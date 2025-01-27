@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://s3l8653qru7l"
-path="res://.godot/imported/simple_player_walkback1.png-7c3bb9df812a23920d3addc619676a29.ctex"
+uid="uid://dbrxjmthbs0b0"
+path="res://.godot/imported/simple_player_walkside1.png-b6a95c342336f7263ab30bff2963d3bc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://animations/simple_player_walkback1.png"
-dest_files=["res://.godot/imported/simple_player_walkback1.png-7c3bb9df812a23920d3addc619676a29.ctex"]
+source_file="res://Art/Animations/simple_player_walkside1.png"
+dest_files=["res://.godot/imported/simple_player_walkside1.png-b6a95c342336f7263ab30bff2963d3bc.ctex"]
 
 [params]
 

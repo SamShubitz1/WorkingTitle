@@ -28,7 +28,6 @@ func _process(delta: float) -> void:
 		position.x = 56
 	move_player(delta)
 	process_player_inputs()
-	print("pos: " + str(position.x) + ", " + str(position.y))
 	pass
 
 func process_player_inputs() -> void:

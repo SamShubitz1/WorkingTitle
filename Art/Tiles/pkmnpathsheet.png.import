@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3sd2xoybaj7v"
-path="res://.godot/imported/simple_player_idle1.png-7f89dbe164d756c19b6bbeded4c2feea.ctex"
+uid="uid://dmwfrd0bmmrry"
+path="res://.godot/imported/pkmnpathsheet.png-d0e7a5be5f41cebd9172c3df9b96bd2f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://simple_player_idle1.png"
-dest_files=["res://.godot/imported/simple_player_idle1.png-7f89dbe164d756c19b6bbeded4c2feea.ctex"]
+source_file="res://Art/Tiles/pkmnpathsheet.png"
+dest_files=["res://.godot/imported/pkmnpathsheet.png-d0e7a5be5f41cebd9172c3df9b96bd2f.ctex"]
 
 [params]
 
