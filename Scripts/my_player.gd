@@ -1,9 +1,11 @@
+
 extends CharacterBody2D
 
 @export var DEBUG_PLAYER: bool = true
 
 #TODO get from map_manager / map_controller
-@onready var Current_Tile_Map = $"../TileMapLayer"
+@onready var Current_Tile_Map = $"../MapController/TileMapLayer"
+@onready var Map_Controller = $"../MapController"
 var GRID_CELL_SIZE_PX: int = 16
 
 @onready var Player_Animation_Object = $AnimatedSprite2D
@@ -195,13 +197,13 @@ func check_move_complete() -> void:
 
 	return
 
-# calculate player current grid coord from player position values
+# translate from world_coordinates to grid_coordinates
 func point_to_grid(point_coords: Vector2i) -> Vector2i:
 	var x = round((point_coords.x - player_image_offset_px.x) / GRID_CELL_SIZE_PX)
 	var y = round((point_coords.y - player_image_offset_px.y) / GRID_CELL_SIZE_PX)
 	return Vector2i(x,y)
 
-# calculate supposed player position from grid coords
+# translate from grid_coordinates to world_coordinates
 func grid_to_point(grid_coords: Vector2i) -> Vector2i:
 	var x = round((grid_coords.x * GRID_CELL_SIZE_PX) + player_image_offset_px.x)
 	var y = round((grid_coords.y * GRID_CELL_SIZE_PX) + player_image_offset_px.y)
@@ -210,21 +212,20 @@ func grid_to_point(grid_coords: Vector2i) -> Vector2i:
 
 #DEBUG player debug print to console
 func print_player_info() -> void:
-	print("")
-	print("player_moving: " + str(player_moving))
-	print("player_direction: " + str(Direction.keys()[player_direction]))
-	print("player coords: " + str(position.x) + ", " + str(position.y))
-	print("destination grid coords: " + str(dest_grid))
-	print("player grid coords: " + str(player_grid))
-
-	print("--- updating grid coords ---")
-	player_grid = point_to_grid(position)
-	print("player grid coords: " + str(player_grid))
 
 	var tile = Current_Tile_Map.get_cell_tile_data(player_grid)
 	var tile_collider_count = tile.get_collision_polygons_count(0)
-	print("tile colliders on player point: " + str(tile_collider_count))
-	print("")
+
+	var player_info_report = {
+		"player_moving": player_moving,
+		"player_direction": Direction.keys()[player_direction],
+		"player_world_coords": position,
+		"dest_grid_coords": dest_grid,
+		"player_grid_cords": player_grid,
+		"tile_colliders_on_player_point": tile_collider_count
+	}
+	print("player_info: " + str(player_info_report))
+
 	return
 
 func player_action_pressed() -> void:
@@ -240,19 +241,29 @@ func player_action_pressed() -> void:
 			action_coords.x -= 1
 		Direction.RIGHT:
 			action_coords.x += 1
-
+	
 	# get tile
 	var tile = Current_Tile_Map.get_cell_tile_data(action_coords)
+	if (tile == null):
+		#TODO catch error
+		print("ERROR: Inspecting null tile at: " + str(action_coords))
+		return # bad value, exit
 
 	# get tile info
 	var tile_report = {
-		"world_coords": action_coords,
-		"colliders": tile.get_collision_polygons_count(0),
-		"customData": tile.get_custom_data("layer_name"),
-		"textureOrigin": tile.texture_origin,
-		"cellAtlasCoords": Current_Tile_Map.get_cell_atlas_coords(action_coords)
+		"world_coords": grid_to_point(action_coords),
+		"map_coords": action_coords,
+		"colliders_count": tile.get_collision_polygons_count(0),
+		"custom_data": tile.get_custom_data("layer_name"),
+		"texture_origin": tile.texture_origin,
+		"cell_atlas_coords": Current_Tile_Map.get_cell_atlas_coords(action_coords)
 	}
 
-	print("action button: " + str(tile_report))
+	print("action_button: " + str(tile_report))
+	
+	var test = Map_Controller.set_object_at_coordinates(self, action_coords)
+	
+	var object = Map_Controller.get_object_at_coordinates(action_coords)
+	print("returned object: ", object)
 
 	return
