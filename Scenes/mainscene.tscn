@@ -41,7 +41,7 @@ tile_map_data = PackedByteArray("AAABAAEAAAABAAAAAAABAAIAAAABAAAAAAABAAMAAAABAAA
 tile_set = SubResource("TileSet_uvfte")
 
 [node name="MyPlayer" parent="." instance=ExtResource("2_gisl2")]
-position = Vector2(40, 40)
+position = Vector2(8, 8)
 script = ExtResource("3_ra62t")
 
 [node name="Camera2D" type="Camera2D" parent="MyPlayer"]

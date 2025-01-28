@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cnn774a8n44im" path="res://Art/Animations/simple_player_walkback1.png" id="6_f7w0i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nu6t"]
-size = Vector2(15.9, 15.9)
+size = Vector2(16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_21wr8"]
 atlas = ExtResource("1_ot5fw")
