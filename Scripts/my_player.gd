@@ -163,23 +163,23 @@ func check_move_complete() -> void:
 
 	match player_direction:
 		Direction.UP:
-			if (position.y-1 <= ((dest_grid.y * GRID_CELL_SIZE_PX) + player_image_offset_px.y)):
+			if (position.y <= ((dest_grid.y * GRID_CELL_SIZE_PX) + player_image_offset_px.y)):
 				# AT UP DEST
 				move_finished = true
 				Player_Animation_Object.play("idle_up")
 		Direction.DOWN:
-			if (position.y+1 >= ((dest_grid.y * GRID_CELL_SIZE_PX) + player_image_offset_px.y)):
+			if (position.y >= ((dest_grid.y * GRID_CELL_SIZE_PX) + player_image_offset_px.y)):
 				# AT DOWN DEST
 				move_finished = true
 				Player_Animation_Object.play("idle_down")
 		Direction.LEFT:
-			if (position.x-1 <= ((dest_grid.x * GRID_CELL_SIZE_PX) + player_image_offset_px.x)):
+			if (position.x <= ((dest_grid.x * GRID_CELL_SIZE_PX) + player_image_offset_px.x)):
 				# AT LEFT DEST
 				move_finished = true
 				Player_Animation_Object.play("idle_side")
 				Player_Animation_Object.flip_h = true # flip side image for left
 		Direction.RIGHT:
-			if (position.x+1 >= ((dest_grid.x * GRID_CELL_SIZE_PX) + player_image_offset_px.x)):
+			if (position.x >= ((dest_grid.x * GRID_CELL_SIZE_PX) + player_image_offset_px.x)):
 				# AT RIGHT DEST
 				move_finished = true
 				Player_Animation_Object.play("idle_side")
