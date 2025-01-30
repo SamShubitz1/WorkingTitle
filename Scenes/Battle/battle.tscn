@@ -1,13 +1,13 @@
 [gd_scene load_steps=7 format=3 uid="uid://n7teu1x6u43o"]
 
-[ext_resource type="Script" path="res://battle.gd" id="1_vwya7"]
+[ext_resource type="Script" path="res://Scenes/Battle/battle.gd" id="1_xmt7g"]
 
 [sub_resource type="Theme" id="Theme_3gble"]
 
 [sub_resource type="Theme" id="Theme_ddpyb"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hrbwa"]
-bg_color = Color(0.835821, 0.886892, 0.853482, 1)
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="Theme" id="Theme_q8sl7"]
 
@@ -18,32 +18,33 @@ outline_color = Color(0.000159503, 0.000108775, 2.53083e-05, 1)
 [node name="Battle" type="Control"]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 50.0
-offset_bottom = 50.0
+offset_top = 82.0
+offset_bottom = 82.0
 size_flags_stretch_ratio = 0.0
 theme = SubResource("Theme_3gble")
+script = ExtResource("1_xmt7g")
+metadata/_edit_group_ = true
 
-[node name="Panel" type="Panel" parent="."]
+[node name="Battle_Menu" type="Panel" parent="."]
 layout_mode = 0
 offset_top = 430.0
 offset_right = 1280.0
 offset_bottom = 686.0
 theme = SubResource("Theme_ddpyb")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hrbwa")
-script = ExtResource("1_vwya7")
 
-[node name="HBoxContainer" type="VBoxContainer" parent="Panel"]
+[node name="Options" type="VBoxContainer" parent="Battle_Menu"]
 layout_mode = 0
 offset_right = 320.0
 offset_bottom = 256.0
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Panel" type="Panel" parent="Panel/HBoxContainer"]
+[node name="Name_Panel" type="Panel" parent="Battle_Menu/Options"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer/Panel"]
+[node name="Name_Label" type="Label" parent="Battle_Menu/Options/Name_Panel"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -52,39 +53,39 @@ text = "DEENO
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Button" type="Button" parent="Panel/HBoxContainer"]
+[node name="Attack" type="Button" parent="Battle_Menu/Options"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "1. Attack"
 alignment = 0
 
-[node name="Button2" type="Button" parent="Panel/HBoxContainer"]
+[node name="Move" type="Button" parent="Battle_Menu/Options"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "2. Move
 "
 alignment = 0
 
-[node name="Button3" type="Button" parent="Panel/HBoxContainer"]
+[node name="Items" type="Button" parent="Battle_Menu/Options"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "3. Items"
 alignment = 0
 
-[node name="Button4" type="Button" parent="Panel/HBoxContainer"]
+[node name="Status" type="Button" parent="Battle_Menu/Options"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "4. Status"
 alignment = 0
 
-[node name="Button5" type="Button" parent="Panel/HBoxContainer"]
+[node name="Retreat" type="Button" parent="Battle_Menu/Options"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "5. Retreat
 "
 alignment = 0
 
-[node name="VBoxContainer2" type="HBoxContainer" parent="Panel"]
+[node name="Abilities" type="HBoxContainer" parent="Battle_Menu"]
 layout_mode = 2
 offset_left = 320.0
 offset_right = 960.0
@@ -93,17 +94,17 @@ theme = SubResource("Theme_q8sl7")
 theme_override_constants/separation = 0
 alignment = 1
 
-[node name="HBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer2"]
+[node name="Abilities_Col1" type="VBoxContainer" parent="Battle_Menu/Abilities"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Panel" type="Panel" parent="Panel/VBoxContainer2/HBoxContainer"]
+[node name="Abilities_Panel" type="Panel" parent="Battle_Menu/Abilities/Abilities_Col1"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer2/HBoxContainer/Panel"]
+[node name="Label" type="Label" parent="Battle_Menu/Abilities/Abilities_Col1/Abilities_Panel"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -111,96 +112,96 @@ offset_bottom = 31.0
 text = "ABILITIES"
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Button" type="Button" parent="Panel/VBoxContainer2/HBoxContainer"]
+[node name="Ability_1" type="Button" parent="Battle_Menu/Abilities/Abilities_Col1"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "1. Rock"
 alignment = 0
 
-[node name="Button2" type="Button" parent="Panel/VBoxContainer2/HBoxContainer"]
+[node name="Ability_2" type="Button" parent="Battle_Menu/Abilities/Abilities_Col1"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "2. Paper
 "
 alignment = 0
 
-[node name="Button3" type="Button" parent="Panel/VBoxContainer2/HBoxContainer"]
+[node name="Ability_3" type="Button" parent="Battle_Menu/Abilities/Abilities_Col1"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "3. Scissors"
 alignment = 0
 
-[node name="HBoxContainer2" type="VBoxContainer" parent="Panel/VBoxContainer2"]
+[node name="Abilities_Col2" type="VBoxContainer" parent="Battle_Menu/Abilities"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Panel" type="Panel" parent="Panel/VBoxContainer2/HBoxContainer2"]
+[node name="Panel" type="Panel" parent="Battle_Menu/Abilities/Abilities_Col2"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer2/HBoxContainer2/Panel"]
+[node name="Label" type="Label" parent="Battle_Menu/Abilities/Abilities_Col2/Panel"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
 offset_bottom = 31.0
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Button" type="Button" parent="Panel/VBoxContainer2/HBoxContainer2"]
+[node name="Ability_4" type="Button" parent="Battle_Menu/Abilities/Abilities_Col2"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "???"
 alignment = 0
 
-[node name="Button2" type="Button" parent="Panel/VBoxContainer2/HBoxContainer2"]
+[node name="Ability_5" type="Button" parent="Battle_Menu/Abilities/Abilities_Col2"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "???"
 alignment = 0
 
-[node name="Button3" type="Button" parent="Panel/VBoxContainer2/HBoxContainer2"]
+[node name="Ability_6" type="Button" parent="Battle_Menu/Abilities/Abilities_Col2"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "???"
 alignment = 0
 
-[node name="HBoxContainer3" type="VBoxContainer" parent="Panel/VBoxContainer2"]
+[node name="Abilities_Col3" type="VBoxContainer" parent="Battle_Menu/Abilities"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Panel" type="Panel" parent="Panel/VBoxContainer2/HBoxContainer3"]
+[node name="Panel" type="Panel" parent="Battle_Menu/Abilities/Abilities_Col3"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/VBoxContainer2/HBoxContainer3/Panel"]
+[node name="Label" type="Label" parent="Battle_Menu/Abilities/Abilities_Col3/Panel"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
 offset_bottom = 31.0
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Button" type="Button" parent="Panel/VBoxContainer2/HBoxContainer3"]
+[node name="Ability_7" type="Button" parent="Battle_Menu/Abilities/Abilities_Col3"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "???"
 alignment = 0
 
-[node name="Button2" type="Button" parent="Panel/VBoxContainer2/HBoxContainer3"]
+[node name="Ability_8" type="Button" parent="Battle_Menu/Abilities/Abilities_Col3"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "???"
 alignment = 0
 
-[node name="Button3" type="Button" parent="Panel/VBoxContainer2/HBoxContainer3"]
+[node name="Ability_9" type="Button" parent="Battle_Menu/Abilities/Abilities_Col3"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "???"
 alignment = 0
 
-[node name="HBoxContainer2" type="VBoxContainer" parent="Panel"]
+[node name="Description" type="VBoxContainer" parent="Battle_Menu"]
 layout_mode = 0
 offset_left = 960.0
 offset_right = 1280.0
@@ -208,11 +209,11 @@ offset_bottom = 256.0
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Panel" type="Panel" parent="Panel/HBoxContainer2"]
+[node name="Panel" type="Panel" parent="Battle_Menu/Description"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer2/Panel"]
+[node name="Label" type="Label" parent="Battle_Menu/Description/Panel"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -221,11 +222,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel2" type="Panel" parent="Panel/HBoxContainer2"]
+[node name="Panel2" type="Panel" parent="Battle_Menu/Description"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer2/Panel2"]
+[node name="Label" type="Label" parent="Battle_Menu/Description/Panel2"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -234,11 +235,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel3" type="Panel" parent="Panel/HBoxContainer2"]
+[node name="Panel3" type="Panel" parent="Battle_Menu/Description"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer2/Panel3"]
+[node name="Label" type="Label" parent="Battle_Menu/Description/Panel3"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -247,11 +248,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel4" type="Panel" parent="Panel/HBoxContainer2"]
+[node name="Panel4" type="Panel" parent="Battle_Menu/Description"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer2/Panel4"]
+[node name="Label" type="Label" parent="Battle_Menu/Description/Panel4"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -260,11 +261,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel5" type="Panel" parent="Panel/HBoxContainer2"]
+[node name="Panel5" type="Panel" parent="Battle_Menu/Description"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer2/Panel5"]
+[node name="Label" type="Label" parent="Battle_Menu/Description/Panel5"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -273,24 +274,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel6" type="Panel" parent="Panel/HBoxContainer2"]
+[node name="Panel6" type="Panel" parent="Battle_Menu/Description"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Panel/HBoxContainer2/Panel6"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
-text = "Sucker Punch
-"
-label_settings = SubResource("LabelSettings_i3s7n")
-
-[node name="Panel7" type="Panel" parent="Panel/HBoxContainer2"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="Panel/HBoxContainer2/Panel7"]
+[node name="Label" type="Label" parent="Battle_Menu/Description/Panel6"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
