@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://n7teu1x6u43o"]
+[gd_scene load_steps=9 format=3 uid="uid://bd4t1hl2ilp2x"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="1_745sj"]
 [ext_resource type="Texture2D" uid="uid://30yr4o0do3m3" path="res://Scenes/Battle/Cursor/triangle-16.png" id="2_620g3"]
