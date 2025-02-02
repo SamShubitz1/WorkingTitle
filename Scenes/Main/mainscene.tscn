@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=4 uid="uid://csf6egx1otdtc"]
+[gd_scene load_steps=8 format=4 uid="uid://csf6egx1otdtc"]
 
 [ext_resource type="Texture2D" uid="uid://dmwfrd0bmmrry" path="res://Art/Tiles/pkmnpathsheet.png" id="1_gnpmv"]
 [ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="2_gisl2"]
 [ext_resource type="Script" path="res://Scenes/Player/my_player.gd" id="3_ra62t"]
 [ext_resource type="Script" path="res://Scenes/Main/map_controller.gd" id="4_13v58"]
 [ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="4_noa1d"]
-[ext_resource type="PackedScene" uid="uid://n7teu1x6u43o" path="res://Scenes/Battle/battle.tscn" id="6_gy1u6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xndd3"]
 texture = ExtResource("1_gnpmv")
@@ -55,5 +54,3 @@ zoom = Vector2(4, 4)
 
 [node name="Norman" parent="." instance=ExtResource("4_noa1d")]
 position = Vector2(88, 88)
-
-[node name="Battle" parent="." instance=ExtResource("6_gy1u6")]

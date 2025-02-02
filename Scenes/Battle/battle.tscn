@@ -1,6 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://n7teu1x6u43o"]
+[gd_scene load_steps=9 format=3 uid="uid://n7teu1x6u43o"]
 
-[ext_resource type="Script" path="res://Scenes/Battle/battle.gd" id="1_xmt7g"]
+[ext_resource type="Script" path="res://Scenes/Battle/battle_menu.gd" id="2_c1osm"]
+[ext_resource type="Texture2D" uid="uid://30yr4o0do3m3" path="res://Scenes/Battle/Cursor/triangle-16.png" id="3_2intb"]
+[ext_resource type="Script" path="res://Scenes/Battle/Cursor/cursor.gd" id="3_u4i8s"]
 
 [sub_resource type="Theme" id="Theme_3gble"]
 
@@ -17,21 +19,24 @@ outline_color = Color(0.000159503, 0.000108775, 2.53083e-05, 1)
 
 [node name="Battle" type="Control"]
 layout_mode = 3
-anchors_preset = 0
-offset_top = 82.0
-offset_bottom = 82.0
+anchor_top = 0.666
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -0.511963
 size_flags_stretch_ratio = 0.0
 theme = SubResource("Theme_3gble")
-script = ExtResource("1_xmt7g")
-metadata/_edit_group_ = true
 
 [node name="Battle_Menu" type="Panel" parent="."]
-layout_mode = 0
-offset_top = 430.0
-offset_right = 1280.0
-offset_bottom = 686.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -3.05176e-05
+grow_horizontal = 2
+grow_vertical = 2
 theme = SubResource("Theme_ddpyb")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hrbwa")
+script = ExtResource("2_c1osm")
 
 [node name="Options" type="VBoxContainer" parent="Battle_Menu"]
 layout_mode = 0
@@ -201,7 +206,7 @@ size_flags_vertical = 3
 text = "???"
 alignment = 0
 
-[node name="Description" type="VBoxContainer" parent="Battle_Menu"]
+[node name="Descriptions" type="VBoxContainer" parent="Battle_Menu"]
 layout_mode = 0
 offset_left = 960.0
 offset_right = 1280.0
@@ -209,11 +214,11 @@ offset_bottom = 256.0
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Panel" type="Panel" parent="Battle_Menu/Description"]
+[node name="Panel" type="Panel" parent="Battle_Menu/Descriptions"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Description/Panel"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -222,11 +227,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel2" type="Panel" parent="Battle_Menu/Description"]
+[node name="Panel2" type="Panel" parent="Battle_Menu/Descriptions"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Description/Panel2"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel2"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -235,11 +240,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel3" type="Panel" parent="Battle_Menu/Description"]
+[node name="Panel3" type="Panel" parent="Battle_Menu/Descriptions"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Description/Panel3"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel3"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -248,11 +253,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel4" type="Panel" parent="Battle_Menu/Description"]
+[node name="Panel4" type="Panel" parent="Battle_Menu/Descriptions"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Description/Panel4"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel4"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -261,11 +266,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel5" type="Panel" parent="Battle_Menu/Description"]
+[node name="Panel5" type="Panel" parent="Battle_Menu/Descriptions"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Description/Panel5"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel5"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -274,11 +279,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel6" type="Panel" parent="Battle_Menu/Description"]
+[node name="Panel6" type="Panel" parent="Battle_Menu/Descriptions"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Description/Panel6"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel6"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
@@ -286,3 +291,14 @@ offset_bottom = 31.0
 text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
+
+[node name="Cursor" type="TextureRect" parent="Battle_Menu"]
+layout_mode = 0
+offset_left = 109.0
+offset_top = 55.512
+offset_right = 125.0
+offset_bottom = 71.512
+rotation = 1.5708
+texture = ExtResource("3_2intb")
+flip_v = true
+script = ExtResource("3_u4i8s")
