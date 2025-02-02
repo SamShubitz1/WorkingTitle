@@ -3,9 +3,15 @@ extends Control
 @onready var cursor = $Cursor
 @onready var options_menu = $Options.get_children().slice(1)
 @onready var abilities_menu = $Abilities.get_children().slice(3)
+@onready var description_panels = $Descriptions.get_children()
 @onready var descriptions_menu = $Descriptions.get_children()
+@onready var ability_description_label = description_panels[1].get_node("Label")
 
-var character_abilities: Array = ["Rock", "Paper", "Scissors"]
+var character_abilities: Array = [
+	{"name":"Rock", "description": "A rock based attack"},
+	{"name": "Paper", "description": "A paper based attack"},
+	{"name": "Scissors", "description": "A scissors based attack"}
+	]
 
 var selected_index: int = 0
 var selected_button: Button
@@ -59,6 +65,13 @@ func _input(_e) -> void:
 func update_selected_button() -> void:
 	selected_button = current_menu[selected_index]
 	cursor.move_cursor(selected_button.position)
+	
+	if current_menu == abilities_menu:
+		ability_description_label = description_panels[1].get_node("Label")
+		if selected_index <= character_abilities.size() - 1:
+			ability_description_label.text = character_abilities[selected_index].description
+		else:
+			ability_description_label.text = "???"
 
 func on_attack_accept() -> void:
 	selected_menu_index = (selected_menu_index + 1) % menus.size()
@@ -69,6 +82,6 @@ func on_attack_accept() -> void:
 func populate_abilities_menu() -> void:
 	for i in range(abilities_menu.size()):
 		if i <= character_abilities.size() - 1:
-			abilities_menu[i].text = str(i + 1) + ". " + character_abilities[i]
+			abilities_menu[i].text += str(i + 1) + ". " + character_abilities[i].name
 		else:
 			abilities_menu[i].text = "???"

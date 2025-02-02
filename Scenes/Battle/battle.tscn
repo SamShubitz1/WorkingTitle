@@ -125,8 +125,6 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "
-"
 
 [node name="Ability_2" type="Button" parent="Battle_Menu/Abilities"]
 layout_mode = 2
@@ -137,15 +135,11 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "
-"
 
 [node name="Ability_4" type="Button" parent="Battle_Menu/Abilities"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "
-"
 
 [node name="Ability_5" type="Button" parent="Battle_Menu/Abilities"]
 layout_mode = 2
@@ -156,15 +150,11 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "
-"
 
 [node name="Ability_7" type="Button" parent="Battle_Menu/Abilities"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "
-"
 
 [node name="Ability_8" type="Button" parent="Battle_Menu/Abilities"]
 layout_mode = 2
@@ -175,8 +165,6 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "
-"
 
 [node name="Descriptions" type="VBoxContainer" parent="Battle_Menu"]
 layout_mode = 0
@@ -199,11 +187,11 @@ text = "Sucker Punch
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Panel2" type="Panel" parent="Battle_Menu/Descriptions"]
+[node name="Ability_Description" type="Panel" parent="Battle_Menu/Descriptions"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel2"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Ability_Description"]
 layout_mode = 2
 offset_top = 4.0
 offset_right = 320.0
