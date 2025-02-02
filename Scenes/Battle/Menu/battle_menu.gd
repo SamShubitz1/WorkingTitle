@@ -17,7 +17,7 @@ var selected_button: Button
 
 var menus: Array = []
 var selected_menu_index: int = 0
-var current_menu
+var current_menu: Array
 
 func _ready() -> void:
 	menus = [options_menu, abilities_menu]
@@ -27,14 +27,14 @@ func _ready() -> void:
 	cursor.move_cursor(Vector2i(0, 45))
 	
 func _input(_e) -> void:
-	if Input.is_action_just_pressed("navigate_up"):
+	if Input.is_action_just_pressed("navigate_backward"):
 		if selected_index == 0:
 			selected_index += (current_menu.size() - 1)
 			update_selected_button()
 		else:
 			selected_index = (selected_index - 1)
 			update_selected_button()
-	elif Input.is_action_just_pressed("navigate_down"):
+	elif Input.is_action_just_pressed("navigate_forward"):
 		selected_index = (selected_index + 1) % current_menu.size()
 		update_selected_button()
 	elif Input.is_action_just_pressed("ui_accept"):
