@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://bd4t1hl2ilp2x"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="1_745sj"]
-[ext_resource type="Texture2D" path="res://Scenes/Battle/Cursor/cursor.png" id="2_620g3"]
+[ext_resource type="Texture2D" uid="uid://30yr4o0do3m3" path="res://Scenes/Battle/Cursor/cursor.png" id="2_620g3"]
 [ext_resource type="Script" path="res://Scenes/Battle/Cursor/cursor.gd" id="3_wuqyt"]
 
 [sub_resource type="Theme" id="Theme_3gble"]
