@@ -45,6 +45,14 @@ func _input(_e) -> void:
 		selected_index = (selected_index + 1) % current_menu.size()
 		update_selected_button()
 		
+	elif Input.is_action_just_pressed("go_back"):
+		if selected_menu_index == 1:
+			selected_menu_index = 0
+			selected_index = 0
+			current_menu = menus[selected_menu_index]
+			cursor.set_menu_type(MenuType.OPTIONS)
+			update_selected_button()
+		
 	elif Input.is_action_just_pressed("ui_accept"):
 		if selected_menu_index == 0:
 			match selected_button.text:
