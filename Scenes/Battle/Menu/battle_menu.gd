@@ -67,7 +67,6 @@ func update_selected_button() -> void:
 	cursor.move_cursor(selected_button.position)
 	
 	if current_menu == abilities_menu:
-		ability_description_label = description_panels[1].get_node("Label")
 		if selected_index <= character_abilities.size() - 1:
 			ability_description_label.text = character_abilities[selected_index].description
 		else:
