@@ -19,6 +19,8 @@ var menus: Array
 var selected_menu_index: int = 0
 var selected_menu: Array
 
+var initial_cursor_position: Vector2i = Vector2i(0, 45)
+
 enum MenuType {
 	OPTIONS,
 	ABILITIES
@@ -30,7 +32,7 @@ func _ready() -> void:
 	selected_button = selected_menu[selected_button_index]
 	char_name_label.text = character_info.name
 	populate_abilities_menu()
-	cursor.move_cursor(Vector2i(0, 45))
+	cursor.move_cursor(initial_cursor_position)
 	
 func _input(_e) -> void:
 	if Input.is_action_just_pressed("navigate_backward"):
@@ -47,7 +49,7 @@ func _input(_e) -> void:
 		
 	elif Input.is_action_just_pressed("go_back"):
 		if selected_menu_index == 1:
-			selected_menu_index = 0
+			selected_menu_index -= 1
 			selected_button_index = 0
 			selected_menu = menus[selected_menu_index]
 			cursor.set_menu_type(MenuType.OPTIONS)
@@ -58,7 +60,7 @@ func _input(_e) -> void:
 		if selected_menu_index == 0:
 			match selected_button.text:
 				"1. Attack":
-					on_attack_accept()
+					on_select_attack()
 				"2. Move":
 					pass
 				"3. Items":
@@ -81,7 +83,7 @@ func update_selected_button() -> void:
 		else:
 			ability_description_label.text = "???"
 
-func on_attack_accept() -> void:
+func on_select_attack() -> void:
 	selected_menu_index = (selected_menu_index + 1) % menus.size()
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(MenuType.ABILITIES)
