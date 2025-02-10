@@ -38,219 +38,172 @@ theme = SubResource("Theme_ddpyb")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hrbwa")
 script = ExtResource("1_745sj")
 
-[node name="Options" type="VBoxContainer" parent="Battle_Menu"]
+[node name="Main_Menu" type="Panel" parent="Battle_Menu"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 256.0
+
+[node name="Menu" type="VBoxContainer" parent="Battle_Menu/Main_Menu"]
 layout_mode = 0
 offset_right = 320.0
 offset_bottom = 256.0
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Name_Panel" type="Panel" parent="Battle_Menu/Options"]
+[node name="Name_Label" type="Label" parent="Battle_Menu/Main_Menu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="Name_Label" type="Label" parent="Battle_Menu/Options/Name_Panel"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
 text = "DEENO
 "
 label_settings = SubResource("LabelSettings_i3s7n")
 
-[node name="Attack" type="Button" parent="Battle_Menu/Options"]
+[node name="Attack" type="Button" parent="Battle_Menu/Main_Menu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "1. Attack"
 alignment = 0
 
-[node name="Move" type="Button" parent="Battle_Menu/Options"]
+[node name="Move" type="Button" parent="Battle_Menu/Main_Menu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "2. Move
 "
 alignment = 0
 
-[node name="Items" type="Button" parent="Battle_Menu/Options"]
+[node name="Items" type="Button" parent="Battle_Menu/Main_Menu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "3. Items"
 alignment = 0
 
-[node name="Status" type="Button" parent="Battle_Menu/Options"]
+[node name="Status" type="Button" parent="Battle_Menu/Main_Menu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "4. Status"
 alignment = 0
 
-[node name="Retreat" type="Button" parent="Battle_Menu/Options"]
+[node name="Retreat" type="Button" parent="Battle_Menu/Main_Menu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "5. Retreat
 "
 alignment = 0
 
-[node name="Abilities" type="GridContainer" parent="Battle_Menu"]
-custom_minimum_size = Vector2(320, 256)
+[node name="Abilities_Menu" type="Panel" parent="Battle_Menu"]
 layout_mode = 0
 offset_left = 320.0
 offset_right = 960.0
 offset_bottom = 256.0
+
+[node name="Menu" type="GridContainer" parent="Battle_Menu/Abilities_Menu"]
+custom_minimum_size = Vector2(320, 256)
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 256.0
 columns = 3
 
-[node name="Abilities_Panel" type="Panel" parent="Battle_Menu/Abilities"]
+[node name="Abilities_Label" type="Label" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Abilities_Label" type="Label" parent="Battle_Menu/Abilities/Abilities_Panel"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
 text = "Abilities
 
 "
 
-[node name="Panel2" type="Panel" parent="Battle_Menu/Abilities"]
+[node name="Panel2" type="Panel" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel3" type="Panel" parent="Battle_Menu/Abilities"]
+[node name="Panel3" type="Panel" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_1" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_1" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_2" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_2" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_3" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_3" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_4" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_4" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_5" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_5" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_6" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_6" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_7" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_7" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_8" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_8" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_9" type="Button" parent="Battle_Menu/Abilities"]
+[node name="Ability_9" type="Button" parent="Battle_Menu/Abilities_Menu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Descriptions" type="VBoxContainer" parent="Battle_Menu"]
+[node name="Descriptions" type="Panel" parent="Battle_Menu"]
 layout_mode = 0
 offset_left = 960.0
 offset_right = 1280.0
 offset_bottom = 256.0
+
+[node name="Labels" type="VBoxContainer" parent="Battle_Menu/Descriptions"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 256.0
 theme = SubResource("Theme_q8sl7")
 alignment = 1
 
-[node name="Panel" type="Panel" parent="Battle_Menu/Descriptions"]
+[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Sucker Punch"
+
+[node name="Ability_Description" type="Label" parent="Battle_Menu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
-text = "Sucker Punch
-"
-label_settings = SubResource("LabelSettings_i3s7n")
-
-[node name="Ability_Description" type="Panel" parent="Battle_Menu/Descriptions"]
+[node name="Label3" type="Label" parent="Battle_Menu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
+text = "Text"
 
-[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Ability_Description"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
-text = "Sucker Punch
-"
-label_settings = SubResource("LabelSettings_i3s7n")
-
-[node name="Panel3" type="Panel" parent="Battle_Menu/Descriptions"]
+[node name="Label4" type="Label" parent="Battle_Menu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
+text = "Text"
 
-[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel3"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
-text = "Sucker Punch
-"
-label_settings = SubResource("LabelSettings_i3s7n")
-
-[node name="Panel4" type="Panel" parent="Battle_Menu/Descriptions"]
+[node name="Label5" type="Label" parent="Battle_Menu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
+text = "Text"
 
-[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel4"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
-text = "Sucker Punch
-"
-label_settings = SubResource("LabelSettings_i3s7n")
-
-[node name="Panel5" type="Panel" parent="Battle_Menu/Descriptions"]
+[node name="Label6" type="Label" parent="Battle_Menu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel5"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
-text = "Sucker Punch
-"
-label_settings = SubResource("LabelSettings_i3s7n")
-
-[node name="Panel6" type="Panel" parent="Battle_Menu/Descriptions"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Label" type="Label" parent="Battle_Menu/Descriptions/Panel6"]
-layout_mode = 2
-offset_top = 4.0
-offset_right = 320.0
-offset_bottom = 31.0
-text = "Sucker Punch
-"
-label_settings = SubResource("LabelSettings_i3s7n")
+text = "Text"
 
 [node name="Cursor" type="TextureRect" parent="Battle_Menu"]
 layout_mode = 0

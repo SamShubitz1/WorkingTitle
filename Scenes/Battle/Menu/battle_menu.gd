@@ -1,10 +1,10 @@
 extends Control
 
 @onready var cursor = $Cursor
-@onready var options_menu = $Options.get_children().slice(1)
-@onready var abilities_menu = $Abilities.get_children().slice(3)
-@onready var char_name_label = $Options/Name_Panel/Name_Label
-@onready var ability_description_label = $Descriptions/Ability_Description/Label
+@onready var options_menu = $Main_Menu/Menu.get_children().slice(1)
+@onready var abilities_menu = $Abilities_Menu/Menu.get_children().slice(3)
+@onready var char_name_label = $Main_Menu/Menu/Name_Label
+@onready var ability_description_label = $Descriptions/Labels/Ability_Description
 
 var character_info: Dictionary = {"name": "Deeno", "abilities": [
 	{"name":"Rock", "description": "A rock based attack"},
@@ -54,7 +54,7 @@ func _input(_e) -> void:
 			selected_menu = menus[selected_menu_index]
 			cursor.set_menu_type(MenuType.OPTIONS)
 			update_selected_button()
-			ability_description_label.text = "Sucker Punch"
+			ability_description_label.text = "Text"
 		
 	elif Input.is_action_just_pressed("ui_accept"):
 		if selected_menu_index == 0:
