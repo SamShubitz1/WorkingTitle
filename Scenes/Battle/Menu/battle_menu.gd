@@ -43,9 +43,11 @@ func _input(_e) -> void:
 		else:
 			selected_button_index = (selected_button_index - 1)
 			update_selected_button()
+			
 	elif Input.is_action_just_pressed("navigate_forward"):
 		selected_button_index = (selected_button_index + 1) % selected_menu.size()
 		update_selected_button()
+		
 	elif Input.is_action_just_pressed("go_back"):
 		if selected_menu_index == 1:
 			selected_menu_index -= 1
@@ -54,11 +56,12 @@ func _input(_e) -> void:
 			cursor.set_menu_type(MenuType.OPTIONS)
 			update_selected_button()
 			ability_description_label.text = "Text"
+			
 	elif Input.is_action_just_pressed("ui_accept"):
 		if selected_menu == options_menu:
 			match selected_button.text:
 				"1. Attack":
-					select_abilities_menu()
+					on_select_attack()
 				"2. Move":
 					pass
 				"3. Items":
@@ -67,6 +70,7 @@ func _input(_e) -> void:
 					pass
 				"5. Retreat":
 					pass	
+					
 		elif selected_menu == abilities_menu:
 			if selected_button_index < character_info.abilities.size():
 				perform_attack(character_info.abilities[selected_button_index].name)
@@ -81,7 +85,7 @@ func update_selected_button() -> void:
 		else:
 			ability_description_label.text = "???"
 
-func select_abilities_menu() -> void:
+func on_select_attack() -> void:
 	selected_menu_index = (selected_menu_index + 1) % menus.size()
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(MenuType.ABILITIES)
