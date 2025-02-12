@@ -132,9 +132,8 @@ func perform_attack(player_attack: String) -> void:
 			
 	
 func get_enemy_attack() -> String:
-	var enemy_attacks = ["Rock", "Paper", "Scissors"]
 	var attack_index = randi() % 3
-	return enemy_attacks[attack_index]
+	return enemy_info["abilities"][attack_index]
 	
 func check_death() -> void:
 	if player_health.value <= 0 || enemy_health.value <= 0:
