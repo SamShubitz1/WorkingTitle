@@ -1,7 +1,6 @@
-[gd_scene load_steps=15 format=3 uid="uid://bd4t1hl2ilp2x"]
+[gd_scene load_steps=14 format=3 uid="uid://bd4t1hl2ilp2x"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="1_745sj"]
-[ext_resource type="Script" path="res://Scenes/Battle/battle_controller.gd" id="1_lx3hh"]
 [ext_resource type="Texture2D" uid="uid://30yr4o0do3m3" path="res://Scenes/Battle/Cursor/cursor.png" id="2_620g3"]
 [ext_resource type="Script" path="res://Scenes/Battle/Cursor/cursor.gd" id="3_wuqyt"]
 [ext_resource type="Texture2D" uid="uid://bulgojpq4w4gh" path="res://Art/Animations/simple_bot_idledown.png" id="4_dttdu"]
@@ -56,9 +55,6 @@ anchor_bottom = 1.0
 offset_top = -0.0239258
 offset_bottom = 0.999969
 color = Color(0.971332, 0.989374, 0.91255, 1)
-
-[node name="BattleController" type="Node2D" parent="."]
-script = ExtResource("1_lx3hh")
 
 [node name="BattleMenu" type="Panel" parent="."]
 layout_mode = 1

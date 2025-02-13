@@ -17,6 +17,8 @@ func _process(_delta: float) -> void:
 
 # convert grid coords to stored-object
 func get_object_at_coords(grid_coords: Vector2i) -> Node:
+	if (not world_map_array.has(grid_coords)):
+		return null
 	var object = world_map_array[grid_coords]
 	if object:
 		return object
@@ -41,6 +43,7 @@ func grid_to_point(grid_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0)) 
 
 # get collider count at grid coords
 func check_grid_for_collider(grid_coords: Vector2i) -> bool:
+	# bounds error checking
 	if (grid_coords.x < 0 or grid_coords.y < 0):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
 		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
@@ -57,8 +60,28 @@ func check_grid_for_collider(grid_coords: Vector2i) -> bool:
 	# return result: true = collider, false = no collider
 	return collider_count
 
+# add collider to specified tile
+func add_grid_collider(grid_coords: Vector2i) -> void:
+	print("Map_Controller: attempting to add collider at: " + str(grid_coords))
+	# bounds error checking
+	if (grid_coords.x < 0 or grid_coords.y < 0):
+		#TODO catch error for out-of-bounds array lookup for tilemap object
+		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
+		return # exit for bad value
+	
+	# get tile at grid_coords
+	var tile_data = Current_Tile_Map.get_cell_tile_data(grid_coords)
+	if (tile_data == null):
+		#TODO catch error for out-of-bounds array lookup for tilemap object
+		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
+		return # exit for bad TileMap data
+	
+	tile_data.add_collision_polygon(0)
+	
+	return
+
 # convert grid coords to TileData object, properties
-func get_tile_at_world_coords(grid_coords: Vector2i) -> TileData:
+func get_tile_at_grid_coords(grid_coords: Vector2i) -> TileData:
 	var tile: TileData = Current_Tile_Map.get_cell_tile_data(grid_coords)
 	if (tile == null):
 		#TODO catch error
@@ -73,6 +96,7 @@ func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
 	return atlas_coords
 
 # get dictionary/hashtable format report of various tile data at grid coords
+#TODO bounds check for error
 func get_world_tile_report(grid_coords: Vector2i) -> Dictionary:
 	var tile: TileData = Current_Tile_Map.get_cell_tile_data(grid_coords)
 	var atlas_coords: Vector2i = Current_Tile_Map.get_cell_atlas_coords(grid_coords)

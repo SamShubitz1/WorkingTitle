@@ -4,7 +4,7 @@ extends CharacterBody2D
 @onready var Map_Controller = $"../MapController"
 
 @export var DEBUG_PLAYER: bool = true
-@export var speed: int = 1
+@export var speed = 75
 @export var player_image_offset_px = Vector2i(8,8)
 
 var player_moving: bool = false
@@ -25,6 +25,20 @@ var player_direction: Direction = Direction.DOWN
 func _ready() -> void:
 	player_grid = Map_Controller.point_to_grid(position)
 	Player_Animation_Object.play("idle_down")
+	
+	# load player position from preference file
+	var PREFERENCE_FILE : String = "user://preferences.cfg"
+	var config = ConfigFile.new()
+	var err = config.load(PREFERENCE_FILE)
+	if err != OK:
+		print_debug("Creating user preference file...")
+		config.set_value("player", "grid_position", player_grid)
+		config.save(PREFERENCE_FILE)
+	else:
+		player_grid = config.get_value("player", "grid_position")
+		position.x = player_grid.x * Map_Controller.GRID_CELL_SIZE_PX + player_image_offset_px.x
+		position.y = player_grid.y * Map_Controller.GRID_CELL_SIZE_PX + player_image_offset_px.y
+		print("loaded config: " + str(player_grid))
 	return
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -66,13 +80,13 @@ func set_next_move(dir: Direction) -> void:
 	# sets destination grid
 	match dir:
 		Direction.UP:
-			dest_grid.y -= 1
+			dest_grid.y = player_grid.y - 1
 		Direction.DOWN:
-			dest_grid.y += 1
+			dest_grid.y = player_grid.y + 1
 		Direction.LEFT:
-			dest_grid.x -= 1
+			dest_grid.x = player_grid.x - 1
 		Direction.RIGHT:
-			dest_grid.x += 1
+			dest_grid.x = player_grid.x + 1
 		_:
 			#TODO catch error for bad input value on dir
 			print("ERROR: Bad direction input given to player on set_next_move(dir)")
@@ -81,9 +95,13 @@ func set_next_move(dir: Direction) -> void:
 	set_player_animation(player_direction, false)
 
 	# check if next move is valid
-	if (Map_Controller.check_grid_for_collider(dest_grid)):
+	var tile_collision_check = Map_Controller.check_grid_for_collider(dest_grid)
+	var object_collision_check = Map_Controller.get_object_at_coords(dest_grid)
+	if (tile_collision_check or object_collision_check):
 		# collider found, reset move state and values, and exit early
 		if (DEBUG_PLAYER): print("Player collision at cell: " + str(dest_grid))
+		var collided_object = Map_Controller.get_object_at_coords(dest_grid)
+		if (DEBUG_PLAYER): print("Collided with: " + str(collided_object))
 		player_moving = false
 		dest_grid = player_grid
 		check_move_complete()
@@ -102,13 +120,13 @@ func process_player_movement(_delta) -> void:
 	# move player object by speed value
 	match player_direction:
 		Direction.UP:
-			position.y -= speed
+			position.y -= speed * _delta
 		Direction.DOWN:
-			position.y += speed
+			position.y += speed * _delta
 		Direction.LEFT:
-			position.x -= speed
+			position.x -= speed * _delta
 		Direction.RIGHT:
-			position.x += speed
+			position.x += speed * _delta
 		_:
 			#TODO catch error for bad player dir
 			print("ERROR: Bad direction on player process_player_movement()")
@@ -144,8 +162,10 @@ func check_move_complete() -> void:
 			#TODO catch error for bad player dir
 			print("ERROR: Bad direction on player check_move_complete()")
 
-	# set player animation based on direction
-	set_player_animation(player_direction, true)
+	if (move_finished):
+		# set player idle animation based on direction
+		print("setting player to idle")
+		set_player_animation(player_direction, true)
 
 	if (move_finished):
 		player_moving = false
@@ -187,11 +207,35 @@ func player_action_pressed() -> void:
 	var tile_report = Map_Controller.get_world_tile_report(action_coords)
 	print("action_button: " + str(tile_report))
 
+
 	# set player as object on map-object-collection
-	var _test = Map_Controller.set_object_at_coords(self, action_coords)
+	#var _test = Map_Controller.set_object_at_coords(self, action_coords)
 	# get object from map-object-collection
 	var object = Map_Controller.get_object_at_coords(action_coords)
-	print("returned object: ", object)
+	var actioned_tile = Map_Controller.get_tile_at_grid_coords(action_coords)
+	if(object == null and actioned_tile == null):
+		return
+	
+	if(object != null):
+		print("returned object: ", object)
+		print("type : ", typeof(object))
+		#print("properties : ", object.get_property_list())
+		print("test : ", object.grid_coords)
+		if (object.battle_ready):
+			var PREFERENCE_FILE : String = "user://preferences.cfg"
+			var config = ConfigFile.new()
+			var err = config.load(PREFERENCE_FILE)
+			if err != OK:
+				print_debug("Creating user preference file...")
+				config.set_value("player", "grid_position", player_grid)
+				config.save(PREFERENCE_FILE)
+			get_tree().change_scene_to_file("res://Scenes/Battle/battle.tscn")
+		object.kill()
+	elif(actioned_tile != null):
+		print("returned tile: ", actioned_tile)
+		print("type : ", typeof(actioned_tile))
+		#print("properties : ", actioned_tile.get_property_list())
+		
 
 	return
 
