@@ -3,6 +3,7 @@ extends Node
 @onready var dialog_box = $"../DialogBox/Dialog"
 @onready var player_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 @onready var enemy_health = $"../Enemy/EnemyHealth"
+@onready var cursor = $"../BattleMenu/Cursor"
 
 var event_queue: Array = []
 
@@ -28,7 +29,7 @@ enum EventType {
 func _ready() -> void:
 	player_health.max_value = character_info["max_health"]
 	enemy_health.max_value = enemy_info["max_health"]
-	play_dialog(initial_dialog)
+	handle_dialog(initial_dialog)
 	
 func add_event(event) -> void:
 	event_queue.append(event)
@@ -37,26 +38,26 @@ func increment_queue() -> void:
 	var event = event_queue.pop_front()
 	match event.type:
 		EventType.DIALOG:
-			play_dialog(event)
+			handle_dialog(event)
 		EventType.ATTACK:
-			perform_attack(event)
+			handle_attack(event)
 		EventType.DEATH:
-			on_death()
+			handle_death()
 			
-func play_dialog(event: Dictionary) -> void:
+func handle_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
 	
-func perform_attack(event: Dictionary) -> void:
+func handle_attack(event: Dictionary) -> void:
 		if event.target == "enemy":
 			enemy_health.value -= event.damage
-			play_dialog({"text": "Enemy took " + str(event.damage) + " damage!"})
+			handle_dialog({"text": "Enemy took " + str(event.damage) + " damage!"})
 		elif event.target == "player":
 			player_health.value -= event.damage
-			play_dialog({"text": "Player took " + str(event.damage) + " damage!"})
+			handle_dialog({"text": "Player took " + str(event.damage) + " damage!"})
 		check_death()
 	
 func on_attack(player_attack) -> void:
-	play_dialog({"text": "Player used " + player_attack + "!"})
+	handle_dialog({"text": "Player used " + player_attack + "!"})
 	
 	var attack = attacks[player_attack]
 	var enemy_attack = get_enemy_attack()
@@ -67,7 +68,6 @@ func on_attack(player_attack) -> void:
 	if result:
 		add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
 	
-#figure out how to put int as return type w/o getting error
 func calculate_attack_dmg(player_attack: String, enemy_attack: String):
 	if player_attack == "Rock":
 		match enemy_attack:
@@ -110,5 +110,5 @@ func check_death() -> void:
 		add_event({"type": EventType.DEATH})
 			
 			
-func on_death() -> void:
+func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")

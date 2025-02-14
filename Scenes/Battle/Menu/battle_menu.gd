@@ -39,32 +39,34 @@ func _ready() -> void:
 	cursor.move_cursor(initial_cursor_position)
 	
 func _input(_e) -> void:
-	if Input.is_action_just_pressed("navigate_backward"):
-		if selected_button_index == 0:
-			selected_button_index += (selected_menu.size() - 1)
-			update_selected_button()
-		else:
-			selected_button_index = (selected_button_index - 1)
+	if not cursor.disabled:
+		if Input.is_action_just_pressed("navigate_backward"):
+			if selected_button_index == 0:
+				selected_button_index += (selected_menu.size() - 1)
+				update_selected_button()
+			else:
+				selected_button_index = (selected_button_index - 1)
+				update_selected_button()
+				
+		elif Input.is_action_just_pressed("navigate_forward"):
+			selected_button_index = (selected_button_index + 1) % selected_menu.size()
 			update_selected_button()
 			
-	elif Input.is_action_just_pressed("navigate_forward"):
-		selected_button_index = (selected_button_index + 1) % selected_menu.size()
-		update_selected_button()
-		
-	elif Input.is_action_just_pressed("go_back"):
-		if selected_menu_index == 1:
-			selected_menu_index -= 1
-			selected_button_index = 0
-			selected_menu = menus[selected_menu_index]
-			cursor.set_menu_type(MenuType.OPTIONS)
-			update_selected_button()
-			ability_description_label.text = "Text"
+		elif Input.is_action_just_pressed("go_back"):
+			if selected_menu_index == 1:
+				selected_menu_index -= 1
+				selected_button_index = 0
+				selected_menu = menus[selected_menu_index]
+				cursor.set_menu_type(MenuType.OPTIONS)
+				update_selected_button()
+				ability_description_label.text = ""
 			
-	elif Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("ui_accept"):
 		if battle_controller.event_queue.size() > 0:
-			print(battle_controller.event_queue)
 			battle_controller.increment_queue()
-			
+			if battle_controller.event_queue.size() == 0:
+				cursor.enable()
+		
 		elif selected_menu == options_menu:
 			match selected_button.text:
 				"1. Attack":
@@ -82,6 +84,7 @@ func _input(_e) -> void:
 			if selected_button_index < character_info.abilities.size():
 				var attack = character_info.abilities[selected_button_index].name
 				battle_controller.on_attack(attack)
+				cursor.disable()
 			
 func update_selected_button() -> void:
 	selected_button = selected_menu[selected_button_index]
@@ -110,7 +113,7 @@ func update_ui() -> void:
 			abilities_menu[i].text += str(i + 1) + ". " + character_info.abilities[i].name
 		else:
 			abilities_menu[i].text = "???"
-	
+
 func update_menus() -> void:
 	menus = [options_menu, abilities_menu]
 	selected_menu = menus[selected_menu_index]
