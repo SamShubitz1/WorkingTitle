@@ -144,8 +144,7 @@ alignment = 0
 [node name="Move" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "2. Move
-"
+text = "2. Move"
 alignment = 0
 
 [node name="Items" type="Button" parent="BattleMenu/MainMenu/Menu"]
@@ -163,8 +162,7 @@ alignment = 0
 [node name="Retreat" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "5. Retreat
-"
+text = "5. Retreat"
 alignment = 0
 
 [node name="AbilitiesMenu" type="Panel" parent="BattleMenu"]

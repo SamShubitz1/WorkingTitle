@@ -12,8 +12,6 @@ var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities
 	{"name": "Paper", "description": "A paper based attack"},
 	{"name": "Scissors", "description": "A scissors based attack"}
 	]}
-	
-var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
 
 enum EventType {
 	DIALOG,
@@ -64,7 +62,9 @@ func _input(_e) -> void:
 			
 	elif Input.is_action_just_pressed("ui_accept"):
 		if battle_controller.event_queue.size() > 0:
+			print(battle_controller.event_queue)
 			battle_controller.increment_queue()
+			
 		elif selected_menu == options_menu:
 			match selected_button.text:
 				"1. Attack":
@@ -76,12 +76,12 @@ func _input(_e) -> void:
 				"4. Status":
 					pass
 				"5. Retreat":
-					get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+					on_select_retreat()
 					
 		elif selected_menu == abilities_menu:
 			if selected_button_index < character_info.abilities.size():
-				var attack_name = character_info.abilities[selected_button_index].name
-				battle_controller.on_attack(attack_name)
+				var attack = character_info.abilities[selected_button_index].name
+				battle_controller.on_attack(attack)
 			
 func update_selected_button() -> void:
 	selected_button = selected_menu[selected_button_index]
@@ -98,6 +98,9 @@ func on_select_attack() -> void:
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(MenuType.ABILITIES)
 	update_selected_button()
+	
+func on_select_retreat() -> void:
+	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	
 func update_ui() -> void:
 	char_name_label.text = character_info.name

@@ -15,15 +15,14 @@ var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": [
 var attacks: Dictionary = {"Rock": {"damage": 20}, "Paper": {"damage": 20}, "Scissors": {"damage": 20}}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
-var char_dead: bool
-
 enum EventType {
 	DIALOG,
 	ATTACK,
-	ITEM
+	ITEM,
+	DEATH
 }
 
-# The idea is that ultimately each event type will have a type, maybe a class
+# The idea is that ultimately each event object will have a type, maybe a class
 # So we make a new Dialog, Item, or Attack event to be passed into the event queue
 # right now events are just dictionaries with a type: EventType property
 func _ready() -> void:
@@ -41,6 +40,8 @@ func increment_queue() -> void:
 			play_dialog(event)
 		EventType.ATTACK:
 			perform_attack(event)
+		EventType.DEATH:
+			on_death()
 			
 func play_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
@@ -55,9 +56,6 @@ func perform_attack(event: Dictionary) -> void:
 		check_death()
 	
 func on_attack(player_attack) -> void:
-	if char_dead:
-		check_death()
-
 	play_dialog({"text": "Player used " + player_attack + "!"})
 	
 	var attack = attacks[player_attack]
@@ -108,8 +106,9 @@ func check_death() -> void:
 			dead_name = "Player"
 		else:
 			dead_name = "Enemy"
-		if not char_dead:
-			add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
-			char_dead = true
-		else:
-			get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
+		add_event({"type": EventType.DEATH})
+			
+			
+func on_death() -> void:
+	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
