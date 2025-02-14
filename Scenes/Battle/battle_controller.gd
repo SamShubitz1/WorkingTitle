@@ -11,12 +11,9 @@ var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities
 	{"name": "Paper", "description": "A paper based attack"},
 	{"name": "Scissors", "description": "A scissors based attack"}
 	]}
-	
 var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
 var attacks: Dictionary = {"Rock": {"damage": 20}, "Paper": {"damage": 20}, "Scissors": {"damage": 20}}
-var character_died: bool = false
-	
-var initial_dialog: Dictionary = {"type": EventType.DIALOG, "text": "A wild man appears!"}
+var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 enum EventType {
 	DIALOG,
@@ -25,7 +22,7 @@ enum EventType {
 }
 
 # The idea is that ultimately each event type will have a type, maybe a class
-# So we make a new Dialog, Item, or Attack to be passed into the event queue
+# So we make a new Dialog, Item, or Attack event to be passed into the event queue
 # right now events are just dictionaries with a type: EventType property
 func _ready() -> void:
 	player_health.max_value = character_info["max_health"]
@@ -42,14 +39,12 @@ func increment_queue() -> void:
 			play_dialog(event)
 		EventType.ATTACK:
 			perform_attack(event)
-	check_death()
 			
 func play_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
 	
-func on_attack(attack_name) -> void:
-	add_event({"type": EventType.DIALOG, "text": "Player used " + attack_name + "!"})
-	increment_queue()
+func on_attack(attack_name) -> void:	
+	play_dialog({"text": "Player used " + attack_name + "!"})
 	
 	var attack = attacks[attack_name]
 	var enemy_attack = get_enemy_attack()
@@ -70,6 +65,7 @@ func perform_attack(event: Dictionary) -> void:
 		elif event.target == "player":
 			player_health.value -= event.damage
 			play_dialog({"text": "Player took " + str(event.damage) + " damage!"})
+		check_death()
 	
 #figure out how to put int as return type w/o getting error
 func calculate_attack_dmg(player_attack: String, enemy_attack: String):
@@ -110,8 +106,5 @@ func check_death() -> void:
 			dead_name = "Player"
 		else:
 			dead_name = "Enemy"
-		if not character_died:
-			add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
-			character_died = true
-		if event_queue.size() == 0 && character_died:
-			get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
+		get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
