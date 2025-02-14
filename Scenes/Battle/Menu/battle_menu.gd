@@ -2,16 +2,19 @@ extends Control
 
 @onready var cursor = $Cursor
 @onready var battle_controller = $"../BattleController"
+@onready var options_node = $MainMenu
 @onready var options_menu = $MainMenu/Menu.get_children().slice(1)
 @onready var abilities_menu = $AbilitiesMenu/Menu.get_children().slice(3)
+@onready var items_node = $ItemsMenu
+@onready var items_menu = $ItemsMenu/Menu.get_children().slice(1)
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
-@onready var ability_description_label = $Descriptions/Labels/AbilityDescription
+@onready var description_label = $Descriptions/Labels/AbilityDescription
 
 var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities": [
 	{"name":"Rock", "description": "A rock based attack"},
 	{"name": "Paper", "description": "A paper based attack"},
 	{"name": "Scissors", "description": "A scissors based attack"}
-	]}
+	], "items": [{"name": "Extra Rock", "description": "Adds damage to rock attacks"}, {"name": "Sharpener", "description": "Adds damage to scissors attacks"}, {"name": "Extra Paper", "description": "Adds damage to paper attacks"}]}
 
 enum EventType {
 	DIALOG,
@@ -26,40 +29,32 @@ var menus: Array
 var selected_menu_index: int = 0
 var selected_menu: Array
 
-var initial_cursor_position: Vector2i = Vector2i(0, 45)
+var initial_cursor_position: Vector2 = Vector2(0, 45)
 
 enum MenuType {
 	OPTIONS,
-	ABILITIES
+	ABILITIES,
+	ITEMS
 }
 
+#using process_frame to avoid race issues w/ updating cursor position
 func _ready() -> void:
+	items_node.hide()
 	update_ui()
 	update_menus()
+	await get_tree().process_frame
 	cursor.move_cursor(initial_cursor_position)
 	
 func _input(_e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_just_pressed("navigate_backward"):
-			if selected_button_index == 0:
-				selected_button_index += (selected_menu.size() - 1)
-				update_selected_button()
-			else:
-				selected_button_index = (selected_button_index - 1)
-				update_selected_button()
+			navigate_backward()
 				
 		elif Input.is_action_just_pressed("navigate_forward"):
-			selected_button_index = (selected_button_index + 1) % selected_menu.size()
-			update_selected_button()
+			navigate_forward()
 			
 		elif Input.is_action_just_pressed("go_back"):
-			if selected_menu_index == 1:
-				selected_menu_index -= 1
-				selected_button_index = 0
-				selected_menu = menus[selected_menu_index]
-				cursor.set_menu_type(MenuType.OPTIONS)
-				update_selected_button()
-				ability_description_label.text = ""
+			go_back()
 			
 	if Input.is_action_just_pressed("ui_accept"):
 		if battle_controller.event_queue.size() > 0:
@@ -74,7 +69,7 @@ func _input(_e) -> void:
 				"2. Move":
 					pass
 				"3. Items":
-					pass
+					on_select_items()
 				"4. Status":
 					pass
 				"5. Retreat":
@@ -85,22 +80,39 @@ func _input(_e) -> void:
 				var attack = character_info.abilities[selected_button_index].name
 				battle_controller.on_attack(attack)
 				cursor.disable()
-			
+
+#using process_frame to avoid race issues w/ updating cursor position
 func update_selected_button() -> void:
 	selected_button = selected_menu[selected_button_index]
+	await get_tree().process_frame
 	cursor.move_cursor(selected_button.position)
 	
 	if selected_menu == abilities_menu:
 		if selected_button_index < character_info.abilities.size():
-			ability_description_label.text = character_info.abilities[selected_button_index].description
+			description_label.text = character_info.abilities[selected_button_index].description
 		else:
-			ability_description_label.text = "???"
+			description_label.text = "???"
+			
+	elif selected_menu == items_menu:
+		if selected_button_index < character_info.items.size():
+			description_label.text = character_info.items[selected_button_index].description
+		else:
+			description_label.text = "???"
 
 func on_select_attack() -> void:
-	selected_menu_index = (selected_menu_index + 1) % menus.size()
+	selected_menu_index = 1
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(MenuType.ABILITIES)
 	update_selected_button()
+	
+func on_select_items() -> void:
+	selected_menu_index = 2
+	selected_menu = menus[selected_menu_index]
+	selected_button_index = 0
+	cursor.set_menu_type(MenuType.ITEMS)
+	update_selected_button()
+	options_node.hide()
+	items_node.show()
 	
 func on_select_retreat() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
@@ -113,9 +125,60 @@ func update_ui() -> void:
 			abilities_menu[i].text += str(i + 1) + ". " + character_info.abilities[i].name
 		else:
 			abilities_menu[i].text = "???"
+			
+	for i in range(character_info.items.size()):
+		items_menu[i].text = character_info.items[i].name
+		
 
 func update_menus() -> void:
-	menus = [options_menu, abilities_menu]
+	menus = [options_menu, abilities_menu, items_menu]
 	selected_menu = menus[selected_menu_index]
 	selected_button = selected_menu[selected_button_index]
+	
+func navigate_backward() -> void:
+	if selected_menu == abilities_menu:
+		if selected_button_index == 0:
+			selected_button_index += (character_info.abilities.size() - 1)
+			update_selected_button()
+		else:
+			selected_button_index = (selected_button_index - 1)
+			update_selected_button()
 			
+	elif selected_menu == items_menu:
+		if selected_button_index == 0:
+			selected_button_index += (character_info.items.size() - 1)
+			update_selected_button()
+		else:
+			selected_button_index = (selected_button_index - 1)
+			update_selected_button()
+	else:
+		if selected_button_index == 0:
+			selected_button_index += (selected_menu.size() - 1)
+			update_selected_button()
+		else:
+			selected_button_index = (selected_button_index - 1)
+			update_selected_button()
+
+func navigate_forward():
+	if selected_menu == abilities_menu:
+		selected_button_index = (selected_button_index + 1) % character_info.abilities.size()
+		update_selected_button()
+	elif selected_menu == items_menu:
+		selected_button_index = (selected_button_index + 1) % character_info.items.size()
+		update_selected_button()
+	else:
+		selected_button_index = (selected_button_index + 1) % selected_menu.size()
+		update_selected_button()
+
+func go_back():
+	if selected_menu == items_menu:
+		items_node.hide()
+		options_node.show()
+	if selected_menu != options_menu:
+		selected_menu_index = 0
+		selected_button_index = 0
+		selected_menu = menus[selected_menu_index]
+		cursor.set_menu_type(MenuType.OPTIONS)
+		update_selected_button()
+		description_label.text = ""
+	

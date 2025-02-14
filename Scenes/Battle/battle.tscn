@@ -98,9 +98,10 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_hrbwa")
 script = ExtResource("1_745sj")
 
 [node name="MainMenu" type="Panel" parent="BattleMenu"]
-layout_mode = 0
-offset_right = 320.0
-offset_bottom = 256.0
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 1.0
 
 [node name="Menu" type="VBoxContainer" parent="BattleMenu/MainMenu"]
 layout_mode = 0
@@ -180,7 +181,7 @@ columns = 3
 
 [node name="AbilitiesLabel" type="Label" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
-text = "Abilities
+text = " Abilities
 
 "
 
@@ -255,7 +256,7 @@ alignment = 1
 [node name="Label" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Sucker Punch"
+text = " Sucker Punch"
 
 [node name="AbilityDescription" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
@@ -282,15 +283,65 @@ size_flags_vertical = 3
 text = "Text"
 
 [node name="Cursor" type="TextureRect" parent="BattleMenu"]
-layout_mode = 0
+z_index = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_left = 109.0
 offset_top = 55.512
-offset_right = 125.0
-offset_bottom = 71.512
+offset_right = -1155.0
+offset_bottom = -184.488
 rotation = 1.5708
 texture = ExtResource("2_620g3")
 flip_v = true
 script = ExtResource("3_wuqyt")
+
+[node name="ItemsMenu" type="Panel" parent="BattleMenu"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 1.0
+
+[node name="Menu" type="VBoxContainer" parent="BattleMenu/ItemsMenu"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 256.0
+theme = SubResource("Theme_q8sl7")
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="BattleMenu/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " ITEMS
+"
+label_settings = SubResource("LabelSettings_i3s7n")
+
+[node name="Slot" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot2" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot3" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot4" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot5" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
 
 [node name="Enemy" type="Node2D" parent="."]
 

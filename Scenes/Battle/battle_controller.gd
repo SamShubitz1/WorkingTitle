@@ -11,9 +11,9 @@ var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities
 	{"name":"Rock", "description": "A rock based attack"},
 	{"name": "Paper", "description": "A paper based attack"},
 	{"name": "Scissors", "description": "A scissors based attack"}
-	]}
+	], "items": ["Extra Rock", "Sharpener", "Extra Paper"]}
 var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
-var attacks: Dictionary = {"Rock": {"damage": 20}, "Paper": {"damage": 20}, "Scissors": {"damage": 20}}
+var attacks: Dictionary = {"Rock": {"type": "Rock", "damage": 20}, "Paper": {"type": "Paper", "damage": 20}, "Scissors": {"type": "Scissors", "damage": 20}}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 enum EventType {
@@ -23,14 +23,12 @@ enum EventType {
 	DEATH
 }
 
-# The idea is that ultimately each event object will have a type, maybe a class
-# So we make a new Dialog, Item, or Attack event to be passed into the event queue
-# right now events are just dictionaries with a type: EventType property
 func _ready() -> void:
 	player_health.max_value = character_info["max_health"]
 	enemy_health.max_value = enemy_info["max_health"]
 	handle_dialog(initial_dialog)
-	
+
+#The idea is that each event object will be a class instance, we make a new Dialog, Item, or Attack event to be passed into the event queue. Right now, events are just dictionaries with a type: EventType property
 func add_event(event) -> void:
 	event_queue.append(event)
 
