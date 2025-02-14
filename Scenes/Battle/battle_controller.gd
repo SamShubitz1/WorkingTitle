@@ -15,6 +15,8 @@ var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": [
 var attacks: Dictionary = {"Rock": {"damage": 20}, "Paper": {"damage": 20}, "Scissors": {"damage": 20}}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
+var char_dead: bool
+
 enum EventType {
 	DIALOG,
 	ATTACK,
@@ -43,21 +45,6 @@ func increment_queue() -> void:
 func play_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
 	
-func on_attack(attack_name) -> void:	
-	play_dialog({"text": "Player used " + attack_name + "!"})
-	
-	var attack = attacks[attack_name]
-	var enemy_attack = get_enemy_attack()
-	
-	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack + "!"})
-	
-	var result = calculate_attack_dmg(attack_name, enemy_attack)
-	
-	if result:
-		add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
-
-#normally the target would be know by this point but since this
-#is rock paper scissors, the dmg target is determined after the attacks
 func perform_attack(event: Dictionary) -> void:
 		if event.target == "enemy":
 			enemy_health.value -= event.damage
@@ -66,6 +53,21 @@ func perform_attack(event: Dictionary) -> void:
 			player_health.value -= event.damage
 			play_dialog({"text": "Player took " + str(event.damage) + " damage!"})
 		check_death()
+	
+func on_attack(player_attack) -> void:
+	if char_dead:
+		check_death()
+
+	play_dialog({"text": "Player used " + player_attack + "!"})
+	
+	var attack = attacks[player_attack]
+	var enemy_attack = get_enemy_attack()
+	
+	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack + "!"})
+	
+	var result = calculate_attack_dmg(player_attack, enemy_attack)
+	if result:
+		add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
 	
 #figure out how to put int as return type w/o getting error
 func calculate_attack_dmg(player_attack: String, enemy_attack: String):
@@ -106,5 +108,8 @@ func check_death() -> void:
 			dead_name = "Player"
 		else:
 			dead_name = "Enemy"
-		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
-		get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+		if not char_dead:
+			add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
+			char_dead = true
+		else:
+			get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")

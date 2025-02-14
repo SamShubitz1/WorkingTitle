@@ -76,7 +76,7 @@ func _input(_e) -> void:
 				"4. Status":
 					pass
 				"5. Retreat":
-					pass	
+					get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 					
 		elif selected_menu == abilities_menu:
 			if selected_button_index < character_info.abilities.size():
