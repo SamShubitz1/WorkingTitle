@@ -1,12 +1,11 @@
 extends Control
 
 @onready var cursor = $Cursor
+@onready var battle_controller = $"../BattleController"
 @onready var options_menu = $MainMenu/Menu.get_children().slice(1)
 @onready var abilities_menu = $AbilitiesMenu/Menu.get_children().slice(3)
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
 @onready var ability_description_label = $Descriptions/Labels/AbilityDescription
-@onready var player_health = $MainMenu/Menu/CharPanel/Health
-@onready var enemy_health = $"../Enemy/EnemyHealth"
 
 var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities": [
 	{"name":"Rock", "description": "A rock based attack"},
@@ -15,6 +14,12 @@ var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities
 	]}
 	
 var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
+
+enum EventType {
+	DIALOG,
+	ATTACK,
+	ITEM
+}
 
 var selected_button_index: int = 0
 var selected_button: Button
@@ -58,7 +63,9 @@ func _input(_e) -> void:
 			ability_description_label.text = "Text"
 			
 	elif Input.is_action_just_pressed("ui_accept"):
-		if selected_menu == options_menu:
+		if battle_controller.event_queue.size() > 0:
+			battle_controller.increment_queue()
+		elif selected_menu == options_menu:
 			match selected_button.text:
 				"1. Attack":
 					on_select_attack()
@@ -73,7 +80,8 @@ func _input(_e) -> void:
 					
 		elif selected_menu == abilities_menu:
 			if selected_button_index < character_info.abilities.size():
-				perform_attack(character_info.abilities[selected_button_index].name)
+				var attack_name = character_info.abilities[selected_button_index].name
+				battle_controller.on_attack(attack_name)
 			
 func update_selected_button() -> void:
 	selected_button = selected_menu[selected_button_index]
@@ -93,8 +101,6 @@ func on_select_attack() -> void:
 	
 func update_ui() -> void:
 	char_name_label.text = character_info.name
-	player_health.max_value = character_info["max_health"]
-	enemy_health.max_value = enemy_info["max_health"]
 	
 	for i in range(abilities_menu.size()):
 		if i < character_info.abilities.size():
@@ -107,38 +113,3 @@ func update_menus() -> void:
 	selected_menu = menus[selected_menu_index]
 	selected_button = selected_menu[selected_button_index]
 			
-func perform_attack(player_attack: String) -> void:
-	var enemy_attack = get_enemy_attack()
-	if player_attack == "Rock":
-		match enemy_attack:
-			"Rock":
-				pass
-			"Paper":
-				player_health.value -= 20
-			"Scissors":
-				enemy_health.value -= 20
-	elif player_attack == "Paper":
-		match enemy_attack:
-			"Rock":
-				enemy_health.value -= 20
-			"Paper":
-				pass
-			"Scissors":
-				player_health.value -= 20
-	elif player_attack == "Scissors":
-		match enemy_attack:
-			"Rock":
-				player_health.value -= 20
-			"Paper":
-				enemy_health.value -= 20
-			"Scissors":
-				pass
-	check_death()
-	
-func get_enemy_attack() -> String:
-	var attack_index = randi() % enemy_info["abilities"].size()
-	return enemy_info["abilities"][attack_index]
-	
-func check_death() -> void:
-	if player_health.value <= 0 || enemy_health.value <= 0:
-		get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn") 

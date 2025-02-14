@@ -1,0 +1,117 @@
+extends Node
+
+@onready var dialog_box = $"../DialogBox/Dialog"
+@onready var player_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
+@onready var enemy_health = $"../Enemy/EnemyHealth"
+
+var event_queue: Array = []
+
+var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities": [
+	{"name":"Rock", "description": "A rock based attack"},
+	{"name": "Paper", "description": "A paper based attack"},
+	{"name": "Scissors", "description": "A scissors based attack"}
+	]}
+	
+var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
+var attacks: Dictionary = {"Rock": {"damage": 20}, "Paper": {"damage": 20}, "Scissors": {"damage": 20}}
+var character_died: bool = false
+	
+var initial_dialog: Dictionary = {"type": EventType.DIALOG, "text": "A wild man appears!"}
+
+enum EventType {
+	DIALOG,
+	ATTACK,
+	ITEM
+}
+
+# The idea is that ultimately each event type will have a type, maybe a class
+# So we make a new Dialog, Item, or Attack to be passed into the event queue
+# right now events are just dictionaries with a type: EventType property
+func _ready() -> void:
+	player_health.max_value = character_info["max_health"]
+	enemy_health.max_value = enemy_info["max_health"]
+	play_dialog(initial_dialog)
+	
+func add_event(event) -> void:
+	event_queue.append(event)
+
+func increment_queue() -> void:
+	var event = event_queue.pop_front()
+	match event.type:
+		EventType.DIALOG:
+			play_dialog(event)
+		EventType.ATTACK:
+			perform_attack(event)
+	check_death()
+			
+func play_dialog(event: Dictionary) -> void:
+	dialog_box.text = event.text
+	
+func on_attack(attack_name) -> void:
+	add_event({"type": EventType.DIALOG, "text": "Player used " + attack_name + "!"})
+	increment_queue()
+	
+	var attack = attacks[attack_name]
+	var enemy_attack = get_enemy_attack()
+	
+	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack + "!"})
+	
+	var result = calculate_attack_dmg(attack_name, enemy_attack)
+	
+	if result:
+		add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
+
+#normally the target would be know by this point but since this
+#is rock paper scissors, the dmg target is determined after the attacks
+func perform_attack(event: Dictionary) -> void:
+		if event.target == "enemy":
+			enemy_health.value -= event.damage
+			play_dialog({"text": "Enemy took " + str(event.damage) + " damage!"})
+		elif event.target == "player":
+			player_health.value -= event.damage
+			play_dialog({"text": "Player took " + str(event.damage) + " damage!"})
+	
+#figure out how to put int as return type w/o getting error
+func calculate_attack_dmg(player_attack: String, enemy_attack: String):
+	if player_attack == "Rock":
+		match enemy_attack:
+			"Rock":
+				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
+			"Paper":
+				return {"target": "player", "damage": attacks[enemy_attack].damage}
+			"Scissors":
+				return {"target": "enemy", "damage": attacks[player_attack].damage}
+	elif player_attack == "Paper":
+		match enemy_attack:
+			"Rock":
+				return {"target": "enemy", "damage": attacks[player_attack].damage}
+			"Paper":
+				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
+			"Scissors":
+				return {"target": "player", "damage": attacks[enemy_attack].damage}
+	elif player_attack == "Scissors":
+		match enemy_attack:
+			"Rock":
+				return {"target": "player", "damage": attacks[enemy_attack].damage}
+			"Paper":
+				return {"target": "enemy", "damage": attacks[player_attack].damage}
+			"Scissors":
+				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
+	
+func get_enemy_attack() -> String:
+	var attack_index = randi() % enemy_info["abilities"].size()
+	var attack = enemy_info["abilities"][attack_index]
+	return attack
+
+func check_death() -> void:
+	if player_health.value <= 0 || enemy_health.value <= 0:
+		var dead_name
+		if player_health.value == 0:
+			dead_name = "Player"
+		else:
+			dead_name = "Enemy"
+		if not character_died:
+			add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
+			character_died = true
+		if event_queue.size() == 0 && character_died:
+			get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
