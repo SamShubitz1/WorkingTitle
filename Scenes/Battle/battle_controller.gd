@@ -53,26 +53,29 @@ func on_attack(player_attack: Dictionary) -> void:
 	handle_dialog({"text": "Player used " + player_attack.name + "!"})
 	var result = calculate_attack_dmg(player_attack)
 	add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
-	var enemy_attack = get_enemy_attack()
-	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
-	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage})
+	perform_enemy_attack()
 	
 func on_use_item(item: Dictionary) -> void:
 	handle_dialog({"text": "Player used " + item.name + "!"})
 	player.items_equipped.append(item)
 	player.populate_buffs_array()
+	perform_enemy_attack()
 
 func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
 	var damage = player_attack.damage
 	var multiplier = resolve_status_effects(player_attack)
-	if multiplier:
-		damage *= multiplier
+	damage *= multiplier
 	return {"target": "enemy", "damage": damage}
 	
 func get_enemy_attack() -> Dictionary:
 	var attack_index = randi() % enemy_info["abilities"].size()
 	var attack = enemy_info["abilities"][attack_index]
 	return attack
+	
+func perform_enemy_attack() -> void:
+	var enemy_attack = get_enemy_attack()
+	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
+	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage})
 
 func check_death() -> void:
 	if player_health.value <= 0 || enemy_health.value <= 0:

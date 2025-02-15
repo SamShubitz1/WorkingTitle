@@ -77,7 +77,7 @@ func _input(_e) -> void:
 					go_back()
 				else:
 					battle_controller.on_use_item(item) #expensive on large arrays
-					#cursor.disable() #do we want the item message to require an input to move past?
+					cursor.disable() #do we want the item message to require an input to move past?
 					update_ui()
 					go_back()
  
