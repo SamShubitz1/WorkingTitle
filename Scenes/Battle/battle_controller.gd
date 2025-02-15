@@ -11,6 +11,7 @@ var event_queue: Array = []
 var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": []}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
+#may add more event types eventually e.g. item, animation
 enum EventType {
 	DIALOG,
 	ATTACK,
@@ -48,8 +49,9 @@ func handle_attack(event: Dictionary) -> void:
 			player_health.value -= event.damage
 			handle_dialog({"text": "Player took " + str(event.damage) + " damage!"})
 		check_death()
-	
-func on_attack(player_attack: Dictionary) -> void:
+
+#will eventually pass down target: Node as well as player_attack
+func on_use_attack(player_attack: Dictionary) -> void:
 	handle_dialog({"text": "Player used " + player_attack.name + "!"})
 	var result = calculate_attack_dmg(player_attack)
 	add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
@@ -67,15 +69,15 @@ func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
 	damage *= multiplier
 	return {"target": "enemy", "damage": damage}
 	
-func get_enemy_attack() -> Dictionary:
-	var attack_index = randi() % enemy_info["abilities"].size()
-	var attack = enemy_info["abilities"][attack_index]
-	return attack
-	
 func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
 	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage})
+	
+func get_enemy_attack() -> Dictionary:
+	var attack_index = randi() % enemy_info["abilities"].size()
+	var attack = enemy_info["abilities"][attack_index]
+	return attack
 
 func check_death() -> void:
 	if player_health.value <= 0 || enemy_health.value <= 0:

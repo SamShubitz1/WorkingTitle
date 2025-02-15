@@ -20,12 +20,6 @@ var selected_menu: Array
 
 var initial_cursor_position: Vector2 = Vector2(0, 45)
 
-enum MenuType {
-	OPTIONS,
-	ABILITIES,
-	ITEMS
-}
-
 #using process_frame seems to help avoid race issues w/ updating cursor position
 func _ready() -> void:
 	items_node.hide()
@@ -52,34 +46,13 @@ func _input(_e) -> void:
 				cursor.enable()
 		
 		elif selected_menu == options_menu:
-			match selected_button.text:
-				"1. Attack":
-					on_select_attack_menu()
-				"2. Move":
-					pass
-				"3. Items":
-					on_select_items_menu()
-				"4. Status":
-					pass
-				"5. Retreat":
-					on_select_retreat()
+			on_select_option()
 					
 		elif selected_menu == abilities_menu:
-			if selected_button_index < character_info.abilities.size():
-				var attack = character_info.abilities[selected_button_index]
-				battle_controller.on_attack(attack)
-				cursor.disable()
+			on_select_ability()
 				
 		elif selected_menu == items_menu:
-			if selected_button_index < character_info.items.size():
-				var item = character_info.items.pop_at(selected_button_index)
-				if item.name == "Empty":
-					go_back()
-				else:
-					battle_controller.on_use_item(item) #expensive on large arrays
-					cursor.disable() #do we want the item message to require an input to move past?
-					update_ui()
-					go_back()
+			on_select_item()
  
 #using process_frame seems to help avoid race issues w/ updating cursor position
 func update_selected_button() -> void:
@@ -92,7 +65,6 @@ func update_selected_button() -> void:
 			description_label.text = character_info.abilities[selected_button_index].description
 		else:
 			description_label.text = "???"
-			
 	elif selected_menu == items_menu:
 		if character_info.items.is_empty():
 			character_info.items.append({"name": "Empty", "description": ""})
@@ -103,17 +75,47 @@ func update_selected_button() -> void:
 func on_select_attack_menu() -> void:
 	selected_menu_index = 1
 	selected_menu = menus[selected_menu_index]
-	cursor.set_menu_type(MenuType.ABILITIES)
+	cursor.set_menu_type(cursor.MenuType.ABILITIES)
 	update_selected_button()
 	
 func on_select_items_menu() -> void:
 	selected_menu_index = 2
 	selected_menu = menus[selected_menu_index]
 	selected_button_index = 0
-	cursor.set_menu_type(MenuType.ITEMS)
+	cursor.set_menu_type(cursor.MenuType.ITEMS)
 	update_selected_button()
 	options_node.hide()
 	items_node.show()
+	
+func on_select_option() -> void:
+	match selected_button.text:
+		"1. Attack":
+			on_select_attack_menu()
+		"2. Move":
+			pass
+		"3. Items":
+			on_select_items_menu()
+		"4. Status":
+			pass
+		"5. Retreat":
+			on_select_retreat()
+			
+func on_select_ability() -> void:
+	if selected_button_index < character_info.abilities.size():
+		var attack = character_info.abilities[selected_button_index]
+		battle_controller.on_use_attack(attack)
+		cursor.disable()
+		
+func on_select_item() -> void:
+	if selected_button_index < character_info.items.size():
+		var item = character_info.items.pop_at(selected_button_index) #expensive on large arrays
+		if item.name == "Empty":
+			go_back()
+		else:
+			battle_controller.on_use_item(item)
+			cursor.disable()
+			update_ui()
+			go_back()
 	
 func on_select_retreat() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/overworld.tscn")
@@ -180,7 +182,7 @@ func go_back():
 		selected_menu_index = 0
 		selected_menu = menus[selected_menu_index]
 		selected_button_index = 0
-		cursor.set_menu_type(MenuType.OPTIONS)
+		cursor.set_menu_type(cursor.MenuType.OPTIONS)
 		update_selected_button()
 		description_label.text = ""
 	
