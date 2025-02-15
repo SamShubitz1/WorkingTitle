@@ -11,15 +11,15 @@ var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities
 	{"name":"Rock", "description": "A rock based attack"},
 	{"name": "Paper", "description": "A paper based attack"},
 	{"name": "Scissors", "description": "A scissors based attack"}
-	], "items": ["Extra Rock", "Sharpener", "Extra Paper"]}
+	], "items": ["Extra Rock", "Sharpener", "Extra Paper"], "items_equipped": []}
 var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
 var attacks: Dictionary = {"Rock": {"type": "Rock", "damage": 20}, "Paper": {"type": "Paper", "damage": 20}, "Scissors": {"type": "Scissors", "damage": 20}}
+var items: Dictionary = {"Extra Rock": {"multiplier": .2}, "Sharpener": {"multiplier": .2}, "Extra Paper": {"multiplier": .2}}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 enum EventType {
 	DIALOG,
 	ATTACK,
-	ITEM,
 	DEATH
 }
 
@@ -54,9 +54,8 @@ func handle_attack(event: Dictionary) -> void:
 			handle_dialog({"text": "Player took " + str(event.damage) + " damage!"})
 		check_death()
 	
-func on_attack(player_attack) -> void:
+func on_attack(player_attack: String) -> void:
 	handle_dialog({"text": "Player used " + player_attack + "!"})
-	
 	var attack = attacks[player_attack]
 	var enemy_attack = get_enemy_attack()
 	
@@ -66,6 +65,11 @@ func on_attack(player_attack) -> void:
 	if result:
 		add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
 	
+func on_use_item(item_name: String) -> void:
+	handle_dialog({"text": "Player used " + item_name + "!"})
+	var item = items[item_name]
+	character_info.items_equipped.append(item)
+
 func calculate_attack_dmg(player_attack: String, enemy_attack: String):
 	if player_attack == "Rock":
 		match enemy_attack:
@@ -74,11 +78,17 @@ func calculate_attack_dmg(player_attack: String, enemy_attack: String):
 			"Paper":
 				return {"target": "player", "damage": attacks[enemy_attack].damage}
 			"Scissors":
-				return {"target": "enemy", "damage": attacks[player_attack].damage}
+				var damage = attacks[player_attack].damage
+				if items["Extra Rock"] in character_info.items_equipped:
+					damage += damage * items["Extra Rock"].multiplier
+				return {"target": "enemy", "damage": damage}
 	elif player_attack == "Paper":
 		match enemy_attack:
 			"Rock":
-				return {"target": "enemy", "damage": attacks[player_attack].damage}
+				var damage = attacks[player_attack].damage
+				if items["Extra Paper"] in character_info.items_equipped:
+					damage += damage * items["Extra Paper"].multiplier
+				return {"target": "enemy", "damage": damage}
 			"Paper":
 				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
 			"Scissors":
@@ -88,7 +98,10 @@ func calculate_attack_dmg(player_attack: String, enemy_attack: String):
 			"Rock":
 				return {"target": "player", "damage": attacks[enemy_attack].damage}
 			"Paper":
-				return {"target": "enemy", "damage": attacks[player_attack].damage}
+				var damage = attacks[player_attack].damage
+				if items["Sharpener"] in character_info.items_equipped:
+					damage += damage * items["Sharpener"].multiplier
+				return {"target": "enemy", "damage": damage}
 			"Scissors":
 				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
 	

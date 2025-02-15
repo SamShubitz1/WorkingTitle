@@ -37,7 +37,7 @@ enum MenuType {
 	ITEMS
 }
 
-#using process_frame to avoid race issues w/ updating cursor position
+#using process_frame seems to help avoid race issues w/ updating cursor position
 func _ready() -> void:
 	items_node.hide()
 	update_ui()
@@ -57,7 +57,7 @@ func _input(_e) -> void:
 			go_back()
 			
 	if Input.is_action_just_pressed("ui_accept"):
-		if battle_controller.event_queue.size() > 0:
+		if not battle_controller.event_queue.is_empty():
 			battle_controller.increment_queue()
 			if battle_controller.event_queue.size() == 0:
 				cursor.enable()
@@ -65,11 +65,11 @@ func _input(_e) -> void:
 		elif selected_menu == options_menu:
 			match selected_button.text:
 				"1. Attack":
-					on_select_attack()
+					on_select_attack_menu()
 				"2. Move":
 					pass
 				"3. Items":
-					on_select_items()
+					on_select_items_menu()
 				"4. Status":
 					pass
 				"5. Retreat":
@@ -80,8 +80,18 @@ func _input(_e) -> void:
 				var attack = character_info.abilities[selected_button_index].name
 				battle_controller.on_attack(attack)
 				cursor.disable()
-
-#using process_frame to avoid race issues w/ updating cursor position
+				
+		elif selected_menu == items_menu:
+			if selected_button_index < character_info.items.size():
+				var item = character_info.items.pop_at(selected_button_index)
+				if item.name == "Empty":
+					go_back()
+				else:
+					battle_controller.on_use_item(item.name) #expensive on large arrays
+					update_ui()
+					go_back()
+ 
+#using process_frame seems to help avoid race issues w/ updating cursor position
 func update_selected_button() -> void:
 	selected_button = selected_menu[selected_button_index]
 	await get_tree().process_frame
@@ -94,18 +104,19 @@ func update_selected_button() -> void:
 			description_label.text = "???"
 			
 	elif selected_menu == items_menu:
-		if selected_button_index < character_info.items.size():
+		if character_info.items.is_empty():
+			character_info.items.append({"name": "Empty", "description": ""})
+			update_ui()
+		elif selected_button_index < character_info.items.size():
 			description_label.text = character_info.items[selected_button_index].description
-		else:
-			description_label.text = "???"
 
-func on_select_attack() -> void:
+func on_select_attack_menu() -> void:
 	selected_menu_index = 1
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(MenuType.ABILITIES)
 	update_selected_button()
 	
-func on_select_items() -> void:
+func on_select_items_menu() -> void:
 	selected_menu_index = 2
 	selected_menu = menus[selected_menu_index]
 	selected_button_index = 0
@@ -119,17 +130,17 @@ func on_select_retreat() -> void:
 	
 func update_ui() -> void:
 	char_name_label.text = character_info.name
-	
 	for i in range(abilities_menu.size()):
 		if i < character_info.abilities.size():
-			abilities_menu[i].text += str(i + 1) + ". " + character_info.abilities[i].name
+			abilities_menu[i].text = str(i + 1) + ". " + character_info.abilities[i].name
 		else:
 			abilities_menu[i].text = "???"
-			
-	for i in range(character_info.items.size()):
-		items_menu[i].text = character_info.items[i].name
+	for i in range(items_menu.size()):
+		if i < character_info.items.size():
+			items_menu[i].text = character_info.items[i].name
+		else:
+			items_menu[i].text = ""
 		
-
 func update_menus() -> void:
 	menus = [options_menu, abilities_menu, items_menu]
 	selected_menu = menus[selected_menu_index]
@@ -143,7 +154,6 @@ func navigate_backward() -> void:
 		else:
 			selected_button_index = (selected_button_index - 1)
 			update_selected_button()
-			
 	elif selected_menu == items_menu:
 		if selected_button_index == 0:
 			selected_button_index += (character_info.items.size() - 1)
