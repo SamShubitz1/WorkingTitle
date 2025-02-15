@@ -9,7 +9,6 @@ extends Node
 var event_queue: Array = []
 
 var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": []}
-
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 enum EventType {
@@ -52,9 +51,9 @@ func handle_attack(event: Dictionary) -> void:
 	
 func on_attack(player_attack: Dictionary) -> void:
 	handle_dialog({"text": "Player used " + player_attack.name + "!"})
-	var enemy_attack = get_enemy_attack()
 	var result = calculate_attack_dmg(player_attack)
 	add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
+	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
 	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage})
 	
@@ -65,7 +64,7 @@ func on_use_item(item: Dictionary) -> void:
 
 func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
 	var damage = player_attack.damage
-	var multiplier = resolve_effects(player_attack)
+	var multiplier = resolve_status_effects(player_attack)
 	if multiplier:
 		damage *= multiplier
 	return {"target": "enemy", "damage": damage}
@@ -86,7 +85,7 @@ func check_death() -> void:
 		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
 		add_event({"type": EventType.DEATH})
 		
-func resolve_effects(attack: Dictionary):
+func resolve_status_effects(attack: Dictionary) -> float:
 	var buff = player.buffs.get(attack.type, 0) + 1
 	return buff
 	

@@ -120,11 +120,13 @@ func on_select_retreat() -> void:
 	
 func update_ui() -> void:
 	char_name_label.text = character_info.name
+	
 	for i in range(abilities_menu.size()):
 		if i < character_info.abilities.size():
 			abilities_menu[i].text = str(i + 1) + ". " + character_info.abilities[i].name
 		else:
 			abilities_menu[i].text = "???"
+			
 	for i in range(items_menu.size()):
 		if i < character_info.items.size():
 			items_menu[i].text = character_info.items[i].name
