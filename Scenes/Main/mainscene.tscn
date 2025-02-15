@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=4 uid="uid://csf6egx1otdtc"]
+[gd_scene load_steps=10 format=4 uid="uid://csf6egx1otdtc"]
 
 [ext_resource type="Texture2D" uid="uid://dmwfrd0bmmrry" path="res://Art/Tiles/pkmnpathsheet.png" id="1_gnpmv"]
 [ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="2_gisl2"]
 [ext_resource type="Script" path="res://Scenes/Player/my_player.gd" id="3_ra62t"]
 [ext_resource type="Script" path="res://Scenes/Main/map_controller.gd" id="4_13v58"]
 [ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="4_noa1d"]
+[ext_resource type="Script" path="res://Scenes/Main/player_controller.gd" id="5_orlxc"]
 [ext_resource type="Script" path="res://Scenes/Npc/npc.gd" id="6_d3usa"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xndd3"]
@@ -46,13 +47,16 @@ texture_filter = 1
 tile_map_data = PackedByteArray("AAABAAEAAAABAAAAAAABAAIAAAABAAAAAAABAAMAAAABAAAAAAACAAEAAAAEAAEAAAACAAIAAAACAAAAAAACAAMAAAABAAIAAAAAAAEAAAADAAIAAAAAAAIAAAADAAIAAAAAAAMAAAADAAIAAAABAAQAAAAAAAEAAAACAAQAAAAEAAAAAAADAAQAAAAEAAAAAAAEAAQAAAABAAEAAAADAAEAAAAAAAIAAAAEAAEAAAACAAAAAAAEAAIAAAACAAAAAAAEAAMAAAACAAAAAAAFAAEAAAADAAIAAAAFAAIAAAADAAIAAAAFAAMAAAADAAIAAAAFAAQAAAADAAIAAAAFAAAAAAADAAIAAAAEAAAAAAADAAEAAAADAAAAAAADAAAAAAACAAAAAAADAAAAAAABAAAAAAACAAEAAAAAAAAAAAADAAIAAAAAAAQAAAADAAIAAAADAAIAAAABAAAAAAADAAMAAAACAAIAAAAAAAUAAAADAAIAAAABAAUAAAADAAIAAAACAAUAAAADAAIAAAADAAUAAAADAAIAAAAEAAUAAAADAAIAAAAGAAAAAAAFAAEAAAAGAAEAAAAFAAEAAAAGAAIAAAAFAAEAAAAGAAMAAAAFAAEAAAAGAAQAAAAFAAEAAAAGAAUAAAAFAAEAAAAHAAAAAAAGAAAAAAAHAAEAAAAGAAAAAAAHAAIAAAAGAAAAAAAHAAMAAAAGAAAAAAAHAAQAAAAGAAAAAAAHAAUAAAAGAAAAAAAHAAYAAAAGAAEAAAAGAAYAAAAGAAEAAAAFAAYAAAAGAAEAAAAEAAYAAAAGAAEAAAADAAYAAAAGAAEAAAACAAYAAAAGAAEAAAABAAYAAAAGAAEAAAAAAAYAAAAGAAEAAAAFAAUAAAAGAAIAAAAAAAcAAAAFAAAAAAABAAcAAAADAAIAAAACAAcAAAADAAIAAAADAAcAAAAEAAIAAAAEAAcAAAAEAAIAAAAFAAcAAAAFAAAAAAAGAAcAAAAFAAIAAAAHAAcAAAAEAAIAAAAIAAcAAAADAAIAAAAIAAYAAAAEAAIAAAAIAAUAAAAFAAAAAAAIAAQAAAAFAAIAAAAIAAMAAAAEAAIAAAAIAAIAAAAFAAIAAAAIAAEAAAAFAAAAAAAIAAAAAAAFAAIAAAAJAAAAAAAFAAIAAAAJAAEAAAAFAAAAAAAJAAIAAAAFAAIAAAAJAAMAAAAFAAIAAAAJAAQAAAAFAAIAAAAJAAUAAAAEAAIAAAAJAAYAAAADAAIAAAAJAAcAAAAEAAIAAAA=")
 tile_set = SubResource("TileSet_uvfte")
 
-[node name="MyPlayer" parent="." instance=ExtResource("2_gisl2")]
-position = Vector2(8, 8)
-script = ExtResource("3_ra62t")
-
-[node name="Camera2D" type="Camera2D" parent="MyPlayer"]
-zoom = Vector2(6, 6)
-
 [node name="Norman" parent="." instance=ExtResource("4_noa1d")]
 position = Vector2(56, 88)
 script = ExtResource("6_d3usa")
+
+[node name="PlayerController" type="Node2D" parent="."]
+script = ExtResource("5_orlxc")
+
+[node name="MyPlayer" parent="PlayerController" instance=ExtResource("2_gisl2")]
+position = Vector2(8, 8)
+script = ExtResource("3_ra62t")
+
+[node name="Camera2D" type="Camera2D" parent="PlayerController/MyPlayer"]
+zoom = Vector2(6, 6)
