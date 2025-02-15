@@ -4,8 +4,8 @@ extends Node2D
 @onready var Overworld_Scene_File = "res://Scenes/Main/overworld.tscn"
 @onready var Battle_Scene_File = "res://Scenes/Battle/battle.tscn"
 
-#TODO @onready var Title_Scene_Node: Node = 
-@onready var Overworld_Scene_Node: Node = get_tree().get_root().find_node("Overworld")
+#TODO @onready var Title_Scene_Node: Node =
+#@onready var Overworld_Scene_Node: Node = get_tree().get_root().find_node("Overworld")
 #@onready var Battle_Scene_Node: Node = get_tree().get_root().find_node("node_name")
 
 var foo = "bar"
@@ -33,20 +33,20 @@ func load_battle_scene(object: Node) -> void:
 
 # load new overworld scene from file
 func load_overworld_scene() -> void:
-	load_new_scene(Overworld_Scene_File)
+	load_new_scene(Overworld_Scene_File, null)
 	return
 
 # switch to battle scene node
 func switch_to_battle_scene() -> void:
 	# check for existing battle scene node in tree
 		# create new node if not found
-	
+
 	# pause / unload current scene (overworld)
-	
+
 	# unpause / load battle scene
-	
+
 	# update GameController state for mode tracking
-	
+
 	return
 
 # switch to overworld scene node
