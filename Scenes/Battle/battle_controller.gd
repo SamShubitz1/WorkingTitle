@@ -14,7 +14,7 @@ var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities
 	], "items": ["Extra Rock", "Sharpener", "Extra Paper"], "items_equipped": []}
 var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
 var attacks: Dictionary = {"Rock": {"type": "Rock", "damage": 20}, "Paper": {"type": "Paper", "damage": 20}, "Scissors": {"type": "Scissors", "damage": 20}}
-var items: Dictionary = {"Extra Rock": {"multiplier": .2}, "Sharpener": {"multiplier": .2}, "Extra Paper": {"multiplier": .2}}
+var items: Dictionary = {"Extra Rock": {"id": 0, "multiplier": .2}, "Sharpener": {"id": 1, "multiplier": .2}, "Extra Paper": {"id": 2, "multiplier": .2}}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 enum EventType {
@@ -80,6 +80,8 @@ func calculate_attack_dmg(player_attack: String, enemy_attack: String):
 			"Scissors":
 				var damage = attacks[player_attack].damage
 				if items["Extra Rock"] in character_info.items_equipped:
+					print(character_info.items_equipped)
+					print(items["Extra Rock"])
 					damage += damage * items["Extra Rock"].multiplier
 				return {"target": "enemy", "damage": damage}
 	elif player_attack == "Paper":
