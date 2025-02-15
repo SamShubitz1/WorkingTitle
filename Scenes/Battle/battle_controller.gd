@@ -44,10 +44,8 @@ func handle_dialog(event: Dictionary) -> void:
 func handle_attack(event: Dictionary) -> void:
 		if event.target == "enemy":
 			enemy_health.value -= event.damage
-			handle_dialog({"text": "Enemy took " + str(event.damage) + " damage!"})
 		elif event.target == "player":
 			player_health.value -= event.damage
-			handle_dialog({"text": "Player took " + str(event.damage) + " damage!"})
 		check_death()
 
 #will eventually pass down target: Node as well as player_attack
@@ -55,12 +53,14 @@ func on_use_attack(player_attack: Dictionary) -> void:
 	handle_dialog({"text": "Player used " + player_attack.name + "!"})
 	var result = calculate_attack_dmg(player_attack)
 	add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
+	add_event({"type": EventType.DIALOG, "text": "Enemy took " + str(result.damage) + " damage!"})
 	perform_enemy_attack()
 	
 func on_use_item(item: Dictionary) -> void:
 	handle_dialog({"text": "Player used " + item.name + "!"})
 	player.items_equipped.append(item)
 	player.populate_buffs_array()
+	add_event({"type": EventType.DIALOG, "text": item.effect_description})
 	perform_enemy_attack()
 
 func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
@@ -73,6 +73,7 @@ func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
 	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage})
+	add_event({"type": EventType.DIALOG, "text": "Player took " + str(enemy_attack.damage) + " damage!"})
 	
 func get_enemy_attack() -> Dictionary:
 	var attack_index = randi() % enemy_info["abilities"].size()

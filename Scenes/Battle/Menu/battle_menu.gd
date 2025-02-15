@@ -70,7 +70,7 @@ func update_selected_button() -> void:
 			character_info.items.append({"name": "Empty", "description": ""})
 			update_ui()
 		elif selected_button_index < character_info.items.size():
-			description_label.text = character_info.items[selected_button_index].description
+			description_label.text = character_info.items[selected_button_index].menu_description
 
 func on_select_attack_menu() -> void:
 	selected_menu_index = 1
