@@ -2,6 +2,7 @@ extends Node2D
 
 @onready var Player: PlayerClass = $MyPlayer
 @onready var Map_Controller = $"../MapController"
+@onready var Game_Controller = get_tree().current_scene
 
 @export var DEBUG_PLAYER: bool = true
 
@@ -190,7 +191,9 @@ func player_action_pressed() -> void:
 # begin battle scene
 func enter_battle_scene() -> void:
 	save_data()
-	get_tree().change_scene_to_file("res://Scenes/Battle/battle.tscn")
+	print("foo:" + str(Game_Controller.foo))
+	print("gamecontroller:" + str(Game_Controller))
+	Game_Controller.load_new_scene("res://Scenes/Battle/battle.tscn")
 	return
 
 # set player animation based on direction

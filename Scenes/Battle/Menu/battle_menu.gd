@@ -118,7 +118,7 @@ func on_select_item() -> void:
 			go_back()
 	
 func on_select_retreat() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Main/overworld.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	
 func update_ui() -> void:
 	char_name_label.text = character_info.name

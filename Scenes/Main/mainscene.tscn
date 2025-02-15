@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://csf6egx1otdtc"]
+[gd_scene load_steps=3 format=3 uid="uid://csf6egx1otdtc"]
 
+[ext_resource type="Script" path="res://Scenes/Main/game_controller.gd" id="1_2nx2o"]
 [ext_resource type="PackedScene" uid="uid://d4npjlduq7bda" path="res://Scenes/Main/overworld.tscn" id="1_6a1ku"]
 
 [node name="MainScene" type="Node2D"]
+script = ExtResource("1_2nx2o")
 
-[node name="GameController" type="Node2D" parent="."]
-
-[node name="Overworld" parent="GameController" instance=ExtResource("1_6a1ku")]
+[node name="Overworld" parent="." instance=ExtResource("1_6a1ku")]
