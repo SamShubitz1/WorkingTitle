@@ -14,7 +14,7 @@ var enemy_info: Dictionary = {
 	"abilities": []}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
-#may add more event types eventually e.g. item, animation
+#might add more event types eventually e.g. item, animation
 enum EventType {
 	DIALOG,
 	ATTACK,
@@ -31,7 +31,6 @@ func _ready() -> void:
 	enemy_health.max_value = enemy_info["max_health"]
 	handle_dialog(initial_dialog)
 
-#The idea is that each event object will be a class instance, we make a new Dialog, Item, or Attack event to be passed into the event queue. Right now, events are just dictionaries with a type: EventType property
 func add_event(event) -> void:
 	event_queue.append(event)
 
@@ -71,10 +70,11 @@ func on_use_item(item: Dictionary) -> void:
 	player.populate_buffs_array()
 	add_event({"type": EventType.DIALOG, "text": item.effect_description})
 	perform_enemy_attack()
-	
+
 func on_try_retreat() -> void:
 	handle_dialog({"text": "Player tried to retreat!"})
-	if player_health.value >= enemy_health.value:
+	var success: bool = player_health.value > enemy_health.value
+	if success:
 		clear_queue()
 		add_event({"type": EventType.DIALOG, "text": "Got away safely!"})
 		add_event({"type": EventType.RETREAT})
@@ -83,9 +83,9 @@ func on_try_retreat() -> void:
 		perform_enemy_attack()
 		
 func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
-	var damage = player_attack.damage
-	var multiplier = resolve_status_effects(player_attack)
-	damage *= multiplier
+	var damage: int = player_attack.damage
+	var multiplier: float = resolve_status_effects(player_attack)
+	damage *= multiplier #if damage ends in '0' it will stay an int
 	return {"target": "enemy", "damage": damage}
 	
 func perform_enemy_attack() -> void:

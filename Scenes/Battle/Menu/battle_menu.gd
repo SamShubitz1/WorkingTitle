@@ -67,7 +67,7 @@ func update_selected_button() -> void:
 			description_label.text = "???"
 	elif selected_menu == items_menu:
 		if character_info.items.is_empty():
-			character_info.items.append({"name": "Empty", "description": ""})
+			character_info.items.append({"name": "Empty", "menu_description": ""})
 			update_ui()
 		elif selected_button_index < character_info.items.size():
 			description_label.text = character_info.items[selected_button_index].menu_description
@@ -89,34 +89,32 @@ func on_select_items_menu() -> void:
 	
 func on_select_option() -> void:
 	match selected_button.text:
-		"1. Attack":
+		" Attack":
 			on_select_attack_menu()
-		"2. Move":
+		" Move":
 			pass
-		"3. Items":
+		" Items":
 			on_select_items_menu()
-		"4. Status":
+		" Status":
 			pass
-		"5. Retreat":
+		" Retreat":
 			on_select_retreat()
 			
 func on_select_ability() -> void:
-	if selected_button_index < character_info.abilities.size():
-		var attack = character_info.abilities[selected_button_index]
-		battle_controller.on_use_attack(attack)
-		cursor.disable()
-		go_back()
+	var attack = character_info.abilities[selected_button_index]
+	battle_controller.on_use_attack(attack)
+	cursor.disable()
+	go_back()
 		
 func on_select_item() -> void:
-	if selected_button_index < character_info.items.size():
-		var item = character_info.items.pop_at(selected_button_index) #expensive on large arrays
-		if item.name == "Empty":
-			go_back()
-		else:
-			battle_controller.on_use_item(item)
-			cursor.disable()
-			update_ui()
-			go_back()
+	var item = character_info.items.pop_at(selected_button_index) #expensive on large arrays
+	if item.name == "Empty":
+		go_back()
+	else:
+		battle_controller.on_use_item(item)
+		cursor.disable()
+		update_ui()
+		go_back()
 	
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
@@ -127,7 +125,7 @@ func update_ui() -> void:
 	
 	for i in range(abilities_menu.size()):
 		if i < character_info.abilities.size():
-			abilities_menu[i].text = str(i + 1) + ". " + character_info.abilities[i].name
+			abilities_menu[i].text = character_info.abilities[i].name
 		else:
 			abilities_menu[i].text = "???"
 			

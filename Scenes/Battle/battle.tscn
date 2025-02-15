@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bd4t1hl2ilp2x"]
+[gd_scene load_steps=17 format=3 uid="uid://bd4t1hl2ilp2x"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/battle_controller.gd" id="1_6nkpg"]
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="1_745sj"]
@@ -9,6 +9,18 @@
 [ext_resource type="Script" path="res://Scenes/Battle/player.gd" id="6_5ss40"]
 
 [sub_resource type="Theme" id="Theme_3gble"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tbwo3"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [sub_resource type="Theme" id="Theme_ddpyb"]
 
@@ -50,7 +62,7 @@ theme = SubResource("Theme_3gble")
 [node name="BattleController" type="Node" parent="."]
 script = ExtResource("1_6nkpg")
 
-[node name="DialogBox" type="ColorRect" parent="."]
+[node name="DialogBox" type="Panel" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_top = -1.988
@@ -59,6 +71,7 @@ offset_left = 427.0
 offset_top = 42.9281
 offset_right = -453.0
 offset_bottom = -338.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tbwo3")
 
 [node name="Dialog" type="Label" parent="DialogBox"]
 custom_minimum_size = Vector2(400, 128)
@@ -66,8 +79,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -15.0
-offset_bottom = -15.0
+offset_top = -1.00002
+offset_bottom = -0.999985
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
@@ -140,31 +153,31 @@ value = 100.0
 [node name="Attack" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "1. Attack"
+text = " Attack"
 alignment = 0
 
 [node name="Move" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "2. Move"
+text = " Move"
 alignment = 0
 
 [node name="Items" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "3. Items"
+text = " Items"
 alignment = 0
 
 [node name="Status" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "4. Status"
+text = " Status"
 alignment = 0
 
 [node name="Retreat" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "5. Retreat"
+text = " Retreat"
 alignment = 0
 
 [node name="AbilitiesMenu" type="Panel" parent="BattleMenu"]
