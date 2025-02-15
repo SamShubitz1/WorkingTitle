@@ -175,11 +175,11 @@ func player_action_pressed() -> void:
 	var actioned_tile = Map_Controller.get_tile_at_grid_coords(action_coords)
 	if(object == null and actioned_tile == null):
 		return
-	
+
 	if(object != null):
 		if (DEBUG_PLAYER): print_action_object_report(object)
 		if (object.battle_ready):
-			enter_battle_scene()
+			enter_battle_scene(object)
 		object.kill()
 	elif(actioned_tile != null):
 		# get tile info
@@ -189,11 +189,10 @@ func player_action_pressed() -> void:
 
 
 # begin battle scene
-func enter_battle_scene() -> void:
+func enter_battle_scene(object: Node) -> void:
 	save_data()
-	print("foo:" + str(Game_Controller.foo))
-	print("gamecontroller:" + str(Game_Controller))
-	Game_Controller.load_new_scene("res://Scenes/Battle/battle.tscn")
+	print_debug("test gamecontroller: " + str(Game_Controller.foo)) # test gamecontroller property access
+	Game_Controller.load_battle_scene(object)
 	return
 
 # set player animation based on direction
