@@ -8,18 +8,25 @@ extends Node
 
 var event_queue: Array = []
 
-var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": []}
+var enemy_info: Dictionary = {
+	"name": "Norman",
+	"max_health": 80,
+	"abilities": []}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 #may add more event types eventually e.g. item, animation
 enum EventType {
 	DIALOG,
 	ATTACK,
-	DEATH
+	DEATH,
+	RETREAT
 }
 
 func _ready() -> void:
-	enemy_info["abilities"] = [player.abilities_dictionary["Rock"], player.abilities_dictionary["Paper"], player.abilities_dictionary["Scissors"]]
+	enemy_info["abilities"] = [
+	player.abilities_dictionary["Rock"],
+	player.abilities_dictionary["Paper"],
+	player.abilities_dictionary["Scissors"]]
 	player_health.max_value = player["max_health"]
 	enemy_health.max_value = enemy_info["max_health"]
 	handle_dialog(initial_dialog)
@@ -37,6 +44,8 @@ func increment_queue() -> void:
 			handle_attack(event)
 		EventType.DEATH:
 			handle_death()
+		EventType.RETREAT:
+			handle_retreat()
 			
 func handle_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
@@ -62,7 +71,17 @@ func on_use_item(item: Dictionary) -> void:
 	player.populate_buffs_array()
 	add_event({"type": EventType.DIALOG, "text": item.effect_description})
 	perform_enemy_attack()
-
+	
+func on_try_retreat() -> void:
+	handle_dialog({"text": "Player tried to retreat!"})
+	if player_health.value >= enemy_health.value:
+		clear_queue()
+		add_event({"type": EventType.DIALOG, "text": "Got away safely!"})
+		add_event({"type": EventType.RETREAT})
+	else:
+		add_event({"type": EventType.DIALOG, "text": "But it failed!"})
+		perform_enemy_attack()
+		
 func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
 	var damage = player_attack.damage
 	var multiplier = resolve_status_effects(player_attack)
@@ -97,6 +116,9 @@ func resolve_status_effects(attack: Dictionary) -> float:
 	
 func clear_queue() -> void:
 	event_queue.clear()
-			
+	
+func handle_retreat() -> void:
+	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+		
 func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")

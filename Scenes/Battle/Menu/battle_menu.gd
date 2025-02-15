@@ -105,6 +105,7 @@ func on_select_ability() -> void:
 		var attack = character_info.abilities[selected_button_index]
 		battle_controller.on_use_attack(attack)
 		cursor.disable()
+		go_back()
 		
 func on_select_item() -> void:
 	if selected_button_index < character_info.items.size():
@@ -118,7 +119,8 @@ func on_select_item() -> void:
 			go_back()
 	
 func on_select_retreat() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+	battle_controller.on_try_retreat()
+	cursor.disable()
 	
 func update_ui() -> void:
 	char_name_label.text = character_info.name
