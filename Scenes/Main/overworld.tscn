@@ -1,0 +1,62 @@
+[gd_scene load_steps=10 format=4 uid="uid://d4npjlduq7bda"]
+
+[ext_resource type="Script" path="res://Scenes/Main/map_controller.gd" id="1_tkkut"]
+[ext_resource type="Texture2D" uid="uid://dmwfrd0bmmrry" path="res://Art/Tiles/pkmnpathsheet.png" id="2_osdsw"]
+[ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="3_lolx1"]
+[ext_resource type="Script" path="res://Scenes/Npc/npc.gd" id="4_ggrd1"]
+[ext_resource type="Script" path="res://Scenes/Main/player_controller.gd" id="5_l4qnv"]
+[ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="6_x832e"]
+[ext_resource type="Script" path="res://Scenes/Player/my_player.gd" id="7_xincb"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lcs2y"]
+texture = ExtResource("2_osdsw")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_1dn45"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_lcs2y")
+
+[node name="Overworld" type="Node2D"]
+
+[node name="MapController" type="Node2D" parent="."]
+script = ExtResource("1_tkkut")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="MapController"]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAABAAEAAAABAAAAAAABAAIAAAABAAAAAAABAAMAAAABAAAAAAACAAEAAAAEAAEAAAACAAIAAAACAAAAAAACAAMAAAABAAIAAAAAAAEAAAADAAIAAAAAAAIAAAADAAIAAAAAAAMAAAADAAIAAAABAAQAAAAAAAEAAAACAAQAAAAEAAAAAAADAAQAAAAEAAAAAAAEAAQAAAABAAEAAAADAAEAAAAAAAIAAAAEAAEAAAACAAAAAAAEAAIAAAACAAAAAAAEAAMAAAACAAAAAAAFAAEAAAADAAIAAAAFAAIAAAADAAIAAAAFAAMAAAADAAIAAAAFAAQAAAADAAIAAAAFAAAAAAADAAIAAAAEAAAAAAADAAEAAAADAAAAAAADAAAAAAACAAAAAAADAAAAAAABAAAAAAACAAEAAAAAAAAAAAADAAIAAAAAAAQAAAADAAIAAAADAAIAAAABAAAAAAADAAMAAAACAAIAAAAAAAUAAAADAAIAAAABAAUAAAADAAIAAAACAAUAAAADAAIAAAADAAUAAAADAAIAAAAEAAUAAAADAAIAAAAGAAAAAAAFAAEAAAAGAAEAAAAFAAEAAAAGAAIAAAAFAAEAAAAGAAMAAAAFAAEAAAAGAAQAAAAFAAEAAAAGAAUAAAAFAAEAAAAHAAAAAAAGAAAAAAAHAAEAAAAGAAAAAAAHAAIAAAAGAAAAAAAHAAMAAAAGAAAAAAAHAAQAAAAGAAAAAAAHAAUAAAAGAAAAAAAHAAYAAAAGAAEAAAAGAAYAAAAGAAEAAAAFAAYAAAAGAAEAAAAEAAYAAAAGAAEAAAADAAYAAAAGAAEAAAACAAYAAAAGAAEAAAABAAYAAAAGAAEAAAAAAAYAAAAGAAEAAAAFAAUAAAAGAAIAAAAAAAcAAAAFAAAAAAABAAcAAAADAAIAAAACAAcAAAADAAIAAAADAAcAAAAEAAIAAAAEAAcAAAAEAAIAAAAFAAcAAAAFAAAAAAAGAAcAAAAFAAIAAAAHAAcAAAAEAAIAAAAIAAcAAAADAAIAAAAIAAYAAAAEAAIAAAAIAAUAAAAFAAAAAAAIAAQAAAAFAAIAAAAIAAMAAAAEAAIAAAAIAAIAAAAFAAIAAAAIAAEAAAAFAAAAAAAIAAAAAAAFAAIAAAAJAAAAAAAFAAIAAAAJAAEAAAAFAAAAAAAJAAIAAAAFAAIAAAAJAAMAAAAFAAIAAAAJAAQAAAAFAAIAAAAJAAUAAAAEAAIAAAAJAAYAAAADAAIAAAAJAAcAAAAEAAIAAAA=")
+tile_set = SubResource("TileSet_1dn45")
+
+[node name="Norman" parent="." instance=ExtResource("3_lolx1")]
+position = Vector2(56, 88)
+script = ExtResource("4_ggrd1")
+
+[node name="PlayerController" type="Node2D" parent="."]
+script = ExtResource("5_l4qnv")
+
+[node name="MyPlayer" parent="PlayerController" instance=ExtResource("6_x832e")]
+position = Vector2(8, 8)
+script = ExtResource("7_xincb")
+
+[node name="Camera2D" type="Camera2D" parent="PlayerController/MyPlayer"]
+zoom = Vector2(6, 6)
