@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bd4t1hl2ilp2x"]
+[gd_scene load_steps=16 format=3 uid="uid://bd4t1hl2ilp2x"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/battle_controller.gd" id="1_6nkpg"]
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="1_745sj"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://Scenes/Battle/Cursor/cursor.gd" id="3_wuqyt"]
 [ext_resource type="Texture2D" uid="uid://bulgojpq4w4gh" path="res://Art/Animations/simple_bot_idledown.png" id="4_dttdu"]
 [ext_resource type="Texture2D" uid="uid://b4ml4r15mqnl1" path="res://Art/Animations/simple_player_idle1.png" id="5_a40wh"]
+[ext_resource type="Script" path="res://Scenes/Battle/player.gd" id="6_5ss40"]
 
 [sub_resource type="Theme" id="Theme_3gble"]
 
@@ -365,6 +366,7 @@ max_value = 80.0
 value = 80.0
 
 [node name="Player" type="Node2D" parent="."]
+script = ExtResource("6_5ss40")
 
 [node name="Player_Sprite" type="Sprite2D" parent="Player"]
 texture_filter = 1

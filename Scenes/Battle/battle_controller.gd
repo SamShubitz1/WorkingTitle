@@ -4,17 +4,12 @@ extends Node
 @onready var player_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 @onready var enemy_health = $"../Enemy/EnemyHealth"
 @onready var cursor = $"../BattleMenu/Cursor"
+@onready var player = $"../Player"
 
 var event_queue: Array = []
 
-var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities": [
-	{"name":"Rock", "description": "A rock based attack"},
-	{"name": "Paper", "description": "A paper based attack"},
-	{"name": "Scissors", "description": "A scissors based attack"}
-	], "items": ["Extra Rock", "Sharpener", "Extra Paper"], "items_equipped": []}
-var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": ["Rock","Paper","Scissors"]}
-var attacks: Dictionary = {"Rock": {"type": "Rock", "damage": 20}, "Paper": {"type": "Paper", "damage": 20}, "Scissors": {"type": "Scissors", "damage": 20}}
-var items: Dictionary = {"Extra Rock": {"id": 0, "multiplier": .2}, "Sharpener": {"id": 1, "multiplier": .2}, "Extra Paper": {"id": 2, "multiplier": .2}}
+var enemy_info: Dictionary = {"name": "Norman", "max_health": 80, "abilities": []}
+
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 enum EventType {
@@ -24,7 +19,8 @@ enum EventType {
 }
 
 func _ready() -> void:
-	player_health.max_value = character_info["max_health"]
+	enemy_info["abilities"] = [player.abilities_dictionary["Rock"], player.abilities_dictionary["Paper"], player.abilities_dictionary["Scissors"]]
+	player_health.max_value = player["max_health"]
 	enemy_health.max_value = enemy_info["max_health"]
 	handle_dialog(initial_dialog)
 
@@ -54,60 +50,27 @@ func handle_attack(event: Dictionary) -> void:
 			handle_dialog({"text": "Player took " + str(event.damage) + " damage!"})
 		check_death()
 	
-func on_attack(player_attack: String) -> void:
-	handle_dialog({"text": "Player used " + player_attack + "!"})
-	var attack = attacks[player_attack]
+func on_attack(player_attack: Dictionary) -> void:
+	handle_dialog({"text": "Player used " + player_attack.name + "!"})
 	var enemy_attack = get_enemy_attack()
+	var result = calculate_attack_dmg(player_attack)
+	add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
+	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
+	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage})
 	
-	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack + "!"})
-	
-	var result = calculate_attack_dmg(player_attack, enemy_attack)
-	if result:
-		add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
-	
-func on_use_item(item_name: String) -> void:
-	handle_dialog({"text": "Player used " + item_name + "!"})
-	var item = items[item_name]
-	character_info.items_equipped.append(item)
+func on_use_item(item: Dictionary) -> void:
+	handle_dialog({"text": "Player used " + item.name + "!"})
+	player.items_equipped.append(item)
+	player.populate_buffs_array()
 
-func calculate_attack_dmg(player_attack: String, enemy_attack: String):
-	if player_attack == "Rock":
-		match enemy_attack:
-			"Rock":
-				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
-			"Paper":
-				return {"target": "player", "damage": attacks[enemy_attack].damage}
-			"Scissors":
-				var damage = attacks[player_attack].damage
-				if items["Extra Rock"] in character_info.items_equipped:
-					print(character_info.items_equipped)
-					print(items["Extra Rock"])
-					damage += damage * items["Extra Rock"].multiplier
-				return {"target": "enemy", "damage": damage}
-	elif player_attack == "Paper":
-		match enemy_attack:
-			"Rock":
-				var damage = attacks[player_attack].damage
-				if items["Extra Paper"] in character_info.items_equipped:
-					damage += damage * items["Extra Paper"].multiplier
-				return {"target": "enemy", "damage": damage}
-			"Paper":
-				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
-			"Scissors":
-				return {"target": "player", "damage": attacks[enemy_attack].damage}
-	elif player_attack == "Scissors":
-		match enemy_attack:
-			"Rock":
-				return {"target": "player", "damage": attacks[enemy_attack].damage}
-			"Paper":
-				var damage = attacks[player_attack].damage
-				if items["Sharpener"] in character_info.items_equipped:
-					damage += damage * items["Sharpener"].multiplier
-				return {"target": "enemy", "damage": damage}
-			"Scissors":
-				add_event({"type": EventType.DIALOG, "text": "Stalemate!"})
+func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
+	var damage = player_attack.damage
+	var multiplier = resolve_effects(player_attack)
+	if multiplier:
+		damage *= multiplier
+	return {"target": "enemy", "damage": damage}
 	
-func get_enemy_attack() -> String:
+func get_enemy_attack() -> Dictionary:
 	var attack_index = randi() % enemy_info["abilities"].size()
 	var attack = enemy_info["abilities"][attack_index]
 	return attack
@@ -119,9 +82,16 @@ func check_death() -> void:
 			dead_name = "Player"
 		else:
 			dead_name = "Enemy"
+		clear_queue()
 		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
 		add_event({"type": EventType.DEATH})
-			
+		
+func resolve_effects(attack: Dictionary):
+	var buff = player.buffs.get(attack.type, 0) + 1
+	return buff
+	
+func clear_queue() -> void:
+	event_queue.clear()
 			
 func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")

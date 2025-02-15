@@ -9,18 +9,7 @@ extends Control
 @onready var items_menu = $ItemsMenu/Menu.get_children().slice(1)
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
 @onready var description_label = $Descriptions/Labels/AbilityDescription
-
-var character_info: Dictionary = {"name": "Deeno", "max_health": 100, "abilities": [
-	{"name":"Rock", "description": "A rock based attack"},
-	{"name": "Paper", "description": "A paper based attack"},
-	{"name": "Scissors", "description": "A scissors based attack"}
-	], "items": [{"name": "Extra Rock", "description": "Adds damage to rock attacks"}, {"name": "Sharpener", "description": "Adds damage to scissors attacks"}, {"name": "Extra Paper", "description": "Adds damage to paper attacks"}]}
-
-enum EventType {
-	DIALOG,
-	ATTACK,
-	ITEM
-}
+@onready var character_info = $"../Player"
 
 var selected_button_index: int = 0
 var selected_button: Button
@@ -77,7 +66,7 @@ func _input(_e) -> void:
 					
 		elif selected_menu == abilities_menu:
 			if selected_button_index < character_info.abilities.size():
-				var attack = character_info.abilities[selected_button_index].name
+				var attack = character_info.abilities[selected_button_index]
 				battle_controller.on_attack(attack)
 				cursor.disable()
 				
@@ -87,7 +76,8 @@ func _input(_e) -> void:
 				if item.name == "Empty":
 					go_back()
 				else:
-					battle_controller.on_use_item(item.name) #expensive on large arrays
+					battle_controller.on_use_item(item) #expensive on large arrays
+					#cursor.disable() #do we want the item message to require an input to move past?
 					update_ui()
 					go_back()
  
@@ -139,7 +129,7 @@ func update_ui() -> void:
 		if i < character_info.items.size():
 			items_menu[i].text = character_info.items[i].name
 		else:
-			items_menu[i].text = ""
+			items_menu[i].text = "-"
 		
 func update_menus() -> void:
 	menus = [options_menu, abilities_menu, items_menu]
