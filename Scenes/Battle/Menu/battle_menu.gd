@@ -178,8 +178,8 @@ func go_back():
 		options_node.show()
 	if selected_menu != options_menu:
 		selected_menu_index = 0
-		selected_button_index = 0
 		selected_menu = menus[selected_menu_index]
+		selected_button_index = 0
 		cursor.set_menu_type(MenuType.OPTIONS)
 		update_selected_button()
 		description_label.text = ""
