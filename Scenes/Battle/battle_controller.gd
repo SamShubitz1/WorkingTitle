@@ -96,4 +96,4 @@ func clear_queue() -> void:
 	event_queue.clear()
 			
 func handle_death() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+	get_tree().change_scene_to_file("res://Scenes/Main/overworld.tscn")

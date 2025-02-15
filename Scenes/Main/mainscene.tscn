@@ -1,62 +1,9 @@
-[gd_scene load_steps=10 format=4 uid="uid://csf6egx1otdtc"]
+[gd_scene load_steps=2 format=3 uid="uid://csf6egx1otdtc"]
 
-[ext_resource type="Texture2D" uid="uid://dmwfrd0bmmrry" path="res://Art/Tiles/pkmnpathsheet.png" id="1_gnpmv"]
-[ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="2_gisl2"]
-[ext_resource type="Script" path="res://Scenes/Player/my_player.gd" id="3_ra62t"]
-[ext_resource type="Script" path="res://Scenes/Main/map_controller.gd" id="4_13v58"]
-[ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="4_noa1d"]
-[ext_resource type="Script" path="res://Scenes/Main/player_controller.gd" id="5_orlxc"]
-[ext_resource type="Script" path="res://Scenes/Npc/npc.gd" id="6_d3usa"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xndd3"]
-texture = ExtResource("1_gnpmv")
-0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-5:2/0 = 0
-6:2/0 = 0
-6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-
-[sub_resource type="TileSet" id="TileSet_uvfte"]
-physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_xndd3")
+[ext_resource type="PackedScene" uid="uid://d4npjlduq7bda" path="res://Scenes/Main/overworld.tscn" id="1_6a1ku"]
 
 [node name="MainScene" type="Node2D"]
 
-[node name="MapController" type="Node2D" parent="."]
-script = ExtResource("4_13v58")
+[node name="GameController" type="Node2D" parent="."]
 
-[node name="TileMapLayer" type="TileMapLayer" parent="MapController"]
-texture_filter = 1
-tile_map_data = PackedByteArray("AAABAAEAAAABAAAAAAABAAIAAAABAAAAAAABAAMAAAABAAAAAAACAAEAAAAEAAEAAAACAAIAAAACAAAAAAACAAMAAAABAAIAAAAAAAEAAAADAAIAAAAAAAIAAAADAAIAAAAAAAMAAAADAAIAAAABAAQAAAAAAAEAAAACAAQAAAAEAAAAAAADAAQAAAAEAAAAAAAEAAQAAAABAAEAAAADAAEAAAAAAAIAAAAEAAEAAAACAAAAAAAEAAIAAAACAAAAAAAEAAMAAAACAAAAAAAFAAEAAAADAAIAAAAFAAIAAAADAAIAAAAFAAMAAAADAAIAAAAFAAQAAAADAAIAAAAFAAAAAAADAAIAAAAEAAAAAAADAAEAAAADAAAAAAADAAAAAAACAAAAAAADAAAAAAABAAAAAAACAAEAAAAAAAAAAAADAAIAAAAAAAQAAAADAAIAAAADAAIAAAABAAAAAAADAAMAAAACAAIAAAAAAAUAAAADAAIAAAABAAUAAAADAAIAAAACAAUAAAADAAIAAAADAAUAAAADAAIAAAAEAAUAAAADAAIAAAAGAAAAAAAFAAEAAAAGAAEAAAAFAAEAAAAGAAIAAAAFAAEAAAAGAAMAAAAFAAEAAAAGAAQAAAAFAAEAAAAGAAUAAAAFAAEAAAAHAAAAAAAGAAAAAAAHAAEAAAAGAAAAAAAHAAIAAAAGAAAAAAAHAAMAAAAGAAAAAAAHAAQAAAAGAAAAAAAHAAUAAAAGAAAAAAAHAAYAAAAGAAEAAAAGAAYAAAAGAAEAAAAFAAYAAAAGAAEAAAAEAAYAAAAGAAEAAAADAAYAAAAGAAEAAAACAAYAAAAGAAEAAAABAAYAAAAGAAEAAAAAAAYAAAAGAAEAAAAFAAUAAAAGAAIAAAAAAAcAAAAFAAAAAAABAAcAAAADAAIAAAACAAcAAAADAAIAAAADAAcAAAAEAAIAAAAEAAcAAAAEAAIAAAAFAAcAAAAFAAAAAAAGAAcAAAAFAAIAAAAHAAcAAAAEAAIAAAAIAAcAAAADAAIAAAAIAAYAAAAEAAIAAAAIAAUAAAAFAAAAAAAIAAQAAAAFAAIAAAAIAAMAAAAEAAIAAAAIAAIAAAAFAAIAAAAIAAEAAAAFAAAAAAAIAAAAAAAFAAIAAAAJAAAAAAAFAAIAAAAJAAEAAAAFAAAAAAAJAAIAAAAFAAIAAAAJAAMAAAAFAAIAAAAJAAQAAAAFAAIAAAAJAAUAAAAEAAIAAAAJAAYAAAADAAIAAAAJAAcAAAAEAAIAAAA=")
-tile_set = SubResource("TileSet_uvfte")
-
-[node name="Norman" parent="." instance=ExtResource("4_noa1d")]
-position = Vector2(56, 88)
-script = ExtResource("6_d3usa")
-
-[node name="PlayerController" type="Node2D" parent="."]
-script = ExtResource("5_orlxc")
-
-[node name="MyPlayer" parent="PlayerController" instance=ExtResource("2_gisl2")]
-position = Vector2(8, 8)
-script = ExtResource("3_ra62t")
-
-[node name="Camera2D" type="Camera2D" parent="PlayerController/MyPlayer"]
-zoom = Vector2(6, 6)
+[node name="Overworld" parent="GameController" instance=ExtResource("1_6a1ku")]
