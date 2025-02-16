@@ -6,8 +6,9 @@ extends Node
 @onready var player = $"../Player"
 @onready var enemy = $"../Enemy"
 @onready var cursor = $"../BattleMenu/Cursor"
+
 var event_queue: Array = []
-var filter_list: Array = [] # when character dies their published events will be filtered out inside increment queue
+var filter_list: Array = [] # when character dies their published events will be filtered during increment queue
 
 var selected_attack: Dictionary
 
@@ -52,7 +53,6 @@ func handle_attack(event: Dictionary) -> void:
 			player_health.value -= event.damage
 		check_death()
 
-#will eventually pass down target: Node as well as player_attack
 func on_use_attack(target: String) -> void:
 	cursor.disable()
 	handle_dialog({"text": "Player used " + selected_attack.name + "!"})
@@ -61,9 +61,13 @@ func on_use_attack(target: String) -> void:
 	add_event({"type": EventType.DIALOG, "text": "Enemy took " + str(damage) + " damage!"})
 	perform_enemy_attack()
 	
-func build_attack_event(player_attack: Dictionary) -> void:
+func prompt_select_target(player_attack: Dictionary) -> void:
 	selected_attack = player_attack
 	handle_dialog({"text": "Select a target!"})
+	
+func cancel_select_target() -> void:
+	selected_attack = {}
+	handle_dialog({"text": "Select an ability!"})
 	
 func on_use_item(item: Dictionary) -> void:
 	cursor.disable()

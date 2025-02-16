@@ -99,7 +99,7 @@ func on_select_ability() -> void:
 	update_selected_menu(3)
 	selected_button_index = 0
 	update_selected_button()
-	battle_controller.build_attack_event(selected_attack)
+	battle_controller.prompt_select_target(selected_attack)
 	
 func on_select_target():
 	var target = targets_menu[selected_button_index]
@@ -155,9 +155,12 @@ func go_back():
 	if selected_menu == items_menu:
 		items_node.hide()
 		options_node.show()
-	if selected_menu != options_menu:
+	if selected_menu != options_menu && selected_menu != targets_menu:
 		update_selected_menu(0)
 		description_label.text = ""
+	if selected_menu == targets_menu:
+		update_selected_menu(1)
+		battle_controller.cancel_select_target()
 		
 func get_menu_size() -> int:
 	var menu_size: int
