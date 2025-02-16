@@ -8,7 +8,7 @@ extends Node
 @onready var cursor = $"../BattleMenu/Cursor"
 
 var event_queue: Array = []
-var filter_list: Array = [] # when character dies their published events will be filtered during increment queue
+var filter_list: Array = [] # will be used to filter out events of dead characters
 
 var selected_attack: Dictionary
 

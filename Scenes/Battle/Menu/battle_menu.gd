@@ -40,7 +40,10 @@ func _input(_e) -> void:
 			navigate_forward(menu_size)
 			
 		elif Input.is_action_just_pressed("go_back"):
-			go_back()
+			if selected_menu == targets_menu:
+				on_cancel_target_select()
+			else:
+				go_back()
 			
 	if Input.is_action_just_pressed("ui_accept"):
 		if not battle_controller.event_queue.is_empty():
@@ -155,12 +158,10 @@ func go_back():
 	if selected_menu == items_menu:
 		items_node.hide()
 		options_node.show()
-	if selected_menu != options_menu && selected_menu != targets_menu:
+	if selected_menu != options_menu:
 		update_selected_menu(0)
 		description_label.text = ""
-	if selected_menu == targets_menu:
-		update_selected_menu(1)
-		battle_controller.cancel_select_target()
+		
 		
 func get_menu_size() -> int:
 	var menu_size: int
@@ -174,3 +175,7 @@ func get_menu_size() -> int:
 		_:
 			menu_size = selected_menu.size()
 	return menu_size
+	
+func on_cancel_target_select() -> void:
+	update_selected_menu(1)
+	battle_controller.cancel_select_target()
