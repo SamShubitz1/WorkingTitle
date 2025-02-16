@@ -16,7 +16,6 @@ var selected_button_index: int = 0
 var selected_button: Node
 
 var menus: Array
-var selected_menu_index: int = 0
 var selected_menu: Array
 
 var targets_menu: Array = []
@@ -33,22 +32,22 @@ func _ready() -> void:
 	
 func _input(_e) -> void:
 	if not cursor.disabled:
-		var size: int
+		var menu_size: int
 		match selected_menu:
 			abilities_menu:
-				size = player.abilities.size()
+				menu_size = player.abilities.size()
 			items_menu:
-				size = player.items.size()
+				menu_size = player.items.size()
 			targets_menu:
-				size = targets_menu.size()
+				menu_size = targets_menu.size()
 			_:
-				size = selected_menu.size()
+				menu_size = selected_menu.size()
 			
 		if Input.is_action_just_pressed("navigate_backward"):
-			navigate_backward(size)
+			navigate_backward(menu_size)
 				
 		elif Input.is_action_just_pressed("navigate_forward"):
-			navigate_forward(size)
+			navigate_forward(menu_size)
 			
 		elif Input.is_action_just_pressed("go_back"):
 			go_back()
@@ -58,13 +57,16 @@ func _input(_e) -> void:
 			battle_controller.increment_queue()
 			if battle_controller.event_queue.size() == 0:
 				cursor.enable()
-		match selected_menu:
-			options_menu:
-				on_select_option()	
-			abilities_menu:
-				on_select_ability()
-			items_menu:
-				on_select_item()
+		else:
+			match selected_menu:
+				options_menu:
+					on_select_option()	
+				abilities_menu:
+					on_select_ability()
+				items_menu:
+					on_select_item()
+				targets_menu:
+					on_select_target()
  
 # using process_frame seems to help avoid race issues w/ updating cursor position
 func update_selected_button() -> void:
@@ -82,7 +84,7 @@ func update_selected_button() -> void:
 			if selected_button_index < player.items.size():
 				description_label.text = player.items[selected_button_index].menu_description
 
-func update_selected_menu() -> void:
+func update_selected_menu(selected_menu_index: int) -> void:
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(selected_menu_index)
 	selected_button_index = 0
@@ -94,13 +96,11 @@ func update_selected_menu() -> void:
 func on_select_option() -> void:
 	match selected_button.text:
 		" Attack":
-			selected_menu_index = 1
-			update_selected_menu()
+			update_selected_menu(1)
 		" Move":
 			pass
 		" Items":
-			selected_menu_index = 2
-			update_selected_menu()
+			update_selected_menu(2)
 		" Status":
 			pass
 		" Retreat":
@@ -108,17 +108,16 @@ func on_select_option() -> void:
 			
 func on_select_ability() -> void:
 	var selected_attack = player.abilities[selected_button_index]
-	battle_controller.handle_dialog({"text": "Select an enemy!"})
-	selected_menu_index = 3
-	update_selected_menu()
-	cursor.set_menu_type(cursor.MenuType.TARGETS)
+	update_selected_menu(3)
 	selected_button_index = 0
 	update_selected_button()
-	on_select_target(selected_attack)
+	battle_controller.build_attack_event(selected_attack)
 	
-func on_select_target(attack: Dictionary):
+func on_select_target():
 	var target = targets_menu[selected_button_index]
-	battle_controller.on_use_attack(attack, target.alignment)
+	battle_controller.on_use_attack(target.alignment)
+	cursor.disable()
+	go_back()
 		
 func on_select_item() -> void:
 	var item = player.items.pop_at(selected_button_index) # expensive on large arrays
@@ -151,16 +150,16 @@ func update_ui() -> void:
 		
 func update_menus() -> void:
 	menus = [options_menu, abilities_menu, items_menu, targets_menu]
-	selected_menu = menus[selected_menu_index]
-	selected_button = selected_menu[selected_button_index]
 	targets_menu.append(enemy)
+	selected_menu = menus[0]
+	selected_button = selected_menu[selected_button_index]
 	
 func navigate_backward(menu_size: int) -> void:
 		if selected_button_index == 0:
 			selected_button_index += (menu_size - 1)
 			update_selected_button()
 		else:
-			selected_button_index = (selected_button_index - 1)
+			selected_button_index -= 1
 			update_selected_button()
 
 func navigate_forward(menu_size: int):
@@ -172,10 +171,6 @@ func go_back():
 		items_node.hide()
 		options_node.show()
 	if selected_menu != options_menu:
-		selected_menu_index = 0
-		selected_menu = menus[selected_menu_index]
-		selected_button_index = 0
-		cursor.set_menu_type(cursor.MenuType.OPTIONS)
-		update_selected_button()
+		update_selected_menu(0)
 		description_label.text = ""
 	

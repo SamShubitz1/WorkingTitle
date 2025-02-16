@@ -7,6 +7,9 @@ extends Node
 @onready var enemy = $"../Enemy"
 
 var event_queue: Array = []
+var filter_list: Array = [] # when character dies their published events will be filtered out inside increment queue
+
+var selected_attack: Dictionary
 
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
@@ -14,7 +17,7 @@ enum EventType {
 	DIALOG,
 	ATTACK,
 	DEATH,
-	RETREAT
+	RETREAT,
 }
 
 func _ready() -> void:
@@ -48,12 +51,16 @@ func handle_attack(event: Dictionary) -> void:
 		check_death()
 
 #will eventually pass down target: Node as well as player_attack
-func on_use_attack(player_attack: Dictionary, target: String) -> void:
-	handle_dialog({"text": "Player used " + player_attack.name + "!"})
-	var damage = calculate_attack_dmg(player_attack)
+func on_use_attack(target: String) -> void:
+	handle_dialog({"text": "Player used " + selected_attack.name + "!"})
+	var damage = calculate_attack_dmg()
 	add_event({"type": EventType.ATTACK, "target": target, "damage": damage})
 	add_event({"type": EventType.DIALOG, "text": "Enemy took " + str(damage) + " damage!"})
 	perform_enemy_attack()
+	
+func build_attack_event(player_attack: Dictionary) -> void:
+	selected_attack = player_attack
+	handle_dialog({"text": "Select a target!"})
 	
 func on_use_item(item: Dictionary) -> void:
 	handle_dialog({"text": "Player used " + item.name + "!"})
@@ -73,9 +80,9 @@ func on_try_retreat() -> void:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!"})
 		perform_enemy_attack()
 
-func calculate_attack_dmg(player_attack: Dictionary) -> int:
-	var damage: int = player_attack.damage
-	var multiplier: float = resolve_status_effects(player_attack)
+func calculate_attack_dmg() -> int:
+	var damage: int = selected_attack.damage
+	var multiplier: float = resolve_status_effects()
 	damage *= multiplier #if damage ends in '0' it will stay an int
 	return damage
 	
@@ -101,8 +108,8 @@ func check_death() -> void:
 		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
 		add_event({"type": EventType.DEATH})
 		
-func resolve_status_effects(attack: Dictionary) -> float:
-	var buff = player.buffs.get(attack.type, 0) + 1
+func resolve_status_effects() -> float:
+	var buff = player.buffs.get(selected_attack.type, 0) + 1
 	return buff
 	
 func clear_queue() -> void:

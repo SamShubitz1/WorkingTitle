@@ -19,10 +19,13 @@ var selected_menu_type: MenuType = MenuType.OPTIONS
 func move_cursor(button_position: Vector2i) -> void:
 	match selected_menu_type:
 		MenuType.OPTIONS:
+			self.color = Color(1, 1, 1)
 			self.position = button_position + options_offset
 		MenuType.ABILITIES:
+			self.color = Color(1, 1, 1)
 			self.position = button_position + abilities_offset
 		MenuType.ITEMS:
+			self.color = Color(1, 1, 1)
 			self.position = button_position + items_offset
 		MenuType.TARGETS:
 			self.color = Color(1, 0, 0)
