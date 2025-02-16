@@ -17,7 +17,6 @@ var selected_button: Node
 
 var menus: Array
 var selected_menu: Array
-
 var targets_menu: Array = []
 
 var initial_cursor_position: Vector2 = Vector2(0, 45)
@@ -32,16 +31,7 @@ func _ready() -> void:
 	
 func _input(_e) -> void:
 	if not cursor.disabled:
-		var menu_size: int
-		match selected_menu:
-			abilities_menu:
-				menu_size = player.abilities.size()
-			items_menu:
-				menu_size = player.items.size()
-			targets_menu:
-				menu_size = targets_menu.size()
-			_:
-				menu_size = selected_menu.size()
+		var menu_size = get_menu_size()
 			
 		if Input.is_action_just_pressed("navigate_backward"):
 			navigate_backward(menu_size)
@@ -173,4 +163,16 @@ func go_back():
 	if selected_menu != options_menu:
 		update_selected_menu(0)
 		description_label.text = ""
-	
+		
+func get_menu_size() -> int:
+	var menu_size: int
+	match selected_menu:
+		abilities_menu:
+			menu_size = player.abilities.size()
+		items_menu:
+			menu_size = player.items.size()
+		targets_menu:
+			menu_size = targets_menu.size()
+		_:
+			menu_size = selected_menu.size()
+	return menu_size
