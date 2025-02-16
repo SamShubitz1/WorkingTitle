@@ -45,8 +45,6 @@ func _input(_e) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		if not battle_controller.event_queue.is_empty():
 			battle_controller.increment_queue()
-			if battle_controller.event_queue.size() == 0:
-				cursor.enable()
 		else:
 			match selected_menu:
 				options_menu:
@@ -106,7 +104,6 @@ func on_select_ability() -> void:
 func on_select_target():
 	var target = targets_menu[selected_button_index]
 	battle_controller.on_use_attack(target.alignment)
-	cursor.disable()
 	go_back()
 		
 func on_select_item() -> void:
@@ -115,13 +112,11 @@ func on_select_item() -> void:
 		go_back()
 	else:
 		battle_controller.on_use_item(item)
-		cursor.disable()
 		update_ui()
 		go_back()
 	
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
-	cursor.disable()
 	
 func update_ui() -> void:
 	char_name_label.text = player.name

@@ -5,7 +5,7 @@ extends Node
 @onready var enemy_health = $"../Enemy/EnemyHealth"
 @onready var player = $"../Player"
 @onready var enemy = $"../Enemy"
-
+@onready var cursor = $"../BattleMenu/Cursor"
 var event_queue: Array = []
 var filter_list: Array = [] # when character dies their published events will be filtered out inside increment queue
 
@@ -39,6 +39,8 @@ func increment_queue() -> void:
 			handle_death()
 		EventType.RETREAT:
 			handle_retreat()
+	if event_queue.size() == 0:
+				cursor.enable()
 			
 func handle_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
@@ -52,6 +54,7 @@ func handle_attack(event: Dictionary) -> void:
 
 #will eventually pass down target: Node as well as player_attack
 func on_use_attack(target: String) -> void:
+	cursor.disable()
 	handle_dialog({"text": "Player used " + selected_attack.name + "!"})
 	var damage = calculate_attack_dmg()
 	add_event({"type": EventType.ATTACK, "target": target, "damage": damage})
@@ -63,6 +66,7 @@ func build_attack_event(player_attack: Dictionary) -> void:
 	handle_dialog({"text": "Select a target!"})
 	
 func on_use_item(item: Dictionary) -> void:
+	cursor.disable()
 	handle_dialog({"text": "Player used " + item.name + "!"})
 	player.items_equipped.append(item)
 	player.populate_buffs_array()
@@ -70,6 +74,7 @@ func on_use_item(item: Dictionary) -> void:
 	perform_enemy_attack()
 
 func on_try_retreat() -> void:
+	cursor.disable()
 	handle_dialog({"text": "Player retreats!"})
 	var success: bool = player_health.value > randi() % int(enemy_health.value)
 	if success:
