@@ -3,19 +3,13 @@ extends Node
 @onready var dialog_box = $"../DialogBox/Dialog"
 @onready var player_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 @onready var enemy_health = $"../Enemy/EnemyHealth"
-@onready var cursor = $"../BattleMenu/Cursor"
 @onready var player = $"../Player"
 @onready var enemy = $"../Enemy"
 
 var event_queue: Array = []
 
-var enemy_info: Dictionary = {
-	"name": "Norman",
-	"max_health": 80,
-	"abilities": []}
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
-#might add more event types eventually e.g. item, animation
 enum EventType {
 	DIALOG,
 	ATTACK,
@@ -78,7 +72,7 @@ func on_try_retreat() -> void:
 	else:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!"})
 		perform_enemy_attack()
-		
+
 func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
 	var damage: int = player_attack.damage
 	var multiplier: float = resolve_status_effects(player_attack)
@@ -92,8 +86,8 @@ func perform_enemy_attack() -> void:
 	add_event({"type": EventType.DIALOG, "text": "Player took " + str(enemy_attack.damage) + " damage!"})
 	
 func get_enemy_attack() -> Dictionary:
-	var attack_index = randi() % enemy_info["abilities"].size()
-	var attack = enemy_info["abilities"][attack_index]
+	var attack_index = randi() % enemy.abilities.size()
+	var attack = enemy.abilities[attack_index]
 	return attack
 
 func check_death() -> void:

@@ -38,4 +38,3 @@ func disable() -> void:
 func enable() -> void:
 	disabled = false
 	self.show()
-	
