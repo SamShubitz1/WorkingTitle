@@ -46,18 +46,19 @@ func _input(_e) -> void:
 				go_back()
 			
 	if Input.is_action_just_pressed("ui_accept"):
-		if not battle_controller.event_queue.is_empty():
-			battle_controller.increment_queue()
-		else:
-			match selected_menu:
-				options_menu:
-					on_select_option()	
-				abilities_menu:
-					on_select_ability()
-				items_menu:
-					on_select_item()
-				targets_menu:
-					on_select_target()
+		if not battle_controller.increment_disabled:
+			if not battle_controller.event_queue.is_empty():
+				battle_controller.increment_queue()
+			else:
+				match selected_menu:
+					options_menu:
+						on_select_option()	
+					abilities_menu:
+						on_select_ability()
+					items_menu:
+						on_select_item()
+					targets_menu:
+						on_select_target()
  
 # using process_frame seems to help avoid race issues w/ updating cursor position
 func update_selected_button() -> void:

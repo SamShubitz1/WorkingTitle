@@ -14,6 +14,8 @@ var selected_attack: Dictionary
 
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
+var increment_disabled: bool = false
+
 enum EventType {
 	DIALOG,
 	ATTACK,
@@ -107,7 +109,7 @@ func calculate_attack_dmg() -> int:
 func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
-	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage, "duration": 1.5})
+	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage, "duration": 1})
 	add_event({"type": EventType.DIALOG, "text": "Player took " + str(enemy_attack.damage) + " damage!"})
 	
 func get_enemy_attack() -> Dictionary:
@@ -137,4 +139,6 @@ func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	
 func wait(seconds: float) -> void:
+	increment_disabled = true
 	await get_tree().create_timer(seconds).timeout
+	increment_disabled = false
