@@ -28,6 +28,9 @@ func _ready() -> void:
 
 func add_event(event) -> void:
 	event_queue.append(event)
+	
+func clear_queue() -> void:
+	event_queue.clear()
 
 func increment_queue() -> void:
 	var event = event_queue.pop_front()
@@ -40,8 +43,14 @@ func increment_queue() -> void:
 			handle_death()
 		EventType.RETREAT:
 			handle_retreat()
+			
+	if event.has("duration"):
+			await wait(event.duration)
+			if not event_queue.is_empty():
+				increment_queue()
+				
 	if event_queue.size() == 0:
-				cursor.enable()
+		cursor.enable()
 			
 func handle_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
@@ -52,12 +61,12 @@ func handle_attack(event: Dictionary) -> void:
 		elif event.target == "player":
 			player_health.value -= event.damage
 		check_death()
-
+		
 func on_use_attack(target: String) -> void:
 	cursor.disable()
 	handle_dialog({"text": "Player used " + selected_attack.name + "!"})
 	var damage = calculate_attack_dmg()
-	add_event({"type": EventType.ATTACK, "target": target, "damage": damage})
+	add_event({"type": EventType.ATTACK, "target": target, "damage": damage, "duration": 1})
 	add_event({"type": EventType.DIALOG, "text": "Enemy took " + str(damage) + " damage!"})
 	perform_enemy_attack()
 	
@@ -98,7 +107,7 @@ func calculate_attack_dmg() -> int:
 func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!"})
-	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage})
+	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage, "duration": 1.5})
 	add_event({"type": EventType.DIALOG, "text": "Player took " + str(enemy_attack.damage) + " damage!"})
 	
 func get_enemy_attack() -> Dictionary:
@@ -121,11 +130,11 @@ func resolve_status_effects() -> float:
 	var buff = player.buffs.get(selected_attack.type, 0) + 1
 	return buff
 	
-func clear_queue() -> void:
-	event_queue.clear()
-	
 func handle_retreat() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 		
 func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+	
+func wait(seconds: float) -> void:
+	await get_tree().create_timer(seconds).timeout
