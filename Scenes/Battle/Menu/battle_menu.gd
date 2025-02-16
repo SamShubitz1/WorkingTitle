@@ -33,11 +33,22 @@ func _ready() -> void:
 	
 func _input(_e) -> void:
 	if not cursor.disabled:
+		var size: int
+		match selected_menu:
+			abilities_menu:
+				size = player.abilities.size()
+			items_menu:
+				size = player.items.size()
+			targets_menu:
+				size = targets_menu.size()
+			_:
+				size = selected_menu.size()
+			
 		if Input.is_action_just_pressed("navigate_backward"):
-			navigate_backward(selected_menu.size())
+			navigate_backward(size)
 				
 		elif Input.is_action_just_pressed("navigate_forward"):
-			navigate_forward(selected_menu.size())
+			navigate_forward(size)
 			
 		elif Input.is_action_just_pressed("go_back"):
 			go_back()
@@ -47,15 +58,13 @@ func _input(_e) -> void:
 			battle_controller.increment_queue()
 			if battle_controller.event_queue.size() == 0:
 				cursor.enable()
-		
-		elif selected_menu == options_menu:
-			on_select_option()
-					
-		elif selected_menu == abilities_menu:
-			on_select_ability()
-				
-		elif selected_menu == items_menu:
-			on_select_item()
+		match selected_menu:
+			options_menu:
+				on_select_option()	
+			abilities_menu:
+				on_select_ability()
+			items_menu:
+				on_select_item()
  
 # using process_frame seems to help avoid race issues w/ updating cursor position
 func update_selected_button() -> void:
@@ -70,7 +79,8 @@ func update_selected_button() -> void:
 			player.items.append({"name": "Empty", "menu_description": ""})
 			update_ui()
 		else:
-			description_label.text = player.items[selected_button_index].menu_description
+			if selected_button_index < player.items.size():
+				description_label.text = player.items[selected_button_index].menu_description
 
 func update_selected_menu() -> void:
 	selected_menu = menus[selected_menu_index]
@@ -97,13 +107,18 @@ func on_select_option() -> void:
 			on_select_retreat()
 			
 func on_select_ability() -> void:
-	var attack = player.abilities[selected_button_index]
+	var selected_attack = player.abilities[selected_button_index]
 	battle_controller.handle_dialog({"text": "Select an enemy!"})
 	selected_menu_index = 3
 	update_selected_menu()
 	cursor.set_menu_type(cursor.MenuType.TARGETS)
 	selected_button_index = 0
 	update_selected_button()
+	on_select_target(selected_attack)
+	
+func on_select_target(attack: Dictionary):
+	var target = targets_menu[selected_button_index]
+	battle_controller.on_use_attack(attack, target.alignment)
 		
 func on_select_item() -> void:
 	var item = player.items.pop_at(selected_button_index) # expensive on large arrays

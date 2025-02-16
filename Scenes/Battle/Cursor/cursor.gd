@@ -3,7 +3,7 @@ extends Polygon2D
 var options_offset = Vector2i(110, 11)
 var items_offset = Vector2i(120, 11)
 var abilities_offset = Vector2i(490, 21)
-var targets_offset = Vector2i(800, -300)
+var targets_offset = Vector2i(1100, -300)
 
 var disabled: bool = false
 
@@ -25,7 +25,7 @@ func move_cursor(button_position: Vector2i) -> void:
 		MenuType.ITEMS:
 			self.position = button_position + items_offset
 		MenuType.TARGETS:
-			self.scale = Vector2(2, 2)
+			self.color = Color(1, 0, 0)
 			self.position = button_position + targets_offset
 
 func set_menu_type(type: MenuType) -> void:

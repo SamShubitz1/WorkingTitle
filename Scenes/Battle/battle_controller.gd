@@ -48,11 +48,11 @@ func handle_attack(event: Dictionary) -> void:
 		check_death()
 
 #will eventually pass down target: Node as well as player_attack
-func on_use_attack(player_attack: Dictionary) -> void:
+func on_use_attack(player_attack: Dictionary, target: String) -> void:
 	handle_dialog({"text": "Player used " + player_attack.name + "!"})
-	var result = calculate_attack_dmg(player_attack)
-	add_event({"type": EventType.ATTACK, "target": result.target, "damage": result.damage})
-	add_event({"type": EventType.DIALOG, "text": "Enemy took " + str(result.damage) + " damage!"})
+	var damage = calculate_attack_dmg(player_attack)
+	add_event({"type": EventType.ATTACK, "target": target, "damage": damage})
+	add_event({"type": EventType.DIALOG, "text": "Enemy took " + str(damage) + " damage!"})
 	perform_enemy_attack()
 	
 func on_use_item(item: Dictionary) -> void:
@@ -73,11 +73,11 @@ func on_try_retreat() -> void:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!"})
 		perform_enemy_attack()
 
-func calculate_attack_dmg(player_attack: Dictionary) -> Dictionary:
+func calculate_attack_dmg(player_attack: Dictionary) -> int:
 	var damage: int = player_attack.damage
 	var multiplier: float = resolve_status_effects(player_attack)
 	damage *= multiplier #if damage ends in '0' it will stay an int
-	return {"target": "enemy", "damage": damage}
+	return damage
 	
 func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()

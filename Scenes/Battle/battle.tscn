@@ -1,8 +1,7 @@
-[gd_scene load_steps=18 format=3 uid="uid://bd4t1hl2ilp2x"]
+[gd_scene load_steps=17 format=3 uid="uid://bd4t1hl2ilp2x"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/battle_controller.gd" id="1_6nkpg"]
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="1_745sj"]
-[ext_resource type="Texture2D" uid="uid://30yr4o0do3m3" path="res://Scenes/Battle/Cursor/cursor.png" id="2_620g3"]
 [ext_resource type="Script" path="res://Scenes/Battle/Cursor/cursor.gd" id="3_wuqyt"]
 [ext_resource type="Texture2D" uid="uid://bulgojpq4w4gh" path="res://Art/Animations/simple_bot_idledown.png" id="4_dttdu"]
 [ext_resource type="Script" path="res://Scenes/Battle/enemy.gd" id="5_7vmyt"]
@@ -299,8 +298,10 @@ text = "Text"
 
 [node name="Cursor" type="Polygon2D" parent="BattleMenu"]
 z_index = 1
+position = Vector2(95, 54.512)
 rotation = 1.5708
-texture = ExtResource("2_620g3")
+scale = Vector2(1.09648, 1.19025)
+polygon = PackedVector2Array(9.26404, 11.2827, 16.5601, 0.360573, 0, 0)
 script = ExtResource("3_wuqyt")
 
 [node name="ItemsMenu" type="Panel" parent="BattleMenu"]
@@ -348,21 +349,6 @@ alignment = 0
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 0
-
-[node name="Cursor" type="TextureRect" parent="BattleMenu"]
-z_index = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 109.0
-offset_top = 55.512
-offset_right = -1155.0
-offset_bottom = -184.488
-rotation = 1.5708
-texture = ExtResource("2_620g3")
-flip_v = true
-script = ExtResource("3_wuqyt")
 
 [node name="Enemy" type="Node2D" parent="."]
 script = ExtResource("5_7vmyt")
