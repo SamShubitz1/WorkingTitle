@@ -1,6 +1,8 @@
 extends Node
 
-@onready var dialog_box = $"../DialogBox/Dialog"
+@onready var animation_player = $DialogBox/AnimationPlayer
+@onready var dialog_box = $"DialogBox/Dialog"
+@onready var dialog_cursor = $DialogBox/DialogCursor
 @onready var player_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 @onready var enemy_health = $"../Enemy/EnemyHealth"
 @onready var player = $"../Player"
@@ -20,6 +22,11 @@ enum EventType {
 	ATTACK,
 	DEATH,
 	RETREAT,
+}
+
+enum AnimationState {
+	ON,
+	OFF
 }
 
 func _ready() -> void:
@@ -46,12 +53,15 @@ func increment_queue() -> void:
 			handle_retreat()
 			
 	if event.has("duration"):
-			await wait(event.duration)
-			if not event_queue.is_empty():
-				increment_queue()
-				
-	if event_queue.size() == 0:
+		toggle_animation(AnimationState.OFF)
+		await wait(event.duration)
+		toggle_animation(AnimationState.ON)
+		if not event_queue.is_empty():
+			increment_queue()
+
+	if event_queue.is_empty():
 		cursor.enable()
+		toggle_animation(AnimationState.OFF)
 			
 func handle_dialog(event: Dictionary) -> void:
 	dialog_box.text = event.text
@@ -65,6 +75,7 @@ func handle_attack(event: Dictionary) -> void:
 		
 func on_use_attack(target: String) -> void:
 	cursor.disable()
+	toggle_animation(AnimationState.ON)
 	handle_dialog({"text": "Player used " + selected_attack.name + "!"})
 	var damage = calculate_attack_dmg()
 	add_event({"type": EventType.ATTACK, "target": target, "damage": damage, "duration": 1})
@@ -81,6 +92,7 @@ func cancel_select_target() -> void:
 	
 func on_use_item(item: Dictionary) -> void:
 	cursor.disable()
+	toggle_animation(AnimationState.ON)
 	handle_dialog({"text": "Player used " + item.name + "!"})
 	player.items_equipped.append(item)
 	player.populate_buffs_array()
@@ -89,6 +101,7 @@ func on_use_item(item: Dictionary) -> void:
 
 func on_try_retreat() -> void:
 	cursor.disable()
+	toggle_animation(AnimationState.ON)
 	handle_dialog({"text": "Player retreats!"})
 	var success: bool = player_health.value > randi() % int(enemy_health.value)
 	if success:
@@ -141,3 +154,13 @@ func wait(seconds: float) -> void:
 	increment_disabled = true
 	await get_tree().create_timer(seconds).timeout
 	increment_disabled = false
+	
+func toggle_animation(state: AnimationState) -> void:
+	if state == AnimationState.ON:
+		dialog_cursor.visible = true
+		animation_player.play("cursor_blink")
+	else:
+		dialog_cursor.visible = false
+		animation_player.stop()
+		
+	
