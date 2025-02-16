@@ -61,15 +61,12 @@ func update_selected_button() -> void:
 	cursor.move_cursor(selected_button.position)
 	
 	if selected_menu == abilities_menu:
-		if selected_button_index < character_info.abilities.size():
-			description_label.text = character_info.abilities[selected_button_index].description
-		else:
-			description_label.text = "???"
+		description_label.text = character_info.abilities[selected_button_index].description
 	elif selected_menu == items_menu:
 		if character_info.items.is_empty():
 			character_info.items.append({"name": "Empty", "menu_description": ""})
 			update_ui()
-		elif selected_button_index < character_info.items.size():
+		else:
 			description_label.text = character_info.items[selected_button_index].menu_description
 
 func on_select_attack_menu() -> void:
