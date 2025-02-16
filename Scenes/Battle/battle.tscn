@@ -357,7 +357,7 @@ layout_mode = 2
 size_flags_vertical = 3
 alignment = 0
 
-[node name="Cursor" type="Polygon2D" parent="BattleMenu"]
+[node name="Cursor2" type="Polygon2D" parent="BattleMenu"]
 z_index = 1
 rotation = 1.5708
 texture = ExtResource("2_620g3")
