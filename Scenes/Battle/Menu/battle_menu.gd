@@ -88,11 +88,11 @@ func update_selected_menu(selected_menu_index: int) -> void:
 func on_select_option() -> void:
 	match selected_button.text:
 		" Attack":
-			update_selected_menu(1)
+			update_selected_menu(cursor.MenuType.ABILITIES)
 		" Move":
 			pass
 		" Items":
-			update_selected_menu(2)
+			update_selected_menu(cursor.MenuType.ITEMS)
 		" Status":
 			pass
 		" Retreat":
@@ -100,7 +100,7 @@ func on_select_option() -> void:
 			
 func on_select_ability() -> void:
 	var selected_attack = player.abilities[selected_button_index]
-	update_selected_menu(3)
+	update_selected_menu(cursor.MenuType.TARGETS)
 	selected_button_index = 0
 	update_selected_button()
 	battle_controller.prompt_select_target(selected_attack)
@@ -160,9 +160,8 @@ func go_back():
 		items_node.hide()
 		options_node.show()
 	if selected_menu != options_menu:
-		update_selected_menu(0)
+		update_selected_menu(cursor.MenuType.OPTIONS)
 		description_label.text = ""
-		
 		
 func get_menu_size() -> int:
 	var menu_size: int
@@ -178,5 +177,5 @@ func get_menu_size() -> int:
 	return menu_size
 	
 func on_cancel_target_select() -> void:
-	update_selected_menu(1)
+	update_selected_menu(cursor.MenuType.ABILITIES)
 	battle_controller.cancel_select_target()

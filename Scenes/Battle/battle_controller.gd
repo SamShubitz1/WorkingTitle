@@ -8,10 +8,9 @@ extends Node
 @onready var cursor = $"../BattleMenu/Cursor"
 
 var event_queue: Array = []
-var filter_list: Array = [] # will be used to filter out events of dead characters
+var filter_list: Array = [] # will be used to filter out obsolete events
 
 var selected_attack: Dictionary
-
 var initial_dialog: Dictionary = {"text": "A wild man appears!"}
 
 var increment_disabled: bool = false
