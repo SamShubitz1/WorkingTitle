@@ -5,6 +5,7 @@ extends Node
 @onready var enemy_health = $"../Enemy/EnemyHealth"
 @onready var cursor = $"../BattleMenu/Cursor"
 @onready var player = $"../Player"
+@onready var enemy = $"../Enemy"
 
 var event_queue: Array = []
 

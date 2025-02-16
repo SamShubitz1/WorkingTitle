@@ -296,19 +296,10 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
 
-[node name="Cursor" type="TextureRect" parent="BattleMenu"]
+[node name="Cursor" type="Polygon2D" parent="BattleMenu"]
 z_index = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 109.0
-offset_top = 55.512
-offset_right = -1155.0
-offset_bottom = -184.488
 rotation = 1.5708
 texture = ExtResource("2_620g3")
-flip_v = true
 script = ExtResource("3_wuqyt")
 
 [node name="ItemsMenu" type="Panel" parent="BattleMenu"]
@@ -356,12 +347,6 @@ alignment = 0
 layout_mode = 2
 size_flags_vertical = 3
 alignment = 0
-
-[node name="Cursor2" type="Polygon2D" parent="BattleMenu"]
-z_index = 1
-rotation = 1.5708
-texture = ExtResource("2_620g3")
-script = ExtResource("3_wuqyt")
 
 [node name="Enemy" type="Node2D" parent="."]
 

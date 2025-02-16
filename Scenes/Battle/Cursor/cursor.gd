@@ -17,14 +17,14 @@ enum MenuType {
 var selected_menu_type: MenuType = MenuType.OPTIONS
 
 func move_cursor(button_position: Vector2i) -> void:
-		if selected_menu_type == MenuType.OPTIONS:
+	match selected_menu_type:
+		MenuType.OPTIONS:
 			self.position = button_position + options_offset
-		elif selected_menu_type == MenuType.ABILITIES:
+		MenuType.ABILITIES:
 			self.position = button_position + abilities_offset
-		elif selected_menu_type == MenuType.ITEMS:
+		MenuType.ITEMS:
 			self.position = button_position + items_offset
 		MenuType.TARGETS:
-			
 			self.scale = Vector2(2, 2)
 			self.position = button_position + targets_offset
 
