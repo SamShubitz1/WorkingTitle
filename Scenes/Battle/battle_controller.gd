@@ -23,12 +23,8 @@ enum EventType {
 }
 
 func _ready() -> void:
-	enemy_info["abilities"] = [
-	player.abilities_dictionary["Rock"],
-	player.abilities_dictionary["Paper"],
-	player.abilities_dictionary["Scissors"]]
-	player_health.max_value = player["max_health"]
-	enemy_health.max_value = enemy_info["max_health"]
+	player_health.max_value = player.max_health
+	enemy_health.max_value = enemy.max_health
 	handle_dialog(initial_dialog)
 
 func add_event(event) -> void:
@@ -72,8 +68,8 @@ func on_use_item(item: Dictionary) -> void:
 	perform_enemy_attack()
 
 func on_try_retreat() -> void:
-	handle_dialog({"text": "Player tried to retreat!"})
-	var success: bool = player_health.value > enemy_health.value
+	handle_dialog({"text": "Player retreats!"})
+	var success: bool = player_health.value > randi() % int(enemy_health.value)
 	if success:
 		clear_queue()
 		add_event({"type": EventType.DIALOG, "text": "Got away safely!"})

@@ -357,6 +357,12 @@ layout_mode = 2
 size_flags_vertical = 3
 alignment = 0
 
+[node name="Cursor" type="Polygon2D" parent="BattleMenu"]
+z_index = 1
+rotation = 1.5708
+texture = ExtResource("2_620g3")
+script = ExtResource("3_wuqyt")
+
 [node name="Enemy" type="Node2D" parent="."]
 
 [node name="Enemy_Sprite" type="AnimatedSprite2D" parent="Enemy"]
