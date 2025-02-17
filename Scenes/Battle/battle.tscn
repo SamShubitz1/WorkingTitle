@@ -22,6 +22,21 @@ corner_radius_top_right = 5
 corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
+[sub_resource type="Animation" id="Animation_yu4h3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
 [sub_resource type="Animation" id="Animation_4leb8"]
 resource_name = "cursor_blink"
 loop_mode = 1
@@ -36,21 +51,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(0, 0, 0, 1), Color(1, 1, 1, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_yu4h3"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(0, 0, 0, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_i3me5"]
@@ -354,7 +354,6 @@ polygon = PackedVector2Array(9.26404, 11.2827, 16.5601, 0.360573, 0, 0)
 script = ExtResource("3_wuqyt")
 
 [node name="ItemsMenu" type="Panel" parent="BattleMenu"]
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.25

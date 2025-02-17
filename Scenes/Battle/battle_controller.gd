@@ -1,13 +1,13 @@
 extends Node
 
-@onready var animation_player = $DialogBox/AnimationPlayer
-@onready var dialog_box = $"DialogBox/Dialog"
-@onready var dialog_cursor = $DialogBox/DialogCursor
-@onready var player_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
+@onready var animation_player = $"../BattleMenuControl/DialogBox/AnimationPlayer"
+@onready var dialog_box = $"../BattleMenuControl/DialogBox/Dialog"
+@onready var dialog_cursor = $"../BattleMenuControl/DialogBox/DialogCursor"
+@onready var player_health = $"../BattleMenuControl/MainMenu/Menu/CharPanel/Health"
 @onready var enemy_health = $"../Enemy/EnemyHealth"
 @onready var player = $"../Player"
 @onready var enemy = $"../Enemy"
-@onready var cursor = $"../BattleMenu/Cursor"
+@onready var cursor = $"../BattleMenuControl/Cursor"
 
 var event_queue: Array = []
 var filter_list: Array = [] # will be used to filter out obsolete events
@@ -30,6 +30,9 @@ enum AnimationState {
 }
 
 func _ready() -> void:
+	print("my path: " + str(get_path()))
+	print("cursor: " + str(cursor.disabled))
+
 	player_health.max_value = player.max_health
 	enemy_health.max_value = enemy.max_health
 	handle_dialog(initial_dialog)
