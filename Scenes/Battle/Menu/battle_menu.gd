@@ -1,16 +1,16 @@
 extends Control
 
-@onready var cursor = $Cursor
-@onready var battle_controller = $"../BattleController"
-@onready var options_node = $MainMenu
-@onready var options_menu = $MainMenu/Menu.get_children().slice(1)
-@onready var abilities_menu = $AbilitiesMenu/Menu.get_children().slice(3)
-@onready var items_node = $ItemsMenu
-@onready var items_menu = $ItemsMenu/Menu.get_children().slice(1)
-@onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
-@onready var description_label = $Descriptions/Labels/AbilityDescription
-@onready var player = $"../Player"
-@onready var enemy = $"../Enemy"
+@onready var cursor = $"../Cursor"
+@onready var battle_controller = $"../../BattleController"
+@onready var options_node = $"../MainMenu"
+@onready var options_menu = $"../MainMenu/Menu".get_children().slice(1)
+@onready var abilities_menu = $"../AbilitiesMenu/Menu".get_children().slice(3)
+@onready var items_node = $"../ItemsMenu"
+@onready var items_menu = $"../ItemsMenu/Menu".get_children().slice(1)
+@onready var char_name_label = $"../MainMenu/Menu/CharPanel/NameLabel"
+@onready var description_label = $"../Descriptions/Labels/AbilityDescription"
+@onready var player = $"../../Player"
+@onready var enemy = $"../../Enemy"
 
 var selected_button_index: int = 0
 var selected_button: Node
@@ -19,7 +19,7 @@ var menus: Array
 var selected_menu: Array
 var targets_menu: Array = []
 
-var initial_cursor_position: Vector2 = Vector2(0, 45)
+var initial_cursor_position: Vector2 = Vector2(0, 43)
 
 # using process_frame seems to help avoid race issues w/ updating cursor position
 func _ready() -> void:
@@ -52,7 +52,7 @@ func _input(_e) -> void:
 			else:
 				match selected_menu:
 					options_menu:
-						on_select_option()	
+						on_select_option()
 					abilities_menu:
 						on_select_ability()
 					items_menu:

@@ -1,0 +1,439 @@
+[gd_scene load_steps=21 format=3 uid="uid://dprpqlfs1wads"]
+
+[ext_resource type="Script" path="res://Scenes/Battle/battle_controller.gd" id="1_jrcef"]
+[ext_resource type="Script" path="res://Scenes/Battle/enemy.gd" id="2_x1boa"]
+[ext_resource type="Texture2D" uid="uid://bulgojpq4w4gh" path="res://Art/Animations/simple_bot_idledown.png" id="3_57c2c"]
+[ext_resource type="Script" path="res://Scenes/Battle/player.gd" id="4_6eosr"]
+[ext_resource type="Texture2D" uid="uid://b4ml4r15mqnl1" path="res://Art/Animations/simple_player_idle1.png" id="5_sgboj"]
+[ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="6_t1g76"]
+[ext_resource type="Script" path="res://Scenes/Battle/Cursor/cursor.gd" id="7_tyxjv"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_57c2c")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gsre"]
+bg_color = Color(0.92, 0.1288, 0.1288, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxy7r"]
+bg_color = Color(0.44607, 0.671498, 0.355604, 1)
+
+[sub_resource type="Theme" id="Theme_y4e55"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uks1o"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8nmk"]
+bg_color = Color(1, 1, 1, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="Animation" id="Animation_yu4h3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4leb8"]
+resource_name = "cursor_blink"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_i3me5"]
+_data = {
+"RESET": SubResource("Animation_yu4h3"),
+"cursor_blink": SubResource("Animation_4leb8")
+}
+
+[sub_resource type="Theme" id="Theme_om1ud"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g53kf"]
+font_color = Color(0.91664, 0.91664, 0.91664, 1)
+outline_color = Color(0.000159503, 0.000108775, 2.53083e-05, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cy1y"]
+bg_color = Color(0.92, 0.1288, 0.1288, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xnljf"]
+bg_color = Color(0.44607, 0.671498, 0.355604, 1)
+
+[node name="BattleScene" type="Node2D"]
+
+[node name="BattleController" type="Node" parent="."]
+script = ExtResource("1_jrcef")
+
+[node name="Enemy" type="Node2D" parent="."]
+position = Vector2(1006, 323)
+script = ExtResource("2_x1boa")
+
+[node name="Enemy_Sprite" type="AnimatedSprite2D" parent="Enemy"]
+texture_filter = 1
+scale = Vector2(12, 12)
+sprite_frames = SubResource("SpriteFrames_fknt7")
+
+[node name="EnemyHealth" type="ProgressBar" parent="Enemy"]
+custom_minimum_size = Vector2(200, 0)
+offset_left = -101.0
+offset_top = -134.0
+offset_right = 99.0
+offset_bottom = -111.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_0gsre")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fxy7r")
+max_value = 80.0
+value = 80.0
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(250, 279)
+script = ExtResource("4_6eosr")
+
+[node name="Player_Sprite" type="Sprite2D" parent="Player"]
+texture_filter = 1
+scale = Vector2(12, 12)
+texture = ExtResource("5_sgboj")
+
+[node name="BattleMenuControl" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BattleMenu" type="Panel" parent="BattleMenuControl"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 512.0
+offset_right = 1240.0
+offset_bottom = 728.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_y4e55")
+theme_override_styles/panel = SubResource("StyleBoxFlat_uks1o")
+script = ExtResource("6_t1g76")
+
+[node name="ColorRect" type="ColorRect" parent="BattleMenuControl"]
+z_index = -1
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 768.0
+
+[node name="DialogBox" type="Panel" parent="BattleMenuControl"]
+layout_mode = 1
+offset_left = 440.0
+offset_top = 50.0
+offset_right = 840.0
+offset_bottom = 200.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_m8nmk")
+
+[node name="Dialog" type="Label" parent="BattleMenuControl/DialogBox"]
+custom_minimum_size = Vector2(400, 128)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -1.00002
+offset_bottom = -0.999985
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DialogCursor" type="Polygon2D" parent="BattleMenuControl/DialogBox"]
+visible = false
+position = Vector2(222, -108)
+scale = Vector2(1, 0.866667)
+color = Color(0, 0, 0, 1)
+polygon = PackedVector2Array(155, 279.512, 171, 279.512, 163, 291.05)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BattleMenuControl/DialogBox"]
+root_node = NodePath("../DialogCursor")
+libraries = {
+"": SubResource("AnimationLibrary_i3me5")
+}
+
+[node name="MainMenu" type="Panel" parent="BattleMenuControl"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 1.0
+offset_top = 511.0
+offset_right = 310.0
+offset_bottom = 727.0
+
+[node name="Menu" type="VBoxContainer" parent="BattleMenuControl/MainMenu"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 256.0
+theme = SubResource("Theme_om1ud")
+alignment = 1
+
+[node name="CharPanel" type="HBoxContainer" parent="BattleMenuControl/MainMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+
+[node name="NameLabel" type="Label" parent="BattleMenuControl/MainMenu/Menu/CharPanel"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "DEENO
+"
+label_settings = SubResource("LabelSettings_g53kf")
+
+[node name="Control" type="Control" parent="BattleMenuControl/MainMenu/Menu/CharPanel"]
+custom_minimum_size = Vector2(30, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Health" type="ProgressBar" parent="BattleMenuControl/MainMenu/Menu/CharPanel"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_4cy1y")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xnljf")
+value = 100.0
+
+[node name="Attack" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " Attack"
+alignment = 0
+
+[node name="Move" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " Move"
+alignment = 0
+
+[node name="Items" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " Items"
+alignment = 0
+
+[node name="Status" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " Status"
+alignment = 0
+
+[node name="Retreat" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " Retreat"
+alignment = 0
+
+[node name="AbilitiesMenu" type="Panel" parent="BattleMenuControl"]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 511.0
+offset_right = 960.0
+offset_bottom = 767.0
+
+[node name="Menu" type="GridContainer" parent="BattleMenuControl/AbilitiesMenu"]
+custom_minimum_size = Vector2(320, 256)
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 256.0
+columns = 3
+
+[node name="AbilitiesLabel" type="Label" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+text = " Abilities
+
+"
+
+[node name="Panel2" type="Panel" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Panel3" type="Panel" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_1" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_2" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_3" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_4" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_5" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_6" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_7" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_8" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Ability_9" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Descriptions" type="Panel" parent="BattleMenuControl"]
+layout_mode = 0
+offset_left = 960.0
+offset_top = 511.0
+offset_right = 1280.0
+offset_bottom = 767.0
+
+[node name="Labels" type="VBoxContainer" parent="BattleMenuControl/Descriptions"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 256.0
+theme = SubResource("Theme_om1ud")
+alignment = 1
+
+[node name="Label" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " Sucker Punch"
+
+[node name="AbilityDescription" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label3" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Text"
+
+[node name="Label4" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Text"
+
+[node name="Label5" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Text"
+
+[node name="Label6" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Text"
+
+[node name="ItemsMenu" type="Panel" parent="BattleMenuControl"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.25
+anchor_bottom = 1.0
+offset_top = 511.0
+offset_right = 310.0
+offset_bottom = 727.0
+
+[node name="Menu" type="VBoxContainer" parent="BattleMenuControl/ItemsMenu"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 256.0
+theme = SubResource("Theme_om1ud")
+alignment = 1
+
+[node name="NameLabel" type="Label" parent="BattleMenuControl/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " ITEMS
+"
+label_settings = SubResource("LabelSettings_g53kf")
+
+[node name="Slot" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot2" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot3" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot4" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Slot5" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 0
+
+[node name="Cursor" type="Polygon2D" parent="BattleMenuControl"]
+position = Vector2(1150, 300)
+rotation = 1.5708
+scale = Vector2(1.09648, 1.19025)
+color = Color(1, 0, 0, 1)
+polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
+script = ExtResource("7_tyxjv")
+
+[node name="BattleCamera" type="Camera2D" parent="."]
+position = Vector2(640, 384)

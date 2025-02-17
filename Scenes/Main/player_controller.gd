@@ -3,6 +3,7 @@ extends Node2D
 @onready var Player: PlayerClass = $MyPlayer
 @onready var Map_Controller = $"../MapController"
 @onready var Game_Controller = get_tree().current_scene
+@onready var Player_Camera = Player.Player_Camera
 
 @export var DEBUG_PLAYER: bool = true
 
@@ -180,7 +181,7 @@ func player_action_pressed() -> void:
 		if (DEBUG_PLAYER): print_action_object_report(object)
 		if (object.battle_ready):
 			enter_battle_scene(object)
-		object.kill()
+		#object.kill()
 	elif(actioned_tile != null):
 		# get tile info
 		var tile_report = Map_Controller.get_world_tile_report(action_coords)
@@ -232,6 +233,23 @@ func set_player_position(pos: Vector2i, scope: String) -> void:
 			#Map_Controller.set_object_at_coords(self, pos)
 	return
 
+# set player direction
+func set_player_direction(dir: int, idle: bool = true) -> void:
+	Player.current_direction = Player.Direction.keys()[dir]
+	print("dir: " + str(dir))
+	print("player dir: " + str(Player.current_direction))
+	match dir:
+		Player.Direction.UP when idle:
+			Player.Animation_Object.play("idle_up")
+		Player.Direction.DOWN when idle:
+			Player.Animation_Object.play("idle_down")
+		Player.Direction.LEFT when idle:
+			Player.Animation_Object.play("idle_side")
+			Player.Animation_Object.flip_h = true
+		Player.Direction.RIGHT when idle:
+			Player.Animation_Object.play("idle_side")
+			Player.Animation_Object.flip_h = false
+	return
 
 #DEBUG player debug print to console
 func print_player_info() -> void:
@@ -266,11 +284,13 @@ func save_data() -> bool:
 		# file not found, creating new
 		print_debug("Creating user preference file...")
 		config.set_value("player", "grid_position", Player.grid_position)
+		config.set_value("player", "direction", Player.current_direction)
 		result = config.save(PREFERENCE_FILE)
 	else:
 		# existing file found, updating
 		print_debug("Updating user preference file: " + str(Player.grid_position))
 		config.set_value("player", "grid_position", Player.grid_position)
+		config.set_value("player", "direction", Player.current_direction)
 		result = config.save(PREFERENCE_FILE)
 
 	return result
@@ -285,11 +305,14 @@ func load_data() -> bool:
 		# file not found, creating new
 		print_debug("Creating user preference file...")
 		config.set_value("player", "grid_position", Player.grid_position)
+		config.set_value("player", "direction", Player.current_direction)
 		_result = config.save(PREFERENCE_FILE)
 	else:
 		# existing file found, reading it
 		var loaded_grid_position = config.get_value("player", "grid_position")
+		var loaded_direction = config.get_value("player", "direction")
 		set_player_position(loaded_grid_position, "grid")
+		set_player_direction(loaded_direction)
 		print_debug("loaded config: " + str(Player.grid_position))
 
 	return true
