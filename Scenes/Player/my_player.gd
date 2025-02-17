@@ -3,6 +3,7 @@ extends CharacterBody2D
 
 @onready var Animation_Object = $AnimatedSprite2D
 @onready var Map_Controller = $"../MapController"
+@onready var Player_Camera = get_node("./OverworldCamera")
 
 @export var DEBUG_PLAYER: bool = true
 @export var speed = 75
@@ -19,7 +20,8 @@ enum Direction {
 	RIGHT,
 	NONE
 }
-var current_direction: Direction = Direction.DOWN
+#var current_direction: Direction = Direction.DOWN
+var current_direction = 3
 
 
 # Called when the node enters the scene tree for the first time.

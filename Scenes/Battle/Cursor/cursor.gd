@@ -1,9 +1,9 @@
 extends Polygon2D
 
-var options_offset = Vector2i(110, 11)
-var items_offset = Vector2i(120, 11)
-var abilities_offset = Vector2i(490, 21)
-var targets_offset = Vector2i(1100, -300)
+var options_offset = Vector2i(95, 520)
+var items_offset = Vector2i(125, 520)
+var abilities_offset = Vector2i(480, 530)
+var targets_offset = Vector2i(130, -10)
 
 var disabled: bool = false
 
