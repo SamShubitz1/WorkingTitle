@@ -482,5 +482,13 @@ scale = Vector2(0.594435, 1.19025)
 polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
 script = ExtResource("7_tyxjv")
 
+[node name="LogCursor" type="Polygon2D" parent="BattleMenuControl"]
+visible = false
+z_index = 1
+position = Vector2(884, 569)
+rotation = -3.14159
+scale = Vector2(0.594435, 1.19025)
+polygon = PackedVector2Array(-1.68237, 0, 21.8695, 0, 10.0936, 11.7622)
+
 [node name="BattleCamera" type="Camera2D" parent="."]
 position = Vector2(640, 384)

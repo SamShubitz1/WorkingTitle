@@ -14,10 +14,10 @@ var filter_list: Array = [] # will be used to filter out obsolete events
 var initial_dialog: String = "A wild man appears!"
 var battle_log: Array = []
 var dialog: Label
+var scroll_index: int = 0
 
-var increment_disabled: bool = false
-var dialog_duration: float = .6
-var attack_duration: float = .6
+var dialog_duration: float = .7
+var attack_duration: float = .7
 
 var selected_attack: Dictionary
 
@@ -68,10 +68,6 @@ func increment_queue() -> void:
 		increment_queue() # can recursively call itself :O
 	else:
 		cursor.enable()
-		
-#func process_queue() -> void:
-	#for i in range(event_queue.size()):
-		#await increment_queue()
 			
 func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
@@ -90,6 +86,7 @@ func update_dialog_queue() -> void:
 	dialog_box[0].modulate = Color(1, 1, 0)
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
+	scroll_index = 1
 	
 
 func handle_attack(event: Dictionary) -> void:
@@ -139,7 +136,7 @@ func on_try_retreat() -> void:
 func calculate_attack_dmg() -> int:
 	var damage: int = selected_attack.damage
 	var multiplier: float = resolve_status_effects()
-	damage *= multiplier #if damage ends in '0' it will stay an int
+	damage *= multiplier
 	return damage
 	
 func perform_enemy_attack() -> void:
@@ -176,6 +173,22 @@ func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	
 func wait(seconds: float) -> void:
-	increment_disabled = true
 	await get_tree().create_timer(seconds).timeout
-	increment_disabled = false
+	
+func on_scroll_up():
+	if scroll_index > 1:
+		scroll_index -= 1
+	for i in range(dialog_box.size()):
+		if scroll_index < battle_log.size():
+			dialog_box[i].text = battle_log[(battle_log.size()) - (scroll_index + i)]
+	dialog_box[0].modulate = Color(1, 1, 0)
+
+func on_scroll_down():
+	if scroll_index + (dialog_box.size() - 1) < battle_log.size():
+		scroll_index += 1
+	for i in range(dialog_box.size()):
+		if scroll_index + (dialog_box.size() - 1) <= battle_log.size():
+			dialog_box[i].text = battle_log[battle_log.size() - (scroll_index + i)]	
+	dialog_box[0].modulate = Color(1, 1, 0)
+	
+# 
