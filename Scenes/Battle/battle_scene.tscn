@@ -140,7 +140,7 @@ layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
-text = "Battle Log"
+text = "Log"
 vertical_alignment = 1
 
 [node name="Slot1" type="Label" parent="BattleMenuControl/DialogBox/BattleLog"]

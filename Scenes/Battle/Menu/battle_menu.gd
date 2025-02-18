@@ -68,11 +68,10 @@ func update_selected_button() -> void:
 		description_label.text = player.abilities[selected_button_index].description
 	elif selected_menu == items_menu:
 		if player.items.is_empty():
-			player.items.append({"name": "Empty", "menu_description": ""})
+			player.items.append({"name": "Empty", "menu_description": "You have no items"})
 			update_ui()
-		else:
-			if selected_button_index < player.items.size():
-				description_label.text = player.items[selected_button_index].menu_description
+		if selected_button_index < player.items.size():
+			description_label.text = player.items[selected_button_index].menu_description
 
 func update_selected_menu(selected_menu_index: int) -> void:
 	toggle_dialog_display()

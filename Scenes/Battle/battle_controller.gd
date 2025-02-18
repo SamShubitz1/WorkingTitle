@@ -16,8 +16,8 @@ var battle_log: Array = []
 var dialog: Label
 
 var increment_disabled: bool = false
-var dialog_duration: float = .7
-var attack_duration: float = .7
+var dialog_duration: float = .6
+var attack_duration: float = .6
 
 var selected_attack: Dictionary
 
@@ -84,12 +84,13 @@ func play_dialog(text: String) -> void: #function might be redundant
 	update_dialog_queue()
 	
 func update_dialog_queue() -> void:
-	for i in range(dialog_box.size() - 1):
-		if i < battle_log.size() - 1:
+	for i in range(dialog_box.size()):
+		if i < battle_log.size():
 			dialog_box[i].text = battle_log[(battle_log.size() - 1) - i]
 	dialog_box[0].modulate = Color(1, 1, 0)
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
+	
 
 func handle_attack(event: Dictionary) -> void:
 		if event.target == "enemy":
