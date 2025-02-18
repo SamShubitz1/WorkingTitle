@@ -1,12 +1,13 @@
 extends Control
 
 @onready var cursor = $"../Cursor"
+@onready var dialog_box = $"../DialogBox"
 @onready var battle_controller = $"../../BattleController"
-@onready var options_node = $"../MainMenu"
+@onready var abilities_node = $"../AbilitiesMenu"
 @onready var options_menu = $"../MainMenu/Menu".get_children().slice(1)
 @onready var abilities_menu = $"../AbilitiesMenu/Menu".get_children().slice(3)
 @onready var items_node = $"../ItemsMenu"
-@onready var items_menu = $"../ItemsMenu/Menu".get_children().slice(1)
+@onready var items_menu = $"../ItemsMenu/Menu".get_children().slice(3)
 @onready var char_name_label = $"../MainMenu/Menu/CharPanel/NameLabel"
 @onready var description_label = $"../Descriptions/Labels/AbilityDescription"
 @onready var player = $"../../Player"
@@ -19,7 +20,7 @@ var menus: Array
 var selected_menu: Array
 var targets_menu: Array = []
 
-var initial_cursor_position: Vector2 = Vector2(0, 43)
+var initial_cursor_position: Vector2 = Vector2(0, 40)
 
 # using process_frame seems to help avoid race issues w/ updating cursor position
 func _ready() -> void:
@@ -46,19 +47,16 @@ func _input(_e) -> void:
 				go_back()
 			
 	if Input.is_action_just_pressed("ui_accept"):
-		if not battle_controller.increment_disabled:
-			if not battle_controller.event_queue.is_empty():
-				battle_controller.increment_queue()
-			else:
-				match selected_menu:
-					options_menu:
-						on_select_option()
-					abilities_menu:
-						on_select_ability()
-					items_menu:
-						on_select_item()
-					targets_menu:
-						on_select_target()
+		if not cursor.disabled:
+			match selected_menu:
+				options_menu:
+					on_select_option()
+				abilities_menu:
+					on_select_ability()
+				items_menu:
+					on_select_item()
+				targets_menu:
+					on_select_target()
  
 # using process_frame seems to help avoid race issues w/ updating cursor position
 func update_selected_button() -> void:
@@ -77,12 +75,13 @@ func update_selected_button() -> void:
 				description_label.text = player.items[selected_button_index].menu_description
 
 func update_selected_menu(selected_menu_index: int) -> void:
+	toggle_dialog_display()
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(selected_menu_index)
 	selected_button_index = 0
 	update_selected_button()
 	if cursor.selected_menu_type == cursor.MenuType.ITEMS:
-		options_node.hide()
+		abilities_node.hide()
 		items_node.show()
 	
 func on_select_option() -> void:
@@ -106,6 +105,7 @@ func on_select_ability() -> void:
 	battle_controller.prompt_select_target(selected_attack)
 	
 func on_select_target():
+	toggle_dialog_display()
 	var target = targets_menu[selected_button_index]
 	battle_controller.on_use_attack(target.alignment)
 	go_back()
@@ -158,7 +158,7 @@ func navigate_forward(menu_size: int):
 func go_back():
 	if selected_menu == items_menu:
 		items_node.hide()
-		options_node.show()
+		abilities_node.show()
 	if selected_menu != options_menu:
 		update_selected_menu(cursor.MenuType.OPTIONS)
 		description_label.text = ""
@@ -179,3 +179,6 @@ func get_menu_size() -> int:
 func on_cancel_target_select() -> void:
 	update_selected_menu(cursor.MenuType.ABILITIES)
 	battle_controller.cancel_select_target()
+	
+func toggle_dialog_display() -> void:
+	dialog_box.visible = !dialog_box.visible
