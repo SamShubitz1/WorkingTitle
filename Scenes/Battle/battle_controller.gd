@@ -80,9 +80,8 @@ func handle_dialog(event: Dictionary) -> void:
 	
 func play_dialog(text: String) -> void: #function might be redundant
 	dialog.text = text
-	if !battle_log.is_empty() && text != battle_log[battle_log.size() - 1]:
-		battle_log.append(text)
-		update_dialog_queue()
+	battle_log.append(text)
+	update_dialog_queue()
 	
 func update_dialog_queue() -> void:
 	for i in range(dialog_box.size() - 1):
