@@ -54,6 +54,8 @@ func _input(_e) -> void:
 				navigate_log()
 
 	if Input.is_action_just_pressed("ui_accept"):
+		if battle_controller.manual_increment:
+			battle_controller.increment_queue()
 		if not cursor.disabled:
 			match selected_menu:
 				options_menu:

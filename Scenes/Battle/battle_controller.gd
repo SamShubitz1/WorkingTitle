@@ -15,6 +15,7 @@ var initial_dialog: String = "A wild man appears!"
 var battle_log: Array = []
 var dialog: Label
 var scroll_index: int = 0
+var manual_increment: bool = false
 
 var dialog_duration: float = .7
 var attack_duration: float = .7
@@ -58,15 +59,18 @@ func increment_queue() -> void:
 			EventType.RETREAT:
 				handle_retreat()
 				
-		if event.has("duration"):
+		if event.has("duration") && not manual_increment:
 			await wait(event.duration)
 			
-		if event_queue.is_empty():
-			cursor.enable()
-			play_dialog("Player turn!")
-			
-		increment_queue() # can recursively call itself :O
+			if event_queue.is_empty():
+				cursor.enable()
+				play_dialog("Player turn!")
+				
+			increment_queue() # can recursively call itself :O
+		else:
+			manual_increment = true
 	else:
+		manual_increment = false
 		cursor.enable()
 			
 func handle_dialog(event: Dictionary) -> void:
@@ -117,7 +121,7 @@ func on_use_item(item: Dictionary) -> void:
 	add_event({"type": EventType.DIALOG, "text": "Player used " + item.name + "!", "duration": dialog_duration})
 	player.items_equipped.append(item)
 	player.populate_buffs_array()
-	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": attack_duration})
+	add_event({"type": EventType.DIALOG, "text": item.effect_description})
 	perform_enemy_attack()
 	increment_queue()
 
@@ -126,7 +130,7 @@ func on_try_retreat() -> void:
 	add_event({"type": EventType.DIALOG, "text": "Player retreats!", "duration": dialog_duration})
 	var success: bool = player_health.value > randi() % int(enemy_health.value)
 	if success:
-		add_event({"type": EventType.DIALOG, "text": "Got away safely!", "duration": dialog_duration})
+		add_event({"type": EventType.DIALOG, "text": "Got away safely!"})
 		add_event({"type": EventType.RETREAT})
 	else:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration})
@@ -154,11 +158,11 @@ func check_death() -> void:
 	if player_health.value <= 0 || enemy_health.value <= 0:
 		var dead_name
 		if player_health.value == 0:
-			dead_name = "Player"
+			dead_name = "You"
 		else:
 			dead_name = "Enemy"
 		clear_queue()
-		add_event({"type": EventType.DIALOG, "text": dead_name + " died!", "duration": dialog_duration})
+		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
 		add_event({"type": EventType.DEATH})
 		increment_queue()
 		
