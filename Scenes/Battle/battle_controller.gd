@@ -160,7 +160,7 @@ func check_death() -> void:
 		else:
 			dead_name = "Enemy"
 		clear_queue()
-		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
+		add_event({"type": EventType.DIALOG, "text": dead_name + " died!", "duration": dialog_duration})
 		add_event({"type": EventType.DEATH})
 		increment_queue()
 		
