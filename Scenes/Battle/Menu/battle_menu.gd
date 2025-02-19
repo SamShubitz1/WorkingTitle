@@ -171,12 +171,11 @@ func navigate_forward(menu_size: int):
 		update_selected_button()
 
 func go_back():
-	if selected_menu == items_menu:
-		items_node.hide()
-		abilities_node.show()
-	elif selected_menu == log_menu:
+	if selected_menu == log_menu:
 		toggle_dialog_display()
 	if selected_menu != options_menu:
+		items_node.hide()
+		abilities_node.show()
 		update_selected_menu(cursor.MenuType.OPTIONS)
 		description_label.text = ""
 		
