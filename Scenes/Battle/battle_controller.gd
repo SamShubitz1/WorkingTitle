@@ -17,8 +17,8 @@ var dialog: Label
 var scroll_index: int = 0
 var manual_increment: bool = false
 
-var dialog_duration: float = .7
-var attack_duration: float = .7
+var dialog_duration: float = 0.7
+var attack_duration: float = 0.7
 
 var selected_attack: Dictionary
 
@@ -27,11 +27,6 @@ enum EventType {
 	ATTACK,
 	DEATH,
 	RETREAT,
-}
-
-enum AnimationState {
-	ON,
-	OFF
 }
 
 func _ready() -> void:
@@ -78,7 +73,7 @@ func handle_dialog(event: Dictionary) -> void:
 	battle_log.append(event.text)
 	update_dialog_queue()
 	
-func play_dialog(text: String) -> void: #redundant function, could be used to filter message from battle log
+func play_dialog(text: String) -> void: # redundant function, could be used to filter messages from battle log
 	dialog.text = text
 	battle_log.append(text)
 	update_dialog_queue()
@@ -182,7 +177,7 @@ func on_scroll_up():
 	if scroll_index > 1:
 		scroll_index -= 1
 	for i in range(dialog_box.size()):
-		if scroll_index < battle_log.size():
+		if scroll_index < battle_log.size() - (dialog_box.size() - 1):
 			dialog_box[i].text = battle_log[(battle_log.size()) - (scroll_index + i)]
 	dialog_box[0].modulate = Color(1, 1, 0)
 
