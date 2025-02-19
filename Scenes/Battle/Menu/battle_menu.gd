@@ -32,6 +32,8 @@ func _ready() -> void:
 	
 func _input(_e) -> void:
 	if not cursor.disabled:
+		if not battle_controller.event_queue.is_empty():
+			battle_controller.increment_queue()
 		var menu_size = get_menu_size()
 			
 		if Input.is_action_just_pressed("navigate_backward"):
@@ -50,8 +52,9 @@ func _input(_e) -> void:
 				go_back()
 		
 		elif Input.is_action_just_pressed("navigate_log"):
-			navigate_log()
-			
+			if selected_menu != log_menu:
+				navigate_log()
+
 	if Input.is_action_just_pressed("ui_accept"):
 		if not cursor.disabled:
 			match selected_menu:
@@ -202,6 +205,3 @@ func navigate_log() -> void:
 	dialog_box.visible = true
 	dialog_box.modulate = Color(1.5,1.5,1.5)
 	update_selected_menu(cursor.MenuType.LOG)
-	
-	
-	

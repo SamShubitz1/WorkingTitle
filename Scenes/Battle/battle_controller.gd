@@ -60,12 +60,12 @@ func increment_queue() -> void:
 				
 		if event.has("duration"):
 			await wait(event.duration)
+			increment_queue() # can recursively call itself :O
 			
-		if event_queue.is_empty():
-			cursor.enable()
-			play_dialog("Player turn!")
+			if event_queue.is_empty():
+				cursor.enable()
+				play_dialog("Player turn!")
 			
-		increment_queue() # can recursively call itself :O
 	else:
 		cursor.enable()
 			
@@ -126,7 +126,7 @@ func on_try_retreat() -> void:
 	add_event({"type": EventType.DIALOG, "text": "Player retreats!", "duration": dialog_duration})
 	var success: bool = player_health.value > randi() % int(enemy_health.value)
 	if success:
-		add_event({"type": EventType.DIALOG, "text": "Got away safely!", "duration": dialog_duration})
+		add_event({"type": EventType.DIALOG, "text": "Got away safely!"})
 		add_event({"type": EventType.RETREAT})
 	else:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration})
@@ -158,7 +158,7 @@ func check_death() -> void:
 		else:
 			dead_name = "Enemy"
 		clear_queue()
-		add_event({"type": EventType.DIALOG, "text": dead_name + " died!", "duration": dialog_duration})
+		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
 		add_event({"type": EventType.DEATH})
 		increment_queue()
 		
