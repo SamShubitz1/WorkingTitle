@@ -121,7 +121,7 @@ func on_use_item(item: Dictionary) -> void:
 	add_event({"type": EventType.DIALOG, "text": "Player used " + item.name + "!", "duration": dialog_duration})
 	player.items_equipped.append(item)
 	player.populate_buffs_array()
-	add_event({"type": EventType.DIALOG, "text": item.effect_description})
+	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration})
 	perform_enemy_attack()
 	increment_queue()
 
