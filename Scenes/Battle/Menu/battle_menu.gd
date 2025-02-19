@@ -31,9 +31,10 @@ func _ready() -> void:
 	cursor.move_cursor(initial_cursor_position)
 	
 func _input(_e) -> void:
-	if not cursor.disabled:
+	if not battle_controller.increment_disabled:
 		if not battle_controller.event_queue.is_empty():
 			battle_controller.increment_queue()
+	if not cursor.disabled:
 		var menu_size = get_menu_size()
 			
 		if Input.is_action_just_pressed("navigate_backward"):

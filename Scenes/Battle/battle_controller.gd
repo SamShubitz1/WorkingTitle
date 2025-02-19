@@ -19,6 +19,8 @@ var scroll_index: int = 0
 var dialog_duration: float = .7
 var attack_duration: float = .7
 
+var increment_disabled: bool = false
+
 var selected_attack: Dictionary
 
 enum EventType {
@@ -48,6 +50,7 @@ func clear_queue() -> void:
 func increment_queue() -> void:
 	var event = event_queue.pop_front()
 	if event:
+		increment_disabled = true
 		match event.type:
 			EventType.DIALOG:
 				handle_dialog(event)
@@ -60,12 +63,11 @@ func increment_queue() -> void:
 				
 		if event.has("duration"):
 			await wait(event.duration)
-			increment_queue() # can recursively call itself :O
 			
 			if event_queue.is_empty():
 				cursor.enable()
 				play_dialog("Player turn!")
-			
+		increment_disabled = false	
 	else:
 		cursor.enable()
 			
