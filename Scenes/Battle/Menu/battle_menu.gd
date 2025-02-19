@@ -1,7 +1,6 @@
 extends Control
 
 @onready var cursor = $"../Cursor"
-@onready var log_cursor = $"../LogCursor"
 @onready var dialog_box = $"../DialogBox"
 @onready var battle_controller = $"../../BattleController"
 @onready var abilities_node = $"../AbilitiesMenu"
@@ -44,6 +43,9 @@ func _input(_e) -> void:
 		elif Input.is_action_just_pressed("go_back"):
 			if selected_menu == targets_menu:
 				on_cancel_target_select()
+			elif selected_menu == log_menu:
+				cursor.toggle_visibility()
+				go_back()
 			else:
 				go_back()
 		
@@ -78,7 +80,7 @@ func update_selected_button() -> void:
 			description_label.text = player.items[selected_button_index].menu_description
 
 func update_selected_menu(selected_menu_index: int) -> void:
-	selected_menu = menus[selected_menu_index] 
+	selected_menu = menus[selected_menu_index]
 	if selected_menu != log_menu:
 		toggle_dialog_display()
 	cursor.set_menu_type(selected_menu_index)
@@ -128,7 +130,6 @@ func on_select_retreat() -> void:
 	
 func update_ui() -> void:
 	char_name_label.text = player.name
-	log_menu.append(log_cursor)
 	
 	for i in range(abilities_menu.size()):
 		if i < player.abilities.size():
@@ -145,6 +146,7 @@ func update_ui() -> void:
 func update_menus() -> void:
 	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
 	targets_menu.append(enemy)
+	log_menu.append(dialog_box)
 	selected_menu = menus[0]
 	selected_button = selected_menu[selected_button_index]
 	
@@ -193,10 +195,12 @@ func on_cancel_target_select() -> void:
 	battle_controller.cancel_select_target()
 	
 func toggle_dialog_display() -> void:
+	dialog_box.modulate = Color(1,1,1)
 	dialog_box.visible = !dialog_box.visible
-	
+
 func navigate_log() -> void:
 	dialog_box.visible = true
+	dialog_box.modulate = Color(1.5,1.5,1.5)
 	update_selected_menu(cursor.MenuType.LOG)
 	
 	

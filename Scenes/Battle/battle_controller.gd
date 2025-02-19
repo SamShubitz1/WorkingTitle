@@ -74,7 +74,7 @@ func handle_dialog(event: Dictionary) -> void:
 	battle_log.append(event.text)
 	update_dialog_queue()
 	
-func play_dialog(text: String) -> void: #function might be redundant
+func play_dialog(text: String) -> void: #redundant function, could be used to filter message from battle log
 	dialog.text = text
 	battle_log.append(text)
 	update_dialog_queue()
