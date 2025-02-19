@@ -92,12 +92,13 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 	scroll_index = 1
 	
-
 func handle_attack(event: Dictionary) -> void:
 		if event.target == "enemy":
 			enemy_health.value -= event.damage
+			play_dialog("Player took " + str(event.damage) + " damage!")
 		elif event.target == "player":
 			player_health.value -= event.damage
+			play_dialog("Enemy took " + str(event.damage) + " damage!")
 		check_death()
 		
 func on_use_attack(target: String) -> void:
@@ -105,7 +106,6 @@ func on_use_attack(target: String) -> void:
 	var damage = calculate_attack_dmg()
 	add_event({"type": EventType.DIALOG, "text": "Player used " + selected_attack.name + "!", "duration": dialog_duration})
 	add_event({"type": EventType.ATTACK, "target": target, "damage": damage, "duration": attack_duration})
-	add_event({"type": EventType.DIALOG, "text": "Enemy took " + str(damage) + " damage!", "duration": dialog_duration})
 	perform_enemy_attack()
 	increment_queue()
 	
@@ -147,7 +147,6 @@ func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!", "duration": dialog_duration})
 	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage, "duration": attack_duration})
-	add_event({"type": EventType.DIALOG, "text": "Player took " + str(enemy_attack.damage) + " damage!", "duration": dialog_duration})
 	
 func get_enemy_attack() -> Dictionary:
 	var attack_index = randi() % enemy.abilities.size()
