@@ -19,8 +19,6 @@ var scroll_index: int = 0
 var dialog_duration: float = .7
 var attack_duration: float = .7
 
-var increment_disabled: bool = false
-
 var selected_attack: Dictionary
 
 enum EventType {
@@ -50,7 +48,6 @@ func clear_queue() -> void:
 func increment_queue() -> void:
 	var event = event_queue.pop_front()
 	if event:
-		increment_disabled = true
 		match event.type:
 			EventType.DIALOG:
 				handle_dialog(event)
@@ -64,10 +61,11 @@ func increment_queue() -> void:
 		if event.has("duration"):
 			await wait(event.duration)
 			
-			if event_queue.is_empty():
-				cursor.enable()
-				play_dialog("Player turn!")
-		increment_disabled = false	
+		if event_queue.is_empty():
+			cursor.enable()
+			play_dialog("Player turn!")
+			
+		increment_queue() # can recursively call itself :O
 	else:
 		cursor.enable()
 			
@@ -128,7 +126,7 @@ func on_try_retreat() -> void:
 	add_event({"type": EventType.DIALOG, "text": "Player retreats!", "duration": dialog_duration})
 	var success: bool = player_health.value > randi() % int(enemy_health.value)
 	if success:
-		add_event({"type": EventType.DIALOG, "text": "Got away safely!"})
+		add_event({"type": EventType.DIALOG, "text": "Got away safely!", "duration": dialog_duration})
 		add_event({"type": EventType.RETREAT})
 	else:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration})
