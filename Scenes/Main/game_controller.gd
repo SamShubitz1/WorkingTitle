@@ -5,7 +5,7 @@ extends Node2D
 
 #TODO @onready var Title_Scene_File =
 const Overworld_Scene_File = "res://Scenes/Main/overworld.tscn"
-const Battle_Scene_File = "res://Scenes/Battle/Battle_Scene/battle_scene.tscn"
+const Battle_Scene_File = "res://Scenes/Battle/Battle/battle_scene.tscn"
 
 var overworld_cam_obj
 var battle_cam_obj
