@@ -1,7 +1,6 @@
 extends Control
 
 @onready var battle_cursor = $Cursor
-
 @onready var options_node = $MainMenu
 @onready var abilities_node = $AbilitiesMenu
 @onready var items_node = $ItemsMenu
@@ -80,6 +79,7 @@ func update_selected_menu(selected_menu_index: int) -> void:
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(selected_menu_index)
 	selected_menu.activate() # activating a menu makes it visible as well
+	
 	if selected_menu == items_menu:
 		abilities_menu.hide_menu()
 		items_menu.show_menu()
@@ -87,7 +87,6 @@ func update_selected_menu(selected_menu_index: int) -> void:
 	elif selected_menu == abilities_menu:
 		update_description()
 		
-
 func on_press_button() -> void:
 	match selected_menu:
 		options_menu:

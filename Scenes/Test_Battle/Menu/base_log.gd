@@ -41,6 +41,7 @@ func disactivate() -> void:
 	is_active = false
 	cursor.show()
 	menu.modulate = Color(1, 1, 1)
+	scroll_index = 1
 	
 func init(log: Node, log_slots: Array, menu_cursor: BaseCursor, initial_button_position = null) -> void:
 	self.menu = log
