@@ -173,20 +173,20 @@ func handle_death() -> void:
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
 	
-func on_scroll_up():
-	if scroll_index > 1:
-		scroll_index -= 1
-	for i in range(dialog_box.size()):
-		if scroll_index < battle_log.size() - (dialog_box.size() - 1):
-			dialog_box[i].text = battle_log[(battle_log.size()) - (scroll_index + i)]
-	dialog_box[0].modulate = Color(1, 1, 0)
-
-func on_scroll_down():
-	if scroll_index + (dialog_box.size() - 1) < battle_log.size():
-		scroll_index += 1
-	for i in range(dialog_box.size()):
-		if scroll_index + (dialog_box.size() - 1) <= battle_log.size():
-			dialog_box[i].text = battle_log[battle_log.size() - (scroll_index + i)]	
-	dialog_box[0].modulate = Color(1, 1, 0)
+#func on_scroll_up():
+	#if scroll_index > 1:
+		#scroll_index -= 1
+	#for i in range(dialog_box.size()):
+		#if scroll_index < battle_log.size() - (dialog_box.size() - 1):
+			#dialog_box[i].text = battle_log[(battle_log.size()) - (scroll_index + i)]
+	#dialog_box[0].modulate = Color(1, 1, 0)
+#
+#func on_scroll_down():
+	#if scroll_index + (dialog_box.size() - 1) < battle_log.size():
+		#scroll_index += 1
+	#for i in range(dialog_box.size()):
+		#if scroll_index + (dialog_box.size() - 1) <= battle_log.size():
+			#dialog_box[i].text = battle_log[battle_log.size() - (scroll_index + i)]	
+	#dialog_box[0].modulate = Color(1, 1, 0)
 	
 # 

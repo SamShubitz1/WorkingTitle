@@ -36,9 +36,11 @@ func _input(_e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_just_pressed("navigate_forward"):
 			selected_menu.navigate_forward()
+			update_description()
 
 		elif Input.is_action_just_pressed("navigate_backward"):
 			selected_menu.navigate_backward()
+			update_description()
 		
 		elif Input.is_action_just_pressed("navigate_log"):
 			if selected_menu != log_menu:
@@ -81,6 +83,10 @@ func update_selected_menu(selected_menu_index: int) -> void:
 	if selected_menu == items_menu:
 		abilities_menu.hide_menu()
 		items_menu.show_menu()
+		update_description()
+	elif selected_menu == abilities_menu:
+		update_description()
+		
 
 func on_press_button() -> void:
 	match selected_menu:
@@ -127,7 +133,9 @@ func on_cancel_target_select() -> void:
 
 func on_select_item() -> void:
 	var item = player.items.pop_at(selected_menu.selected_button_index) # expensive on large arrays
-	items_menu.set_scroll_size(player.items.size())
+	if player.items.is_empty():
+		player.items.append({"name": "Empty", "menu_description": "You have no items"})
+		update_ui()
 	if item.name == "Empty":
 		go_back()
 	else:
@@ -135,11 +143,11 @@ func on_select_item() -> void:
 		battle_controller.on_use_item(item)
 		update_ui()
 		go_back()
+	items_menu.set_scroll_size(player.items.size())
 
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 
-		
 func update_ui() -> void:
 	cursor = battle_cursor
 	char_name_label.text = player.name
@@ -155,6 +163,14 @@ func update_ui() -> void:
 			items_menu.buttons[i].text = player.items[i].name
 		else:
 			items_menu.buttons[i].text = "-"
+			
+func update_description() -> void:
+	var index = selected_menu.get_selected_button_index()
+	if selected_menu == abilities_menu:
+		description_label.text = player.abilities[index].description
+	elif selected_menu == items_menu:
+		if index < player.items.size():
+			description_label.text = player.items[index].menu_description
 
 func initialize_menus() -> void:
 	var initial_button_position = Vector2i(0, 65)

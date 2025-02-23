@@ -61,3 +61,6 @@ func show_menu() -> void:
 
 func hide_menu() -> void:
 	menu.visible = false
+
+func get_selected_button_index() -> int:
+	return selected_button_index
