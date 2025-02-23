@@ -15,7 +15,8 @@ enum MenuType {
 var selected_menu_type: MenuType
 
 func move_cursor(button_position: Vector2i) -> void:
-	self.position = button_position
+	if not disabled:
+		self.position = button_position
 
 func set_menu_type(type: MenuType) -> void:
 	selected_menu_type = type

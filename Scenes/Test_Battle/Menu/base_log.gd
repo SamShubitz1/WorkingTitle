@@ -3,7 +3,7 @@ extends BaseMenu
 class_name BaseLog
 
 var entries: Array
-var slots: Array
+var slots: Array # Label/text nodes that will be populated with log entries
 
 var scroll_index: int = 1
 

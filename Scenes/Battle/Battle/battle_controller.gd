@@ -90,10 +90,10 @@ func update_dialog_queue() -> void:
 func handle_attack(event: Dictionary) -> void:
 		if event.target == "enemy":
 			enemy_health.value -= event.damage
-			play_dialog("Player took " + str(event.damage) + " damage!")
+			play_dialog("Enemy took " + str(event.damage) + " damage!")
 		elif event.target == "player":
 			player_health.value -= event.damage
-			play_dialog("Enemy took " + str(event.damage) + " damage!")
+			play_dialog("Player took " + str(event.damage) + " damage!")
 		check_death()
 		
 func on_use_attack(target: String) -> void:
