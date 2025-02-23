@@ -15,17 +15,6 @@ func navigate_backward() -> void:
 	if is_active:
 		scroll_up()
 		
-func activate() -> void:
-	self.show_menu()
-	is_active = true
-	cursor.hide()
-	menu.modulate = Color(1.5, 1.5, 1.5)
-	
-func disactivate() -> void:
-	is_active = false
-	cursor.show()
-	menu.modulate = Color(1, 1, 1)
-	
 func scroll_up():
 	if scroll_index > 1:
 		scroll_index -= 1
@@ -41,8 +30,19 @@ func scroll_down():
 		if scroll_index + (slots.size() - 1) <= entries.size():
 			slots[i].text = entries[entries.size() - (scroll_index + i)]	
 	slots[0].modulate = Color(1, 1, 0)
+		
+func activate() -> void:
+	self.show_menu()
+	is_active = true
+	cursor.hide()
+	menu.modulate = Color(1.5, 1.5, 1.5)
 	
-func init(log: Node, log_slots: Array, menu_cursor: BaseCursor) -> void:
+func disactivate() -> void:
+	is_active = false
+	cursor.show()
+	menu.modulate = Color(1, 1, 1)
+	
+func init(log: Node, log_slots: Array, menu_cursor: BaseCursor, initial_button_position = null) -> void:
 	self.menu = log
 	self.slots = log_slots
 	self.cursor = menu_cursor

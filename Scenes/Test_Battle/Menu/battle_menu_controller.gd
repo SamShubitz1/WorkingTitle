@@ -58,29 +58,6 @@ func _input(_e) -> void:
 			battle_controller.increment_queue()
 		if not cursor.disabled:
 			on_press_button()
-		
-	if Input.is_action_just_pressed("testbutton"):
-		print("selected button is ", selected_menu.selected_button, "its position is: ", selected_menu.selected_button.position, "cursor position is: ", cursor.position)
-
-func initialize_menus() -> void:
-	options_menu.init(options_node, options_node.get_child(0).get_children().slice(1), battle_cursor)
-	
-	abilities_menu.init(abilities_node, abilities_node.get_child(0).get_children().slice(3), battle_cursor)
-	abilities_menu.set_scroll_size(player.abilities.size())
-	
-	items_menu.init(items_node, items_node.get_child(0).get_children().slice(3), battle_cursor)
-	items_menu.set_scroll_size(player.items.size())
-	
-	enemies = [enemy]
-	targets_menu.init(targets_node, enemies, battle_cursor)
-	targets_menu.set_scroll_size(enemies.size())
-	
-	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), battle_cursor)
-	log_menu.set_entries(battle_controller.battle_log)
-	
-	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
-	selected_menu = options_menu
-	selected_menu.activate()
 
 func go_back():
 	if selected_menu != options_menu:
@@ -90,26 +67,26 @@ func go_back():
 		update_selected_menu(cursor.MenuType.OPTIONS)
 		description_label.text = ""
 
-func update_ui() -> void:
-	cursor = battle_cursor
-	char_name_label.text = player.name
+func navigate_log() -> void:
+	log_menu.activate()
+	update_selected_menu(cursor.MenuType.LOG)
 
-	for i in range(abilities_menu.buttons.size()):
-		if i < player.abilities.size():
-			abilities_menu.buttons[i].text = player.abilities[i].name
-		else:
-			abilities_menu.buttons[i].text = "???"
-
-	for i in range(items_menu.buttons.size()):
-		if i < player.items.size():
-			items_menu.buttons[i].text = player.items[i].name
-		else:
-			items_menu.buttons[i].text = "-"
+func update_selected_menu(selected_menu_index: int) -> void:
+	selected_menu.disactivate()
+	if selected_menu != options_menu && selected_menu != log_menu:
+		selected_menu.hide_menu()
+	selected_menu = menus[selected_menu_index]
+	cursor.set_menu_type(selected_menu_index)
+	selected_menu.activate() # activating a menu makes it visible as well
+	if selected_menu == items_menu:
+		abilities_menu.hide_menu()
+		items_menu.show_menu()
 
 func on_press_button() -> void:
 	match selected_menu:
 		options_menu:
 			on_select_option()
+			print("selected pb in on press b ", selected_menu.selected_button.position)
 		abilities_menu:
 			on_select_ability()
 		items_menu:
@@ -117,20 +94,12 @@ func on_press_button() -> void:
 		targets_menu:
 			on_select_target()
 
-func on_cancel_target_select() -> void:
-	log_menu.hide_menu()
-	update_selected_menu(cursor.MenuType.ABILITIES)
-	battle_controller.cancel_select_target()
-
-func navigate_log() -> void:
-	log_menu.activate()
-	update_selected_menu(cursor.MenuType.LOG)
-
 func on_select_option() -> void:
 	match selected_menu.selected_button.text:
 		" Attack":
 			log_menu.hide_menu()
 			update_selected_menu(cursor.MenuType.ABILITIES)
+			print("selected pb in on select option ", selected_menu.selected_button.position)
 		" Move":
 			pass
 		" Items":
@@ -153,6 +122,11 @@ func on_select_target():
 	battle_controller.on_use_attack(target.alignment)
 	go_back()
 
+func on_cancel_target_select() -> void:
+	log_menu.hide_menu()
+	update_selected_menu(cursor.MenuType.ABILITIES)
+	battle_controller.cancel_select_target()
+
 func on_select_item() -> void:
 	var item = player.items.pop_at(selected_menu.selected_button_index) # expensive on large arrays
 	items_menu.set_scroll_size(player.items.size())
@@ -167,13 +141,41 @@ func on_select_item() -> void:
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 
-func update_selected_menu(selected_menu_index: int) -> void:
-	selected_menu.disactivate()
-	if selected_menu != options_menu && selected_menu != log_menu:
-		selected_menu.hide_menu()
-	selected_menu = menus[selected_menu_index]
-	cursor.set_menu_type(selected_menu_index)
-	selected_menu.activate() # activating a menu makes it visible as well
-	if selected_menu == items_menu:
-		abilities_menu.hide_menu()
-		items_menu.show_menu()
+		
+func update_ui() -> void:
+	cursor = battle_cursor
+	char_name_label.text = player.name
+
+	for i in range(abilities_menu.buttons.size()):
+		if i < player.abilities.size():
+			abilities_menu.buttons[i].text = player.abilities[i].name
+		else:
+			abilities_menu.buttons[i].text = "???"
+
+	for i in range(items_menu.buttons.size()):
+		if i < player.items.size():
+			items_menu.buttons[i].text = player.items[i].name
+		else:
+			items_menu.buttons[i].text = "-"
+
+func initialize_menus() -> void:
+	var initial_button_position = Vector2i(0, 65)
+	options_menu.init(options_node, options_node.get_child(0).get_children().slice(1), battle_cursor, null)
+	
+	abilities_menu.init(abilities_node, abilities_node.get_child(0).get_children().slice(3), battle_cursor, initial_button_position)
+	abilities_menu.set_scroll_size(player.abilities.size())
+	
+	items_menu.init(items_node, items_node.get_child(0).get_children().slice(3), battle_cursor, initial_button_position)
+	items_menu.set_scroll_size(player.items.size())
+	
+	enemies = [enemy]
+	targets_menu.init(targets_node, enemies, battle_cursor, null)
+	targets_menu.set_scroll_size(enemies.size())
+	
+	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), battle_cursor, null)
+	log_menu.set_entries(battle_controller.battle_log)
+	
+	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
+	selected_menu = options_menu
+	selected_menu.activate()
+	
