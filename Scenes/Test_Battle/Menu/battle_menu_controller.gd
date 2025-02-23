@@ -86,7 +86,6 @@ func on_press_button() -> void:
 	match selected_menu:
 		options_menu:
 			on_select_option()
-			print("selected pb in on press b ", selected_menu.selected_button.position)
 		abilities_menu:
 			on_select_ability()
 		items_menu:
@@ -99,7 +98,6 @@ func on_select_option() -> void:
 		" Attack":
 			log_menu.hide_menu()
 			update_selected_menu(cursor.MenuType.ABILITIES)
-			print("selected pb in on select option ", selected_menu.selected_button.position)
 		" Move":
 			pass
 		" Items":
@@ -160,12 +158,16 @@ func update_ui() -> void:
 
 func initialize_menus() -> void:
 	var initial_button_position = Vector2i(0, 65)
-	options_menu.init(options_node, options_node.get_child(0).get_children().slice(1), battle_cursor, null)
 	
-	abilities_menu.init(abilities_node, abilities_node.get_child(0).get_children().slice(3), battle_cursor, initial_button_position)
+	var options_buttons = options_node.get_child(0).get_children().slice(1)
+	options_menu.init(options_node, options_buttons, battle_cursor, null)
+	
+	var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
+	abilities_menu.init(abilities_node, abilities_buttons, battle_cursor, initial_button_position)
 	abilities_menu.set_scroll_size(player.abilities.size())
 	
-	items_menu.init(items_node, items_node.get_child(0).get_children().slice(3), battle_cursor, initial_button_position)
+	var items_buttons = items_node.get_child(0).get_children().slice(3)
+	items_menu.init(items_node, items_buttons, battle_cursor, initial_button_position)
 	items_menu.set_scroll_size(player.items.size())
 	
 	enemies = [enemy]
