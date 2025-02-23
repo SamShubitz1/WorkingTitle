@@ -89,7 +89,7 @@ func update_selected_menu(selected_menu_index: int) -> void:
 	cursor.set_menu_type(selected_menu_index)
 	selected_button_index = 0
 	update_selected_button()
-	if cursor.selected_menu_type == cursor.MenuType.ITEMS:
+	if selected_menu == items_menu:
 		abilities_node.hide()
 		items_node.show()
 	

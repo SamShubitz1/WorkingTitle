@@ -1,0 +1,44 @@
+[gd_scene load_steps=5 format=3 uid="uid://clg4nd1ekycri"]
+
+[ext_resource type="PackedScene" uid="uid://dprpqlfs1wads" path="res://Scenes/Battle/Battle_Scene/battle_scene.tscn" id="1_yd60t"]
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/battle_menu_controller.gd" id="2_ymmmw"]
+[ext_resource type="Script" path="res://battle_cursor.gd" id="3_nifbg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eurhc"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="BattleScene" instance=ExtResource("1_yd60t")]
+
+[node name="BattleMenuControl" parent="." index="3"]
+script = ExtResource("2_ymmmw")
+
+[node name="BattleMenu" parent="BattleMenuControl" index="0"]
+script = null
+
+[node name="TargetsMenu" type="Panel" parent="BattleMenuControl" index="1"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 32.0
+anchor_bottom = 12.775
+offset_left = 320.0
+offset_top = 511.0
+offset_right = -321.0
+offset_bottom = 257.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eurhc")
+
+[node name="Menu" type="VBoxContainer" parent="BattleMenuControl/TargetsMenu" index="0"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="BattleMenuControl/TargetsMenu/Menu" index="0"]
+layout_mode = 2
+text = "Target Info"
+
+[node name="Ability_1" parent="BattleMenuControl/AbilitiesMenu/Menu" index="3"]
+text = "wtf"
+
+[node name="Cursor" parent="BattleMenuControl" index="8"]
+script = ExtResource("3_nifbg")
