@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/player.gd" id="4_6eosr"]
 [ext_resource type="Texture2D" uid="uid://b4ml4r15mqnl1" path="res://Art/Animations/simple_player_idle1.png" id="5_sgboj"]
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="6_t1g76"]
-[ext_resource type="Script" path="res://Scenes/Battle/Cursor/cursor.gd" id="7_tyxjv"]
+[ext_resource type="Script" path="res://Scenes/Battle/Cursor/battle_cursor.gd" id="7_tyxjv"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
 animations = [{

@@ -7,14 +7,14 @@ var targets_offset = Vector2i(130, -10)
 
 func move_cursor(button_position: Vector2i) -> void:
 	match selected_menu_type:
-		MenuType.OPTIONS:
+		Enums.BattleMenuType.OPTIONS:
 			self.color = Color(1, 1, 1)
 			self.position = button_position + options_offset
-		MenuType.ABILITIES:
+		Enums.BattleMenuType.ABILITIES:
 			self.color = Color(1, 1, 1)
 			self.position = button_position + abilities_offset
-		MenuType.ITEMS:
+		Enums.BattleMenuType.ITEMS:
 			self.position = button_position + items_offset
-		MenuType.TARGETS:
+		Enums.BattleMenuType.TARGETS:
 			self.color = Color(1, 0, 0)
 			self.position = button_position + targets_offset

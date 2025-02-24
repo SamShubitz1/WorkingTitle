@@ -15,6 +15,10 @@ run/main_scene="res://Scenes/Main/mainscene.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://Art/Animations/simple_bot_idledown.png"
 
+[autoload]
+
+Enums="*res://enums.gd"
+
 [display]
 
 window/size/viewport_width=1280

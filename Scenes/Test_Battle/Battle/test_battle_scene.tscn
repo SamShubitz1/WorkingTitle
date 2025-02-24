@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://dprpqlfs1wads" path="res://Scenes/Battle/Battle/battle_scene.tscn" id="1_yd60t"]
 [ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/battle_menu_controller.gd" id="2_ymmmw"]
-[ext_resource type="Script" path="res://Scenes/Test_Battle/Cursor/battle_cursor.gd" id="3_nifbg"]
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Cursor/test_battle_cursor.gd" id="3_nifbg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eurhc"]
 bg_color = Color(0.6, 0.6, 0.6, 0)

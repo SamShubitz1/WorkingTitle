@@ -64,3 +64,6 @@ func hide_menu() -> void:
 
 func get_selected_button_index() -> int:
 	return selected_button_index
+
+func get_selected_button() -> Button:
+	return selected_button

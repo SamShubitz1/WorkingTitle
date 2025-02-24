@@ -1,0 +1,94 @@
+[gd_scene load_steps=3 format=3 uid="uid://gt05q7a7uhqy"]
+
+[ext_resource type="Script" path="res://start_menu.gd" id="1_ugx30"]
+[ext_resource type="Script" path="res://start_menu_cursor.gd" id="2_qhcmj"]
+
+[node name="StartMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1280.0
+offset_bottom = -768.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ugx30")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1280.0
+offset_bottom = 768.0
+
+[node name="MainMenu" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 640.0
+offset_right = 1280.0
+offset_bottom = 768.0
+
+[node name="Menu" type="VBoxContainer" parent="MainMenu"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 768.0
+
+[node name="Pokedex" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Pokédex"
+
+[node name="Pokemon" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Pokémon
+"
+
+[node name="Items" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Items
+"
+
+[node name="Save" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Save"
+
+[node name="Exit" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Exit"
+
+[node name="PokedexLog" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -2.0
+offset_right = 638.0
+offset_bottom = 384.0
+
+[node name="Menu" type="VBoxContainer" parent="PokedexLog"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 384.0
+
+[node name="Slot1" type="Button" parent="PokedexLog/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Slot2" type="Button" parent="PokedexLog/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Slot3" type="Button" parent="PokedexLog/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Slot4" type="Button" parent="PokedexLog/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Cursor" type="Polygon2D" parent="."]
+z_index = 1
+position = Vector2(884, 700)
+rotation = -1.5708
+scale = Vector2(0.594435, 1.19025)
+polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
+script = ExtResource("2_qhcmj")

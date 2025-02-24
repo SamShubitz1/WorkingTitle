@@ -50,9 +50,9 @@ func init(log: Node, log_slots: Array, menu_cursor: BaseCursor, initial_button_p
 	
 func set_entries(log_entries: Array) -> void:
 	self.entries = log_entries
+	for i in range(slots.size()):
+		if scroll_index < entries.size() - (slots.size() - 1):
+			slots[i].text = entries[(entries.size()) - (scroll_index + i)]
 
 func update_selected_button(index = null) -> void:
 	pass # override base menu behavior
-
-		
-	

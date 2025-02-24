@@ -65,12 +65,11 @@ func go_back():
 		log_menu.show_menu()
 		items_menu.hide_menu()
 		abilities_menu.hide_menu()
-		update_selected_menu(cursor.MenuType.OPTIONS)
+		update_selected_menu(Enums.BattleMenuType.OPTIONS)
 		description_label.text = ""
 
 func navigate_log() -> void:
-	log_menu.activate()
-	update_selected_menu(cursor.MenuType.LOG)
+	update_selected_menu(Enums.BattleMenuType.LOG)
 
 func update_selected_menu(selected_menu_index: int) -> void:
 	selected_menu.disactivate()
@@ -102,12 +101,12 @@ func on_select_option() -> void:
 	match selected_menu.selected_button.text:
 		" Attack":
 			log_menu.hide_menu()
-			update_selected_menu(cursor.MenuType.ABILITIES)
+			update_selected_menu(Enums.BattleMenuType.ABILITIES)
 		" Move":
 			pass
 		" Items":
 			log_menu.hide_menu()
-			update_selected_menu(cursor.MenuType.ITEMS)
+			update_selected_menu(Enums.BattleMenuType.ITEMS)
 		" Status":
 			pass
 		" Retreat":
@@ -116,7 +115,7 @@ func on_select_option() -> void:
 func on_select_ability() -> void:
 	log_menu.show_menu()
 	var selected_attack = player.abilities_dictionary[selected_menu.selected_button.text]
-	update_selected_menu(cursor.MenuType.TARGETS)
+	update_selected_menu(Enums.BattleMenuType.TARGETS)
 	battle_controller.prompt_select_target(selected_attack)
 
 func on_select_target():
@@ -127,11 +126,11 @@ func on_select_target():
 
 func on_cancel_target_select() -> void:
 	log_menu.hide_menu()
-	update_selected_menu(cursor.MenuType.ABILITIES)
+	update_selected_menu(Enums.BattleMenuType.ABILITIES)
 	battle_controller.cancel_select_target()
 
 func on_select_item() -> void:
-	var item = player.items.pop_at(selected_menu.selected_button_index) # expensive on large arrays
+	var item = player.items.pop_at(selected_menu.get_selected_button_index()) # expensive on large arrays
 	if player.items.is_empty():
 		player.items.append({"name": "Empty", "menu_description": "You have no items"})
 		update_ui()
