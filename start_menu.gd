@@ -24,21 +24,25 @@ func _input(_e) -> void:
 			selected_menu.navigate_backward()
 			color_on()
 			
-		if Input.is_action_just_pressed(("ui_accept")):
+		if Input.is_action_just_pressed("ui_accept"):
 			on_press_button()
 		
-		if Input.is_action_just_pressed(("go_back")):
-			go_back()
-			if selected_menu == pokedex_log:
+		if Input.is_action_just_pressed("go_back"):
+			if pokemon_card.visible:
 				pokemon_card.visible = false
+			elif selected_menu != main_menu:
+				selected_menu.hide_menu()
+				go_back()
 			
 func on_press_button() -> void:
 	if selected_menu == main_menu:
 		var button_text = selected_menu.get_selected_button().text
+		color_off() 
 		match button_text:
 			"Pokédex":
 				update_selected_menu(Enums.MainMenuType.POKEDEX)
-	if selected_menu == pokedex_log:
+				color_on()
+	elif selected_menu == pokedex_log:
 		var entry = pokedex_log.get_current_entry()
 		set_pokemon_card(entry)
 	
@@ -55,7 +59,7 @@ func list_types(types: Array) -> String:
 	return type_string
 	
 func color_on() -> void:
-	current_selected_button = main_menu.get_selected_button()
+	current_selected_button = selected_menu.get_selected_button()
 	current_selected_button.modulate = Color(1, 1, 0)
 	
 func color_off() -> void:

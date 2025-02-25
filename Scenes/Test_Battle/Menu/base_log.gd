@@ -56,6 +56,9 @@ func set_entries(log_entries: Array) -> void:
 			
 func get_current_entry() -> String:
 	return slots[0].text
+	
+func get_selected_button() -> Button:
+	return slots[0]
 
 func update_selected_button(index = null) -> void:
 	pass # override base menu behavior
