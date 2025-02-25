@@ -92,3 +92,19 @@ rotation = -1.5708
 scale = Vector2(0.594435, 1.19025)
 polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
 script = ExtResource("2_qhcmj")
+
+[node name="PokemonCard" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 383.0
+offset_right = 640.0
+offset_bottom = 768.0
+color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+
+[node name="CardLabel" type="Label" parent="PokemonCard"]
+layout_mode = 0
+offset_top = 1.0
+offset_right = 640.0
+offset_bottom = 385.0
+theme_override_colors/font_color = Color(0.950577, 0.988492, 0.902805, 1)
+vertical_alignment = 1
+autowrap_mode = 3

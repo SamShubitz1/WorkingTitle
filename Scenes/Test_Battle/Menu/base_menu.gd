@@ -23,7 +23,7 @@ func navigate_backward() -> void:
 			selected_button_index -= 1
 			update_selected_button()
 
-func navigate_forward():
+func navigate_forward() -> void:
 	if is_active:
 		selected_button_index = (selected_button_index + 1) % scroll_size
 		update_selected_button()
@@ -53,7 +53,7 @@ func init(menu: Node, menu_buttons: Array, menu_cursor: BaseCursor, initial_butt
 		selected_button.position = initial_button_position
 	set_scroll_size()
 
-func set_scroll_size(size: int = buttons.size()):
+func set_scroll_size(size: int = buttons.size()) -> void:
 	scroll_size = size
 
 func show_menu() -> void:

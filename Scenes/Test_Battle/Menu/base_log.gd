@@ -53,6 +53,9 @@ func set_entries(log_entries: Array) -> void:
 	for i in range(slots.size()):
 		if scroll_index < entries.size() - (slots.size() - 1):
 			slots[i].text = entries[(entries.size()) - (scroll_index + i)]
+			
+func get_current_entry() -> String:
+	return slots[0].text
 
 func update_selected_button(index = null) -> void:
 	pass # override base menu behavior
