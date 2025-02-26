@@ -18,6 +18,7 @@ script = ExtResource("1_ugx30")
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 768.0
+color = Color(0.00175109, 0.00211988, 0.000130405, 1)
 
 [node name="MainMenu" type="Control" parent="."]
 anchors_preset = 0
@@ -97,8 +98,8 @@ script = ExtResource("2_qhcmj")
 layout_mode = 0
 offset_top = 383.0
 offset_right = 640.0
-offset_bottom = 768.0
-color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+offset_bottom = 767.0
+color = Color(0.0584205, 0.0584206, 0.0584206, 1)
 
 [node name="CardLabel" type="Label" parent="PokemonCard"]
 layout_mode = 0
