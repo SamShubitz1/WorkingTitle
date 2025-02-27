@@ -11,7 +11,7 @@ var menu_history: Array
 func init(menu_cursor: BaseCursor, current_menus: Array) -> void:
 	self.cursor = menu_cursor
 	self.menus = current_menus
-	selected_menu = menus[Enums.MainMenuType.MAIN]
+	selected_menu = menus[GameData.MainMenuType.MAIN]
 	selected_menu.activate()
 
 func update_selected_menu(index: int) -> void:

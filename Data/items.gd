@@ -1,0 +1,3 @@
+extends Node
+
+var items_dictionary: Dictionary = {"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "effect_description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3}, "Sharpener":{"name": "Sharpener", "effect_type": "Scissors", "effect_description": "Scissors attack went up!", "menu_description": "Adds damage to scissors attacks", "multiplier": .3}, "Extra Paper":{"name": "Extra Paper", "effect_type": "Paper", "effect_description": "Paper attack went up!", "menu_description": "Adds damage to paper attacks", "multiplier": .3}}

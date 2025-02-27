@@ -65,11 +65,11 @@ func go_back():
 		log_menu.show_menu()
 		items_menu.hide_menu()
 		abilities_menu.hide_menu()
-		update_selected_menu(Enums.BattleMenuType.OPTIONS)
+		update_selected_menu(GameData.BattleMenuType.OPTIONS)
 		description_label.text = ""
 
 func navigate_log() -> void:
-	update_selected_menu(Enums.BattleMenuType.LOG)
+	update_selected_menu(GameData.BattleMenuType.LOG)
 
 func update_selected_menu(selected_menu_index: int) -> void:
 	selected_menu.disactivate()
@@ -101,12 +101,12 @@ func on_select_option() -> void:
 	match selected_menu.selected_button.text:
 		" Attack":
 			log_menu.hide_menu()
-			update_selected_menu(Enums.BattleMenuType.ABILITIES)
+			update_selected_menu(GameData.BattleMenuType.ABILITIES)
 		" Move":
 			pass
 		" Items":
 			log_menu.hide_menu()
-			update_selected_menu(Enums.BattleMenuType.ITEMS)
+			update_selected_menu(GameData.BattleMenuType.ITEMS)
 		" Status":
 			pass
 		" Retreat":
@@ -114,8 +114,8 @@ func on_select_option() -> void:
 
 func on_select_ability() -> void:
 	log_menu.show_menu()
-	var selected_attack = player.abilities_dictionary[selected_menu.selected_button.text]
-	update_selected_menu(Enums.BattleMenuType.TARGETS)
+	var selected_attack = GameData.abilities[selected_menu.selected_button.text]
+	update_selected_menu(GameData.BattleMenuType.TARGETS)
 	battle_controller.prompt_select_target(selected_attack)
 
 func on_select_target():
@@ -126,7 +126,7 @@ func on_select_target():
 
 func on_cancel_target_select() -> void:
 	log_menu.hide_menu()
-	update_selected_menu(Enums.BattleMenuType.ABILITIES)
+	update_selected_menu(GameData.BattleMenuType.ABILITIES)
 	battle_controller.cancel_select_target()
 
 func on_select_item() -> void:

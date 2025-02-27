@@ -40,14 +40,14 @@ func on_press_button() -> void:
 		color_off() 
 		match button_text:
 			"Pokédex":
-				update_selected_menu(Enums.MainMenuType.POKEDEX)
+				update_selected_menu(GameData.MainMenuType.POKEDEX)
 				color_on()
 				update_pokedex_entry()
 	elif selected_menu == pokedex_log:
 		pokemon_card.visible = !pokemon_card.visible
 				
 func set_pokemon_card(entry) -> void:
-	var pokemon_info = Enums.pokedex[entry]
+	var pokemon_info = GameData.pokedex[entry]
 	var text = str("Name: ", pokemon_info.name, "\n\n", "Types:", list_types(pokemon_info.type), "\n\n", "Description: ", pokemon_info.description)
 	pokemon_card_label.text = text
 
@@ -74,7 +74,7 @@ func initialize_menus():
 	main_menu.init(self.get_node("MainMenu"), menu_buttons, start_menu_cursor)
 	main_menu.activate()
 	pokedex_log.init(self.get_node("PokedexLog"), log_slots, start_menu_cursor)
-	pokedex_log.set_entries(["-","-","-"] + Enums.pokedex_entries)
+	pokedex_log.set_entries(["-","-","-"] + GameData.pokedex_entries)
 	pokedex_log.hide_menu()
 	current_selected_button = main_menu.get_selected_button()
 	current_selected_button.modulate = Color(1, 1, 0)

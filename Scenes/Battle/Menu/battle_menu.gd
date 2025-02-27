@@ -93,11 +93,11 @@ func update_selected_menu(selected_menu_index: int) -> void:
 func on_select_option() -> void:
 	match selected_button.text:
 		" Attack":
-			update_selected_menu(Enums.BattleMenuType.ABILITIES)
+			update_selected_menu(GameData.BattleMenuType.ABILITIES)
 		" Move":
 			pass
 		" Items":
-			update_selected_menu(Enums.BattleMenuType.ITEMS)
+			update_selected_menu(GameData.BattleMenuType.ITEMS)
 		" Status":
 			pass
 		" Retreat":
@@ -105,7 +105,7 @@ func on_select_option() -> void:
 			
 func on_select_ability() -> void:
 	var selected_attack = player.abilities[selected_button_index]
-	update_selected_menu(Enums.BattleMenuType.TARGETS)
+	update_selected_menu(GameData.BattleMenuType.TARGETS)
 	selected_button_index = 0
 	update_selected_button()
 	battle_controller.prompt_select_target(selected_attack)
@@ -173,7 +173,7 @@ func go_back():
 	if selected_menu != options_menu:
 		items_node.hide()
 		abilities_node.show()
-		update_selected_menu(Enums.BattleMenuType.OPTIONS)
+		update_selected_menu(GameData.BattleMenuType.OPTIONS)
 		description_label.text = ""
 		
 func get_menu_size() -> int:
@@ -190,7 +190,7 @@ func get_menu_size() -> int:
 	return menu_size
 	
 func on_cancel_target_select() -> void:
-	update_selected_menu(Enums.BattleMenuType.ABILITIES)
+	update_selected_menu(GameData.BattleMenuType.ABILITIES)
 	battle_controller.cancel_select_target()
 	
 func toggle_dialog_display() -> void:
@@ -200,4 +200,4 @@ func toggle_dialog_display() -> void:
 func navigate_log() -> void:
 	dialog_box.visible = true
 	dialog_box.modulate = Color(1.5,1.5,1.5)
-	update_selected_menu(Enums.BattleMenuType.LOG)
+	update_selected_menu(GameData.BattleMenuType.LOG)
