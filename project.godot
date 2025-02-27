@@ -17,7 +17,7 @@ config/icon="res://Art/Animations/simple_bot_idledown.png"
 
 [autoload]
 
-Enums="*res://enums.gd"
+Enums="*res://Data/enums.gd"
 
 [display]
 
