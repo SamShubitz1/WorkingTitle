@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://clg4nd1ekycri"]
+[gd_scene load_steps=6 format=3 uid="uid://clg4nd1ekycri"]
 
 [ext_resource type="PackedScene" uid="uid://dprpqlfs1wads" path="res://Scenes/Battle/Battle/battle_scene.tscn" id="1_yd60t"]
-[ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/battle_menu_controller.gd" id="2_ymmmw"]
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/test_battle_menu.gd" id="2_tvtlk"]
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Battle/base_grid.gd" id="3_flgvj"]
 [ext_resource type="Script" path="res://Scenes/Test_Battle/Cursor/test_battle_cursor.gd" id="3_nifbg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eurhc"]
@@ -9,13 +10,107 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="BattleScene" instance=ExtResource("1_yd60t")]
 
-[node name="BattleMenuControl" parent="." index="3"]
-script = ExtResource("2_ymmmw")
+[node name="Enemy" parent="." index="1"]
+position = Vector2(877, 383)
 
-[node name="BattleMenu" parent="BattleMenuControl" index="0"]
+[node name="Player" parent="." index="2"]
+position = Vector2(555, 336)
+
+[node name="BattleMenuControl" parent="." index="3"]
+script = ExtResource("2_tvtlk")
+
+[node name="TargetsGrid" type="GridContainer" parent="BattleMenuControl" index="0"]
+layout_mode = 0
+offset_top = 168.0
+offset_right = 1280.0
+offset_bottom = 464.0
+columns = 8
+script = ExtResource("3_flgvj")
+
+[node name="Cell" type="Button" parent="BattleMenuControl/TargetsGrid" index="0"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell2" type="Button" parent="BattleMenuControl/TargetsGrid" index="1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell3" type="Button" parent="BattleMenuControl/TargetsGrid" index="2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell4" type="Button" parent="BattleMenuControl/TargetsGrid" index="3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell5" type="Button" parent="BattleMenuControl/TargetsGrid" index="4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell6" type="Button" parent="BattleMenuControl/TargetsGrid" index="5"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell7" type="Button" parent="BattleMenuControl/TargetsGrid" index="6"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell8" type="Button" parent="BattleMenuControl/TargetsGrid" index="7"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell9" type="Button" parent="BattleMenuControl/TargetsGrid" index="8"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell10" type="Button" parent="BattleMenuControl/TargetsGrid" index="9"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell11" type="Button" parent="BattleMenuControl/TargetsGrid" index="10"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell12" type="Button" parent="BattleMenuControl/TargetsGrid" index="11"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell13" type="Button" parent="BattleMenuControl/TargetsGrid" index="12"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell14" type="Button" parent="BattleMenuControl/TargetsGrid" index="13"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell15" type="Button" parent="BattleMenuControl/TargetsGrid" index="14"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Cell16" type="Button" parent="BattleMenuControl/TargetsGrid" index="15"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BattleMenu" parent="BattleMenuControl" index="1"]
 script = null
 
-[node name="TargetsMenu" type="Panel" parent="BattleMenuControl" index="1"]
+[node name="TargetsMenu" type="Panel" parent="BattleMenuControl" index="2"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 32.0
@@ -40,5 +135,5 @@ text = "Target Info"
 [node name="Ability_1" parent="BattleMenuControl/AbilitiesMenu/Menu" index="3"]
 text = "wtf"
 
-[node name="Cursor" parent="BattleMenuControl" index="8"]
+[node name="Cursor" parent="BattleMenuControl" index="9"]
 script = ExtResource("3_nifbg")

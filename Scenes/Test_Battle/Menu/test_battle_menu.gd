@@ -5,15 +5,16 @@ extends Control
 @onready var abilities_node = $AbilitiesMenu
 @onready var items_node = $ItemsMenu
 @onready var targets_node = $TargetsMenu
+@onready var targets_grid = $TargetsGrid
 @onready var log_node = $DialogBox
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
-@onready var player = $"../Player"
 @onready var battle_controller = $"../BattleController"
 @onready var description_label = $Descriptions/Labels/AbilityDescription
 @onready var enemy = $"../Enemy"
 
 var enemies: Array
-var players: Array
+var player_info: Dictionary
+var grid_info: Dictionary
 var initial_cursor_position = Vector2(0, 40)
 
 var options_menu = BaseMenu.new()
@@ -27,12 +28,15 @@ var menus: Array
 var cursor: BaseCursor
 
 func _ready() -> void:
+	player_info = battle_controller.get_player_info()
+	grid_info = battle_controller.get_grid_info()
 	initialize_menus()
 	update_ui()
 	cursor.move_cursor(initial_cursor_position)
 
 func _input(_e) -> void:
 	if not cursor.disabled:
+		print(cursor.position)
 		if Input.is_action_just_pressed("navigate_forward"):
 			selected_menu.navigate_forward()
 			update_description()
@@ -114,14 +118,15 @@ func on_select_option() -> void:
 
 func on_select_ability() -> void:
 	log_menu.show_menu()
-	var selected_attack = GameData.abilities[selected_menu.selected_button.text]
+	var attack_name = selected_menu.selected_button.text
 	update_selected_menu(GameData.BattleMenuType.TARGETS)
-	battle_controller.prompt_select_target(selected_attack)
+	battle_controller.prompt_select_target(attack_name)
 
 func on_select_target():
 	log_menu.show_menu() # will change once targets menu exists
-	var target = selected_menu.selected_button
-	battle_controller.on_use_attack(target.alignment)
+	# LOGIC HERE TO GET RANGES/TARGETS
+	var target_cell = selected_menu.selected_button
+	battle_controller.on_use_attack(target_cell)
 	go_back()
 
 func on_cancel_target_select() -> void:
@@ -130,45 +135,43 @@ func on_cancel_target_select() -> void:
 	battle_controller.cancel_select_target()
 
 func on_select_item() -> void:
-	var item = player.items.pop_at(selected_menu.get_selected_button_index()) # expensive on large arrays
-	if player.items.is_empty():
-		player.items.append({"name": "Empty", "menu_description": "You have no items"})
-		update_ui()
-	if item.name == "Empty":
+	var index = selected_menu.get_selected_button_index()
+	var item_name = player_info.items[index].name
+	if item_name == "Empty":
 		go_back()
 	else:
 		log_menu.show_menu()
-		battle_controller.on_use_item(item)
+		battle_controller.on_use_item(index)
 		update_ui()
 		go_back()
-	items_menu.set_scroll_size(player.items.size())
+		items_menu.set_scroll_size(player_info.items.size())
 
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 
 func update_ui() -> void:
 	cursor = battle_cursor
-	char_name_label.text = player.name
+	char_name_label.text = player_info.name
 
 	for i in range(abilities_menu.buttons.size()):
-		if i < player.abilities.size():
-			abilities_menu.buttons[i].text = player.abilities[i].name
+		if i < player_info.abilities.size():
+			abilities_menu.buttons[i].text = player_info.abilities[i].name
 		else:
 			abilities_menu.buttons[i].text = "???"
 
 	for i in range(items_menu.buttons.size()):
-		if i < player.items.size():
-			items_menu.buttons[i].text = player.items[i].name
+		if i < player_info.items.size():
+			items_menu.buttons[i].text = player_info.items[i].name
 		else:
 			items_menu.buttons[i].text = "-"
 			
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()
 	if selected_menu == abilities_menu:
-		description_label.text = player.abilities[index].description
+		description_label.text = player_info.abilities[index].description
 	elif selected_menu == items_menu:
-		if index < player.items.size():
-			description_label.text = player.items[index].menu_description
+		if index < player_info.items.size():
+			description_label.text = player_info.items[index].menu_description
 
 func initialize_menus() -> void:
 	var initial_button_position = Vector2i(0, 65)
@@ -178,18 +181,16 @@ func initialize_menus() -> void:
 	
 	var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
 	abilities_menu.init(abilities_node, abilities_buttons, battle_cursor, initial_button_position)
-	abilities_menu.set_scroll_size(player.abilities.size())
+	abilities_menu.set_scroll_size(player_info.abilities.size())
 	
 	var items_buttons = items_node.get_child(0).get_children().slice(3)
 	items_menu.init(items_node, items_buttons, battle_cursor, initial_button_position)
-	items_menu.set_scroll_size(player.items.size())
+	items_menu.set_scroll_size(player_info.items.size())
 	
-	enemies = [enemy]
-	targets_menu.init(targets_node, enemies, battle_cursor, null)
-	targets_menu.set_scroll_size(enemies.size())
+	var targets_buttons = targets_grid.get_children()
+	targets_menu.init(targets_node, targets_buttons, battle_cursor, null)
 	
-	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), battle_cursor, null)
-	log_menu.set_entries(battle_controller.battle_log)
+	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), battle_cursor, null, battle_controller.battle_log)
 	
 	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
 	selected_menu = options_menu

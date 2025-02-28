@@ -3,6 +3,8 @@ extends Node2D
 var char_name = "Deeno"
 var max_health = 100
 
+var grid_position: Vector2i
+
 enum AbilityType {
 	ROCK,
 	PAPER,

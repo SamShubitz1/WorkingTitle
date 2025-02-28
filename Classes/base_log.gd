@@ -43,16 +43,15 @@ func disactivate() -> void:
 	menu.modulate = Color(1, 1, 1)
 	scroll_index = 1
 	
-func init(log: Node, log_slots: Array, menu_cursor: BaseCursor, initial_button_position = null) -> void:
+func init(log: Node, log_slots: Array, menu_cursor: BaseCursor, initial_button_position = null, log_entries: Array = []) -> void:
 	self.menu = log
 	self.slots = log_slots
 	self.cursor = menu_cursor
-	
-func set_entries(log_entries: Array) -> void:
-	self.entries = log_entries
-	for i in range(slots.size()):
-		if scroll_index < entries.size() - (slots.size() - 1):
-			slots[i].text = entries[(entries.size()) - (scroll_index + i)]
+	if log_entries:
+		self.entries = log_entries
+		for i in range(slots.size()):
+			if scroll_index < entries.size() - (slots.size() - 1):
+				slots[i].text = entries[(entries.size()) - (scroll_index + i)]
 			
 func get_current_entry() -> String:
 	return slots[0].text

@@ -2,11 +2,15 @@ extends Node
 
 @onready var animation_player = $"../BattleMenuControl/DialogBox/AnimationPlayer"
 @onready var dialog_box = $"../BattleMenuControl/DialogBox/BattleLog".get_children().slice(1)
-@onready var player_health = $"../BattleMenuControl/MainMenu/Menu/CharPanel/Health"
-@onready var enemy_health = $"../Enemy/EnemyHealth"
+@onready var player_health_bar = $"../BattleMenuControl/MainMenu/Menu/CharPanel/Health"
+@onready var enemy_health_bar = $"../Enemy/EnemyHealth"
 @onready var player = $"../Player"
 @onready var enemy = $"../Enemy"
 @onready var cursor = $"../BattleMenuControl/Cursor"
+@export var enemy_scene: PackedScene
+
+var battle_grid: BaseGrid = BaseGrid.new()
+var grid_size: Vector2i = Vector2i(2, 4)
 
 var event_queue: Array = []
 var filter_list: Array = [] # will be used to filter out obsolete events
@@ -30,9 +34,11 @@ enum EventType {
 }
 
 func _ready() -> void:
+	battle_grid.init(set_grid_cells())
+	populate_grid()
+	player_health_bar.max_value = player.max_health
+	enemy_health_bar.max_value = enemy.max_health
 	dialog = dialog_box[0]
-	player_health.max_value = player.max_health
-	enemy_health.max_value = enemy.max_health
 	play_dialog(initial_dialog)
 
 func add_event(event) -> void:
@@ -89,10 +95,10 @@ func update_dialog_queue() -> void:
 	
 func handle_attack(event: Dictionary) -> void:
 		if event.target == "enemy":
-			enemy_health.value -= event.damage
+			enemy_health_bar.value -= event.damage
 			play_dialog("Enemy took " + str(event.damage) + " damage!")
 		elif event.target == "player":
-			player_health.value -= event.damage
+			player_health_bar.value -= event.damage
 			play_dialog("Player took " + str(event.damage) + " damage!")
 		check_death()
 		
@@ -104,14 +110,18 @@ func on_use_attack(target: String) -> void:
 	perform_enemy_attack()
 	increment_queue()
 	
-func prompt_select_target(player_attack: Dictionary) -> void:
+func prompt_select_target(attack_name: String) -> void:
+	var player_attack = GameData.abilities[attack_name]
 	selected_attack = player_attack
 	play_dialog("Select a target!")
 	
 func cancel_select_target() -> void:
 	selected_attack = {}
-	
-func on_use_item(item: Dictionary) -> void:
+		
+func on_use_item(item_index: int) -> void:
+	var item = player.items.pop_at(item_index) # expensive on large arrays
+	if player.items.is_empty():
+		player.items.append({"name": "Empty", "menu_description": "You have no items"})
 	cursor.disable()
 	add_event({"type": EventType.DIALOG, "text": "Player used " + item.name + "!", "duration": dialog_duration})
 	player.items_equipped.append(item)
@@ -123,7 +133,7 @@ func on_use_item(item: Dictionary) -> void:
 func on_try_retreat() -> void:
 	cursor.disable()
 	add_event({"type": EventType.DIALOG, "text": "Player retreats!", "duration": dialog_duration})
-	var success: bool = player_health.value > randi() % int(enemy_health.value)
+	var success: bool = player_health_bar.value > randi() % int(enemy_health_bar.value)
 	if success:
 		add_event({"type": EventType.DIALOG, "text": "Got away safely!"})
 		add_event({"type": EventType.RETREAT})
@@ -149,9 +159,9 @@ func get_enemy_attack() -> Dictionary:
 	return attack
 
 func check_death() -> void:
-	if player_health.value <= 0 || enemy_health.value <= 0:
+	if player_health_bar.value <= 0 || enemy_health_bar.value <= 0:
 		var dead_name
-		if player_health.value == 0:
+		if player_health_bar.value == 0:
 			dead_name = "You"
 		else:
 			dead_name = "Enemy"
@@ -170,23 +180,19 @@ func handle_retreat() -> void:
 func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	
+func populate_grid() -> void:
+	battle_grid.set_grid_position(Vector2i(0,3), player)
+	battle_grid.set_grid_position(Vector2i(0,4), enemy)
+	
+func set_grid_cells() -> Vector2i:
+	# will create grid shape for the batlle
+	return Vector2i(6, 2)
+	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
 	
-func on_scroll_up():
-	if scroll_index > 1:
-		scroll_index -= 1
-	for i in range(dialog_box.size()):
-		if scroll_index < battle_log.size() - (dialog_box.size() - 1):
-			dialog_box[i].text = battle_log[(battle_log.size()) - (scroll_index + i)]
-	dialog_box[0].modulate = Color(1, 1, 0)
-
-func on_scroll_down():
-	if scroll_index + (dialog_box.size() - 1) < battle_log.size():
-		scroll_index += 1
-	for i in range(dialog_box.size()):
-		if scroll_index + (dialog_box.size() - 1) <= battle_log.size():
-			dialog_box[i].text = battle_log[battle_log.size() - (scroll_index + i)]	
-	dialog_box[0].modulate = Color(1, 1, 0)
+func get_player_info() -> Dictionary:
+	return {"name": player.name, "abilities": player.abilities, "items": player.items}
 	
-# 
+func get_grid_info() -> Dictionary:
+	return {"current_grid": battle_grid.current_grid, "grid_cells": battle_grid.grid_cells}
