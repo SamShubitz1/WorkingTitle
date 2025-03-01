@@ -119,14 +119,22 @@ func on_select_ability() -> void:
 	log_menu.show_menu() # will change to display target stats
 	var attack_name = selected_menu.selected_button.text
 	battle_controller.prompt_select_target(attack_name)
+	var target = battle_controller.selected_attack["target"]
+	if target == "enemy":
+		targets_menu.activate_enemy_grid()
+	elif target == "player":
+		targets_menu.activate_player_menu()
 	update_selected_menu(GameData.BattleMenuType.TARGETS)
 
 func on_select_target():
-	log_menu.show_menu() # will change once targets menu exists
-	# LOGIC HERE TO GET RANGES/TARGETS
-	var target_cell = selected_menu.selected_button
-	battle_controller.on_use_attack(target_cell)
-	go_back()
+	log_menu.show_menu() # will change once targets/stats display exists
+	var valid_targets = battle_controller.get_valid_targets()
+	var target_cell = targets_menu.get_selected_grid_coords()
+	if valid_targets.has(target_cell):
+		battle_controller.on_use_attack(target_cell)
+		go_back()
+	else:
+		battle_controller.on_select_invalid_target()
 
 func on_cancel_target_select() -> void:
 	log_menu.hide_menu()
@@ -188,7 +196,6 @@ func initialize_menus() -> void:
 	
 	var targets_buttons = targets_grid.get_children()
 	targets_menu.init(targets_node, targets_buttons, cursor, null)
-	targets_menu.activate_enemy_grid()
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
 	

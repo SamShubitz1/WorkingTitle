@@ -11,7 +11,6 @@ extends Node
 
 var battle_grid: BaseGrid = BaseGrid.new()
 var grid_size: Vector2i = Vector2i(2, 4)
-var valid_target: String
 
 var event_queue: Array = []
 var filter_list: Array = [] # will be used to filter out obsolete events
@@ -114,14 +113,13 @@ func on_use_attack(target: String) -> void:
 func prompt_select_target(attack_name: String) -> void:
 	var player_attack = GameData.abilities[attack_name]
 	selected_attack = player_attack
-	if player_attack.target == "enemy":
-		valid_target = "enemy"
-	elif player_attack.target == "ally":
-		valid_target = "player"
 	play_dialog("Select a target!")
 	
 func cancel_select_target() -> void:
-	selected_attack = {}
+		selected_attack = {}
+
+func on_select_invalid_target() -> void:
+	play_dialog("Not a valid target!")
 		
 func on_use_item(item_index: int) -> void:
 	cursor.disable()
@@ -185,9 +183,21 @@ func handle_retreat() -> void:
 func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	
+func get_valid_targets() -> Array[Vector2i]:
+	var valid_targets: Array[Vector2i]
+	var occupied_cells = battle_grid.current_grid.keys()
+	for cell in occupied_cells:
+		if selected_attack.target == "enemy": # can be made into targets enum
+			if cell.x > 3: # if grid size is global (move to game data if so), will always be '3'
+				valid_targets.append(cell)
+		elif selected_attack.target == "self":
+			if cell.x < 4:
+				valid_targets.append(cell)
+	return valid_targets
+			
 func populate_grid() -> void:
-	battle_grid.set_object_at_grid_position(Vector2i(0,3), player)
-	battle_grid.set_object_at_grid_position(Vector2i(0,4), enemy)
+	battle_grid.set_object_at_grid_position(Vector2i(3,0), player)
+	battle_grid.set_object_at_grid_position(Vector2i(5,0), enemy)
 	
 func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
