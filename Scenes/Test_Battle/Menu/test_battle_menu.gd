@@ -34,14 +34,14 @@ func _ready() -> void:
 	update_ui()
 	cursor.move_cursor(initial_cursor_position)
 
-func _input(_e) -> void:
+func _input(e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_just_pressed("navigate_forward"):
-			selected_menu.navigate_forward()
+			selected_menu.navigate_forward(e)
 			update_description()
 
 		elif Input.is_action_just_pressed("navigate_backward"):
-			selected_menu.navigate_backward()
+			selected_menu.navigate_backward(e)
 			update_description()
 		
 		elif Input.is_action_just_pressed("navigate_log"):
@@ -119,9 +119,11 @@ func on_select_ability() -> void:
 	log_menu.show_menu() # will change to display target stats
 	var attack_name = selected_menu.selected_button.text
 	battle_controller.prompt_select_target(attack_name)
-	var target = battle_controller.selected_attack["target"]
+	var target = battle_controller.selected_attack["target"] #could just look up attack from gamedata instead
 	if target == "enemy":
-		targets_menu.activate_enemy_grid()
+		print(targets_menu.current_grid_type, targets_menu.GridType.ENEMY)
+		if targets_menu.current_grid_type != targets_menu.GridType.ENEMY:
+			targets_menu.activate_enemy_grid()
 	elif target == "player":
 		targets_menu.activate_player_menu()
 	update_selected_menu(GameData.BattleMenuType.TARGETS)

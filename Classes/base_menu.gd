@@ -9,12 +9,10 @@ var selected_button_index: int = 0 # track current selected button
 var selected_button: Node # same as buttons[selected_button_index]
 
 var initial_cursor_position: int
-
 var scroll_size: int
-
 var is_active: bool = false
 
-func navigate_backward() -> void:
+func navigate_backward(_e: InputEvent) -> void:
 	if is_active:
 		if selected_button_index == 0:
 			selected_button_index += (scroll_size - 1)
@@ -23,7 +21,7 @@ func navigate_backward() -> void:
 			selected_button_index -= 1
 			update_selected_button()
 
-func navigate_forward() -> void:
+func navigate_forward(_e: InputEvent) -> void:
 	if is_active:
 		selected_button_index = (selected_button_index + 1) % scroll_size
 		update_selected_button()

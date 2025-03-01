@@ -36,8 +36,8 @@ enum EventType {
 func _ready() -> void:
 	#battle_grid.init(set_grid_cells())
 	populate_grid()
-	player_health_bar.max_value = player.max_health
-	enemy_health_bar.max_value = enemy.max_health
+	player.set_health(player_health_bar)
+	enemy.set_health(enemy_health_bar)
 	dialog = dialog_box[0]
 	play_dialog(initial_dialog)
 
@@ -94,19 +94,16 @@ func update_dialog_queue() -> void:
 	scroll_index = 1
 	
 func handle_attack(event: Dictionary) -> void:
-		if event.target == "enemy":
-			enemy_health_bar.value -= event.damage
-			play_dialog("Enemy took " + str(event.damage) + " damage!")
-		elif event.target == "player":
-			player_health_bar.value -= event.damage
-			play_dialog("Player took " + str(event.damage) + " damage!")
-		check_death()
+	event.target.take_damage(event.damage)
+	play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!")
+	check_death()
 		
-func on_use_attack(target: String) -> void:
+func on_use_attack(target_cell: Vector2i) -> void:
+	var selected_target = battle_grid.current_grid[target_cell]
 	cursor.disable()
 	var damage = calculate_attack_dmg()
 	add_event({"type": EventType.DIALOG, "text": "Player used " + selected_attack.name + "!", "duration": dialog_duration})
-	add_event({"type": EventType.ATTACK, "target": target, "damage": damage, "duration": attack_duration})
+	add_event({"type": EventType.ATTACK, "target": selected_target, "damage": damage, "duration": attack_duration})
 	perform_enemy_attack()
 	increment_queue()
 
@@ -116,7 +113,7 @@ func prompt_select_target(attack_name: String) -> void:
 	play_dialog("Select a target!")
 	
 func cancel_select_target() -> void:
-		selected_attack = {}
+	selected_attack = {}
 
 func on_select_invalid_target() -> void:
 	play_dialog("Not a valid target!")
@@ -154,7 +151,7 @@ func calculate_attack_dmg() -> int:
 func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!", "duration": dialog_duration})
-	add_event({"type": EventType.ATTACK, "target": "player", "damage": enemy_attack.damage, "duration": attack_duration})
+	add_event({"type": EventType.ATTACK, "target": player, "damage": enemy_attack.damage, "duration": attack_duration})
 	
 func get_enemy_attack() -> Dictionary:
 	var attack_index = randi() % enemy.abilities.size()
@@ -162,7 +159,7 @@ func get_enemy_attack() -> Dictionary:
 	return attack
 
 func check_death() -> void:
-	if player_health_bar.value <= 0 || enemy_health_bar.value <= 0:
+	if player_health_bar.value <= 0 || enemy.health.value <= 0:
 		var dead_name
 		if player_health_bar.value == 0:
 			dead_name = "You"

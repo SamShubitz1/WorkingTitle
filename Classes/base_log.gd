@@ -7,11 +7,11 @@ var slots: Array # Label/text nodes that will be populated with log entries
 
 var scroll_index: int = 1
 
-func navigate_forward() -> void:
+func navigate_forward(_e: InputEvent) -> void:
 	if is_active:
 		scroll_down()
 	
-func navigate_backward() -> void:
+func navigate_backward(_e: InputEvent) -> void:
 	if is_active:
 		scroll_up()
 		
