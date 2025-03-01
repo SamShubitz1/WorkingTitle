@@ -1,8 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://clg4nd1ekycri"]
+[gd_scene load_steps=6 format=3 uid="uid://clg4nd1ekycri"]
 
 [ext_resource type="PackedScene" uid="uid://dprpqlfs1wads" path="res://Scenes/Battle/Battle/battle_scene.tscn" id="1_yd60t"]
 [ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/test_battle_menu.gd" id="2_tvtlk"]
 [ext_resource type="Script" path="res://Scenes/Test_Battle/Cursor/test_battle_cursor.gd" id="3_nifbg"]
+
+[sub_resource type="Theme" id="Theme_1fvuq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eurhc"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -10,19 +12,24 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 [node name="BattleScene" instance=ExtResource("1_yd60t")]
 
 [node name="Enemy" parent="." index="1"]
-position = Vector2(877, 383)
+position = Vector2(807, 406)
+scale = Vector2(0.5, 0.5)
 
 [node name="Player" parent="." index="2"]
-position = Vector2(555, 336)
+position = Vector2(554, 380)
+scale = Vector2(0.5, 0.5)
 
 [node name="BattleMenuControl" parent="." index="3"]
 script = ExtResource("2_tvtlk")
 
 [node name="TargetsGrid" type="GridContainer" parent="BattleMenuControl" index="0"]
+modulate = Color(1, 1, 1, 0.069)
 layout_mode = 0
-offset_top = 158.0
-offset_right = 1280.0
-offset_bottom = 464.0
+offset_left = 120.0
+offset_top = 72.0
+offset_right = 1120.0
+offset_bottom = 452.0
+theme_override_constants/h_separation = 10
 columns = 8
 
 [node name="Cell" type="Button" parent="BattleMenuControl/TargetsGrid" index="0"]
@@ -171,9 +178,11 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Cell30" type="Button" parent="BattleMenuControl/TargetsGrid" index="29"]
+modulate = Color(0.190812, 0.72268, 1, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = SubResource("Theme_1fvuq")
 
 [node name="Cell31" type="Button" parent="BattleMenuControl/TargetsGrid" index="30"]
 layout_mode = 2

@@ -121,7 +121,6 @@ func on_select_ability() -> void:
 	battle_controller.prompt_select_target(attack_name)
 	var target = battle_controller.selected_attack["target"] #could just look up attack from gamedata instead
 	if target == "enemy":
-		print(targets_menu.current_grid_type, targets_menu.GridType.ENEMY)
 		if targets_menu.current_grid_type != targets_menu.GridType.ENEMY:
 			targets_menu.activate_enemy_grid()
 	elif target == "player":

@@ -63,16 +63,18 @@ func get_selected_grid_coords() -> Vector2i:
 	return coords
 
 func navigate_forward(e: InputEvent) -> void:
-	if e.keycode == KEY_DOWN || e.keycode == KEY_S:
-		move_down()
-	elif e.keycode == KEY_RIGHT || e.keycode == KEY_D:
-		move_right()
+	if is_active:
+		if e.keycode == KEY_DOWN || e.keycode == KEY_S:
+			move_down()
+		elif e.keycode == KEY_RIGHT || e.keycode == KEY_D:
+			move_right()
 			
 func navigate_backward(e: InputEvent) -> void:
-	if e.keycode == KEY_UP || e.keycode == KEY_W:
-		move_up()
-	elif e.keycode == KEY_LEFT || e.keycode == KEY_A:
-		move_left()
+	if is_active:
+		if e.keycode == KEY_UP || e.keycode == KEY_W:
+			move_up()
+		elif e.keycode == KEY_LEFT || e.keycode == KEY_A:
+			move_left()
 			
 func move_up() -> void:
 	var coords = targets_grid.find_key(selected_button)
@@ -116,3 +118,9 @@ func move_right() -> void:
 	
 func set_grid_type(type: GridType) -> void:
 	current_grid_type = type
+	
+func activate() -> void:
+	self.show_menu()
+	is_active = true
+	selected_button = targets_grid[Vector2i(0, 0)]
+	cursor.move_cursor(selected_button.position)
