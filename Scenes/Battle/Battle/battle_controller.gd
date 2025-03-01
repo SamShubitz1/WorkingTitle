@@ -7,10 +7,11 @@ extends Node
 @onready var player = $"../Player"
 @onready var enemy = $"../Enemy"
 @onready var cursor = $"../BattleMenuControl/Cursor"
-@export var enemy_scene: PackedScene
+#@export var enemy_scene: PackedScene
 
 var battle_grid: BaseGrid = BaseGrid.new()
 var grid_size: Vector2i = Vector2i(2, 4)
+var valid_target: String
 
 var event_queue: Array = []
 var filter_list: Array = [] # will be used to filter out obsolete events
@@ -34,7 +35,7 @@ enum EventType {
 }
 
 func _ready() -> void:
-	battle_grid.init(set_grid_cells())
+	#battle_grid.init(set_grid_cells())
 	populate_grid()
 	player_health_bar.max_value = player.max_health
 	enemy_health_bar.max_value = enemy.max_health
@@ -109,20 +110,24 @@ func on_use_attack(target: String) -> void:
 	add_event({"type": EventType.ATTACK, "target": target, "damage": damage, "duration": attack_duration})
 	perform_enemy_attack()
 	increment_queue()
-	
+
 func prompt_select_target(attack_name: String) -> void:
 	var player_attack = GameData.abilities[attack_name]
 	selected_attack = player_attack
+	if player_attack.target == "enemy":
+		valid_target = "enemy"
+	elif player_attack.target == "ally":
+		valid_target = "player"
 	play_dialog("Select a target!")
 	
 func cancel_select_target() -> void:
 	selected_attack = {}
 		
 func on_use_item(item_index: int) -> void:
+	cursor.disable()
 	var item = player.items.pop_at(item_index) # expensive on large arrays
 	if player.items.is_empty():
 		player.items.append({"name": "Empty", "menu_description": "You have no items"})
-	cursor.disable()
 	add_event({"type": EventType.DIALOG, "text": "Player used " + item.name + "!", "duration": dialog_duration})
 	player.items_equipped.append(item)
 	player.populate_buffs_array()
@@ -181,12 +186,12 @@ func handle_death() -> void:
 	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	
 func populate_grid() -> void:
-	battle_grid.set_grid_position(Vector2i(0,3), player)
-	battle_grid.set_grid_position(Vector2i(0,4), enemy)
+	battle_grid.set_object_at_grid_position(Vector2i(0,3), player)
+	battle_grid.set_object_at_grid_position(Vector2i(0,4), enemy)
 	
 func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
-	return Vector2i(6, 2)
+	return Vector2i(8, 2)
 	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
@@ -195,4 +200,4 @@ func get_player_info() -> Dictionary:
 	return {"name": player.name, "abilities": player.abilities, "items": player.items}
 	
 func get_grid_info() -> Dictionary:
-	return {"current_grid": battle_grid.current_grid, "grid_cells": battle_grid.grid_cells}
+	return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}

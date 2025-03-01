@@ -3,7 +3,7 @@ extends BaseCursor
 var options_offset = Vector2i(95, 520)
 var items_offset = Vector2i(500, 535)
 var abilities_offset = Vector2i(480, 535)
-var targets_offset = Vector2i(130, -10)
+var targets_offset = Vector2i(150, 200)
 
 func move_cursor(button_position: Vector2i) -> void:
 	match selected_menu_type:

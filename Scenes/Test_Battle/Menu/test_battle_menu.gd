@@ -20,7 +20,7 @@ var initial_cursor_position = Vector2(0, 40)
 var options_menu = BaseMenu.new()
 var abilities_menu = BaseMenu.new()
 var items_menu = BaseMenu.new()
-var targets_menu = BaseMenu.new()
+var targets_menu = BaseGridMenu.new()
 var log_menu = BaseLog.new()
 
 var selected_menu: BaseMenu
@@ -36,7 +36,6 @@ func _ready() -> void:
 
 func _input(_e) -> void:
 	if not cursor.disabled:
-		print(cursor.position)
 		if Input.is_action_just_pressed("navigate_forward"):
 			selected_menu.navigate_forward()
 			update_description()
@@ -117,10 +116,10 @@ func on_select_option() -> void:
 			on_select_retreat()
 
 func on_select_ability() -> void:
-	log_menu.show_menu()
+	log_menu.show_menu() # will change to display target stats
 	var attack_name = selected_menu.selected_button.text
-	update_selected_menu(GameData.BattleMenuType.TARGETS)
 	battle_controller.prompt_select_target(attack_name)
+	update_selected_menu(GameData.BattleMenuType.TARGETS)
 
 func on_select_target():
 	log_menu.show_menu() # will change once targets menu exists
@@ -150,7 +149,6 @@ func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 
 func update_ui() -> void:
-	cursor = battle_cursor
 	char_name_label.text = player_info.name
 
 	for i in range(abilities_menu.buttons.size()):
@@ -175,22 +173,24 @@ func update_description() -> void:
 
 func initialize_menus() -> void:
 	var initial_button_position = Vector2i(0, 65)
+	cursor = battle_cursor
 	
 	var options_buttons = options_node.get_child(0).get_children().slice(1)
-	options_menu.init(options_node, options_buttons, battle_cursor, null)
+	options_menu.init(options_node, options_buttons, cursor, null)
 	
 	var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
-	abilities_menu.init(abilities_node, abilities_buttons, battle_cursor, initial_button_position)
+	abilities_menu.init(abilities_node, abilities_buttons, cursor, initial_button_position)
 	abilities_menu.set_scroll_size(player_info.abilities.size())
 	
 	var items_buttons = items_node.get_child(0).get_children().slice(3)
-	items_menu.init(items_node, items_buttons, battle_cursor, initial_button_position)
+	items_menu.init(items_node, items_buttons, cursor, initial_button_position)
 	items_menu.set_scroll_size(player_info.items.size())
 	
 	var targets_buttons = targets_grid.get_children()
-	targets_menu.init(targets_node, targets_buttons, battle_cursor, null)
+	targets_menu.init(targets_node, targets_buttons, cursor, null)
+	targets_menu.activate_enemy_grid()
 	
-	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), battle_cursor, null, battle_controller.battle_log)
+	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
 	
 	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
 	selected_menu = options_menu
