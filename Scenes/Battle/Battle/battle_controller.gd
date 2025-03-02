@@ -100,7 +100,7 @@ func handle_attack(event: Dictionary) -> void:
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
 	var selected_targets: Array
-	for cell in target_cells:
+	for cell in target_cells: # move to base grid
 		if battle_grid.current_grid.has(cell):
 			selected_targets.append(cell)
 	var damage = calculate_attack_dmg()
