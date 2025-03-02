@@ -2,5 +2,5 @@
 
 [ext_resource type="Script" path="res://Scenes/Main/game_controller.gd" id="1_2nx2o"]
 
-[node name="MainScene" type="Node2D"]
+[node name="MainScene" type="Node2D" groups=["MyControllers"]]
 script = ExtResource("1_2nx2o")

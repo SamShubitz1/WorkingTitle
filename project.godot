@@ -30,6 +30,10 @@ window/stretch/scale_mode="integer"
 
 project/assembly_name="MachinamonTest01"
 
+[global_group]
+
+MyControllers=""
+
 [input]
 
 ui_left={

@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var Current_Tile_Map = $TileMapLayer
+@onready var Current_Tile_Map = $MapContainer/TileMapLayer
 
 @export var GRID_CELL_SIZE_PX: int = 16
 

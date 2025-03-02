@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
-@onready var Map_Controller = $"../MapController"
+@onready var Map_Controller = $"/root/MainScene/Overworld/MapController"
+@onready var Game_Controller = get_tree().current_scene
 var grid_coords
 var battle_ready = true
 

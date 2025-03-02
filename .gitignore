@@ -2,3 +2,5 @@
 .godot/
 *.DS_Store
 /android/
+*/.code-workspace
+*/.DS_Store

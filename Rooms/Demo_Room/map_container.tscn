@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=4 uid="uid://b7hqn31thugl2"]
+
+[ext_resource type="Texture2D" uid="uid://dmwfrd0bmmrry" path="res://Rooms/Demo_Room/pkmnpathsheet.png" id="1_itvxy"]
+[ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="2_fmuqk"]
+[ext_resource type="Script" path="res://Scenes/Npc/npc.gd" id="3_ftau4"]
+[ext_resource type="Texture2D" uid="uid://85hqk3doau8y" path="res://Art/Tiles/MarsDoodads.png" id="4_bnco4"]
+[ext_resource type="Script" path="res://Rooms/Demo_Room/door_1.gd" id="4_t4xg2"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l2hhy"]
+texture = ExtResource("1_itvxy")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+6:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+
+[sub_resource type="TileSet" id="TileSet_1dn45"]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_l2hhy")
+
+[node name="MapContainer" type="Node2D"]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+texture_filter = 1
+tile_map_data = PackedByteArray("AAABAAEAAAABAAAAAAABAAIAAAABAAAAAAABAAMAAAABAAAAAAACAAEAAAAEAAEAAAACAAIAAAACAAAAAAACAAMAAAABAAIAAAAAAAEAAAADAAIAAAAAAAIAAAADAAIAAAAAAAMAAAADAAIAAAABAAQAAAAAAAEAAAACAAQAAAAEAAAAAAADAAQAAAAEAAAAAAAEAAQAAAABAAEAAAADAAEAAAAAAAIAAAAEAAEAAAACAAAAAAAEAAIAAAACAAAAAAAEAAMAAAACAAAAAAAFAAEAAAADAAIAAAAFAAIAAAADAAIAAAAFAAMAAAADAAIAAAAFAAQAAAADAAIAAAAFAAAAAAADAAIAAAAEAAAAAAADAAEAAAADAAAAAAADAAAAAAACAAAAAAADAAAAAAABAAAAAAACAAEAAAAAAAAAAAADAAIAAAAAAAQAAAADAAIAAAADAAIAAAABAAAAAAADAAMAAAACAAIAAAAAAAUAAAADAAIAAAABAAUAAAADAAIAAAACAAUAAAADAAIAAAADAAUAAAADAAIAAAAEAAUAAAADAAIAAAAGAAAAAAAFAAEAAAAGAAEAAAAFAAEAAAAGAAIAAAAFAAEAAAAGAAMAAAAGAAEAAAAGAAQAAAAFAAEAAAAGAAUAAAAFAAEAAAAHAAAAAAAGAAAAAAAHAAEAAAAGAAAAAAAHAAIAAAAGAAAAAAAHAAMAAAAGAAAAAAAHAAQAAAAGAAAAAAAHAAUAAAAGAAAAAAAHAAYAAAAFAAEAAAAGAAYAAAAFAAEAAAAFAAYAAAAFAAEAAAAEAAYAAAAFAAEAAAADAAYAAAAFAAEAAAACAAYAAAAFAAEAAAABAAYAAAAFAAEAAAAAAAYAAAAFAAEAAAAFAAUAAAAGAAIAAAAAAAcAAAAFAAAAAAABAAcAAAADAAIAAAACAAcAAAADAAIAAAADAAcAAAAEAAIAAAAEAAcAAAAEAAIAAAAFAAcAAAAFAAAAAAAGAAcAAAAFAAIAAAAHAAcAAAAEAAIAAAAIAAcAAAADAAIAAAAIAAYAAAAEAAIAAAAIAAUAAAAFAAAAAAAIAAQAAAAFAAIAAAAIAAMAAAAEAAIAAAAIAAIAAAAFAAIAAAAIAAEAAAAFAAAAAAAIAAAAAAAFAAIAAAAJAAAAAAAFAAIAAAAJAAEAAAAFAAAAAAAJAAIAAAAFAAIAAAAJAAMAAAAFAAIAAAAJAAQAAAAFAAIAAAAJAAUAAAAEAAIAAAAJAAYAAAADAAIAAAAJAAcAAAAEAAIAAAA=")
+tile_set = SubResource("TileSet_1dn45")
+
+[node name="Dodads" type="Node2D" parent="."]
+
+[node name="Norman" parent="Dodads" instance=ExtResource("2_fmuqk")]
+position = Vector2(56, 88)
+script = ExtResource("3_ftau4")
+
+[node name="Door1" type="Node2D" parent="Dodads"]
+position = Vector2(96, 48)
+script = ExtResource("4_t4xg2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Dodads/Door1"]
+texture_filter = 1
+position = Vector2(8, 8)
+texture = ExtResource("4_bnco4")
+region_enabled = true
+region_rect = Rect2(0, 112, 16, 16)

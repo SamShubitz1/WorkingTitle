@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var Map_Controller = self.get_node("/root/MainScene/Overworld/MapController")
 @onready var Player: PlayerClass = self.get_node("/root/MainScene/Overworld/PlayerController/MyPlayer")
 #@onready var Player_Camera = Player.Player_Camera
 
@@ -66,8 +67,6 @@ func switch_to_battle_scene() -> void:
 	var current_scene_node = get_node("/root/MainScene/Overworld")
 	# check for existing battle scene node in tree
 
-	var tree = get_tree()
-	print("is tree null?: " + str(tree == null))
 	var rootNode = get_tree().root
 	var node = rootNode.find_child("battle")
 	if (node):
@@ -77,18 +76,10 @@ func switch_to_battle_scene() -> void:
 		imported_battle_scene = preloaded_scene_battle.instantiate()
 		get_node("/root/MainScene/").add_child(imported_battle_scene)
 		battle_cam_obj = imported_battle_scene.get_node("BattleCamera")
-		print("battlecam: " + str(battle_cam_obj))
-
 		# hide overworld scene in tree
 		current_scene_node.hide()
-
 		# switch cameras
 		battle_cam_obj.make_current()
-		#battle_cam_obj.current = true
-		#overworld_cam_obj.current = false
-
-	# unpause / load battle scene
-
 
 	# pause / unload current scene (overworld)
 	imported_overworld_scene.get_parent().remove_child(imported_overworld_scene)
@@ -97,6 +88,7 @@ func switch_to_battle_scene() -> void:
 	current_scene_node = null
 
 	# update GameController state for mode tracking
+	#TODO
 
 	return
 
@@ -136,3 +128,6 @@ func set_pause_subtree(root: Node, pause: bool) -> void:
 		root.propagate_call(setter, [!pause])
 
 	return
+
+func get_map_controller():
+	return Map_Controller

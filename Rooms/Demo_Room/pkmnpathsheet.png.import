@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dmwfrd0bmmrry"
-path="res://.godot/imported/pkmnpathsheet.png-d0e7a5be5f41cebd9172c3df9b96bd2f.ctex"
+path="res://.godot/imported/pkmnpathsheet.png-e05e00f31b5f7a4ec5bc8cbc87411908.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/pkmnpathsheet.png"
-dest_files=["res://.godot/imported/pkmnpathsheet.png-d0e7a5be5f41cebd9172c3df9b96bd2f.ctex"]
+source_file="res://Rooms/Demo_Room/pkmnpathsheet.png"
+dest_files=["res://.godot/imported/pkmnpathsheet.png-e05e00f31b5f7a4ec5bc8cbc87411908.ctex"]
 
 [params]
 
