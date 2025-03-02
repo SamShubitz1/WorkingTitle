@@ -1,5 +1,6 @@
 extends Node
 
+@onready var Game_Controller = get_tree().current_scene
 @onready var animation_player = $"../BattleMenuControl/DialogBox/AnimationPlayer"
 @onready var dialog_box = $"../BattleMenuControl/DialogBox/BattleLog".get_children().slice(1)
 @onready var player_health_bar = $"../BattleMenuControl/MainMenu/Menu/CharPanel/Health"
@@ -43,7 +44,7 @@ func _ready() -> void:
 
 func add_event(event) -> void:
 	event_queue.append(event)
-	
+
 func clear_queue() -> void:
 	event_queue.clear()
 
@@ -59,31 +60,31 @@ func increment_queue() -> void:
 				handle_death()
 			EventType.RETREAT:
 				handle_retreat()
-				
+
 		if event.has("duration") && not manual_increment:
 			await wait(event.duration)
-			
+
 			if event_queue.is_empty():
 				cursor.enable()
 				play_dialog("Player turn!")
-				
+
 			increment_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
 	else:
 		manual_increment = false
 		cursor.enable()
-			
+
 func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
 	battle_log.append(event.text)
 	update_dialog_queue()
-	
+
 func play_dialog(text: String) -> void: # redundant function, could be used to filter messages from battle log
 	dialog.text = text
 	battle_log.append(text)
 	update_dialog_queue()
-	
+
 func update_dialog_queue() -> void:
 	for i in range(dialog_box.size()):
 		if i < battle_log.size():
@@ -92,7 +93,7 @@ func update_dialog_queue() -> void:
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
 	scroll_index = 1
-	
+
 func handle_attack(event: Dictionary) -> void:
 	event.target.take_damage(event.damage)
 	play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!")
@@ -111,7 +112,7 @@ func prompt_select_target(attack_name: String) -> void:
 	var player_attack = GameData.abilities[attack_name]
 	selected_attack = player_attack
 	play_dialog("Select a target!")
-	
+
 func cancel_select_target() -> void:
 	selected_attack = {}
 
@@ -147,7 +148,7 @@ func calculate_attack_dmg() -> int:
 	var multiplier: float = resolve_status_effects()
 	damage *= multiplier
 	return damage
-	
+
 func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": "Enemy used " + enemy_attack.name + "!", "duration": dialog_duration})
@@ -169,17 +170,20 @@ func check_death() -> void:
 		add_event({"type": EventType.DIALOG, "text": dead_name + " died!"})
 		add_event({"type": EventType.DEATH})
 		increment_queue()
-		
+
 func resolve_status_effects() -> float:
 	var buff = player.buffs.get(selected_attack.type, 0) + 1
 	return buff
-	
+
 func handle_retreat() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
-		
+	#get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+	print(str(Game_Controller))
+	Game_Controller.switch_to_overworld_scene()
+
 func handle_death() -> void:
-	get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
-	
+	#get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
+	Game_Controller.switch_to_overworld_scene()
+
 func get_valid_targets() -> Array[Vector2i]:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()

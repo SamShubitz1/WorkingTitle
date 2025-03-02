@@ -7,14 +7,6 @@ extends Node2D
 # collection of map objects, keyed by grid-position vector
 var world_map_array: Dictionary = {}
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-
 # convert grid coords to stored-object
 func get_object_at_coords(grid_coords: Vector2i) -> Node:
 	if (not world_map_array.has(grid_coords)):

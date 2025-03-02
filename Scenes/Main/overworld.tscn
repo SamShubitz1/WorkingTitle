@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="6_x832e"]
 [ext_resource type="Script" path="res://Scenes/Player/my_player.gd" id="7_xincb"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lcs2y"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l2hhy"]
 texture = ExtResource("2_osdsw")
 0:0/0 = 0
 1:0/0 = 0
@@ -35,7 +35,7 @@ texture = ExtResource("2_osdsw")
 
 [sub_resource type="TileSet" id="TileSet_1dn45"]
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_lcs2y")
+sources/0 = SubResource("TileSetAtlasSource_l2hhy")
 
 [node name="Overworld" type="Node2D"]
 

@@ -2,7 +2,6 @@ class_name PlayerClass
 extends CharacterBody2D
 
 @onready var Animation_Object = $AnimatedSprite2D
-@onready var Map_Controller = $"../MapController"
 @onready var Player_Camera = get_node("./OverworldCamera")
 
 @export var DEBUG_PLAYER: bool = true
@@ -22,17 +21,6 @@ enum Direction {
 }
 #var current_direction: Direction = Direction.DOWN
 var current_direction = 3
-
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	
-	pass
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	
-	pass
 
 func get_grid_position() -> Vector2i:
 	return grid_position
