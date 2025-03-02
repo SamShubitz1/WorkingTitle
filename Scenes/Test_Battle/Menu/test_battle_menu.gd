@@ -119,7 +119,9 @@ func on_select_ability() -> void:
 	log_menu.show_menu() # will change to display target stats
 	var attack_name = selected_menu.selected_button.text
 	battle_controller.prompt_select_target(attack_name)
-	var target = battle_controller.selected_attack["target"] #could just look up attack from gamedata instead
+	var target = battle_controller.selected_attack["target"] # could just look up attack from gamedata instead
+	var shape = battle_controller.selected_attack["shape"]
+	targets_menu.set_current_shape(shape)
 	if target == "enemy":
 		if targets_menu.current_grid_type != targets_menu.GridType.ENEMY:
 			targets_menu.activate_enemy_grid()
@@ -130,9 +132,14 @@ func on_select_ability() -> void:
 func on_select_target():
 	log_menu.show_menu() # will change once targets/stats display exists
 	var valid_targets = battle_controller.get_valid_targets()
-	var target_cell = targets_menu.get_selected_grid_coords()
-	if valid_targets.has(target_cell):
-		battle_controller.on_use_attack(target_cell)
+	var target_cells = targets_menu.get_targeted_cells()
+	var is_valid_target: bool = false
+	for cell in target_cells:
+		if valid_targets.has(cell):
+			is_valid_target = true
+	if is_valid_target:
+		battle_controller.on_use_attack(target_cells) # first item is selected cell
+		targets_menu.disactivate()
 		go_back()
 	else:
 		battle_controller.on_select_invalid_target()

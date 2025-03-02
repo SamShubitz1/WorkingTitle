@@ -7,7 +7,6 @@ extends Node
 @onready var player = $"../Player"
 @onready var enemy = $"../Enemy"
 @onready var cursor = $"../BattleMenuControl/Cursor"
-#@export var enemy_scene: PackedScene
 
 var battle_grid: BaseGrid = BaseGrid.new()
 var grid_size: Vector2i = Vector2i(2, 4)
@@ -73,7 +72,7 @@ func increment_queue() -> void:
 	else:
 		manual_increment = false
 		cursor.enable()
-			
+
 func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
 	battle_log.append(event.text)
@@ -97,13 +96,17 @@ func handle_attack(event: Dictionary) -> void:
 	event.target.take_damage(event.damage)
 	play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!")
 	check_death()
-		
-func on_use_attack(target_cell: Vector2i) -> void:
-	var selected_target = battle_grid.current_grid[target_cell]
+
+func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
+	var selected_targets: Array
+	for cell in target_cells:
+		if battle_grid.current_grid.has(cell):
+			selected_targets.append(cell)
 	var damage = calculate_attack_dmg()
 	add_event({"type": EventType.DIALOG, "text": "Player used " + selected_attack.name + "!", "duration": dialog_duration})
-	add_event({"type": EventType.ATTACK, "target": selected_target, "damage": damage, "duration": attack_duration})
+	for target in selected_targets:
+		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage": damage, "duration": attack_duration})
 	perform_enemy_attack()
 	increment_queue()
 
@@ -185,7 +188,7 @@ func get_valid_targets() -> Array[Vector2i]:
 	var occupied_cells = battle_grid.current_grid.keys()
 	for cell in occupied_cells:
 		if selected_attack.target == "enemy": # can be made into targets enum
-			if cell.x > 3: # if grid size is global (move to game data if so), will always be '3'
+			if cell.x > 3: # if main grid size is constant, will always be '3'
 				valid_targets.append(cell)
 		elif selected_attack.target == "self":
 			if cell.x < 4:
@@ -193,8 +196,8 @@ func get_valid_targets() -> Array[Vector2i]:
 	return valid_targets
 			
 func populate_grid() -> void:
-	battle_grid.set_object_at_grid_position(Vector2i(3,0), player)
-	battle_grid.set_object_at_grid_position(Vector2i(5,0), enemy)
+	battle_grid.set_object_at_grid_position(Vector2i(3, 0), player)
+	battle_grid.set_object_at_grid_position(Vector2i(5, 0), enemy)
 	
 func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle

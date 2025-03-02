@@ -4,7 +4,8 @@
 [ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/test_battle_menu.gd" id="2_tvtlk"]
 [ext_resource type="Script" path="res://Scenes/Test_Battle/Cursor/test_battle_cursor.gd" id="3_nifbg"]
 
-[sub_resource type="Theme" id="Theme_1fvuq"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wgxn4"]
+bg_color = Color(1, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eurhc"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -23,7 +24,6 @@ scale = Vector2(0.5, 0.5)
 script = ExtResource("2_tvtlk")
 
 [node name="TargetsGrid" type="GridContainer" parent="BattleMenuControl" index="0"]
-modulate = Color(1, 1, 1, 0.069)
 layout_mode = 0
 offset_left = 120.0
 offset_top = 72.0
@@ -32,167 +32,229 @@ offset_bottom = 452.0
 theme_override_constants/h_separation = 10
 columns = 8
 
-[node name="Cell" type="Button" parent="BattleMenuControl/TargetsGrid" index="0"]
+[node name="Cell" type="Panel" parent="BattleMenuControl/TargetsGrid" index="0"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell2" type="Button" parent="BattleMenuControl/TargetsGrid" index="1"]
+[node name="Cell2" type="Panel" parent="BattleMenuControl/TargetsGrid" index="1"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell3" type="Button" parent="BattleMenuControl/TargetsGrid" index="2"]
+[node name="Cell3" type="Panel" parent="BattleMenuControl/TargetsGrid" index="2"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell4" type="Button" parent="BattleMenuControl/TargetsGrid" index="3"]
+[node name="Cell4" type="Panel" parent="BattleMenuControl/TargetsGrid" index="3"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell5" type="Button" parent="BattleMenuControl/TargetsGrid" index="4"]
+[node name="Cell5" type="Panel" parent="BattleMenuControl/TargetsGrid" index="4"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell6" type="Button" parent="BattleMenuControl/TargetsGrid" index="5"]
+[node name="Cell6" type="Panel" parent="BattleMenuControl/TargetsGrid" index="5"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell7" type="Button" parent="BattleMenuControl/TargetsGrid" index="6"]
+[node name="Cell7" type="Panel" parent="BattleMenuControl/TargetsGrid" index="6"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell8" type="Button" parent="BattleMenuControl/TargetsGrid" index="7"]
+[node name="Cell8" type="Panel" parent="BattleMenuControl/TargetsGrid" index="7"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell9" type="Button" parent="BattleMenuControl/TargetsGrid" index="8"]
+[node name="Cell9" type="Panel" parent="BattleMenuControl/TargetsGrid" index="8"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell10" type="Button" parent="BattleMenuControl/TargetsGrid" index="9"]
+[node name="Cell10" type="Panel" parent="BattleMenuControl/TargetsGrid" index="9"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell11" type="Button" parent="BattleMenuControl/TargetsGrid" index="10"]
+[node name="Cell11" type="Panel" parent="BattleMenuControl/TargetsGrid" index="10"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell12" type="Button" parent="BattleMenuControl/TargetsGrid" index="11"]
+[node name="Cell12" type="Panel" parent="BattleMenuControl/TargetsGrid" index="11"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell13" type="Button" parent="BattleMenuControl/TargetsGrid" index="12"]
+[node name="Cell13" type="Panel" parent="BattleMenuControl/TargetsGrid" index="12"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell14" type="Button" parent="BattleMenuControl/TargetsGrid" index="13"]
+[node name="Cell14" type="Panel" parent="BattleMenuControl/TargetsGrid" index="13"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell15" type="Button" parent="BattleMenuControl/TargetsGrid" index="14"]
+[node name="Cell15" type="Panel" parent="BattleMenuControl/TargetsGrid" index="14"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell16" type="Button" parent="BattleMenuControl/TargetsGrid" index="15"]
+[node name="Cell16" type="Panel" parent="BattleMenuControl/TargetsGrid" index="15"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell17" type="Button" parent="BattleMenuControl/TargetsGrid" index="16"]
+[node name="Cell17" type="Panel" parent="BattleMenuControl/TargetsGrid" index="16"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell18" type="Button" parent="BattleMenuControl/TargetsGrid" index="17"]
+[node name="Cell18" type="Panel" parent="BattleMenuControl/TargetsGrid" index="17"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell19" type="Button" parent="BattleMenuControl/TargetsGrid" index="18"]
+[node name="Cell19" type="Panel" parent="BattleMenuControl/TargetsGrid" index="18"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell20" type="Button" parent="BattleMenuControl/TargetsGrid" index="19"]
+[node name="Cell20" type="Panel" parent="BattleMenuControl/TargetsGrid" index="19"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell21" type="Button" parent="BattleMenuControl/TargetsGrid" index="20"]
+[node name="Cell21" type="Panel" parent="BattleMenuControl/TargetsGrid" index="20"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell22" type="Button" parent="BattleMenuControl/TargetsGrid" index="21"]
+[node name="Cell22" type="Panel" parent="BattleMenuControl/TargetsGrid" index="21"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell23" type="Button" parent="BattleMenuControl/TargetsGrid" index="22"]
+[node name="Cell23" type="Panel" parent="BattleMenuControl/TargetsGrid" index="22"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell24" type="Button" parent="BattleMenuControl/TargetsGrid" index="23"]
+[node name="Cell24" type="Panel" parent="BattleMenuControl/TargetsGrid" index="23"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell25" type="Button" parent="BattleMenuControl/TargetsGrid" index="24"]
+[node name="Cell25" type="Panel" parent="BattleMenuControl/TargetsGrid" index="24"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell26" type="Button" parent="BattleMenuControl/TargetsGrid" index="25"]
+[node name="Cell26" type="Panel" parent="BattleMenuControl/TargetsGrid" index="25"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell27" type="Button" parent="BattleMenuControl/TargetsGrid" index="26"]
+[node name="Cell27" type="Panel" parent="BattleMenuControl/TargetsGrid" index="26"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell28" type="Button" parent="BattleMenuControl/TargetsGrid" index="27"]
+[node name="Cell28" type="Panel" parent="BattleMenuControl/TargetsGrid" index="27"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell29" type="Button" parent="BattleMenuControl/TargetsGrid" index="28"]
+[node name="Cell29" type="Panel" parent="BattleMenuControl/TargetsGrid" index="28"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell30" type="Button" parent="BattleMenuControl/TargetsGrid" index="29"]
-modulate = Color(0.190812, 0.72268, 1, 1)
+[node name="Cell30" type="Panel" parent="BattleMenuControl/TargetsGrid" index="29"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = SubResource("Theme_1fvuq")
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell31" type="Button" parent="BattleMenuControl/TargetsGrid" index="30"]
+[node name="Cell31" type="Panel" parent="BattleMenuControl/TargetsGrid" index="30"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell32" type="Button" parent="BattleMenuControl/TargetsGrid" index="31"]
+[node name="Cell32" type="Panel" parent="BattleMenuControl/TargetsGrid" index="31"]
+z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
 [node name="BattleMenu" parent="BattleMenuControl" index="1"]
 script = null
@@ -218,6 +280,9 @@ offset_bottom = 40.0
 [node name="Label" type="Label" parent="BattleMenuControl/TargetsMenu/Menu" index="0"]
 layout_mode = 2
 text = "Target Info"
+
+[node name="ColorRect" parent="BattleMenuControl" index="3"]
+z_index = -2
 
 [node name="Ability_1" parent="BattleMenuControl/AbilitiesMenu/Menu" index="3"]
 text = "wtf"

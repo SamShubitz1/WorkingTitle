@@ -15,13 +15,13 @@ func _input(_e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_pressed("navigate_forward"):
 			color_off()
-			selected_menu.navigate_forward()
+			selected_menu.navigate_forward(_e)
 			update_pokedex_entry()
 			color_on()
 
 		elif Input.is_action_pressed("navigate_backward"):
 			color_off()
-			selected_menu.navigate_backward()
+			selected_menu.navigate_backward(_e)
 			update_pokedex_entry()
 			color_on()
 			
@@ -33,7 +33,7 @@ func _input(_e) -> void:
 				selected_menu.hide_menu()
 				go_back()
 				pokemon_card.hide()
-			
+				
 func on_press_button() -> void:
 	if selected_menu == main_menu:
 		var button_text = selected_menu.get_selected_button().text
