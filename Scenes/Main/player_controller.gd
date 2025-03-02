@@ -7,12 +7,15 @@ extends Node2D
 
 @export var DEBUG_PLAYER: bool = true
 
+var can_action = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	can_action = false
 	# get updated reference for grid location
 	Player.grid_position = Map_Controller.point_to_grid(Player.position)
 	Player.Animation_Object.play("idle_down")
-	
+
 	# load player Player.position from preference file
 	load_data()
 	pass
@@ -28,6 +31,8 @@ func _process(delta: float) -> void:
 	process_player_inputs()
 		# set_next_move(dir)
 		# Player.is_moving
+	if (not can_action):
+		can_action = true
 	pass
 
 
@@ -157,6 +162,8 @@ func check_move_complete() -> void:
 
 # player action button, spacebar
 func player_action_pressed() -> void:
+	if (not can_action):
+		return
 	# get action coords / tilespot in front of player in direction facing
 	var action_coords = Player.grid_position
 	match Player.current_direction:
@@ -169,7 +176,10 @@ func player_action_pressed() -> void:
 		Player.Direction.RIGHT:
 			action_coords.x += 1
 
-	
+
+	# get tile info
+	var tile_report = Map_Controller.get_world_tile_report(action_coords)
+	print_debug("action_button: " + str(tile_report))
 
 	# get object from map-object-collection
 	var object = Map_Controller.get_object_at_coords(action_coords)
@@ -181,19 +191,13 @@ func player_action_pressed() -> void:
 		if (DEBUG_PLAYER): print_action_object_report(object)
 		if (object.battle_ready):
 			enter_battle_scene(object)
-		#object.kill()
-	elif(actioned_tile != null):
-		# get tile info
-		var tile_report = Map_Controller.get_world_tile_report(action_coords)
-		print_debug("action_button: " + str(tile_report))
 	return
 
 
 # begin battle scene
 func enter_battle_scene(object: Node) -> void:
 	save_data()
-	print_debug("test gamecontroller: " + str(Game_Controller.foo)) # test gamecontroller property access
-	Game_Controller.load_battle_scene(object)
+	Game_Controller.switch_to_battle_scene()
 	return
 
 # set player animation based on direction
@@ -233,9 +237,13 @@ func set_player_position(pos: Vector2i, scope: String) -> void:
 			#Map_Controller.set_object_at_coords(self, pos)
 	return
 
+func _exit_tree() -> void:
+	print("Player_controller is about to die")
+	return
+
 # set player direction
 func set_player_direction(dir: int, idle: bool = true) -> void:
-	Player.current_direction = Player.Direction.keys()[dir]
+	Player.current_direction = dir
 	print("dir: " + str(dir))
 	print("player dir: " + str(Player.current_direction))
 	match dir:

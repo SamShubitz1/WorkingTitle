@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var Player: PlayerClass = $PlayerController/MyPlayer
+@onready var Player: PlayerClass = self.get_node("/root/MainScene/Overworld/PlayerController/MyPlayer")
 #@onready var Player_Camera = Player.Player_Camera
 
 #TODO @onready var Title_Scene_File =
@@ -14,7 +14,6 @@ var battle_cam_obj
 #@onready var Overworld_Scene_Node: Node = get_tree().get_root().find_node("Overworld")
 #@onready var Battle_Scene_Node: Node = get_tree().get_root().find_node("node_name")
 
-var foo = "bar"
 var preloaded_scene_battle
 var preloaded_scene_overworld
 var current_scene_node
@@ -40,14 +39,7 @@ func _ready() -> void:
 	var node = get_node("/root/MainScene/Overworld")
 	current_scene_node = node
 
-
 	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
-	pass
-
 
 # load new scene
 func load_new_scene(scene, object: Node) -> void:
@@ -65,8 +57,13 @@ func load_overworld_scene() -> void:
 	load_new_scene(Overworld_Scene_File, null)
 	return
 
+func switch_to_battle_scene_file() -> void:
+	get_tree().change_scene_to_file(Battle_Scene_File)
+	return
+
 # switch to battle scene node
 func switch_to_battle_scene() -> void:
+	var current_scene_node = get_node("/root/MainScene/Overworld")
 	# check for existing battle scene node in tree
 
 	var tree = get_tree()
@@ -94,14 +91,37 @@ func switch_to_battle_scene() -> void:
 
 
 	# pause / unload current scene (overworld)
+	imported_overworld_scene.get_parent().remove_child(imported_overworld_scene)
 	imported_overworld_scene.queue_free()
+	imported_overworld_scene = null
+	current_scene_node = null
 
 	# update GameController state for mode tracking
-	
+
+	return
+
+func switch_to_overworld_scene_file() -> void:
+	get_tree().change_scene_to_file(Overworld_Scene_File)
 	return
 
 # switch to overworld scene node
-#TODO
+func switch_to_overworld_scene() -> void:
+	var current_scene_node = get_node("/root/MainScene/BattleScene")
+
+	imported_overworld_scene = preloaded_scene_overworld.instantiate()
+	get_node("/root/MainScene/").add_child(imported_overworld_scene)
+	overworld_cam_obj = imported_overworld_scene.get_node("PlayerController/MyPlayer/OverworldCamera")
+	print("overworldcam: " + str(overworld_cam_obj))
+
+	current_scene_node.hide()
+
+	overworld_cam_obj.make_current()
+
+	imported_battle_scene.get_parent().remove_child(imported_battle_scene)
+	imported_battle_scene.queue_free()
+	imported_battle_scene = null
+	current_scene_node = null
+	return
 
 # pause target node / sub-scene
 func set_pause_subtree(root: Node, pause: bool) -> void:
