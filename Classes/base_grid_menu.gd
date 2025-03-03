@@ -139,7 +139,7 @@ func update_selected_cell(next_coords) -> void:
 		var neighbor = targets_grid[coords]
 		neighbor.modulate = Color(1, 1, 0, .3)
 	selected_button = targets_grid[next_coords]
-	selected_button.modulate.a = 0.6
+	selected_button.modulate.a = 0.5
 	
 func set_current_shape(attack_shape: GameData.AttackShapes) -> void:
 	current_shape = attack_shape

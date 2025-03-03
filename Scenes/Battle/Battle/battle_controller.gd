@@ -9,8 +9,11 @@ extends Node
 @onready var enemy = $"../Enemy"
 @onready var cursor = $"../BattleMenuControl/Cursor"
 
+var enemy_scene = preload("res://Scenes/Battle/Battle/enemy.gd")
+var enemies: Array
+var players: Array
+
 var battle_grid: BaseGrid = BaseGrid.new()
-var grid_size: Vector2i = Vector2i(2, 4)
 
 var event_queue: Array = []
 var filter_list: Array = [] # will be used to filter out obsolete events
@@ -189,7 +192,7 @@ func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
 	for cell in occupied_cells:
-		if selected_attack.target == GameData.TargetType.ENEMY: # can be made into targets enum
+		if selected_attack.target == GameData.TargetType.ENEMY:
 			if cell.x > 3: # if main grid size is constant, will always be '3'
 				valid_targets.append(cell)
 		elif selected_attack.target == GameData.TargetType.PLAYER:
@@ -207,7 +210,7 @@ func populate_grid() -> void:
 	
 func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
-	return Vector2i(8, 2)
+	return Vector2i(8, 4)
 	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
