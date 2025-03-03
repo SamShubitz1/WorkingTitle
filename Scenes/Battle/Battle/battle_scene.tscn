@@ -1,10 +1,10 @@
 [gd_scene load_steps=15 format=3 uid="uid://clg4nd1ekycri"]
 
-[ext_resource type="Script" path="res://Scenes/Test_Battle/Battle/battle_controller.gd" id="1_jktho"]
-[ext_resource type="PackedScene" uid="uid://dk0vha0gj1182" path="res://Scenes/Test_Battle/Characters/enemy.tscn" id="2_lik24"]
-[ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/test_battle_menu.gd" id="2_tvtlk"]
-[ext_resource type="Script" path="res://Scenes/Test_Battle/Cursor/test_battle_cursor.gd" id="3_nifbg"]
-[ext_resource type="PackedScene" uid="uid://cr3t2sex466g6" path="res://Scenes/Test_Battle/Characters/player.tscn" id="3_ugbj4"]
+[ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_controller.gd" id="1_jktho"]
+[ext_resource type="PackedScene" uid="uid://dk0vha0gj1182" path="res://Scenes/Battle/Characters/enemy.tscn" id="2_lik24"]
+[ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="2_tvtlk"]
+[ext_resource type="Script" path="res://Scenes/Battle/Cursor/battle_cursor.gd" id="3_nifbg"]
+[ext_resource type="PackedScene" uid="uid://cr3t2sex466g6" path="res://Scenes/Battle/Characters/player.tscn" id="3_ugbj4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wgxn4"]
 bg_color = Color(1, 0, 0, 1)

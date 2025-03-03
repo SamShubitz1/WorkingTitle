@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dk0vha0gj1182"]
 
-[ext_resource type="Script" path="res://Scenes/Test_Battle/Characters/enemy.gd" id="1_m5tdv"]
+[ext_resource type="Script" path="res://Scenes/Battle/Characters/enemy.gd" id="1_m5tdv"]
 [ext_resource type="Texture2D" uid="uid://bulgojpq4w4gh" path="res://Art/Animations/simple_bot_idledown.png" id="2_cadqq"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
