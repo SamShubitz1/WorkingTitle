@@ -189,10 +189,10 @@ func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
 	for cell in occupied_cells:
-		if selected_attack.target == "enemy": # can be made into targets enum
+		if selected_attack.target == GameData.TargetType.ENEMY: # can be made into targets enum
 			if cell.x > 3: # if main grid size is constant, will always be '3'
 				valid_targets.append(cell)
-		elif selected_attack.target == "self":
+		elif selected_attack.target == GameData.TargetType.PLAYER:
 			if cell.x < 4:
 				valid_targets.append(cell)
 	var is_valid_target: bool = false

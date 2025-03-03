@@ -33,7 +33,7 @@ enum TargetType {
 	SELF
 }
 
-var abilities: Dictionary = {"Rock" : {"name": "Rock", "type": "Rock", "damage": 20, "description": "A rock based attack", "range": 2, "target": "enemy", "shape": AttackShapes.DIAMOND}, "Paper": {"name": "Paper", "type": "Paper", "damage": 20, "description": "A paper based attack", "range": 2, "target": "enemy", "shape": AttackShapes.SQUARE}, "Scissors": {"name": "Scissors", "type": "Scissors", "damage": 20, "description": "A scissors based attack", "range": 2, "target": "enemy", "shape": AttackShapes.LINE}}
+var abilities: Dictionary = {"Rock" : {"name": "Rock", "type": "Rock", "damage": 20, "description": "A rock based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.DIAMOND}, "Paper": {"name": "Paper", "type": "Paper", "damage": 20, "description": "A paper based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.SQUARE}, "Scissors": {"name": "Scissors", "type": "Scissors", "damage": 20, "description": "A scissors based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.LINE}}
 
 var items: Dictionary = {"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "effect_description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3}, "Sharpener":{"name": "Sharpener", "effect_type": "Scissors", "effect_description": "Scissors attack went up!", "menu_description": "Adds damage to scissors attacks", "multiplier": .3}, "Extra Paper":{"name": "Extra Paper", "effect_type": "Paper", "effect_description": "Paper attack went up!", "menu_description": "Adds damage to paper attacks", "multiplier": .3}}
 

@@ -204,4 +204,3 @@ func initialize_menus() -> void:
 	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
 	selected_menu = options_menu
 	selected_menu.activate()
-	
