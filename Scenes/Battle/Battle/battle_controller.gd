@@ -111,10 +111,11 @@ func on_use_attack(target_cells: Array) -> void:
 	perform_enemy_attack()
 	increment_queue()
 
-func prompt_select_target(attack_name: String) -> void:
+func prompt_select_target(attack_name: String) -> Dictionary:
 	var player_attack = GameData.abilities[attack_name]
 	selected_attack = player_attack
 	play_dialog("Select a target!")
+	return {"target": player_attack.target, "shape": player_attack.shape}
 
 func cancel_select_target() -> void:
 	selected_attack = {}
@@ -179,15 +180,12 @@ func resolve_status_effects() -> float:
 	return buff
 
 func handle_retreat() -> void:
-	#get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
-	print(str(Game_Controller))
 	Game_Controller.switch_to_overworld_scene()
 
 func handle_death() -> void:
-	#get_tree().change_scene_to_file("res://Scenes/Main/mainscene.tscn")
 	Game_Controller.switch_to_overworld_scene()
 
-func get_valid_targets() -> Array[Vector2i]:
+func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
 	for cell in occupied_cells:
@@ -197,7 +195,11 @@ func get_valid_targets() -> Array[Vector2i]:
 		elif selected_attack.target == "self":
 			if cell.x < 4:
 				valid_targets.append(cell)
-	return valid_targets
+	var is_valid_target: bool = false
+	for cell in target_cells:
+		if valid_targets.has(cell):
+			is_valid_target = true
+	return is_valid_target
 			
 func populate_grid() -> void:
 	battle_grid.set_object_at_grid_position(Vector2i(3, 0), player)

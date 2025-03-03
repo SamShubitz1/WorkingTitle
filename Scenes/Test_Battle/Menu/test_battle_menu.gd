@@ -101,7 +101,7 @@ func on_press_button() -> void:
 			on_select_target()
 
 func on_select_option() -> void:
-	match selected_menu.selected_button.text:
+	match selected_menu.get_selected_button().text:
 		" Attack":
 			log_menu.hide_menu()
 			update_selected_menu(GameData.BattleMenuType.ABILITIES)
@@ -116,29 +116,23 @@ func on_select_option() -> void:
 			on_select_retreat()
 
 func on_select_ability() -> void:
-	log_menu.show_menu() # will change to display target stats
-	var attack_name = selected_menu.selected_button.text
-	battle_controller.prompt_select_target(attack_name)
-	var target = battle_controller.selected_attack["target"] # could just look up attack from gamedata instead
-	var shape = battle_controller.selected_attack["shape"]
-	targets_menu.set_current_shape(shape)
-	if target == "enemy":
+	log_menu.show_menu()
+	var attack_name = selected_menu.get_selected_button().text
+	var attack_info = battle_controller.prompt_select_target(attack_name)
+	targets_menu.set_current_shape(attack_info.shape)
+	if attack_info.target == GameData.TargetType.ENEMY:
 		if targets_menu.current_grid_type != targets_menu.GridType.ENEMY:
 			targets_menu.activate_enemy_grid()
-	elif target == "player":
+	elif attack_info.target == GameData.TargetType.PLAYER:
 		targets_menu.activate_player_menu()
 	update_selected_menu(GameData.BattleMenuType.TARGETS)
 
 func on_select_target():
-	log_menu.show_menu() # will change once targets/stats display exists
-	var valid_targets = battle_controller.get_valid_targets()
+	log_menu.show_menu()
 	var target_cells = targets_menu.get_targeted_cells()
-	var is_valid_target: bool = false
-	for cell in target_cells:
-		if valid_targets.has(cell):
-			is_valid_target = true
+	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
-		battle_controller.on_use_attack(target_cells) # first item is selected cell
+		battle_controller.on_use_attack(target_cells)
 		targets_menu.disactivate()
 		go_back()
 	else:

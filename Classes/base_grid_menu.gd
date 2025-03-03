@@ -21,7 +21,7 @@ const initial_grid_size: Vector2i = Vector2i(8, 4)
 
 var current_shape: GameData.AttackShapes
 
-func init(menu: Node, menu_buttons: Array, menu_cursor: BaseCursor, initial_button_position = null) -> void:
+func init(menu: Node, menu_buttons: Array, menu_cursor: BaseCursor, _initial_button_position = null) -> void:
 	super.init(menu, menu_buttons, menu_cursor)
 	update_grid(initial_grid_size)
 	for button in menu_buttons:
@@ -30,7 +30,6 @@ func init(menu: Node, menu_buttons: Array, menu_cursor: BaseCursor, initial_butt
 func update_grid(grid_size: Vector2i):
 	targets_grid = {}
 	var rows = grid_size.y
-	var columns = grid_size.x
 	var cell_index = 0
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
@@ -51,11 +50,11 @@ func activate_enemy_grid() -> void:
 	
 func activate_player_grid() -> void:
 	var next_grid_size = Vector2i(initial_grid_size.x / 2, initial_grid_size.y)
-	var enemy_grid: Array
+	var player_grid: Array
 	for y in range(next_grid_size.y):
 		for x in range(next_grid_size.x):
-			enemy_grid.append(targets_grid[Vector2i(x, y)])
-	buttons = enemy_grid
+			player_grid.append(targets_grid[Vector2i(x, y)])
+	buttons = player_grid
 	set_scroll_size(buttons.size())
 	set_grid_type(GridType.PLAYER)
 	update_grid(next_grid_size)
@@ -126,8 +125,7 @@ func set_grid_type(type: GridType) -> void:
 func activate() -> void:
 	self.show_menu()
 	is_active = true
-	selected_button = targets_grid[Vector2i(0, 0)]
-	selected_button.modulate = Color(1, 1, 1, .5)
+	update_selected_cell(Vector2i.ZERO)
 	cursor.move_cursor(selected_button.position)
 
 func disactivate() -> void:
@@ -137,33 +135,36 @@ func disactivate() -> void:
 func update_selected_cell(next_coords) -> void:
 	reset_cells()
 	var neighbor_coords = get_neighbor_coords(next_coords)
-	var neighbors: Array
 	for coords in neighbor_coords:
-		neighbors.append(targets_grid[coords])
-	for neighbor in neighbors:
-		neighbor.modulate = Color(1, 1, 0, .7)
+		var neighbor = targets_grid[coords]
+		neighbor.modulate = Color(1, 1, 0, .3)
 	selected_button = targets_grid[next_coords]
-	selected_button.modulate.a = 0.5
+	selected_button.modulate.a = 0.6
 	
 func set_current_shape(attack_shape: GameData.AttackShapes) -> void:
 	current_shape = attack_shape
 
-func get_neighbor_coords(grid_coords: Vector2i) -> Array:
+func get_neighbor_coords(origin_coords: Vector2i) -> Array:
 	var neighbor_coords: Array
 	match current_shape:
 		GameData.AttackShapes.DIAMOND:
-			if grid_coords.y < initial_grid_size.y - 1:
-				neighbor_coords.append(Vector2i(grid_coords.x, grid_coords.y + 1))
-			if grid_coords.y > 0:
-				neighbor_coords.append(Vector2i(grid_coords.x, grid_coords.y - 1))
-			if grid_coords.x < initial_grid_size.x / 2 - 1: # if enemy grid active
-				neighbor_coords.append(Vector2i(grid_coords.x + 1, grid_coords.y))
-			if grid_coords.x > 0:
-				neighbor_coords.append(Vector2i(grid_coords.x - 1, grid_coords.y))
+			if origin_coords.y < initial_grid_size.y - 1:
+				neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y + 1))
+			if origin_coords.y > 0:
+				neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y - 1))
+			if origin_coords.x < initial_grid_size.x / 2 - 1: # if enemy origin active
+				neighbor_coords.append(Vector2i(origin_coords.x + 1, origin_coords.y))
+			if origin_coords.x > 0:
+				neighbor_coords.append(Vector2i(origin_coords.x - 1, origin_coords.y))
+	match current_shape:
+		GameData.AttackShapes.LINE:
+			var count = origin_coords.x + 1
+			while count < initial_grid_size.x / 2:
+				neighbor_coords.append(Vector2i(count, origin_coords.y))
+				count += 1
+
 	return neighbor_coords
 
 func reset_cells() -> void:
 	for button in buttons:
 		button.modulate.a = 0.1
-	
-#will need to reset/decolor neighbors too
