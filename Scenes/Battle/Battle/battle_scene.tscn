@@ -1,34 +1,21 @@
-[gd_scene load_steps=18 format=3 uid="uid://dprpqlfs1wads"]
+[gd_scene load_steps=15 format=3 uid="uid://clg4nd1ekycri"]
 
-[ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_controller.gd" id="1_jrcef"]
-[ext_resource type="Script" path="res://Scenes/Battle/Battle/enemy.gd" id="2_x1boa"]
-[ext_resource type="Texture2D" uid="uid://bulgojpq4w4gh" path="res://Art/Animations/simple_bot_idledown.png" id="3_57c2c"]
-[ext_resource type="Script" path="res://Scenes/Battle/Battle/player.gd" id="4_6eosr"]
-[ext_resource type="Texture2D" uid="uid://b4ml4r15mqnl1" path="res://Art/Animations/simple_player_idle1.png" id="5_sgboj"]
-[ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="6_t1g76"]
-[ext_resource type="Script" path="res://Scenes/Battle/Cursor/battle_cursor.gd" id="7_tyxjv"]
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Battle/battle_controller.gd" id="1_jktho"]
+[ext_resource type="PackedScene" uid="uid://dk0vha0gj1182" path="res://Scenes/Test_Battle/Characters/enemy.tscn" id="2_lik24"]
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Menu/test_battle_menu.gd" id="2_tvtlk"]
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Cursor/test_battle_cursor.gd" id="3_nifbg"]
+[ext_resource type="PackedScene" uid="uid://cr3t2sex466g6" path="res://Scenes/Test_Battle/Characters/player.tscn" id="3_ugbj4"]
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("3_57c2c")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gsre"]
-bg_color = Color(0.92, 0.1288, 0.1288, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxy7r"]
-bg_color = Color(0.44607, 0.671498, 0.355604, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wgxn4"]
+bg_color = Color(1, 0, 0, 1)
 
 [sub_resource type="Theme" id="Theme_y4e55"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uks1o"]
 bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eurhc"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m8nmk"]
 bg_color = Color(0.0748453, 0.0748453, 0.0748453, 1)
@@ -57,44 +44,251 @@ bg_color = Color(0.44607, 0.671498, 0.355604, 1)
 [node name="BattleScene" type="Node2D"]
 
 [node name="BattleController" type="Node" parent="."]
-script = ExtResource("1_jrcef")
+script = ExtResource("1_jktho")
 
-[node name="Enemy" type="Node2D" parent="."]
-position = Vector2(1006, 323)
-script = ExtResource("2_x1boa")
+[node name="Enemy" parent="." instance=ExtResource("2_lik24")]
 
-[node name="Enemy_Sprite" type="AnimatedSprite2D" parent="Enemy"]
-texture_filter = 1
-scale = Vector2(12, 12)
-sprite_frames = SubResource("SpriteFrames_fknt7")
-
-[node name="EnemyHealth" type="ProgressBar" parent="Enemy"]
-custom_minimum_size = Vector2(200, 0)
-offset_left = -101.0
-offset_top = -134.0
-offset_right = 99.0
-offset_bottom = -111.0
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_styles/background = SubResource("StyleBoxFlat_0gsre")
-theme_override_styles/fill = SubResource("StyleBoxFlat_fxy7r")
-max_value = 80.0
-value = 80.0
-
-[node name="Player" type="Node2D" parent="."]
-position = Vector2(250, 279)
-script = ExtResource("4_6eosr")
-
-[node name="Player_Sprite" type="Sprite2D" parent="Player"]
-texture_filter = 1
-scale = Vector2(12, 12)
-texture = ExtResource("5_sgboj")
+[node name="Player" parent="." instance=ExtResource("3_ugbj4")]
 
 [node name="BattleMenuControl" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("2_tvtlk")
+
+[node name="TargetsGrid" type="GridContainer" parent="BattleMenuControl"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 72.0
+offset_right = 1120.0
+offset_bottom = 452.0
+theme_override_constants/h_separation = 10
+columns = 8
+
+[node name="Cell" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell2" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell3" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell4" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell5" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell6" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell7" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell8" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell9" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell10" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell11" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell12" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell13" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell14" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell15" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell16" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell17" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell18" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell19" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell20" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell21" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell22" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell23" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell24" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell25" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell26" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell27" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell28" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell29" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell30" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell31" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
+
+[node name="Cell32" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+z_index = -1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
 [node name="BattleMenu" type="Panel" parent="BattleMenuControl"]
 layout_mode = 1
@@ -108,10 +302,31 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_y4e55")
 theme_override_styles/panel = SubResource("StyleBoxFlat_uks1o")
-script = ExtResource("6_t1g76")
 
-[node name="ColorRect" type="ColorRect" parent="BattleMenuControl"]
-z_index = -1
+[node name="TargetsMenu" type="Panel" parent="BattleMenuControl"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 32.0
+anchor_bottom = 12.775
+offset_left = 320.0
+offset_top = 511.0
+offset_right = -321.0
+offset_bottom = 257.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eurhc")
+
+[node name="Menu" type="VBoxContainer" parent="BattleMenuControl/TargetsMenu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label" type="Label" parent="BattleMenuControl/TargetsMenu/Menu"]
+layout_mode = 2
+text = "Target Info"
+
+[node name="Background" type="ColorRect" parent="BattleMenuControl"]
+z_index = -2
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 768.0
@@ -291,6 +506,7 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+text = "wtf"
 
 [node name="Ability_2" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
 layout_mode = 2
@@ -480,7 +696,7 @@ position = Vector2(84, 558)
 rotation = 1.5708
 scale = Vector2(0.594435, 1.19025)
 polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
-script = ExtResource("7_tyxjv")
+script = ExtResource("3_nifbg")
 
 [node name="BattleCamera" type="Camera2D" parent="."]
 position = Vector2(640, 384)

@@ -1,6 +1,6 @@
 extends Node
 
-@onready var Game_Controller = get_tree().current_scene
+@onready var game_controller = get_tree().current_scene
 @onready var animation_player = $"../BattleMenuControl/DialogBox/AnimationPlayer"
 @onready var dialog_box = $"../BattleMenuControl/DialogBox/BattleLog".get_children().slice(1)
 @onready var player_health_bar = $"../BattleMenuControl/MainMenu/Menu/CharPanel/Health"
@@ -9,7 +9,6 @@ extends Node
 @onready var enemy = $"../Enemy"
 @onready var cursor = $"../BattleMenuControl/Cursor"
 
-var enemy_scene = preload("res://Scenes/Battle/Battle/enemy.gd")
 var enemies: Array
 var players: Array
 
@@ -183,10 +182,10 @@ func resolve_status_effects() -> float:
 	return buff
 
 func handle_retreat() -> void:
-	Game_Controller.switch_to_overworld_scene()
+	game_controller.switch_to_overworld_scene()
 
 func handle_death() -> void:
-	Game_Controller.switch_to_overworld_scene()
+	game_controller.switch_to_overworld_scene()
 
 func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]

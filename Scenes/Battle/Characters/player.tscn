@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://cr3t2sex466g6"]
+
+[ext_resource type="Script" path="res://Scenes/Test_Battle/Characters/player.gd" id="1_q6fdk"]
+[ext_resource type="Texture2D" uid="uid://b4ml4r15mqnl1" path="res://Art/Animations/simple_player_idle1.png" id="2_kkffu"]
+
+[node name="Player" type="Node2D"]
+position = Vector2(554, 380)
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_q6fdk")
+
+[node name="Player_Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(12, 12)
+texture = ExtResource("2_kkffu")
