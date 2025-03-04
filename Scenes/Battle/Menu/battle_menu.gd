@@ -132,7 +132,6 @@ func on_select_target():
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
 		battle_controller.on_use_attack(target_cells)
-		targets_menu.disactivate()
 		go_back()
 		update_ui()
 	else:

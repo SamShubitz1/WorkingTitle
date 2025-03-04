@@ -18,7 +18,7 @@ var battle_grid: BaseGrid = BaseGrid.new()
 var event_queue: Array
 var turn_queue: Array
 
-var initial_dialog: String = "A wild man appears!"
+var initial_dialog: String = "Two lil' guys appeared!"
 var battle_log: Array
 var dialog: Label
 var scroll_index: int = 0
@@ -42,6 +42,9 @@ func _ready() -> void:
 	build_characters()
 	populate_grid()
 	increment_turn_queue()
+	if current_player.alliance == GameData.Alliance.ENEMY:
+		cursor.disable()
+		perform_enemy_attack()
 
 func add_event(event) -> void:
 	event_queue.append(event)
@@ -72,7 +75,7 @@ func increment_event_queue() -> void:
 		if current_player.alliance == GameData.Alliance.HERO:
 			manual_increment = false
 			cursor.enable()
-		else:
+		if current_player.alliance == GameData.Alliance.ENEMY:
 			perform_enemy_attack()
 
 func handle_dialog(event: Dictionary) -> void:
@@ -171,9 +174,8 @@ func get_enemy_attack() -> Dictionary:
 	return attack
 
 func on_target_death(target: Character) -> void:
-		add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
-		add_event({"type": EventType.DEATH, "target": target})
-		increment_event_queue()
+	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
+	add_event({"type": EventType.DEATH, "target": target})
 
 func resolve_status_effects() -> float:
 	var buff = current_player.buffs.get(selected_attack.type, 0) + 1
@@ -191,7 +193,8 @@ func handle_death(event) -> void:
 		players = players.filter(func(p): return p.char_name != event.target.char_name)
 		event_queue = event_queue.filter(func(e): return !e.has("publisher") || e.publisher != event.target.char_name)
 		turn_queue = turn_queue.filter(func(c): return c.char_name != event.target.char_name)
-		print(turn_queue)
+		increment_event_queue()
+
 func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
@@ -212,7 +215,7 @@ func build_characters() -> void:
 	var pc = pc_scene.instantiate()
 	var pc_abilities = ["Rock", "Paper", "Scissors"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 1000, pc_abilities, Vector2i(3, 0), pc_items) # init props will be accessed from somewhere
+	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 100, pc_abilities, Vector2i(3, 0), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
@@ -270,11 +273,11 @@ func set_position_by_grid_coords(character: Character) -> void:
 func set_turn_order() -> void: # pseudo turn order decider
 	players.shuffle()
 	turn_queue.append_array(players)
-
+	
 func increment_turn_queue() -> void:
-	var next_player = turn_queue.pop_front()
-	current_player = next_player
+	print(players, turn_queue)
 	if turn_queue.is_empty():
 		set_turn_order()
+	var next_player = turn_queue.pop_front()
+	current_player = next_player
 	play_dialog(current_player.char_name + "'s turn!", true)
-	
