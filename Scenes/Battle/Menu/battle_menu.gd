@@ -58,7 +58,7 @@ func _input(e) -> void:
 
 	if Input.is_action_just_pressed("ui_accept"):
 		if battle_controller.manual_increment:
-			battle_controller.increment_queue()
+			battle_controller.increment_event_queue()
 		if not cursor.disabled:
 			on_press_button()
 

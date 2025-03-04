@@ -25,8 +25,8 @@ var dialog: Label
 var scroll_index: int = 0
 var manual_increment: bool = false
 
-var dialog_duration: float = 0.7
-var attack_duration: float = 0.7
+var dialog_duration: float = 0.9
+var attack_duration: float = 0.9
 
 var selected_attack: Dictionary
 
@@ -42,6 +42,7 @@ func _ready() -> void:
 	play_dialog(initial_dialog, true)
 	build_characters()
 	populate_grid()
+	increment_turn_queue()
 
 func add_event(event) -> void:
 	event_queue.append(event)
@@ -49,7 +50,7 @@ func add_event(event) -> void:
 func clear_queue() -> void:
 	event_queue.clear()
 
-func increment_queue() -> void:
+func increment_event_queue() -> void:
 	var event = event_queue.pop_front()
 	if event:
 		match event.type:
@@ -64,7 +65,7 @@ func increment_queue() -> void:
 
 		if event.has("duration") && not manual_increment:
 			await wait(event.duration)
-			increment_queue() # can recursively call itself :O
+			increment_event_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
 	else:
@@ -99,7 +100,7 @@ func handle_attack(event: Dictionary) -> void:
 	var health_result = event.target.take_damage(event.damage)
 	play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!", true)
 	if health_result <= 0:
-		on_target_dies(event.target)
+		on_target_death(event.target)
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
@@ -111,7 +112,7 @@ func on_use_attack(target_cells: Array) -> void:
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration})
 	for target in selected_targets:
 		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage": damage, "duration": attack_duration})
-	increment_queue()
+	increment_event_queue()
 
 func prompt_select_target(attack_name: String) -> Dictionary:
 	var hero_attack = GameData.abilities[attack_name]
@@ -134,7 +135,7 @@ func on_use_item(item_index: int) -> void:
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
 	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration})
-	increment_queue()
+	increment_event_queue()
 
 func on_try_retreat() -> void:
 	cursor.disable()
@@ -145,7 +146,7 @@ func on_try_retreat() -> void:
 		add_event({"type": EventType.RETREAT})
 	else:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration})
-	increment_queue()
+	increment_event_queue()
 
 func calculate_attack_dmg() -> int:
 	var damage: int = selected_attack.damage
@@ -157,17 +158,17 @@ func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration})
 	add_event({"type": EventType.ATTACK, "target": players[0], "damage": enemy_attack.damage, "duration": attack_duration})
-	increment_queue()
+	increment_event_queue()
 	
 func get_enemy_attack() -> Dictionary:
 	var attack_index = randi() % current_player.abilities.size()
 	var attack = current_player.abilities[attack_index]
 	return attack
 
-func on_target_dies(target: Character) -> void:
+func on_target_death(target: Character) -> void:
 		add_event({"type": EventType.DIALOG, "text": target.char_name + " died!"})
 		add_event({"type": EventType.DEATH, "target": target})
-		increment_queue()
+		increment_event_queue()
 
 func resolve_status_effects() -> float:
 	var buff = current_player.buffs.get(selected_attack.type, 0) + 1
@@ -180,7 +181,7 @@ func handle_death(event) -> void:
 	if event.target.is_player:
 		game_controller.switch_to_overworld_scene()
 	else:
-		event.target.free_queue()
+		event.target.queue_free()
 
 func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
@@ -204,6 +205,7 @@ func build_characters() -> void:
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 100, pc_abilities, Vector2i(3, 0), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
+	pc.is_player = true
 	add_child(pc)
 	players.append(pc)
 	
@@ -232,7 +234,6 @@ func build_characters() -> void:
 	players.append(thumper)
 	
 	set_turn_order()
-	increment_turn_queue()
 			
 func populate_grid() -> void:
 	for player in players:
@@ -258,12 +259,7 @@ func set_position_by_grid_coords(character: Character) -> void:
 	character.position = Vector2i(x_pos, y_pos)
 
 func set_turn_order() -> void: # pseudo turn order decider
-	var heros = players.slice(0,2)
-	var enemies = players.slice(2,4)
-	heros.shuffle()
-	enemies.shuffle()
-	heros.append_array(enemies)
-	turn_queue.append_array(heros)
+	turn_queue.append_array([players[0], players[2], players[1], players[3]])
 
 func increment_turn_queue() -> void:
 	var next_player = turn_queue.pop_front()
