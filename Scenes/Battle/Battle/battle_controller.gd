@@ -63,7 +63,7 @@ func increment_event_queue() -> void:
 			EventType.RETREAT:
 				handle_retreat()
 
-		if event.has("duration") && not manual_increment:
+		if event.has("duration"):
 			await wait(event.duration)
 			increment_event_queue() # can recursively call itself :O
 		else:
@@ -97,10 +97,11 @@ func update_dialog_queue() -> void:
 	scroll_index = 1
 
 func handle_attack(event: Dictionary) -> void:
-	var health_result = event.target.take_damage(event.damage)
-	play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!", true)
-	if health_result <= 0:
-		on_target_death(event.target)
+	if event.target.char_name not in filter_list:
+		var health_result = event.target.take_damage(event.damage)
+		play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!", true)
+		if health_result <= 0:
+			on_target_death(event.target)
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
@@ -182,6 +183,7 @@ func handle_death(event) -> void:
 		game_controller.switch_to_overworld_scene()
 	else:
 		event.target.queue_free()
+		filter_list.append(event.target)
 
 func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
@@ -263,6 +265,8 @@ func set_turn_order() -> void: # pseudo turn order decider
 
 func increment_turn_queue() -> void:
 	var next_player = turn_queue.pop_front()
+	if next_player.char_name in filter_list:
+		increment_turn_queue()
 	current_player = next_player
 	play_dialog(current_player.char_name + "'s turn!", true)
 	if turn_queue.is_empty():
