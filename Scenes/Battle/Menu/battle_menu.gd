@@ -10,7 +10,6 @@ extends Control
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
 @onready var battle_controller = $"../BattleController"
 @onready var description_label = $Descriptions/Labels/AbilityDescription
-@onready var enemy = $"../Enemy"
 
 var enemies: Array
 var player_info: Dictionary
@@ -123,7 +122,7 @@ func on_select_ability() -> void:
 	if attack_info.target == GameData.TargetType.ENEMY:
 		if targets_menu.current_grid_type != targets_menu.GridType.ENEMY:
 			targets_menu.activate_enemy_grid()
-	elif attack_info.target == GameData.TargetType.PLAYER:
+	elif attack_info.target == GameData.TargetType.HERO:
 		targets_menu.activate_player_menu()
 	update_selected_menu(GameData.BattleMenuType.TARGETS)
 

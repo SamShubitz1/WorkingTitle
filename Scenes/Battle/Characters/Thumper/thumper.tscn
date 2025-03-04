@@ -1,0 +1,57 @@
+[gd_scene load_steps=8 format=3 uid="uid://dvomnd5imb1vx"]
+
+[ext_resource type="Script" path="res://Classes/base_character.gd" id="1_3lwtn"]
+[ext_resource type="Texture2D" uid="uid://di0oumndkirvh" path="res://Scenes/Battle/Characters/Thumper/Thumper_Combat_Idle1.png" id="2_brmt2"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_saw46"]
+atlas = ExtResource("2_brmt2")
+region = Rect2(0, 15, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r5y6g"]
+atlas = ExtResource("2_brmt2")
+region = Rect2(16, 15, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_saw46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r5y6g")
+}],
+"loop": true,
+"name": &"default",
+"speed": 2.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gsre"]
+bg_color = Color(0.92, 0.1288, 0.1288, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxy7r"]
+bg_color = Color(0.44607, 0.671498, 0.355604, 1)
+
+[node name="Thumper" type="Node2D"]
+position = Vector2(807, 406)
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_3lwtn")
+
+[node name="CharSprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+scale = Vector2(12, 12)
+sprite_frames = SubResource("SpriteFrames_fknt7")
+frame = 1
+frame_progress = 0.575419
+
+[node name="CharHealth" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(200, 0)
+offset_left = -100.0
+offset_top = -134.0
+offset_right = 100.0
+offset_bottom = -111.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_0gsre")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fxy7r")
+max_value = 80.0
+value = 80.0

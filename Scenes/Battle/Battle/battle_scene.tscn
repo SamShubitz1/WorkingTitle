@@ -1,10 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://clg4nd1ekycri"]
+[gd_scene load_steps=13 format=3 uid="uid://clg4nd1ekycri"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_controller.gd" id="1_jktho"]
-[ext_resource type="PackedScene" uid="uid://dk0vha0gj1182" path="res://Scenes/Battle/Characters/enemy.tscn" id="2_lik24"]
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="2_tvtlk"]
 [ext_resource type="Script" path="res://Scenes/Battle/Cursor/battle_cursor.gd" id="3_nifbg"]
-[ext_resource type="PackedScene" uid="uid://cr3t2sex466g6" path="res://Scenes/Battle/Characters/player.tscn" id="3_ugbj4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wgxn4"]
 bg_color = Color(1, 0, 0, 1)
@@ -43,254 +41,250 @@ bg_color = Color(0.44607, 0.671498, 0.355604, 1)
 
 [node name="BattleScene" type="Node2D"]
 
-[node name="BattleController" type="Node" parent="."]
+[node name="BattleController" type="Node2D" parent="."]
 script = ExtResource("1_jktho")
 
-[node name="Enemy" parent="." instance=ExtResource("2_lik24")]
-
-[node name="Player" parent="." instance=ExtResource("3_ugbj4")]
-
-[node name="BattleMenuControl" type="Control" parent="."]
+[node name="BattleMenu" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("2_tvtlk")
 
-[node name="TargetsGrid" type="GridContainer" parent="BattleMenuControl"]
+[node name="TargetsGrid" type="GridContainer" parent="BattleMenu"]
 layout_mode = 0
-offset_left = 120.0
-offset_top = 72.0
-offset_right = 1120.0
-offset_bottom = 452.0
+offset_left = 128.0
+offset_top = 64.0
+offset_right = 1152.0
+offset_bottom = 448.0
 theme_override_constants/h_separation = 10
 columns = 8
 
-[node name="Cell" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell2" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell2" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell3" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell3" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell4" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell4" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell5" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell5" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell6" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell6" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell7" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell7" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell8" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell8" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell9" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell9" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell10" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell10" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell11" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell11" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell12" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell12" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell13" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell13" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell14" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell14" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell15" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell15" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell16" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell16" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell17" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell17" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell18" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell18" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell19" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell19" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell20" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell20" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell21" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell21" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell22" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell22" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell23" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell23" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell24" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell24" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell25" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell25" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell26" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell26" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell27" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell27" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell28" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell28" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell29" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell29" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell30" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell30" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell31" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell31" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="Cell32" type="Panel" parent="BattleMenuControl/TargetsGrid"]
+[node name="Cell32" type="Panel" parent="BattleMenu/TargetsGrid"]
 z_index = -1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_wgxn4")
 
-[node name="BattleMenu" type="Panel" parent="BattleMenuControl"]
+[node name="BattleMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -303,7 +297,7 @@ grow_vertical = 2
 theme = SubResource("Theme_y4e55")
 theme_override_styles/panel = SubResource("StyleBoxFlat_uks1o")
 
-[node name="TargetsMenu" type="Panel" parent="BattleMenuControl"]
+[node name="TargetsMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 32.0
@@ -316,23 +310,23 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_eurhc")
 
-[node name="Menu" type="VBoxContainer" parent="BattleMenuControl/TargetsMenu"]
+[node name="Menu" type="VBoxContainer" parent="BattleMenu/TargetsMenu"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="BattleMenuControl/TargetsMenu/Menu"]
+[node name="Label" type="Label" parent="BattleMenu/TargetsMenu/Menu"]
 layout_mode = 2
 text = "Target Info"
 
-[node name="Background" type="ColorRect" parent="BattleMenuControl"]
+[node name="Background" type="ColorRect" parent="BattleMenu"]
 z_index = -2
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 768.0
 color = Color(0.925479, 0.969422, 0.840045, 1)
 
-[node name="DialogBox" type="Panel" parent="BattleMenuControl"]
+[node name="DialogBox" type="Panel" parent="BattleMenu"]
 z_index = 1
 layout_mode = 1
 offset_left = 320.0
@@ -341,7 +335,7 @@ offset_right = 960.0
 offset_bottom = 767.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_m8nmk")
 
-[node name="BattleLog" type="VBoxContainer" parent="BattleMenuControl/DialogBox"]
+[node name="BattleLog" type="VBoxContainer" parent="BattleMenu/DialogBox"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -350,7 +344,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="BattleLogLabel" type="Label" parent="BattleMenuControl/DialogBox/BattleLog"]
+[node name="BattleLogLabel" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
@@ -358,42 +352,42 @@ theme_override_font_sizes/font_size = 20
 text = "Log"
 vertical_alignment = 1
 
-[node name="Slot1" type="Label" parent="BattleMenuControl/DialogBox/BattleLog"]
+[node name="Slot1" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot2" type="Label" parent="BattleMenuControl/DialogBox/BattleLog"]
+[node name="Slot2" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot3" type="Label" parent="BattleMenuControl/DialogBox/BattleLog"]
+[node name="Slot3" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot4" type="Label" parent="BattleMenuControl/DialogBox/BattleLog"]
+[node name="Slot4" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot5" type="Label" parent="BattleMenuControl/DialogBox/BattleLog"]
+[node name="Slot5" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="MainMenu" type="Panel" parent="BattleMenuControl"]
+[node name="MainMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.25
@@ -402,31 +396,31 @@ offset_top = 511.0
 offset_right = 310.0
 offset_bottom = 727.0
 
-[node name="Menu" type="VBoxContainer" parent="BattleMenuControl/MainMenu"]
+[node name="Menu" type="VBoxContainer" parent="BattleMenu/MainMenu"]
 layout_mode = 0
 offset_right = 320.0
 offset_bottom = 256.0
 theme = SubResource("Theme_om1ud")
 alignment = 1
 
-[node name="CharPanel" type="HBoxContainer" parent="BattleMenuControl/MainMenu/Menu"]
+[node name="CharPanel" type="HBoxContainer" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 
-[node name="NameLabel" type="Label" parent="BattleMenuControl/MainMenu/Menu/CharPanel"]
+[node name="NameLabel" type="Label" parent="BattleMenu/MainMenu/Menu/CharPanel"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "DEENO
 "
 label_settings = SubResource("LabelSettings_g53kf")
 
-[node name="Control" type="Control" parent="BattleMenuControl/MainMenu/Menu/CharPanel"]
+[node name="Control" type="Control" parent="BattleMenu/MainMenu/Menu/CharPanel"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Health" type="ProgressBar" parent="BattleMenuControl/MainMenu/Menu/CharPanel"]
+[node name="Health" type="ProgressBar" parent="BattleMenu/MainMenu/Menu/CharPanel"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -435,262 +429,262 @@ theme_override_styles/background = SubResource("StyleBoxFlat_4cy1y")
 theme_override_styles/fill = SubResource("StyleBoxFlat_xnljf")
 value = 100.0
 
-[node name="Attack" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+[node name="Attack" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Attack"
 alignment = 0
 
-[node name="Move" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+[node name="Move" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Move"
 alignment = 0
 
-[node name="Items" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+[node name="Items" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Items"
 alignment = 0
 
-[node name="Aim" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+[node name="Aim" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Status"
 alignment = 0
 
-[node name="Guard" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+[node name="Guard" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Guard
 "
 alignment = 0
 
-[node name="Retreat" type="Button" parent="BattleMenuControl/MainMenu/Menu"]
+[node name="Retreat" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Retreat"
 alignment = 0
 
-[node name="AbilitiesMenu" type="Panel" parent="BattleMenuControl"]
+[node name="AbilitiesMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 0
 offset_left = 320.0
 offset_top = 511.0
 offset_right = 960.0
 offset_bottom = 767.0
 
-[node name="Menu" type="GridContainer" parent="BattleMenuControl/AbilitiesMenu"]
+[node name="Menu" type="GridContainer" parent="BattleMenu/AbilitiesMenu"]
 custom_minimum_size = Vector2(320, 256)
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 256.0
 columns = 3
 
-[node name="AbilitiesLabel" type="Label" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="AbilitiesLabel" type="Label" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 text = " Abilities
 
 "
 
-[node name="Panel2" type="Panel" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Panel2" type="Panel" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel3" type="Panel" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Panel3" type="Panel" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_1" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_1" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "wtf"
 
-[node name="Ability_2" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_2" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_3" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_3" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_4" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_4" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_5" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_5" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_6" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_6" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_7" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_7" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_8" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_8" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_9" type="Button" parent="BattleMenuControl/AbilitiesMenu/Menu"]
+[node name="Ability_9" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ItemsMenu" type="Panel" parent="BattleMenuControl"]
+[node name="ItemsMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 0
 offset_left = 320.0
 offset_top = 511.0
 offset_right = 960.0
 offset_bottom = 767.0
 
-[node name="Menu" type="GridContainer" parent="BattleMenuControl/ItemsMenu"]
+[node name="Menu" type="GridContainer" parent="BattleMenu/ItemsMenu"]
 custom_minimum_size = Vector2(320, 256)
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 256.0
 columns = 3
 
-[node name="Items" type="Label" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Items" type="Label" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 text = " Items
 "
 
-[node name="Panel2" type="Panel" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Panel2" type="Panel" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel3" type="Panel" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Panel3" type="Panel" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_1" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_1" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_2" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_2" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_3" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_3" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_4" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_4" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_5" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_5" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_6" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_6" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_7" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_7" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_8" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_8" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_9" type="Button" parent="BattleMenuControl/ItemsMenu/Menu"]
+[node name="Ability_9" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot" type="Button" parent="BattleMenuControl/ItemsMenu"]
+[node name="Slot" type="Button" parent="BattleMenu/ItemsMenu"]
 layout_mode = 0
 size_flags_vertical = 3
 alignment = 0
 
-[node name="Slot2" type="Button" parent="BattleMenuControl/ItemsMenu"]
+[node name="Slot2" type="Button" parent="BattleMenu/ItemsMenu"]
 layout_mode = 0
 size_flags_vertical = 3
 alignment = 0
 
-[node name="Slot3" type="Button" parent="BattleMenuControl/ItemsMenu"]
+[node name="Slot3" type="Button" parent="BattleMenu/ItemsMenu"]
 layout_mode = 0
 size_flags_vertical = 3
 alignment = 0
 
-[node name="Slot4" type="Button" parent="BattleMenuControl/ItemsMenu"]
+[node name="Slot4" type="Button" parent="BattleMenu/ItemsMenu"]
 layout_mode = 0
 size_flags_vertical = 3
 alignment = 0
 
-[node name="Slot5" type="Button" parent="BattleMenuControl/ItemsMenu"]
+[node name="Slot5" type="Button" parent="BattleMenu/ItemsMenu"]
 layout_mode = 0
 size_flags_vertical = 3
 alignment = 0
 
-[node name="Descriptions" type="Panel" parent="BattleMenuControl"]
+[node name="Descriptions" type="Panel" parent="BattleMenu"]
 layout_mode = 0
 offset_left = 960.0
 offset_top = 511.0
 offset_right = 1280.0
 offset_bottom = 767.0
 
-[node name="Labels" type="VBoxContainer" parent="BattleMenuControl/Descriptions"]
+[node name="Labels" type="VBoxContainer" parent="BattleMenu/Descriptions"]
 layout_mode = 0
 offset_right = 320.0
 offset_bottom = 256.0
 theme = SubResource("Theme_om1ud")
 alignment = 1
 
-[node name="Label" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+[node name="Label" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Sucker Punch"
 
-[node name="AbilityDescription" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+[node name="AbilityDescription" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label3" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
-layout_mode = 2
-size_flags_vertical = 3
-text = "Text"
-
-[node name="Label4" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+[node name="Label3" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
 
-[node name="Label5" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+[node name="Label4" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
 
-[node name="Label6" type="Label" parent="BattleMenuControl/Descriptions/Labels"]
+[node name="Label5" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
 
-[node name="Cursor" type="Polygon2D" parent="BattleMenuControl"]
+[node name="Label6" type="Label" parent="BattleMenu/Descriptions/Labels"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Text"
+
+[node name="Cursor" type="Polygon2D" parent="BattleMenu"]
 z_index = 1
 position = Vector2(84, 558)
 rotation = 1.5708

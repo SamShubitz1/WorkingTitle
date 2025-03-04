@@ -28,9 +28,14 @@ enum AttackShapes {
 }
 
 enum TargetType {
-	PLAYER,
+	HERO,
 	ENEMY,
 	SELF
+}
+
+enum Alliance {
+	HERO,
+	ENEMY
 }
 
 var abilities: Dictionary = {"Rock" : {"name": "Rock", "type": "Rock", "damage": 20, "description": "A rock based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.DIAMOND}, "Paper": {"name": "Paper", "type": "Paper", "damage": 20, "description": "A paper based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.SQUARE}, "Scissors": {"name": "Scissors", "type": "Scissors", "damage": 20, "description": "A scissors based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.LINE}}
