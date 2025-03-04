@@ -134,6 +134,7 @@ func on_select_target():
 		battle_controller.on_use_attack(target_cells)
 		targets_menu.disactivate()
 		go_back()
+		update_ui()
 	else:
 		battle_controller.on_select_invalid_target()
 
@@ -158,6 +159,10 @@ func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 
 func update_ui() -> void:
+	var next_player_info = battle_controller.get_player_info()
+	if next_player_info.alliance == GameData.Alliance.HERO:
+		player_info = next_player_info
+		
 	char_name_label.text = player_info.name
 
 	for i in range(abilities_menu.buttons.size()):
