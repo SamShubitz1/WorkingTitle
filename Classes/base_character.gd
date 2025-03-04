@@ -5,7 +5,6 @@ class_name Character
 var char_name: String
 var alliance: GameData.Alliance
 var max_health: int
-var is_dead: bool
 var is_player: bool = false
 
 var health_bar: ProgressBar

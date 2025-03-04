@@ -96,11 +96,10 @@ func update_dialog_queue() -> void:
 	scroll_index = 1
 
 func handle_attack(event: Dictionary) -> void:
-	if !event.target.is_dead:
-		var health_result = event.target.take_damage(event.damage)
-		play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!", true)
-		if health_result <= 0:
-			on_target_death(event.target)
+	var health_result = event.target.take_damage(event.damage)
+	play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!", true)
+	if health_result <= 0:
+		on_target_death(event.target)
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
@@ -181,13 +180,11 @@ func handle_death(event) -> void:
 	if event.target.is_player:
 		game_controller.switch_to_overworld_scene()
 	else:
-		event.target.is_dead = true
 		event.target.visible = false
 		battle_grid.current_grid.erase(event.target.grid_position)
-		players = players.filter(func(p): return !p.is_dead)
+		players = players.filter(func(p): return p.char_name != event.target.char_name)
 		event_queue = event_queue.filter(func(e): return e.publisher != event.target.char_name)
 		turn_queue = turn_queue.filter(func(c): return c.char_name != event.target.char_name)
-		print(turn_queue)
 		
 func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
