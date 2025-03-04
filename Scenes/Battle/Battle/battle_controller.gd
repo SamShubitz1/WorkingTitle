@@ -16,7 +16,6 @@ var current_player: Character
 var battle_grid: BaseGrid = BaseGrid.new()
 
 var event_queue: Array
-var filter_list: Array # will be used to filter out obsolete events
 var turn_queue: Array
 
 var initial_dialog: String = "A wild man appears!"
@@ -97,7 +96,7 @@ func update_dialog_queue() -> void:
 	scroll_index = 1
 
 func handle_attack(event: Dictionary) -> void:
-	if event.target.char_name not in filter_list:
+	if !event.target.is_dead:
 		var health_result = event.target.take_damage(event.damage)
 		play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!", true)
 		if health_result <= 0:
@@ -110,9 +109,9 @@ func on_use_attack(target_cells: Array) -> void:
 		if battle_grid.current_grid.has(cell):
 			selected_targets.append(cell)
 	var damage = calculate_attack_dmg()
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
 	for target in selected_targets:
-		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage": damage, "duration": attack_duration})
+		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage": damage, "duration": attack_duration, "publisher": current_player.char_name})
 	increment_event_queue()
 
 func prompt_select_target(attack_name: String) -> Dictionary:
@@ -132,10 +131,10 @@ func on_use_item(item_index: int) -> void:
 	var item = current_player.items.pop_at(item_index) # expensive on large arrays
 	if current_player.items.is_empty():
 		current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
-	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration})
+	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "publisher": current_player.char_name})
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
-	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration})
+	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "publisher": current_player.char_name})
 	increment_event_queue()
 
 func on_try_retreat() -> void:
@@ -157,8 +156,8 @@ func calculate_attack_dmg() -> int:
 
 func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration})
-	add_event({"type": EventType.ATTACK, "target": players[0], "damage": enemy_attack.damage, "duration": attack_duration})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.ATTACK, "target": players[0], "damage": enemy_attack.damage, "duration": attack_duration, "publisher": current_player.char_name})
 	increment_event_queue()
 	
 func get_enemy_attack() -> Dictionary:
@@ -167,7 +166,7 @@ func get_enemy_attack() -> Dictionary:
 	return attack
 
 func on_target_death(target: Character) -> void:
-		add_event({"type": EventType.DIALOG, "text": target.char_name + " died!"})
+		add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 		add_event({"type": EventType.DEATH, "target": target})
 		increment_event_queue()
 
@@ -182,9 +181,14 @@ func handle_death(event) -> void:
 	if event.target.is_player:
 		game_controller.switch_to_overworld_scene()
 	else:
-		event.target.queue_free()
-		filter_list.append(event.target)
-
+		event.target.is_dead = true
+		event.target.visible = false
+		battle_grid.current_grid.erase(event.target.grid_position)
+		players = players.filter(func(p): return !p.is_dead)
+		event_queue = event_queue.filter(func(e): return e.publisher != event.target.char_name)
+		turn_queue = turn_queue.filter(func(c): return c.char_name != event.target.char_name)
+		print(turn_queue)
+		
 func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
@@ -214,7 +218,7 @@ func build_characters() -> void:
 	var runt = runt_scene.instantiate()
 	var runt_abilities = ["Rock", "Paper", "Scissors"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 100, runt_abilities, Vector2i(2, 0), runt_items) # init props will be accessed from somewhere
+	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 80, runt_abilities, Vector2i(2, 0), runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
@@ -222,14 +226,14 @@ func build_characters() -> void:
 	
 	var norman = norman_scene.instantiate()
 	var norman_abilities = ["Rock", "Paper", "Scissors"]
-	norman.init("Norman", GameData.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 80, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
+	norman.init("Norman", GameData.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 20, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
 	var thumper_abilities = ["Rock", "Paper", "Scissors"]
-	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 80, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 100, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
@@ -261,12 +265,11 @@ func set_position_by_grid_coords(character: Character) -> void:
 	character.position = Vector2i(x_pos, y_pos)
 
 func set_turn_order() -> void: # pseudo turn order decider
-	turn_queue.append_array([players[0], players[2], players[1], players[3]])
+	players.shuffle()
+	turn_queue.append_array(players)
 
 func increment_turn_queue() -> void:
 	var next_player = turn_queue.pop_front()
-	if next_player.char_name in filter_list:
-		increment_turn_queue()
 	current_player = next_player
 	play_dialog(current_player.char_name + "'s turn!", true)
 	if turn_queue.is_empty():

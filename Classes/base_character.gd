@@ -5,10 +5,11 @@ class_name Character
 var char_name: String
 var alliance: GameData.Alliance
 var max_health: int
+var is_dead: bool
+var is_player: bool = false
+
 var health_bar: ProgressBar
 var sprite: AnimatedSprite2D
-
-var is_player: bool = false
 
 var attributes = {"Strength": 10, "Flux": 10, "Armor": 10, "Shielding": 10, "Memory": 10, "Power": 10, "Optics": 10, "Mobility": 10}
 
