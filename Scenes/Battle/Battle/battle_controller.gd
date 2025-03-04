@@ -185,7 +185,7 @@ func handle_death(event) -> void:
 		players = players.filter(func(p): return p.char_name != event.target.char_name)
 		event_queue = event_queue.filter(func(e): return e.publisher != event.target.char_name)
 		turn_queue = turn_queue.filter(func(c): return c.char_name != event.target.char_name)
-		
+		print(turn_queue)
 func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
@@ -266,6 +266,8 @@ func set_turn_order() -> void: # pseudo turn order decider
 	turn_queue.append_array(players)
 
 func increment_turn_queue() -> void:
+	if turn_queue.is_empty():
+		set_turn_order()
 	var next_player = turn_queue.pop_front()
 	current_player = next_player
 	play_dialog(current_player.char_name + "'s turn!", true)
