@@ -42,10 +42,10 @@ func _ready() -> void:
 	build_characters()
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": initial_dialog})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 	if current_player.alliance == GameData.Alliance.ENEMY:
 		perform_enemy_attack()
 	else:
-		add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 		increment_event_queue()
 
 func add_event(event) -> void:
@@ -140,7 +140,7 @@ func on_use_item(item_index: int) -> void:
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
 	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "publisher": current_player.char_name})
-	add_event({"type": EventType.END_TURN, "duration": 0})
+	add_event({"type": EventType.END_TURN, "duration": 0, "publisher": current_player.char_name})
 	increment_event_queue()
 
 func on_try_retreat() -> void:
@@ -168,7 +168,6 @@ func perform_enemy_attack() -> void:
 			break
 	
 	var enemy_attack = get_enemy_attack()
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
 	add_event({"type": EventType.ATTACK, "target": target, "damage": enemy_attack.damage, "duration": attack_duration, "publisher": current_player.char_name})
 	add_event({"type": EventType.END_TURN, "duration": 0, "publisher": current_player.char_name})
@@ -180,12 +179,17 @@ func get_enemy_attack() -> Dictionary:
 	return attack
 
 func on_target_death(target: Character) -> void:
+	clear_queue()
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target})
 
 func resolve_status_effects() -> float:
 	var buff = current_player.buffs.get(selected_attack.type, 0) + 1
 	return buff
+	
+func handle_end_turn() -> void:
+	increment_turn_queue()
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "publisher": current_player.char_name})
 
 func handle_retreat() -> void:
 	game_controller.switch_to_overworld_scene()
@@ -200,8 +204,7 @@ func handle_death(event) -> void:
 		event_queue = event_queue.filter(func(e): return !e.has("publisher") || e.publisher != event.target.char_name)
 		turn_queue = turn_queue.filter(func(c): return c.char_name != event.target.char_name)
 		increment_turn_queue()
-		if current_player.alliance == GameData.Alliance.HERO:
-			play_dialog(current_player.char_name + "'s turn!", true)
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 		increment_event_queue()
 
 func check_valid_targets(target_cells: Array) -> bool:
@@ -288,8 +291,3 @@ func increment_turn_queue() -> void:
 		set_turn_order()
 	var next_player = turn_queue.pop_front()
 	current_player = next_player
-	
-func handle_end_turn() -> void:
-	increment_turn_queue()
-		
-		
