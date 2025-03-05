@@ -39,6 +39,7 @@ func _ready() -> void:
 	dialog = dialog_box[0]
 	cursor.disable()
 	build_characters()
+	populate_grid()
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": initial_dialog})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
@@ -54,6 +55,8 @@ func clear_queue() -> void:
 	event_queue.clear()
 
 func increment_event_queue() -> void:
+	manual_increment = false
+	
 	var event = event_queue.pop_front()
 	if event:
 		match event.type:
@@ -167,9 +170,11 @@ func perform_enemy_attack() -> void:
 			break
 	
 	var enemy_attack = get_enemy_attack()
+	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
 	add_event({"type": EventType.ATTACK, "target": target, "damage": enemy_attack.damage, "duration": attack_duration, "publisher": current_player.char_name})
 	add_event({"type": EventType.END_TURN, "duration": 0, "publisher": current_player.char_name})
+	
 	increment_event_queue()
 	
 func get_enemy_attack() -> Dictionary:
@@ -252,8 +257,6 @@ func build_characters() -> void:
 	add_child(thumper)
 	thumper.flip_sprite()
 	players.append(thumper)
-	
-	populate_grid()
 			
 func populate_grid() -> void:
 	for player in players:
