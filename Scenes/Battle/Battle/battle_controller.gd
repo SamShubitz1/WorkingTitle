@@ -10,7 +10,6 @@ var pc_scene = preload("res://Scenes/Battle/Characters/PC/pc.tscn")
 var runt_scene = preload("res://Scenes/Battle/Characters/Runt/runt.tscn")
 
 var players: Array[Character]
-
 var current_player: Character
 
 var battle_grid: BaseGrid = BaseGrid.new()
@@ -179,7 +178,10 @@ func get_enemy_attack() -> Dictionary:
 	return attack
 
 func on_target_death(target: Character) -> void:
-	clear_queue()
+	battle_grid.current_grid.erase(target.grid_position)
+	players = players.filter(func(p): return p.char_name != target.char_name)
+	event_queue = event_queue.filter(func(e): return !e.has("publisher") || e.publisher != target.char_name)
+	turn_queue = turn_queue.filter(func(c): return c.char_name != target.char_name)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target})
 
@@ -199,12 +201,6 @@ func handle_death(event) -> void:
 		game_controller.switch_to_overworld_scene()
 	else:
 		event.target.visible = false
-		battle_grid.current_grid.erase(event.target.grid_position)
-		players = players.filter(func(p): return p.char_name != event.target.char_name)
-		event_queue = event_queue.filter(func(e): return !e.has("publisher") || e.publisher != event.target.char_name)
-		turn_queue = turn_queue.filter(func(c): return c.char_name != event.target.char_name)
-		increment_turn_queue()
-		add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 		increment_event_queue()
 
 func check_valid_targets(target_cells: Array) -> bool:
@@ -227,7 +223,7 @@ func build_characters() -> void:
 	var pc = pc_scene.instantiate()
 	var pc_abilities = ["Rock", "Paper", "Scissors"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 120, pc_abilities, Vector2i(3, 0), pc_items) # init props will be accessed from somewhere
+	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 100, pc_abilities, Vector2i(3, 0), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
@@ -236,7 +232,7 @@ func build_characters() -> void:
 	var runt = runt_scene.instantiate()
 	var runt_abilities = ["Rock", "Paper", "Scissors"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 20, runt_abilities, Vector2i(2, 0), runt_items) # init props will be accessed from somewhere
+	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 80, runt_abilities, Vector2i(2, 0), runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
@@ -244,14 +240,14 @@ func build_characters() -> void:
 	
 	var norman = norman_scene.instantiate()
 	var norman_abilities = ["Rock", "Paper", "Scissors"]
-	norman.init("Norman", GameData.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 20, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
+	norman.init("Norman", GameData.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 80, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
 	var thumper_abilities = ["Rock", "Paper", "Scissors"]
-	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 20, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 100, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
