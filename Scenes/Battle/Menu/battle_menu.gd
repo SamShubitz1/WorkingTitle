@@ -15,7 +15,6 @@ var enemies: Array
 var player_info: Dictionary
 var grid_info: Dictionary
 var initial_cursor_position = Vector2(0, 40)
-
 var options_menu = BaseMenu.new()
 var abilities_menu = BaseMenu.new()
 var items_menu = BaseMenu.new()

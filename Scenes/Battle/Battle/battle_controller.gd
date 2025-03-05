@@ -21,7 +21,6 @@ var turn_queue: Array
 var initial_dialog: String = "Two lil' guys appeared!"
 var battle_log: Array
 var dialog: Label
-var scroll_index: int = 0
 var manual_increment: bool = false
 
 var dialog_duration: float = 0.9
@@ -34,17 +33,20 @@ enum EventType {
 	ATTACK,
 	DEATH,
 	RETREAT,
+	END_TURN
 }
 
 func _ready() -> void:
 	dialog = dialog_box[0]
-	play_dialog(initial_dialog, true)
+	cursor.disable()
 	build_characters()
-	populate_grid()
 	increment_turn_queue()
+	add_event({"type": EventType.DIALOG, "text": initial_dialog})
 	if current_player.alliance == GameData.Alliance.ENEMY:
-		cursor.disable()
 		perform_enemy_attack()
+	else:
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
+		increment_event_queue()
 
 func add_event(event) -> void:
 	event_queue.append(event)
@@ -64,6 +66,8 @@ func increment_event_queue() -> void:
 				handle_death(event)
 			EventType.RETREAT:
 				handle_retreat()
+			EventType.END_TURN:
+				handle_end_turn()
 
 		if event.has("duration"):
 			await wait(event.duration)
@@ -71,11 +75,11 @@ func increment_event_queue() -> void:
 		else:
 			manual_increment = true
 	else:
-		increment_turn_queue()
 		if current_player.alliance == GameData.Alliance.HERO:
+			play_dialog(current_player.char_name + "'s turn!", true)
 			manual_increment = false
 			cursor.enable()
-		if current_player.alliance == GameData.Alliance.ENEMY:
+		elif current_player.alliance == GameData.Alliance.ENEMY:
 			perform_enemy_attack()
 
 func handle_dialog(event: Dictionary) -> void:
@@ -96,7 +100,6 @@ func update_dialog_queue() -> void:
 	dialog_box[0].modulate = Color(1, 1, 0)
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
-	scroll_index = 1
 
 func handle_attack(event: Dictionary) -> void:
 	var health_result = event.target.take_damage(event.damage)
@@ -114,6 +117,7 @@ func on_use_attack(target_cells: Array) -> void:
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
 	for target in selected_targets:
 		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage": damage, "duration": attack_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
 func prompt_select_target(attack_name: String) -> Dictionary:
@@ -137,6 +141,7 @@ func on_use_item(item_index: int) -> void:
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
 	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
 func on_try_retreat() -> void:
@@ -162,10 +167,12 @@ func perform_enemy_attack() -> void:
 		if player.alliance == GameData.Alliance.HERO:
 			target = player
 			break
-			
+	
 	var enemy_attack = get_enemy_attack()
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
 	add_event({"type": EventType.ATTACK, "target": target, "damage": enemy_attack.damage, "duration": attack_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 	
 func get_enemy_attack() -> Dictionary:
@@ -245,7 +252,7 @@ func build_characters() -> void:
 	thumper.flip_sprite()
 	players.append(thumper)
 	
-	set_turn_order()
+	populate_grid()
 			
 func populate_grid() -> void:
 	for player in players:
@@ -275,9 +282,12 @@ func set_turn_order() -> void: # pseudo turn order decider
 	turn_queue.append_array(players)
 	
 func increment_turn_queue() -> void:
-	print(players, turn_queue)
 	if turn_queue.is_empty():
 		set_turn_order()
 	var next_player = turn_queue.pop_front()
 	current_player = next_player
-	play_dialog(current_player.char_name + "'s turn!", true)
+	
+func handle_end_turn() -> void:
+	print("before increment turn in handle end turn: ", current_player.char_name)
+	increment_turn_queue()
+	print("before increment turn in handle end turn: ", current_player.char_name)
