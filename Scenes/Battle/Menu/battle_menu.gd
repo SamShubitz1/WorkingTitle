@@ -29,7 +29,6 @@ func _ready() -> void:
 	player_info = battle_controller.get_player_info()
 	grid_info = battle_controller.get_grid_info()
 	initialize_menus()
-	update_ui()
 	cursor.move_cursor(initial_cursor_position)
 
 func _input(e) -> void:
@@ -59,6 +58,7 @@ func _input(e) -> void:
 		if battle_controller.manual_increment:
 			battle_controller.increment_event_queue()
 		if not cursor.disabled:
+			update_scroll_size()
 			on_press_button()
 
 func go_back():
@@ -131,8 +131,8 @@ func on_select_target():
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
 		battle_controller.on_use_attack(target_cells)
+		abilities_menu.set_scroll_size(player_info.abilities.size()) #will be called on end turn
 		go_back()
-		update_ui()
 	else:
 		battle_controller.on_select_invalid_target()
 
@@ -149,31 +149,11 @@ func on_select_item() -> void:
 	else:
 		log_menu.show_menu()
 		battle_controller.on_use_item(index)
-		update_ui()
 		go_back()
 		items_menu.set_scroll_size(player_info.items.size())
 
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
-
-func update_ui() -> void:
-	var next_player_info = battle_controller.get_player_info()
-	if next_player_info.alliance == GameData.Alliance.HERO:
-		player_info = next_player_info
-		
-	char_name_label.text = player_info.name
-
-	for i in range(abilities_menu.buttons.size()):
-		if i < player_info.abilities.size():
-			abilities_menu.buttons[i].text = player_info.abilities[i].name
-		else:
-			abilities_menu.buttons[i].text = "???"
-
-	for i in range(items_menu.buttons.size()):
-		if i < player_info.items.size():
-			items_menu.buttons[i].text = player_info.items[i].name
-		else:
-			items_menu.buttons[i].text = "-"
 			
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()
@@ -198,7 +178,7 @@ func initialize_menus() -> void:
 	items_menu.init(items_node, items_buttons, cursor, initial_button_position)
 	items_menu.set_scroll_size(player_info.items.size())
 	
-	var targets_buttons = build_targets_grid()
+	var targets_buttons = build_targets_cells()
 	targets_menu.init(targets_node, targets_buttons, cursor, null)
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
@@ -206,8 +186,8 @@ func initialize_menus() -> void:
 	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
 	selected_menu = options_menu
 	selected_menu.activate()
-
-func build_targets_grid() -> Array[Panel]:
+	
+func build_targets_cells() -> Array[Panel]:
 	var cells: Array[Panel]
 	for i in range(32): # battle_controller.get_grid_size()
 		var cell = Panel.new()
@@ -220,3 +200,8 @@ func build_targets_grid() -> Array[Panel]:
 		cells.append(cell)
 		get_node("TargetsGrid").add_child(cell)
 	return cells
+	
+func update_scroll_size() -> void:
+	player_info = battle_controller.get_player_info()
+	abilities_menu.set_scroll_size(player_info.abilities.size())
+	items_menu.set_scroll_size(player_info.items.size())

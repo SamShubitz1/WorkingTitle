@@ -4,6 +4,10 @@ extends Node2D
 @onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
 @onready var cursor = $"../BattleMenu/Cursor"
 
+@onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
+@onready var items_node = $"../BattleMenu/ItemsMenu"
+@onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
+
 var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
 var pc_scene = preload("res://Scenes/Battle/Characters/PC/pc.tscn")
@@ -41,6 +45,7 @@ func _ready() -> void:
 	build_characters()
 	populate_grid()
 	increment_turn_queue()
+	update_ui()
 	add_event({"type": EventType.DIALOG, "text": initial_dialog})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 	if current_player.alliance == GameData.Alliance.ENEMY:
@@ -138,6 +143,7 @@ func on_use_item(item_index: int) -> void:
 	var item = current_player.items.pop_at(item_index) # expensive on large arrays
 	if current_player.items.is_empty():
 		current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
+	update_ui()
 	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "publisher": current_player.char_name})
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
@@ -197,6 +203,7 @@ func resolve_status_effects() -> float:
 func handle_end_turn() -> void:
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "publisher": current_player.char_name})
+	update_ui()
 
 func handle_retreat() -> void:
 	game_controller.switch_to_overworld_scene()
@@ -235,7 +242,7 @@ func build_characters() -> void:
 	players.append(pc)
 	
 	var runt = runt_scene.instantiate()
-	var runt_abilities = ["Rock", "Paper", "Scissors"]
+	var runt_abilities = ["Paper"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 80, runt_abilities, Vector2i(2, 0), runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
@@ -252,7 +259,7 @@ func build_characters() -> void:
 	
 	var thumper = thumper_scene.instantiate()
 	var thumper_abilities = ["Rock", "Paper", "Scissors"]
-	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 100, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 80, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
@@ -290,3 +297,21 @@ func increment_turn_queue() -> void:
 		set_turn_order()
 	var next_player = turn_queue.pop_front()
 	current_player = next_player
+	
+func update_ui() -> void:
+	if current_player.alliance == GameData.Alliance.HERO:	
+		char_name_label.text = current_player.name
+
+		var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
+		for i in range(abilities_buttons.size()):
+			if i < current_player.abilities.size():
+				abilities_buttons[i].text = current_player.abilities[i].name
+			else:
+				abilities_buttons[i].text = "???"
+
+		var items_buttons = items_node.get_child(0).get_children().slice(3)
+		for i in range(items_buttons.size()):
+			if i < current_player.items.size():
+				items_buttons[i].text = current_player.items[i].name
+			else:
+				items_buttons[i].text = "-"
