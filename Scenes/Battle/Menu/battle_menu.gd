@@ -198,7 +198,7 @@ func initialize_menus() -> void:
 	items_menu.init(items_node, items_buttons, cursor, initial_button_position)
 	items_menu.set_scroll_size(player_info.items.size())
 	
-	var targets_buttons = targets_grid.get_children()
+	var targets_buttons = build_targets_grid()
 	targets_menu.init(targets_node, targets_buttons, cursor, null)
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
@@ -206,3 +206,17 @@ func initialize_menus() -> void:
 	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu]
 	selected_menu = options_menu
 	selected_menu.activate()
+
+func build_targets_grid() -> Array[Panel]:
+	var cells: Array[Panel]
+	for i in range(32): # battle_controller.get_grid_size()
+		var cell = Panel.new()
+		cell.size_flags_horizontal = SIZE_EXPAND_FILL
+		cell.size_flags_vertical = SIZE_EXPAND_FILL
+		var style = StyleBoxFlat.new()
+		style.bg_color = Color(1, 0, 0)
+		cell.add_theme_stylebox_override("panel", style)
+		cell.z_index = -1
+		cells.append(cell)
+		get_node("TargetsGrid").add_child(cell)
+	return cells
