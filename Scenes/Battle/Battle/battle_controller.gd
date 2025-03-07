@@ -107,7 +107,9 @@ func handle_attack(event: Dictionary) -> void:
 	var attack_result = event.target.take_damage(event.damage_event)
 	if attack_result.damage:
 		play_dialog(event.target.char_name + " took " + str(attack_result.damage) + " damage!", true)
-	if attack_result.effect_dialog:
+		if attack_result.effect_dialog:
+			add_event({"type": EventType.DIALOG, "text": event.target.char_name + " took " + attack_result.effect_dialog + "!", "duration": dialog_duration})
+	elif attack_result.effect_dialog:
 		play_dialog(event.target.char_name + " took " + attack_result.effect_dialog + "!", true)
 	if event.target.health_bar.value <= 0:
 		on_target_death(event.target)
