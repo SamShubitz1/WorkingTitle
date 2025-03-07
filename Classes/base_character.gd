@@ -61,10 +61,11 @@ func take_damage(damage_event: Dictionary) -> Dictionary:
 		GameData.DamageType.ENERGY:
 			var shielding: float = attributes[GameData.Attributes.SHIELDING]
 			var multiplier: float = 1 - (shielding / 10)
-			
-	health_bar.value -= damage_result
+			damage_result = damage_event.damage * multiplier
+	if damage_result > 0:
+		health_bar.value -= damage_result
 	var event_dialog = resolve_effects(damage_event.effect)
-	return {"damage": damage_result, "dialog": event_dialog}
+	return {"damage": damage_result, "effect_dialog": event_dialog}
 
 func populate_buffs_array() -> void:
 	for i in items_equipped:

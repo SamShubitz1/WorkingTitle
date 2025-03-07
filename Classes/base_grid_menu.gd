@@ -16,8 +16,6 @@ enum Direction {
 }
 
 var targets_grid: Dictionary = {}
-var enemies_grid: Dictionary = {}
-var heroes_grid: Dictionary = {}
 var current_grid_type: GridType = GridType.GLOBAL
 const initial_grid_size: Vector2i = Vector2i(8, 4)
 

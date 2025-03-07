@@ -119,19 +119,14 @@ func on_select_ability() -> void:
 	
 	var attack_name = selected_menu.get_selected_button().text
 	var attack_info = battle_controller.prompt_select_target(attack_name)
+	targets_menu.set_current_shape(attack_info.shape)
 	
 	match attack_info.target_type:
 		GameData.TargetType.ENEMY:
 			targets_menu.activate_enemy_grid()
 		GameData.TargetType.HERO:
 			targets_menu.activate_player_grid()
-			
-	targets_menu.set_current_shape(attack_info.shape)
-	if attack_info.target == GameData.TargetType.ENEMY:
-		if targets_menu.current_grid_type != targets_menu.GridType.ENEMY:
-			targets_menu.activate_enemy_grid()
-	elif attack_info.target == GameData.TargetType.HERO:
-		targets_menu.activate_player_grid()
+	
 	update_selected_menu(GameData.BattleMenuType.TARGETS)
 	
 func on_move() -> void:
