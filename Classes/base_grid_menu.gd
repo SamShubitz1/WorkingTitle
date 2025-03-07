@@ -16,6 +16,8 @@ enum Direction {
 }
 
 var targets_grid: Dictionary = {}
+var enemies_grid: Dictionary = {}
+var heroes_grid: Dictionary = {}
 var current_grid_type: GridType = GridType.GLOBAL
 const initial_grid_size: Vector2i = Vector2i(8, 4)
 
@@ -38,26 +40,28 @@ func update_grid(grid_size: Vector2i):
 			cell_index += 1
 			
 func activate_enemy_grid() -> void:
-	var next_grid_size = Vector2i(initial_grid_size.x / 2, initial_grid_size.y)
-	var enemy_grid: Array
-	for y in range(next_grid_size.y):
-		for x in range(next_grid_size.x):
-			enemy_grid.append(targets_grid[Vector2i(x + next_grid_size.x, (initial_grid_size.y - 1) - y)])
-	buttons = enemy_grid
-	set_scroll_size(buttons.size())
-	set_grid_type(GridType.ENEMY)
-	update_grid(next_grid_size)
-	
+	if current_grid_type != GridType.ENEMY:
+		var next_grid_size = Vector2i(initial_grid_size.x / 2, initial_grid_size.y)
+		var enemy_grid: Array
+		for y in range(next_grid_size.y):
+			for x in range(next_grid_size.x):
+				enemy_grid.append(targets_grid[Vector2i(x + next_grid_size.x, (initial_grid_size.y - 1) - y)])
+		buttons = enemy_grid
+		set_scroll_size(buttons.size())
+		set_grid_type(GridType.ENEMY)
+		update_grid(next_grid_size)
+
 func activate_player_grid() -> void:
-	var next_grid_size = Vector2i(initial_grid_size.x / 2, initial_grid_size.y)
-	var player_grid: Array
-	for y in range(next_grid_size.y):
-		for x in range(next_grid_size.x):
-			player_grid.append(targets_grid[Vector2i(x, y)])
-	buttons = player_grid
-	set_scroll_size(buttons.size())
-	set_grid_type(GridType.PLAYER)
-	update_grid(next_grid_size)
+	if current_grid_type != GridType.PLAYER:
+		var next_grid_size = Vector2i(initial_grid_size.x / 2, initial_grid_size.y)
+		var player_grid: Array
+		for y in range(next_grid_size.y):
+			for x in range(next_grid_size.x):
+				player_grid.append(targets_grid[Vector2i(x, (initial_grid_size.y - 1) - y)])
+		buttons = player_grid
+		set_scroll_size(buttons.size())
+		set_grid_type(GridType.PLAYER)
+		update_grid(next_grid_size)
 
 func get_targeted_cells() -> Array:
 	var selected_coords = [targets_grid.find_key(selected_button)]

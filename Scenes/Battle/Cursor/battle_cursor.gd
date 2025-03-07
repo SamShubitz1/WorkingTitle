@@ -17,3 +17,5 @@ func move_cursor(button_position: Vector2i) -> void:
 			self.position = button_position + items_offset
 		GameData.BattleMenuType.TARGETS:
 			self.color = Color(1, 1, 1, 0)
+		GameData.BattleMenuType.MOVEMENT:
+			self.color = Color(1, 1, 1, 0)

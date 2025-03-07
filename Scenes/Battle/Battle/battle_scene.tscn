@@ -184,7 +184,7 @@ size_flags_vertical = 3
 [node name="NameLabel" type="Label" parent="BattleMenu/MainMenu/Menu/CharPanel"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "DEENO
+text = "
 "
 label_settings = SubResource("LabelSettings_g53kf")
 
@@ -273,7 +273,6 @@ size_flags_vertical = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-text = "wtf"
 
 [node name="Ability_2" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2

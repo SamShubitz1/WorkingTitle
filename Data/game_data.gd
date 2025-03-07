@@ -12,7 +12,8 @@ enum BattleMenuType {
 	ABILITIES,
 	ITEMS,
 	TARGETS,
-	LOG
+	LOG,
+	MOVEMENT
 }
 
 enum MenuType {
@@ -27,6 +28,12 @@ enum AttackShapes {
 	DIAMOND
 }
 
+enum DamageType {
+	PHYSICAL,
+	ENERGY,
+	NONE
+}
+
 enum TargetType {
 	HERO,
 	ENEMY,
@@ -38,7 +45,43 @@ enum Alliance {
 	ENEMY
 }
 
-var abilities: Dictionary = {"Rock" : {"name": "Rock", "type": "Rock", "damage": 20, "description": "A rock based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.DIAMOND}, "Paper": {"name": "Paper", "type": "Paper", "damage": 20, "description": "A paper based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.SQUARE}, "Scissors": {"name": "Scissors", "type": "Scissors", "damage": 20, "description": "A scissors based attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.LINE}}
+enum Attributes {
+	STRENGTH,
+	FLUX,
+	ARMOR,
+	SHIELDING,
+	MEMORY,
+	BATTERY,
+	OPTICS,
+	MOBILITY,
+	NONE
+}
+
+enum EffectTypes {
+	STATUS,
+	ATTRIBUTE,
+	AILMENT
+}
+
+# abilties deals damage, heal, affects attributes + or -, changes status
+#damage or heal, status_effect: effect and magnitude,
+# ability affects this property this much --- abilitiy_effect = {"magnitude": -.2, "property": strength}
+
+# name: string
+# attribute_bonus: Enum Attributes
+# damage_type: PHYSICAL, ENERGY
+# damage: int
+# description: string
+# target: ENEMY, HERO, SELF
+# shape: SINGLE, DIAMOND, LINE, SQUARE
+# effect: {"type": ATTRIBUTES, "value": -2, "effected_property": Attributes.ARMOR}
+
+
+
+var abilities: Dictionary = {
+	"Clobber": {"name": "Clobber", "damage_type": DamageType.PHYSICAL, "damage": 80, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.SINGLE, "effect": {}},
+	"Laser": {"name": "Laser", "damage_type": DamageType.ENERGY, "damage": 60, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A laser attack that deals damage to all enemies in a line", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.LINE, "effect": {}}, "Bite": {"name": "Bite", "damage_type": DamageType.PHYSICAL, "damage": 70, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.SINGLE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_dialog": "-1 armor"}},
+	"Reinforce": {"name": "Reinforce", "damage_type": DamageType.NONE, "damage": 0, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increase armor in a line", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.LINE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_dialog": "+1 armor"}}}
 
 var items: Dictionary = {"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "effect_description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3}, "Sharpener":{"name": "Sharpener", "effect_type": "Scissors", "effect_description": "Scissors attack went up!", "menu_description": "Adds damage to scissors attacks", "multiplier": .3}, "Extra Paper":{"name": "Extra Paper", "effect_type": "Paper", "effect_description": "Paper attack went up!", "menu_description": "Adds damage to paper attacks", "multiplier": .3}}
 

@@ -6,11 +6,10 @@ var char_name: String
 var alliance: GameData.Alliance
 var max_health: int
 var is_player: bool = false
-
 var health_bar: ProgressBar
 var sprite: AnimatedSprite2D
 
-var attributes = {"Strength": 10, "Flux": 10, "Armor": 10, "Shielding": 10, "Memory": 10, "Power": 10, "Optics": 10, "Mobility": 10}
+var attributes = {GameData.Attributes.STRENGTH: 1, GameData.Attributes.FLUX: 1, GameData.Attributes.ARMOR: 1, GameData.Attributes.SHIELDING: 1, GameData.Attributes.MEMORY: 1, GameData.Attributes.BATTERY: 1, GameData.Attributes.OPTICS: 1, GameData.Attributes.MOBILITY: 1}
 
 var items: Array
 var abilities: Array
@@ -51,13 +50,35 @@ func set_items(items: Array) -> void:
 		char_items.append(GameData.items[item])
 	self.items = char_items
 
-func take_damage(damage: int) -> int:
-	health_bar.value -= damage
-	return health_bar.value
+func take_damage(damage_event: Dictionary) -> Dictionary:
+	var damage_type = damage_event.damage_type
+	var damage_result: int
+	match damage_type:
+		GameData.DamageType.PHYSICAL:
+			var armor: float = attributes[GameData.Attributes.ARMOR]
+			var multiplier: float = 1 - (armor / 10)
+			damage_result = damage_event.damage * multiplier
+		GameData.DamageType.ENERGY:
+			var shielding: float = attributes[GameData.Attributes.SHIELDING]
+			var multiplier: float = 1 - (shielding / 10)
+			
+	health_bar.value -= damage_result
+	var event_dialog = resolve_effects(damage_event.effect)
+	return {"damage": damage_result, "dialog": event_dialog}
 
 func populate_buffs_array() -> void:
 	for i in items_equipped:
 		buffs[i.effect_type] = i.multiplier
+
+func resolve_effects(effect: Dictionary):
+	if !effect.is_empty():
+		var property = effect.affected_property
+		var value = effect.effect_value
+		var dialog = effect.effect_dialog
+		attributes[property] += value
+		if dialog:
+			return dialog
+
 
 func flip_sprite() -> void:
 	sprite.flip_h = true

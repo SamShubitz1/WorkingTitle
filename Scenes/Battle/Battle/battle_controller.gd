@@ -40,12 +40,8 @@ enum EventType {
 }
 
 func _ready() -> void:
-	dialog = dialog_box[0]
 	cursor.disable()
-	build_characters()
-	populate_grid()
-	increment_turn_queue()
-	update_ui()
+	initialize_battle()
 	add_event({"type": EventType.DIALOG, "text": initial_dialog})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 	if current_player.alliance == GameData.Alliance.ENEMY:
@@ -108,9 +104,12 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 
 func handle_attack(event: Dictionary) -> void:
-	var health_result = event.target.take_damage(event.damage)
-	play_dialog(event.target.char_name + " took " + str(event.damage) + " damage!", true)
-	if health_result <= 0:
+	var attack_result = event.target.take_damage(event.damage_event)
+	if attack_result.damage:
+		play_dialog(event.target.char_name + " took " + str(attack_result.damage) + " damage!", true)
+	if attack_result.dialog:
+		add_event({"type": EventType.DIALOG, "text": event.target.char_name + " took " + attack_result.dialog + " damage!", "duration": dialog_duration})
+	if event.target.health_bar.value <= 0:
 		on_target_death(event.target)
 
 func on_use_attack(target_cells: Array) -> void:
@@ -119,10 +118,10 @@ func on_use_attack(target_cells: Array) -> void:
 	for cell in target_cells: # move to base grid
 		if battle_grid.current_grid.has(cell):
 			selected_targets.append(cell)
-	var damage = calculate_attack_dmg()
+	var damage_event = calculate_attack_dmg()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
 	for target in selected_targets:
-		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage": damage, "duration": attack_duration, "publisher": current_player.char_name})
+		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "publisher": current_player.char_name})
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
@@ -130,7 +129,7 @@ func prompt_select_target(attack_name: String) -> Dictionary:
 	var hero_attack = GameData.abilities[attack_name]
 	selected_attack = hero_attack
 	play_dialog("Select a target!", false)
-	return {"target": hero_attack.target, "shape": hero_attack.shape}
+	return {"target": hero_attack.target, "shape": hero_attack.shape, "target_type": selected_attack.target_type}
 
 func cancel_select_target() -> void:
 	selected_attack = {}
@@ -144,6 +143,7 @@ func on_use_item(item_index: int) -> void:
 	if current_player.items.is_empty():
 		current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
 	update_ui()
+	
 	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "publisher": current_player.char_name})
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
@@ -162,11 +162,21 @@ func on_try_retreat() -> void:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration})
 	increment_event_queue()
 
-func calculate_attack_dmg() -> int:
+func calculate_attack_dmg() -> Dictionary:
 	var damage: int = selected_attack.damage
-	var multiplier: float = resolve_status_effects()
-	damage *= multiplier
-	return damage
+	var damage_with_range = damage * randf_range(.9, 1.1)
+	var effect: Dictionary = selected_attack.effect
+	var attribute_multiplier = resolve_attribute_bonuses()
+	if attribute_multiplier:
+		damage *= float(attribute_multiplier)
+	return {"damage": damage_with_range, "damage_type": selected_attack.damage_type, "effect": effect}
+	
+func resolve_attribute_bonuses():
+	var attribute = selected_attack.attribute_bonus
+	if attribute != GameData.Attributes.NONE:
+		var value: float = current_player.attributes[attribute]
+		var multiplier: float = 1 + (value / 10)
+		return multiplier
 
 func perform_enemy_attack() -> void:
 	var target
@@ -176,9 +186,10 @@ func perform_enemy_attack() -> void:
 			break
 	
 	var enemy_attack = get_enemy_attack()
+	var damage_event = calculate_attack_dmg()
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
-	add_event({"type": EventType.ATTACK, "target": target, "damage": enemy_attack.damage, "duration": attack_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": attack_duration, "publisher": current_player.char_name})
 	add_event({"type": EventType.END_TURN, "duration": 0, "publisher": current_player.char_name})
 	
 	increment_event_queue()
@@ -186,18 +197,19 @@ func perform_enemy_attack() -> void:
 func get_enemy_attack() -> Dictionary:
 	var attack_index = randi() % current_player.abilities.size()
 	var attack = current_player.abilities[attack_index]
+	selected_attack = attack
 	return attack
 
 func on_target_death(target: Character) -> void:
 	battle_grid.current_grid.erase(target.grid_position)
 	players = players.filter(func(p): return p.char_name != target.char_name)
-	event_queue = event_queue.filter(func(e): return !e.has("publisher") || e.publisher != target.char_name)
+	event_queue = event_queue.filter(func(e): return !e.has("publisher") || e.publisher != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.char_name != target.char_name)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target})
-
-func resolve_status_effects() -> float:
-	var buff = current_player.buffs.get(selected_attack.type, 0) + 1
+	
+func resolve_item_effect() -> float:
+	var buff = current_player.buffs.get(selected_attack.damage_type, 0) + 1
 	return buff
 	
 func handle_end_turn() -> void:
@@ -233,33 +245,33 @@ func check_valid_targets(target_cells: Array) -> bool:
 
 func build_characters() -> void:
 	var pc = pc_scene.instantiate()
-	var pc_abilities = ["Rock", "Paper", "Scissors"]
+	var pc_abilities = ["Clobber", "Laser"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 100, pc_abilities, Vector2i(3, 0), pc_items) # init props will be accessed from somewhere
+	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
 	players.append(pc)
 	
 	var runt = runt_scene.instantiate()
-	var runt_abilities = ["Paper"]
+	var runt_abilities = ["Bite", "Reinforce"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 80, runt_abilities, Vector2i(2, 0), runt_items) # init props will be accessed from somewhere
+	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
 	runt.flip_sprite()
 	
 	var norman = norman_scene.instantiate()
-	var norman_abilities = ["Rock", "Paper", "Scissors"]
-	norman.init("Norman", GameData.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 80, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
+	var norman_abilities = ["Clobber"]
+	norman.init("Norman", GameData.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
-	var thumper_abilities = ["Rock", "Paper", "Scissors"]
-	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 80, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	var thumper_abilities = ["Clobber", "Bite"]
+	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
@@ -315,3 +327,10 @@ func update_ui() -> void:
 				items_buttons[i].text = current_player.items[i].name
 			else:
 				items_buttons[i].text = "-"
+				
+func initialize_battle() -> void:
+	dialog = dialog_box[0]
+	build_characters()
+	populate_grid()
+	increment_turn_queue()
+	update_ui()
