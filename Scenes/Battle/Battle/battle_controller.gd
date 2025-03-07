@@ -170,8 +170,8 @@ func calculate_attack_dmg() -> Dictionary:
 	var effect: Dictionary = selected_attack.effect
 	var attribute_multiplier = resolve_attribute_bonuses()
 	if attribute_multiplier:
-		damage *= float(attribute_multiplier)
-	return {"damage": damage_with_range, "damage_type": selected_attack.damage_type, "effect": effect}
+		damage_with_range *= float(attribute_multiplier)
+	return {"damage": int(damage_with_range), "damage_type": selected_attack.damage_type, "effect": effect}
 	
 func resolve_attribute_bonuses():
 	var attribute = selected_attack.attribute_bonus

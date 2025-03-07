@@ -76,8 +76,6 @@ enum EffectTypes {
 # shape: SINGLE, DIAMOND, LINE, SQUARE
 # effect: {"type": ATTRIBUTES, "value": -2, "effected_property": Attributes.ARMOR}
 
-
-
 var abilities: Dictionary = {
 	"Clobber": {"name": "Clobber", "damage_type": DamageType.PHYSICAL, "damage": 80, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.SINGLE, "effect": {}},
 	"Laser": {"name": "Laser", "damage_type": DamageType.ENERGY, "damage": 60, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.LINE, "effect": {}}, "Bite": {"name": "Bite", "damage_type": DamageType.PHYSICAL, "damage": 70, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": 2, "target": TargetType.ENEMY, "shape": AttackShapes.SINGLE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_dialog": "-1 armor"}},
