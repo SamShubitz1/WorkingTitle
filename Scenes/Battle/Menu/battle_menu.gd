@@ -11,8 +11,7 @@ extends Control
 @onready var battle_controller = $"../BattleController"
 @onready var description_label = $Descriptions/Labels/AbilityDescription
 
-var enemies: Array
-var player_info: Dictionary
+var current_player: Node
 #var grid_info: Dictionary
 var initial_cursor_position = Vector2(0, 40)
 var options_menu = BaseMenu.new()
@@ -127,11 +126,14 @@ func on_select_ability() -> void:
 		GameData.TargetType.HERO:
 			targets_menu.activate_player_grid()
 	
-	update_selected_menu(GameData.BattleMenuType.TARGETS)
+	update_selected_menu(Data.BattleMenuType.TARGETS)
 	
 func on_move() -> void:
-	targets_menu.activate_player_grid()
 	update_selected_menu(GameData.BattleMenuType.MOVEMENT)
+	movement_menu.activate_player_grid()
+	movement_menu.set_current_shape(Data.AttackShapes.SINGLE)
+	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
+	
 	
 func on_select_target():
 	log_menu.show_menu()
@@ -139,7 +141,7 @@ func on_select_target():
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
 		battle_controller.on_use_attack(target_cells)
-		abilities_menu.set_scroll_size(player_info.abilities.size()) #will be called on end turn
+		abilities_menu.set_scroll_size(current_player.abilities.size()) #will be called on end turn
 		go_back()
 	else:
 		battle_controller.on_select_invalid_target()
@@ -151,14 +153,14 @@ func on_cancel_target_select() -> void:
 
 func on_select_item() -> void:
 	var index = selected_menu.get_selected_button_index()
-	var item_name = player_info.items[index].name
+	var item_name = current_player.items[index].name
 	if item_name == "Empty":
 		go_back()
 	else:
 		log_menu.show_menu()
 		battle_controller.on_use_item(index)
 		go_back()
-		items_menu.set_scroll_size(player_info.items.size())
+		items_menu.set_scroll_size(current_player.items.size())
 
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
@@ -169,10 +171,10 @@ func on_select_movement() -> void:
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()
 	if selected_menu == abilities_menu:
-		description_label.text = player_info.abilities[index].description
+		description_label.text = current_player.abilities[index].description
 	elif selected_menu == items_menu:
-		if index < player_info.items.size():
-			description_label.text = player_info.items[index].menu_description
+		if index < current_player.items.size():
+			description_label.text = current_player.items[index].menu_description
 			
 func initialize_menus() -> void:
 	var initial_button_position = Vector2i(0, 65)
@@ -189,7 +191,8 @@ func initialize_menus() -> void:
 	
 	var targets_buttons = build_targets_cells()
 	targets_menu.init(targets_node, targets_buttons, cursor, null)
-	movement_menu.init(targets_node, targets_buttons, cursor, null)
+	
+	movement_menu.init(targets_node, targets_buttons, cursor, null, false)
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
 	
@@ -212,6 +215,6 @@ func build_targets_cells() -> Array[Panel]:
 	return cells
 	
 func update_scroll_size() -> void:
-	player_info = battle_controller.get_player_info()
-	abilities_menu.set_scroll_size(player_info.abilities.size())
-	items_menu.set_scroll_size(player_info.items.size())
+	current_player = battle_controller.get_current_player()
+	abilities_menu.set_scroll_size(current_player.abilities.size())
+	items_menu.set_scroll_size(current_player.items.size())

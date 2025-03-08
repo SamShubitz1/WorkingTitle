@@ -17,27 +17,30 @@ enum Direction {
 
 var targets_grid: Dictionary = {}
 var current_grid_type: GridType = GridType.GLOBAL
-var initial_cells: Array[Panel]
+var global_cells: Array[Panel]
+var range_of_movement: Vector2i
+
 const initial_grid_size: Vector2i = Vector2i(8, 4)
 
 var current_shape: GameData.AttackShapes
 
-func init(menu: Node, menu_buttons: Array, menu_cursor: BaseCursor, initial_button_position = null) -> void:
-	super.init(menu, menu_buttons, menu_cursor)
-	initial_cells = menu_buttons
+func init(menu: Node, buttons: Array, menu_cursor: BaseCursor, initial_button_position = null, wrap = true) -> void:
+	super.init(menu, buttons, menu_cursor)
+	global_cells = buttons
 	update_grid(initial_grid_size)
-	for button in menu_buttons:
+	for button in buttons:
 		button.modulate.a = .1
 	
 func update_grid(grid_size: Vector2i):
 	targets_grid = {}
 	var rows = grid_size.y
 	var cell_index = 0
-	for y in range(grid_size.y):
+	for y in range(rows):
 		for x in range(grid_size.x):
 			var grid_coords = Vector2i(x, rows - (y + 1))
 			targets_grid[grid_coords] = buttons[cell_index]
 			cell_index += 1
+	update_selected_cell(Vector2i(3,0))
 			
 func activate_enemy_grid() -> void:
 	if current_grid_type != GridType.ENEMY:
@@ -60,31 +63,31 @@ func activate_player_grid() -> void:
 func get_enemy_cells() -> Array:
 	var enemy_cells: Array
 	var columns = initial_grid_size.x
-	var rows = initial_grid_size.y
-	for i in range(initial_cells.size()):
+	for i in range(global_cells.size()):
 		if i % columns == columns / 2:
 			for j in range(columns / 2):
-				enemy_cells.append(initial_cells[i + j])
+				enemy_cells.append(global_cells[i + j])
 	return enemy_cells
 				
 func get_player_cells() -> Array:
-	var enemy_cells: Array
+	var player_cells: Array
 	var columns = initial_grid_size.x
-	var rows = initial_grid_size.y
-	for i in range(initial_cells.size()):
+	for i in range(global_cells.size()):
 		if i % columns == 0:
 			for j in range(columns / 2):
-				enemy_cells.append(initial_cells[i + j])
-	return enemy_cells
+				player_cells.append(global_cells[i + j])
+	return player_cells
 		
 func get_targeted_cells() -> Array:
 	var selected_coords = [targets_grid.find_key(selected_button)]
 	selected_coords.append_array(get_neighbor_coords(selected_coords[0]))
 	var global_coords: Array
-	for coord in selected_coords:
-		coord.x += 4
-		global_coords.append(coord)
-	return global_coords
+	if current_grid_type == GridType.ENEMY:
+		for coord in selected_coords:
+			coord.x += 4
+			global_coords.append(coord)
+		selected_coords = global_coords
+	return selected_coords
 
 func navigate_forward(e: InputEvent) -> void:
 	if is_active:
@@ -99,20 +102,20 @@ func navigate_backward(e: InputEvent) -> void:
 			move_up()
 		elif e.keycode == KEY_LEFT || e.keycode == KEY_A:
 			move_left()
-			
+
 func move_up() -> void:
 	var coords = targets_grid.find_key(selected_button)
 	var next_coords: Vector2i
-	if coords.y == 3: # should be a dynamic value
+	if coords.y == initial_grid_size.y - 1:
 		next_coords = Vector2i(coords.x, 0)
 	else:
 		next_coords = Vector2i(coords.x, coords.y + 1)
 	update_selected_cell(next_coords)
-	
+
 func move_down() -> void:
 	var coords = targets_grid.find_key(selected_button)
 	var next_coords: Vector2i
-	if coords.y == 0: # should be a dynamic value
+	if coords.y == 0:
 		next_coords = Vector2i(coords.x, 3)
 	else:
 		next_coords = Vector2i(coords.x, coords.y - 1)
@@ -121,7 +124,7 @@ func move_down() -> void:
 func move_left() -> void:
 	var coords = targets_grid.find_key(selected_button)
 	var next_coords: Vector2i
-	if coords.x == 0: # should be a dynamic value
+	if coords.x == 0:
 		next_coords = Vector2i(3, coords.y)
 	else:
 		next_coords = Vector2i(coords.x - 1, coords.y)
@@ -155,7 +158,8 @@ func update_selected_cell(next_coords) -> void:
 	var neighbor_coords = get_neighbor_coords(next_coords)
 	for coords in neighbor_coords:
 		var neighbor = targets_grid[coords]
-		neighbor.modulate = Color(1, 1, 0, .3)
+		neighbor.modulate = get_cell_color()
+		neighbor.modulate.a = .3
 	selected_button = targets_grid[next_coords]
 	selected_button.modulate.a = 0.5
 	
@@ -186,3 +190,13 @@ func get_neighbor_coords(origin_coords: Vector2i) -> Array:
 func reset_cells() -> void:
 	for button in buttons:
 		button.modulate.a = 0.1
+		
+func set_range(origin: Vector2i, range: Vector2i) -> void:
+	range_of_movement = range
+	update_selected_cell(origin)
+	
+func get_cell_color() -> Color:
+	if current_grid_type == GridType.ENEMY:
+		return Color(1, 0, 0)
+	else:
+		return Color(.2, 1, 1)

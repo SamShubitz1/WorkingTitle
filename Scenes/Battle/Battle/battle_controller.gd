@@ -26,7 +26,7 @@ var battle_log: Array
 var dialog: Label
 var manual_increment: bool = false
 
-var dialog_duration: float = 0.9
+var dialog_duration: float = 0.7
 var attack_duration: float = 0.9
 
 var selected_attack: Dictionary
@@ -131,7 +131,7 @@ func prompt_select_target(attack_name: String) -> Dictionary:
 	var hero_attack = GameData.abilities[attack_name]
 	selected_attack = hero_attack
 	play_dialog("Select a target!", false)
-	return {"target": hero_attack.target, "shape": hero_attack.shape, "target_type": selected_attack.target_type}
+	return {"shape": hero_attack.shape, "target_type": selected_attack.target_type}
 
 func cancel_select_target() -> void:
 	selected_attack = {}
@@ -233,10 +233,10 @@ func check_valid_targets(target_cells: Array) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
 	for cell in occupied_cells:
-		if selected_attack.target == GameData.TargetType.ENEMY:
+		if selected_attack.target_type == GameData.TargetType.ENEMY:
 			if cell.x > 3: # if master grid width is constant, will always be '3'
 				valid_targets.append(cell)
-		elif selected_attack.target == GameData.TargetType.HERO:
+		elif selected_attack.target_type == GameData.TargetType.HERO:
 			if cell.x < 4:
 				valid_targets.append(cell)
 	var is_valid_target: bool = false
@@ -290,8 +290,8 @@ func set_grid_cells() -> Vector2i:
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
 	
-func get_player_info() -> Dictionary:
-	return {"name": current_player.char_name, "abilities": current_player.abilities, "items": current_player.items, "alliance": current_player.alliance}
+func get_current_player() -> Node:
+	return current_player
 	
 func get_grid_info() -> Dictionary:
 	return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
