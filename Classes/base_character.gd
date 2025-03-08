@@ -31,8 +31,8 @@ func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: Anim
 	set_grid_position(grid_position)
 	sprite.play()
 
-func set_grid_position(grid_position: Vector2i):
-	self.grid_position = grid_position
+func set_grid_position(next_position: Vector2i):
+	self.grid_position = next_position
 	
 func set_health() -> void:
 	health_bar.max_value = max_health
@@ -62,12 +62,10 @@ func take_damage(damage_event: Dictionary) -> Dictionary:
 			var shielding: float = attributes[GameData.Attributes.SHIELDING]
 			var multiplier: float = 1 - (shielding / 10)
 			damage_result = damage_event.damage * multiplier
-			
 	if damage_result > 0:
 		health_bar.value -= damage_result
 	
 	var event_dialog = resolve_effects(damage_event.effect)
-	
 	return {"damage": damage_result, "effect_dialog": event_dialog}
 
 func populate_buffs_array() -> void:
@@ -82,7 +80,6 @@ func resolve_effects(effect: Dictionary):
 		attributes[property] += value
 		if dialog:
 			return dialog
-
 
 func flip_sprite() -> void:
 	sprite.flip_h = true

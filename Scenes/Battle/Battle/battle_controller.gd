@@ -123,10 +123,13 @@ func on_use_attack(target_cells: Array) -> void:
 	for cell in target_cells: # move to base grid
 		if battle_grid.current_grid.has(cell):
 			selected_targets.append(cell)
-	var damage_event = calculate_attack_dmg()
+	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player.char_name})
+	
 	for target in selected_targets:
+		var damage_event = calculate_attack_dmg()
 		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "emitter": current_player.char_name})
+		
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
