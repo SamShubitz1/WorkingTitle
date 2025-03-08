@@ -64,11 +64,11 @@ func go_back():
 		log_menu.show_menu()
 		items_menu.hide_menu()
 		abilities_menu.hide_menu()
-		update_selected_menu(GameData.BattleMenuType.OPTIONS)
+		update_selected_menu(Data.BattleMenuType.OPTIONS)
 		description_label.text = ""
 
 func navigate_log() -> void:
-	update_selected_menu(GameData.BattleMenuType.LOG)
+	update_selected_menu(Data.BattleMenuType.LOG)
 
 func update_selected_menu(selected_menu_index: int) -> void:
 	selected_menu.disactivate()
@@ -102,12 +102,12 @@ func on_select_option() -> void:
 	match selected_menu.get_selected_button().text:
 		" Attack":
 			log_menu.hide_menu()
-			update_selected_menu(GameData.BattleMenuType.ABILITIES)
+			update_selected_menu(Data.BattleMenuType.ABILITIES)
 		" Move":
 			on_move()
 		" Items":
 			log_menu.hide_menu()
-			update_selected_menu(GameData.BattleMenuType.ITEMS)
+			update_selected_menu(Data.BattleMenuType.ITEMS)
 		" Status":
 			pass
 		" Retreat":
@@ -124,16 +124,15 @@ func on_select_ability() -> void:
 		GameData.TargetType.ENEMY:
 			targets_menu.activate_enemy_grid()
 		GameData.TargetType.HERO:
-			targets_menu.activate_player_grid()
+			targets_menu.activate_hero_grid()
 	
 	update_selected_menu(Data.BattleMenuType.TARGETS)
 	
 func on_move() -> void:
 	update_selected_menu(GameData.BattleMenuType.MOVEMENT)
-	movement_menu.activate_player_grid()
+	movement_menu.activate_hero_grid()
 	movement_menu.set_current_shape(Data.AttackShapes.SINGLE)
 	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
-	
 	
 func on_select_target():
 	log_menu.show_menu()
@@ -148,7 +147,7 @@ func on_select_target():
 
 func on_cancel_target_select() -> void:
 	log_menu.hide_menu()
-	update_selected_menu(GameData.BattleMenuType.ABILITIES)
+	update_selected_menu(Data.BattleMenuType.ABILITIES)
 	battle_controller.cancel_select_target()
 
 func on_select_item() -> void:
@@ -207,7 +206,7 @@ func build_targets_cells() -> Array[Panel]:
 		cell.size_flags_horizontal = SIZE_EXPAND_FILL
 		cell.size_flags_vertical = SIZE_EXPAND_FILL
 		var style = StyleBoxFlat.new()
-		style.bg_color = Color(1, 0, 0)
+		style.bg_color = Color(1, 1, 1)
 		cell.add_theme_stylebox_override("panel", style)
 		cell.z_index = -1
 		cells.append(cell)
