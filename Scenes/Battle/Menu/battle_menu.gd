@@ -136,7 +136,7 @@ func on_move() -> void:
 	
 func on_select_target():
 	log_menu.show_menu()
-	var target_cells = targets_menu.get_targeted_cells()
+	var target_cells = targets_menu.get_targeted_cell_coords()
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
 		battle_controller.on_use_attack(target_cells)
@@ -165,7 +165,9 @@ func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 	
 func on_select_movement() -> void:
-	var cell = movement_menu.get_targeted_cells()
+	var cells = movement_menu.get_targeted_cell_coords()
+	battle_controller.on_movement(cells)
+	go_back()
 			
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()

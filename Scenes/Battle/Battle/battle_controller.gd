@@ -34,6 +34,7 @@ var selected_attack: Dictionary
 enum EventType {
 	DIALOG,
 	ATTACK,
+	MOVEMENT,
 	DEATH,
 	RETREAT,
 	END_TURN
@@ -65,6 +66,8 @@ func increment_event_queue() -> void:
 				handle_dialog(event)
 			EventType.ATTACK:
 				handle_attack(event)
+			EventType.MOVEMENT:
+				handle_movement(event)
 			EventType.DEATH:
 				handle_death(event)
 			EventType.RETREAT:
@@ -201,6 +204,18 @@ func get_enemy_attack() -> Dictionary:
 	var attack = current_player.abilities[attack_index]
 	selected_attack = attack
 	return attack
+	
+func on_movement(next_coords: Array) -> void:
+	cursor.disable()
+	add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": attack_duration})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
+	add_event({"type": EventType.END_TURN, "duration": 0})
+	increment_event_queue()
+
+func handle_movement(event: Dictionary) -> void:
+	var target = event.target
+	battle_grid.update_grid_object(target, event.next_position)
+	set_position_by_grid_coords(target)
 
 func on_target_death(target: Character) -> void:
 	battle_grid.current_grid.erase(target.grid_position)
@@ -299,7 +314,7 @@ func get_grid_info() -> Dictionary:
 func set_position_by_grid_coords(character: Character) -> void:
 	var coords = character.grid_position
 	var x_pos = 192 + (coords.x * 128) # const grid_span = 128, const grid_offset = 192
-	var y_pos = coords.y + 390
+	var y_pos = 390 + (coords.y * -100)
 	character.position = Vector2i(x_pos, y_pos)
 
 func set_turn_order() -> void: # pseudo turn order decider

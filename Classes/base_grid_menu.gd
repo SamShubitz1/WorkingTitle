@@ -82,7 +82,7 @@ func get_player_cells() -> Array:
 				player_cells.append(global_cells[i + j])
 	return player_cells
 		
-func get_targeted_cells() -> Array:
+func get_targeted_cell_coords() -> Array:
 	var selected_coords = [targets_grid.find_key(selected_button)]
 	selected_coords.append_array(get_neighbor_coords(selected_coords[0]))
 	var global_coords: Array
