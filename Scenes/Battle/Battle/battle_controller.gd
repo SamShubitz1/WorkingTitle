@@ -124,9 +124,9 @@ func on_use_attack(target_cells: Array) -> void:
 		if battle_grid.current_grid.has(cell):
 			selected_targets.append(cell)
 	var damage_event = calculate_attack_dmg()
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player.char_name})
 	for target in selected_targets:
-		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "publisher": current_player.char_name})
+		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "emitter": current_player.char_name})
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
@@ -135,6 +135,9 @@ func prompt_select_target(attack_name: String) -> Dictionary:
 	selected_attack = hero_attack
 	play_dialog("Select a target!", false)
 	return {"shape": hero_attack.shape, "target_type": selected_attack.target_type}
+
+func prompt_select_space() -> void:
+	play_dialog("Select a space!", false)
 
 func cancel_select_target() -> void:
 	selected_attack = {}
@@ -149,11 +152,11 @@ func on_use_item(item_index: int) -> void:
 		current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
 	update_ui()
 	
-	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "emitter": current_player.char_name})
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
-	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "publisher": current_player.char_name})
-	add_event({"type": EventType.END_TURN, "duration": 0, "publisher": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "emitter": current_player.char_name})
+	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player.char_name})
 	increment_event_queue()
 
 func on_try_retreat() -> void:
@@ -193,9 +196,9 @@ func perform_enemy_attack() -> void:
 	var enemy_attack = get_enemy_attack()
 	var damage_event = calculate_attack_dmg()
 	
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "publisher": current_player.char_name})
-	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": attack_duration, "publisher": current_player.char_name})
-	add_event({"type": EventType.END_TURN, "duration": 0, "publisher": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "emitter": current_player.char_name})
+	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": attack_duration, "emitter": current_player.char_name})
+	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player.char_name})
 	
 	increment_event_queue()
 	
@@ -220,7 +223,7 @@ func handle_movement(event: Dictionary) -> void:
 func on_target_death(target: Character) -> void:
 	battle_grid.current_grid.erase(target.grid_position)
 	players = players.filter(func(p): return p.char_name != target.char_name)
-	event_queue = event_queue.filter(func(e): return !e.has("publisher") || e.publisher != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
+	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.char_name != target.char_name)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target})
@@ -231,7 +234,7 @@ func resolve_item_effect() -> float:
 	
 func handle_end_turn() -> void:
 	increment_turn_queue()
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "publisher": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player.char_name})
 	update_ui()
 
 func handle_retreat() -> void:

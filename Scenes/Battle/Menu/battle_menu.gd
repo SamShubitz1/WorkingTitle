@@ -133,6 +133,7 @@ func on_move() -> void:
 	movement_menu.activate_hero_grid()
 	movement_menu.set_current_shape(Data.AttackShapes.SINGLE)
 	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
+	battle_controller.prompt_select_space()
 	
 func on_select_target():
 	log_menu.show_menu()
@@ -165,9 +166,10 @@ func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 	
 func on_select_movement() -> void:
-	var cells = movement_menu.get_targeted_cell_coords()
-	battle_controller.on_movement(cells)
-	go_back()
+	var cell_coords: Array = movement_menu.get_targeted_cell_coords()
+	if current_player.grid_position != cell_coords[0]:
+		battle_controller.on_movement(cell_coords)
+		go_back()
 			
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()
