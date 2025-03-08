@@ -17,12 +17,14 @@ enum Direction {
 
 var targets_grid: Dictionary = {}
 var current_grid_type: GridType = GridType.GLOBAL
+var initial_cells: Array[Panel]
 const initial_grid_size: Vector2i = Vector2i(8, 4)
 
 var current_shape: GameData.AttackShapes
 
-func init(menu: Node, menu_buttons: Array, menu_cursor: BaseCursor, _initial_button_position = null) -> void:
+func init(menu: Node, menu_buttons: Array, menu_cursor: BaseCursor, initial_button_position = null) -> void:
 	super.init(menu, menu_buttons, menu_cursor)
+	initial_cells = menu_buttons
 	update_grid(initial_grid_size)
 	for button in menu_buttons:
 		button.modulate.a = .1
@@ -40,10 +42,7 @@ func update_grid(grid_size: Vector2i):
 func activate_enemy_grid() -> void:
 	if current_grid_type != GridType.ENEMY:
 		var next_grid_size = Vector2i(initial_grid_size.x / 2, initial_grid_size.y)
-		var enemy_grid: Array
-		for y in range(next_grid_size.y):
-			for x in range(next_grid_size.x):
-				enemy_grid.append(targets_grid[Vector2i(x + next_grid_size.x, (initial_grid_size.y - 1) - y)])
+		var enemy_grid = get_enemy_cells()
 		buttons = enemy_grid
 		set_scroll_size(buttons.size())
 		set_grid_type(GridType.ENEMY)
@@ -52,15 +51,32 @@ func activate_enemy_grid() -> void:
 func activate_player_grid() -> void:
 	if current_grid_type != GridType.PLAYER:
 		var next_grid_size = Vector2i(initial_grid_size.x / 2, initial_grid_size.y)
-		var player_grid: Array
-		for y in range(next_grid_size.y):
-			for x in range(next_grid_size.x):
-				player_grid.append(targets_grid[Vector2i(x, (initial_grid_size.y - 1) - y)])
+		var player_grid = get_player_cells()
 		buttons = player_grid
 		set_scroll_size(buttons.size())
 		set_grid_type(GridType.PLAYER)
 		update_grid(next_grid_size)
-
+		
+func get_enemy_cells() -> Array:
+	var enemy_cells: Array
+	var columns = initial_grid_size.x
+	var rows = initial_grid_size.y
+	for i in range(initial_cells.size()):
+		if i % columns == columns / 2:
+			for j in range(columns / 2):
+				enemy_cells.append(initial_cells[i + j])
+	return enemy_cells
+				
+func get_player_cells() -> Array:
+	var enemy_cells: Array
+	var columns = initial_grid_size.x
+	var rows = initial_grid_size.y
+	for i in range(initial_cells.size()):
+		if i % columns == 0:
+			for j in range(columns / 2):
+				enemy_cells.append(initial_cells[i + j])
+	return enemy_cells
+		
 func get_targeted_cells() -> Array:
 	var selected_coords = [targets_grid.find_key(selected_button)]
 	selected_coords.append_array(get_neighbor_coords(selected_coords[0]))
