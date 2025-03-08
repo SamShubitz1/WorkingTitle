@@ -3,6 +3,7 @@ extends Node2D
 @onready var game_controller = get_tree().current_scene
 @onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
 @onready var cursor = $"../BattleMenu/Cursor"
+@onready var display_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 
 @onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
 @onready var items_node = $"../BattleMenu/ItemsMenu"
@@ -342,6 +343,7 @@ func increment_turn_queue() -> void:
 func update_ui() -> void:
 	if current_player.alliance == GameData.Alliance.HERO:	
 		char_name_label.text = current_player.name
+		update_display_health()
 
 		var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
 		for i in range(abilities_buttons.size()):
@@ -356,6 +358,10 @@ func update_ui() -> void:
 				items_buttons[i].text = current_player.items[i].name
 			else:
 				items_buttons[i].text = "-"
+
+func update_display_health() -> void:
+	display_health.max_value = current_player.health_bar.max_value
+	display_health.value = current_player.health_bar.value
 				
 func initialize_battle() -> void:
 	dialog = dialog_box[0]
