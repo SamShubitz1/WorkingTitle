@@ -247,9 +247,15 @@ func handle_death(event) -> void:
 		event.target.visible = false
 		increment_event_queue()
 
-func check_valid_targets(target_cells: Array) -> bool:
+func check_valid_targets(target_cells: Array, check_movement: bool = false) -> bool:
 	var valid_targets: Array[Vector2i]
 	var occupied_cells = battle_grid.current_grid.keys()
+	
+	if check_movement && occupied_cells.has(target_cells[0]):
+		return false
+	elif check_movement:
+		return true
+		
 	for cell in occupied_cells:
 		if selected_attack.target_type == GameData.TargetType.ENEMY:
 			if cell.x > 3: # if master grid width is constant, will always be '3'

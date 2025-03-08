@@ -5,13 +5,20 @@ class_name Event
 enum EventType {
 	DIALOG,
 	ATTACK,
-	ITEM,
+	MOVEMENT,
+	DEATH,
 	RETREAT,
-	DEATH
+	END_TURN
 }
 
 var type: EventType
-var publisher: Character = null
-var target: Character = null
 var text: String = ""
 var duration: float = 0.0
+var target: Character = null
+var emitter: Character = null
+
+func _init()
+
+func build_event() -> void:
+	var event = Event.new()
+	

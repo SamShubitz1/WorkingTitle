@@ -46,9 +46,6 @@ func _input(e) -> void:
 		elif Input.is_action_just_pressed("go_back"):
 			if selected_menu == targets_menu:
 				on_cancel_target_select()
-			elif selected_menu == log_menu:
-				cursor.enable()
-				go_back()
 			else:
 				go_back()
 
@@ -104,7 +101,7 @@ func on_select_option() -> void:
 			log_menu.hide_menu()
 			update_selected_menu(Data.BattleMenuType.ABILITIES)
 		" Move":
-			on_move()
+			on_select_move()
 		" Items":
 			log_menu.hide_menu()
 			update_selected_menu(Data.BattleMenuType.ITEMS)
@@ -128,7 +125,7 @@ func on_select_ability() -> void:
 	
 	update_selected_menu(Data.BattleMenuType.TARGETS)
 	
-func on_move() -> void:
+func on_select_move() -> void:
 	update_selected_menu(GameData.BattleMenuType.MOVEMENT)
 	movement_menu.activate_hero_grid()
 	movement_menu.set_current_shape(Data.AttackShapes.SINGLE)
@@ -167,7 +164,8 @@ func on_select_retreat() -> void:
 	
 func on_select_movement() -> void:
 	var cell_coords: Array = movement_menu.get_targeted_cell_coords()
-	if current_player.grid_position != cell_coords[0]:
+	var is_valid_target = battle_controller.check_valid_targets(cell_coords, true)
+	if is_valid_target:
 		battle_controller.on_movement(cell_coords)
 		go_back()
 			
@@ -194,7 +192,6 @@ func initialize_menus() -> void:
 	
 	var targets_buttons = build_targets_cells()
 	targets_menu.init(targets_node, targets_buttons, cursor, null)
-	
 	movement_menu.init(targets_node, targets_buttons, cursor, null, false)
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
