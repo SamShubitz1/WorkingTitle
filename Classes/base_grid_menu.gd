@@ -229,7 +229,7 @@ func set_range(origin: Vector2i, range: Vector2i) -> void:
 	if current_grid_type == GridType.HERO:
 		update_selected_cell(origin)
 	else:
-		update_selected_cell(Vector2i.ZERO)
+		update_selected_cell(Vector2i(0, origin.y))
 
 func get_cell_color() -> Color:
 	if current_grid_type == GridType.ENEMY:

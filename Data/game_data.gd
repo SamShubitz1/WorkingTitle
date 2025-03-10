@@ -77,17 +77,18 @@ enum EffectTypes {
 # effect: {"type": ATTRIBUTES, "value": -2, "effected_property": Attributes.ARMOR}
 
 var abilities: Dictionary = {
-	"Clobber": {"name": "Clobber", "damage_type": DamageType.PHYSICAL, "damage": 80, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,3), "shape": AttackShapes.SINGLE, "effect": {}},
+	"Clobber": {"name": "Clobber", "damage_type": DamageType.PHYSICAL, "damage": 80, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AttackShapes.SINGLE, "effect": {}},
 	
 	"Laser": {"name": "Laser", "damage_type": DamageType.ENERGY, "damage": 60, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": Vector2i.ZERO, "shape": AttackShapes.LINE, "effect": {}},
 	
 	"Bite": {"name": "Bite", "damage_type": DamageType.PHYSICAL, "damage": 70, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": Vector2i(3,0), "shape": AttackShapes.SINGLE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_dialog": "-1 armor"}},
 	
-	"Reinforce": {"name": "Reinforce", "damage_type": DamageType.NONE, "damage": 0, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": 2, "shape": AttackShapes.LINE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_dialog": "+1 armor"}},
+	"Reinforce": {"name": "Reinforce", "damage_type": DamageType.NONE, "damage": 0, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AttackShapes.LINE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_dialog": "+1 armor"}},
 	
-	"Wave Beam": {"name": "Wave Beam", "damage_type": DamageType.ENERGY, "damage": 75, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": 2, "shape": AttackShapes.SINGLE, "effect": {}},
+	"Wave Beam": {"name": "Wave Beam", "damage_type": DamageType.ENERGY, "damage": 75, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AttackShapes.SINGLE, "effect": {}},
 	
-	"Armor Inversion": {"name": "Armor Inversion", "damage_type": DamageType.NONE, "damage": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": 2, "shape": AttackShapes.SINGLE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": -2, "affected_property": Attributes.ARMOR, "effect_dialog": "-2 armor"}}}
+	"Armor Inversion": {"name": "Armor Inversion", "damage_type": DamageType.NONE, "damage": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AttackShapes.SINGLE, "effect": {"effect_type": EffectTypes.ATTRIBUTE, "effect_value": -2, "affected_property": Attributes.ARMOR, "effect_dialog": "-2 armor"}}}
+	
 var items: Dictionary = {
 	"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "effect_description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3},
 	
