@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmwfrd0bmmrry"
-path="res://.godot/imported/pkmnpathsheet.png-e05e00f31b5f7a4ec5bc8cbc87411908.ctex"
+uid="uid://2u654ry2cjiu"
+path="res://.godot/imported/Pokemon_Door_Sprite_02.png-352d0bf622c878a9accd0970d99277ff.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Rooms/Demo_Room/pkmnpathsheet.png"
-dest_files=["res://.godot/imported/pkmnpathsheet.png-e05e00f31b5f7a4ec5bc8cbc87411908.ctex"]
+source_file="res://Dodads/Doors/Pokemon_Door_Sprite_02.png"
+dest_files=["res://.godot/imported/Pokemon_Door_Sprite_02.png-352d0bf622c878a9accd0970d99277ff.ctex"]
 
 [params]
 

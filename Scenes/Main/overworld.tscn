@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4npjlduq7bda"]
+[gd_scene load_steps=5 format=3 uid="uid://d4npjlduq7bda"]
 
 [ext_resource type="Script" path="res://Scenes/Main/map_controller.gd" id="1_tkkut"]
-[ext_resource type="PackedScene" uid="uid://b7hqn31thugl2" path="res://Rooms/Demo_Room/map_container.tscn" id="2_x3vh7"]
 [ext_resource type="Script" path="res://Scenes/Main/player_controller.gd" id="5_l4qnv"]
 [ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="6_x832e"]
 [ext_resource type="Script" path="res://Scenes/Player/my_player.gd" id="7_xincb"]
@@ -11,7 +10,7 @@
 [node name="MapController" type="Node2D" parent="." groups=["MyControllers"]]
 script = ExtResource("1_tkkut")
 
-[node name="MapContainer" parent="MapController" instance=ExtResource("2_x3vh7")]
+[node name="MapContainer" type="Node2D" parent="MapController"]
 
 [node name="PlayerController" type="Node2D" parent="." groups=["MyControllers"]]
 script = ExtResource("5_l4qnv")

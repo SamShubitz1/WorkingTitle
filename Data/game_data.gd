@@ -2,6 +2,8 @@ extends Node
 
 class_name Data
 
+var GlobalMapControllerRef = 1
+
 enum MainMenuType {
 	MAIN,
 	POKEDEX

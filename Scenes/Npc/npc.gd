@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+class_name NPC_Class
+
 @onready var Map_Controller = $"/root/MainScene/Overworld/MapController"
 @onready var Game_Controller = get_tree().current_scene
 var grid_coords

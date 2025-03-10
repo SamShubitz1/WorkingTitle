@@ -1,6 +1,7 @@
 extends Node2D
 
-@onready var Map_Controller = self.get_node("/root/MainScene/Overworld/MapController")
+#@onready var Map_Controller = self.get_node("/root/MainScene/Overworld/MapController")
+@onready var Map_Controller = get_tree().root.find_child("MapController", true)
 @onready var Player: PlayerClass = self.get_node("/root/MainScene/Overworld/PlayerController/MyPlayer")
 #@onready var Player_Camera = Player.Player_Camera
 
@@ -39,7 +40,8 @@ func _ready() -> void:
 	var rootNode = tree.root
 	var node = get_node("/root/MainScene/Overworld")
 	current_scene_node = node
-
+	
+	print("sanity check GameController has mapcontroller?: " + str(Map_Controller))
 	pass # Replace with function body.
 
 # load new scene
@@ -63,6 +65,7 @@ func switch_to_battle_scene_file() -> void:
 	return
 
 # switch to battle scene node
+# Current used method
 func switch_to_battle_scene() -> void:
 	var current_scene_node = get_node("/root/MainScene/Overworld")
 	# check for existing battle scene node in tree
@@ -97,6 +100,7 @@ func switch_to_overworld_scene_file() -> void:
 	return
 
 # switch to overworld scene node
+# Current used method
 func switch_to_overworld_scene() -> void:
 	var current_scene_node = get_node("/root/MainScene/BattleScene")
 
@@ -130,4 +134,24 @@ func set_pause_subtree(root: Node, pause: bool) -> void:
 	return
 
 func get_map_controller():
+	print_tree()
+	if(Map_Controller == null):
+		print("map controller is null")
+	if(Player == null):
+		print("Player is null")
 	return Map_Controller
+
+func enter_door(object):
+	var Map_Controller = GameData.GlobalMapControllerRef
+	
+	# print door report
+	var door_info_report = {
+		"MapController reference": Map_Controller,
+		"Door object reference": object,
+		"Door destination reference": object.Door_Destination
+	}
+	print_debug("GameController - Door report: " + str(door_info_report))
+	
+	# replace map container
+	Map_Controller.enter_door(object)
+	return
