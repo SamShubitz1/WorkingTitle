@@ -7,6 +7,7 @@ extends CharacterBody2D
 @export var DEBUG_PLAYER: bool = true
 @export var speed = 75
 @export var image_offset_px = Vector2i(8,8)
+@export var Initial_Position_Override = Vector2i(12,3)
 
 var is_moving: bool = false
 var dest_grid = Vector2i(0,0)

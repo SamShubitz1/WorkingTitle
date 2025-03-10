@@ -18,6 +18,8 @@ func _ready() -> void:
 
 	# load player Player.position from preference file
 	load_data()
+	Player.position = Map_Controller.grid_to_point(Player.Initial_Position_Override)
+	Player.set_grid_position(Player.Initial_Position_Override)
 	pass
 
 

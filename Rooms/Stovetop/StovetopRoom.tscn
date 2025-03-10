@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://ddpp4yjte7cpi"]
+[gd_scene load_steps=7 format=4 uid="uid://ddpp4yjte7cpi"]
 
 [ext_resource type="Texture2D" uid="uid://5i032qlv3ycj" path="res://Rooms/Stovetop/Stovetop_Tileset_01.png" id="1_ubus6"]
 [ext_resource type="Script" path="res://Classes/base_door.gd" id="2_oib52"]
 [ext_resource type="Texture2D" uid="uid://2u654ry2cjiu" path="res://Dodads/Doors/Pokemon_Door_Sprite_02.png" id="3_4ur0x"]
+[ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="4_cbd18"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_b6uwb"]
 texture = ExtResource("1_ubus6")
@@ -191,3 +192,6 @@ Door_Destination = "res://Rooms/PalletTown/PalletTownRoom.tscn"
 
 [node name="Sprite2D" type="Sprite2D" parent="Dodads/Doors/DoorToPalletTown"]
 texture = ExtResource("3_4ur0x")
+
+[node name="Norman" parent="Dodads" instance=ExtResource("4_cbd18")]
+position = Vector2(184, 88)
