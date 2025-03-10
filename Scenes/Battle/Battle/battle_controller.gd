@@ -219,7 +219,6 @@ func on_movement(next_coords: Array) -> void:
 	cursor.disable()
 	add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": attack_duration})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
-	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
 func handle_movement(event: Dictionary) -> void:

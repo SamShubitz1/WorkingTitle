@@ -94,7 +94,7 @@ var abilities: Dictionary = {
 	"Wave Beam": {"name": "Wave Beam", "damage_type": DamageType.ENERGY, "damage": 75, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AttackShape.SINGLE, "effects": []},
 	
 	"Armor Inversion": {"name": "Armor Inversion", "damage_type": DamageType.NONE, "damage": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AttackShape.SINGLE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET,"effect_value": -2, "affected_property": Attributes.ARMOR, "effect_description": "lost 2 armor"},
+		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": -2, "affected_property": Attributes.ARMOR, "effect_description": "lost 2 armor"},
 		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF, "effect_value": +2, "affected_property": Attributes.ARMOR, "effect_description": "gained 2 armor"}]}
 	}
 	
