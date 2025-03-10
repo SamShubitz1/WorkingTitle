@@ -24,7 +24,7 @@ var battle_grid: BaseGrid = BaseGrid.new()
 var event_queue: Array
 var turn_queue: Array
 
-var initial_dialog: String = "Two lil' guys appeared!"
+var initial_dialog: String = "Three lil' guys appeared!"
 var battle_log: Array
 var dialog: Label
 var manual_increment: bool = false
@@ -110,13 +110,30 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 
 func handle_attack(event: Dictionary) -> void:
-	var attack_result = event.target.take_damage(event.damage_event)
-	if attack_result.damage:
-		play_dialog(event.target.char_name + " took " + str(attack_result.damage) + " damage!", true)
-		if attack_result.effect_dialog:
-			add_event({"type": EventType.DIALOG, "text": event.target.char_name + " took " + attack_result.effect_dialog + "!", "duration": dialog_duration})
-	elif attack_result.effect_dialog:
-		play_dialog(event.target.char_name + " took " + attack_result.effect_dialog + "!", true)
+	var damage_result = event.target.take_damage(event.damage_event)
+	
+	var effect_dialog: Array
+	for effect in event.damage_event.effects:
+		if effect.effect_target == Data.EffectTarget.TARGET:
+			var dialog = event.target.resolve_effect(effect)
+			effect_dialog.append(dialog)
+		elif effect.effect_target == Data.EffectTarget.SELF:
+			var dialog = event.emitter.resolve_effect(effect)
+			effect_dialog.append(dialog)
+			
+	if damage_result:
+		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
+		if !effect_dialog.is_empty():
+			for dialog in effect_dialog:
+				add_event({"type": EventType.DIALOG, "text": dialog.target + " " + dialog.effect_description + "!", "duration": dialog_duration})
+				
+	elif !effect_dialog.is_empty():
+		var first_dialog = effect_dialog.pop_front()
+		play_dialog(first_dialog.target + " " + first_dialog.effect_description + "!", true)
+		for dialog in effect_dialog:
+			var next_dialog = effect_dialog.pop_front()
+			add_event({"type": EventType.DIALOG, "text": dialog.target + " " + dialog.effect_description + "!", "duration": dialog_duration})
+		
 	if event.target.health_bar.value <= 0:
 		on_target_death(event.target)
 
@@ -127,11 +144,11 @@ func on_use_attack(target_cells: Array) -> void:
 		if battle_grid.current_grid.has(cell):
 			selected_targets.append(cell)
 	
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
 	
 	for target in selected_targets:
-		var damage_event = calculate_attack_dmg()
-		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "emitter": current_player.char_name})
+		var damage_event = current_player.calculate_attack_dmg(selected_attack)
+		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "emitter": current_player})
 		
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
@@ -158,11 +175,11 @@ func on_use_item(item_index: int) -> void:
 		current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
 	update_ui()
 	
-	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "emitter": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "emitter": current_player})
 	current_player.items_equipped.append(item)
 	current_player.populate_buffs_array()
-	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "emitter": current_player.char_name})
-	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "emitter": current_player})
+	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player})
 	increment_event_queue()
 
 func on_try_retreat() -> void:
@@ -176,22 +193,6 @@ func on_try_retreat() -> void:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration})
 	increment_event_queue()
 
-func calculate_attack_dmg() -> Dictionary:
-	var damage: int = selected_attack.damage
-	var damage_with_range = damage * randf_range(.9, 1.1)
-	var effect: Dictionary = selected_attack.effect
-	var attribute_multiplier = resolve_attribute_bonuses()
-	if attribute_multiplier:
-		damage_with_range *= float(attribute_multiplier)
-	return {"damage": int(damage_with_range), "damage_type": selected_attack.damage_type, "effect": effect}
-	
-func resolve_attribute_bonuses():
-	var attribute = selected_attack.attribute_bonus
-	if attribute != GameData.Attributes.NONE:
-		var value: float = current_player.attributes[attribute]
-		var multiplier: float = 1 + (value / 10)
-		return multiplier
-
 func perform_enemy_attack() -> void:
 	var target
 	for player in players:
@@ -200,11 +201,11 @@ func perform_enemy_attack() -> void:
 			break
 	
 	var enemy_attack = get_enemy_attack()
-	var damage_event = calculate_attack_dmg()
+	var damage_event = current_player.calculate_attack_dmg(enemy_attack)
 	
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "emitter": current_player.char_name})
-	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": attack_duration, "emitter": current_player.char_name})
-	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
+	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": attack_duration, "emitter": current_player})
+	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player})
 	
 	increment_event_queue()
 	
@@ -229,7 +230,7 @@ func handle_movement(event: Dictionary) -> void:
 func on_target_death(target: Character) -> void:
 	battle_grid.current_grid.erase(target.grid_position)
 	players = players.filter(func(p): return p.char_name != target.char_name)
-	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
+	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.char_name != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.char_name != target.char_name)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target})
@@ -240,7 +241,7 @@ func resolve_item_effect() -> float:
 	
 func handle_end_turn() -> void:
 	increment_turn_queue()
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player.char_name})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	update_ui()
 
 func handle_retreat() -> void:
@@ -319,7 +320,7 @@ func build_characters() -> void:
 	
 	var pilypile = pilypile_scene.instantiate()
 	var pilypile_abilities = ["Armor Inversion", "Bite"]
-	pilypile.init("Pily-Pile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 3)) # init props will be accessed from somewhere
+	pilypile.init("Pily-Pile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 2)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pilypile)
 	add_child(pilypile)
 	mandrake.flip_sprite()

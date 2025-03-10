@@ -9,7 +9,7 @@ var is_player: bool = false
 var health_bar: ProgressBar
 var sprite: AnimatedSprite2D
 
-var attributes = {GameData.Attributes.STRENGTH: 1, GameData.Attributes.FLUX: 1, GameData.Attributes.ARMOR: 1, GameData.Attributes.SHIELDING: 1, GameData.Attributes.MEMORY: 1, GameData.Attributes.BATTERY: 1, GameData.Attributes.OPTICS: 1, GameData.Attributes.MOBILITY: 1}
+var attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
 
 var items: Array
 var abilities: Array
@@ -50,7 +50,7 @@ func set_items(items: Array) -> void:
 		char_items.append(GameData.items[item])
 	self.items = char_items
 
-func take_damage(damage_event: Dictionary) -> Dictionary:
+func take_damage(damage_event: Dictionary) -> int:
 	var damage_type = damage_event.damage_type
 	var damage_result: int
 	match damage_type:
@@ -65,21 +65,34 @@ func take_damage(damage_event: Dictionary) -> Dictionary:
 	if damage_result > 0:
 		health_bar.value -= damage_result
 	
-	var event_dialog = resolve_effects(damage_event.effect)
-	return {"damage": damage_result, "effect_dialog": event_dialog}
+	return damage_result
 
-func populate_buffs_array() -> void:
-	for i in items_equipped:
-		buffs[i.effect_type] = i.multiplier
+func calculate_attack_dmg(selected_attack: Dictionary) -> Dictionary:
+	var damage: int = selected_attack.damage
+	var damage_with_range = damage * randf_range(.9, 1.1)
+	var attribute_multiplier = resolve_attribute_bonuses(selected_attack)
+	if attribute_multiplier:
+		damage_with_range *= float(attribute_multiplier)
+	return {"damage": int(damage_with_range), "damage_type": selected_attack.damage_type, "effects": selected_attack.effects}
+	
+func resolve_attribute_bonuses(selected_attack: Dictionary):
+	var attribute = selected_attack.attribute_bonus
+	if attribute != GameData.Attributes.NONE:
+		var value: float = attributes[attribute]
+		var multiplier: float = 1 + (value / 10)
+		return multiplier
 
-func resolve_effects(effect: Dictionary):
-	if !effect.is_empty():
-		var property = effect.affected_property
-		var value = effect.effect_value
-		var dialog = effect.effect_dialog
-		attributes[property] += value
-		if dialog:
-			return dialog
+func resolve_effect(effect: Dictionary):
+	var property = effect.affected_property
+	var value = effect.effect_value
+	var description = effect.effect_description
+	attributes[property] += value
+	if description:
+		return {"target": char_name, "effect_description": description}
 
 func flip_sprite() -> void:
 	sprite.flip_h = true
+	
+func populate_buffs_array() -> void:
+	for i in items_equipped:
+		buffs[i.effect_type] = i.multiplier
