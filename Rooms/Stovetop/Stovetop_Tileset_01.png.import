@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ejde2yqmwm12"
-path="res://.godot/imported/PC_Combat_Idle1.png-4d03681a38e2fee46d892a36d73fe0e7.ctex"
+uid="uid://5i032qlv3ycj"
+path="res://.godot/imported/Stovetop_Tileset_01.png-00e5143e049db45875002fb1779d53fe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Battle/Characters/PC/PC_Combat_Idle1.png"
-dest_files=["res://.godot/imported/PC_Combat_Idle1.png-4d03681a38e2fee46d892a36d73fe0e7.ctex"]
+source_file="res://Rooms/Stovetop/Stovetop_Tileset_01.png"
+dest_files=["res://.godot/imported/Stovetop_Tileset_01.png-00e5143e049db45875002fb1779d53fe.ctex"]
 
 [params]
 

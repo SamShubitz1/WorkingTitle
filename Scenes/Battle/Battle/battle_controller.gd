@@ -13,6 +13,8 @@ var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
 var pc_scene = preload("res://Scenes/Battle/Characters/PC/pc.tscn")
 var runt_scene = preload("res://Scenes/Battle/Characters/Runt/runt.tscn")
+var mandrake_scene = preload("res://Scenes/Battle/Characters/Mandrake/mandrake.tscn")
+var pilypile_scene = preload("res://Scenes/Battle/Characters/Pilypile/pilypile.tscn")
 
 var players: Array[Character]
 var current_player: Character
@@ -306,6 +308,22 @@ func build_characters() -> void:
 	add_child(thumper)
 	thumper.flip_sprite()
 	players.append(thumper)
+	
+	var mandrake = mandrake_scene.instantiate()
+	var mandrake_abilities = ["Wave Beam", "Bite"]
+	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
+	set_position_by_grid_coords(mandrake)
+	add_child(mandrake)
+	mandrake.flip_sprite()
+	players.append(mandrake)
+	
+	var pilypile = pilypile_scene.instantiate()
+	var pilypile_abilities = ["Armor Inversion", "Bite"]
+	pilypile.init("Pily-Pile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 3)) # init props will be accessed from somewhere
+	set_position_by_grid_coords(pilypile)
+	add_child(pilypile)
+	mandrake.flip_sprite()
+	players.append(pilypile)
 			
 func populate_grid() -> void:
 	for player in players:

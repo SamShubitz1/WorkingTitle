@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmwfrd0bmmrry"
-path="res://.godot/imported/pkmnpathsheet.png-e05e00f31b5f7a4ec5bc8cbc87411908.ctex"
+uid="uid://gm0mkns6d1d8"
+path="res://.godot/imported/Mandrake_Combat_Idle1.png-93964b266866ae1e780ebc073bd07e62.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Rooms/Demo_Room/pkmnpathsheet.png"
-dest_files=["res://.godot/imported/pkmnpathsheet.png-e05e00f31b5f7a4ec5bc8cbc87411908.ctex"]
+source_file="res://Scenes/Battle/Characters/Mandrake/Mandrake_Combat_Idle1.png"
+dest_files=["res://.godot/imported/Mandrake_Combat_Idle1.png-93964b266866ae1e780ebc073bd07e62.ctex"]
 
 [params]
 

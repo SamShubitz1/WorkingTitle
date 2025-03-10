@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ejde2yqmwm12"
-path="res://.godot/imported/PC_Combat_Idle1.png-4d03681a38e2fee46d892a36d73fe0e7.ctex"
+uid="uid://rsjmhhh3ba7k"
+path="res://.godot/imported/Pokemon_Door_Sprite_01.png-728b61ff56caf6190d0f82f781f69c66.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Battle/Characters/PC/PC_Combat_Idle1.png"
-dest_files=["res://.godot/imported/PC_Combat_Idle1.png-4d03681a38e2fee46d892a36d73fe0e7.ctex"]
+source_file="res://Dodads/Doors/Pokemon_Door_Sprite_01.png"
+dest_files=["res://.godot/imported/Pokemon_Door_Sprite_01.png-728b61ff56caf6190d0f82f781f69c66.ctex"]
 
 [params]
 

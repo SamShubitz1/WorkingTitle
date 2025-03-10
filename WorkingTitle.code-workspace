@@ -4,5 +4,7 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"godotTools.editorPath.godot4": "/Applications/Development/Godot.app"
+	}
 }

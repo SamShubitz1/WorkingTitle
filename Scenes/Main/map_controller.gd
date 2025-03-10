@@ -1,11 +1,23 @@
 extends Node2D
 
-@onready var Current_Tile_Map = $MapContainer/TileMapLayer
+@onready var Current_Tile_Map_Layer: TileMapLayer = null
 
 @export var GRID_CELL_SIZE_PX: int = 16
 
+func _ready():
+	GameData.GlobalMapControllerRef = self
+	load_room("res://Rooms/Stovetop/StovetopRoom.tscn")
+	return
+
 # collection of map objects, keyed by grid-position vector
 var world_map_array: Dictionary = {}
+
+func get_current_tile_map_layer() -> TileMapLayer:
+	var map_container = $"MapContainer".name
+	var currentLayer = $"MapContainer".get_child(0).get_child(0)
+	var currentLayerName = currentLayer.name
+	print("MapController - GetCurrentTileMapLayer: " + str(currentLayer))
+	return currentLayer
 
 # convert grid coords to stored-object
 func get_object_at_coords(grid_coords: Vector2i) -> Node:
@@ -19,6 +31,7 @@ func get_object_at_coords(grid_coords: Vector2i) -> Node:
 # store object reference at grid coords
 func set_object_at_coords(object: Node, grid_coords: Vector2i) -> bool:
 	world_map_array[grid_coords] = object
+	print_debug("MapController - Object added to grid: " + "pos:" + str(grid_coords) + " obj:" + str(object))
 	return true
 
 # translate from world coords to grid coords
@@ -42,7 +55,7 @@ func check_grid_for_collider(grid_coords: Vector2i) -> bool:
 		return true # exit for bad value
 
 	# get tile at grid_coords
-	var tile_data = Current_Tile_Map.get_cell_tile_data(grid_coords)
+	var tile_data = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
 	if (tile_data == null):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
 		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
@@ -62,7 +75,7 @@ func add_grid_collider(grid_coords: Vector2i) -> void:
 		return # exit for bad value
 
 	# get tile at grid_coords
-	var tile_data = Current_Tile_Map.get_cell_tile_data(grid_coords)
+	var tile_data = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
 	if (tile_data == null):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
 		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
@@ -74,7 +87,7 @@ func add_grid_collider(grid_coords: Vector2i) -> void:
 
 # convert grid coords to TileData object, properties
 func get_tile_at_grid_coords(grid_coords: Vector2i) -> TileData:
-	var tile: TileData = Current_Tile_Map.get_cell_tile_data(grid_coords)
+	var tile: TileData = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
 	if (tile == null):
 		#TODO catch error
 		print("ERROR: Inspecting null tile at: " + str(grid_coords))
@@ -83,15 +96,15 @@ func get_tile_at_grid_coords(grid_coords: Vector2i) -> TileData:
 
 # convert grid coords to atlas/palette-tile-coords
 func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
-	var atlas_coords: Vector2i = Current_Tile_Map.get_cell_atlas_coords(grid_coords)
+	var atlas_coords: Vector2i = Current_Tile_Map_Layer.get_cell_atlas_coords(grid_coords)
 	if (atlas_coords == null): return Vector2i(0,0)
 	return atlas_coords
 
 # get dictionary/hashtable format report of various tile data at grid coords
 #TODO bounds check for error
 func get_world_tile_report(grid_coords: Vector2i) -> Dictionary:
-	var tile: TileData = Current_Tile_Map.get_cell_tile_data(grid_coords)
-	var atlas_coords: Vector2i = Current_Tile_Map.get_cell_atlas_coords(grid_coords)
+	var tile: TileData = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
+	var atlas_coords: Vector2i = Current_Tile_Map_Layer.get_cell_atlas_coords(grid_coords)
 
 	# get tile info
 	var tile_report = {
@@ -110,4 +123,31 @@ func remove_object_from_map_collection(object: Node) -> void:
 	for item in world_map_array.keys():
 		if world_map_array[item] == object:
 			world_map_array.erase(item)
+			return
+	print("MapController - no object to remove")
+	return
+
+func destroy_room():
+	var map_container = self.get_child(0)
+	#var door_grid_ref = get_object_at_coords(point_to_grid(object.position))
+	#remove_object_from_map_collection(door_grid_ref)
+	world_map_array = {}
+	map_container.get_child(0).queue_free()
+	return
+
+func load_room(room_resource_path):
+	var map_container = self.get_child(0)
+	# load map file
+	var new_map_resource = load(room_resource_path)
+	# instantiate map object
+	var imported_new_map = new_map_resource.instantiate()
+	# adopt map object to MapContainer
+	map_container.add_child(imported_new_map)
+	# update TileMapLayer reference
+	Current_Tile_Map_Layer = imported_new_map.get_node("TileMapLayer")
+	return
+
+func enter_door(object):
+	destroy_room()
+	load_room(object.Door_Destination)
 	return

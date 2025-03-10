@@ -1,6 +1,10 @@
 # Godot 4+ specific ignores
-.godot/
 *.DS_Store
-/android/
-*/.code-workspace
 */.DS_Store
+**/.DS_Store
+**/.code-workspace
+.godot/
+/android/
+.DS_Store
+Scenes/.DS_Store
+Art/.DS_Store

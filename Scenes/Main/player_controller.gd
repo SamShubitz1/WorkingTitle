@@ -176,7 +176,7 @@ func player_action_pressed() -> void:
 		Player.Direction.RIGHT:
 			action_coords.x += 1
 
-
+	print("player obj id: " + str(self))
 	# get tile info
 	var tile_report = Map_Controller.get_world_tile_report(action_coords)
 	print_debug("action_button: " + str(tile_report))
@@ -188,9 +188,15 @@ func player_action_pressed() -> void:
 		return
 
 	if(object != null):
-		if (DEBUG_PLAYER): print_action_object_report(object)
-		if (object.battle_ready):
-			enter_battle_scene(object)
+		if (object is NPC_Class):
+			if (DEBUG_PLAYER): print_action_object_report(object)
+			if (object.battle_ready):
+				enter_battle_scene(object)
+		elif (object is BaseDoor):
+			print("PlayerController - Door_Destination: " + str(object.Door_Destination))
+			Game_Controller.enter_door(object)
+		else:
+			print("unknown object")
 	return
 
 

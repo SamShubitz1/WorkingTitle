@@ -1,24 +1,24 @@
 [gd_scene load_steps=8 format=3 uid="uid://cr3t2sex466g6"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ge1t4"]
-[ext_resource type="Texture2D" uid="uid://by1t2xwvnliot" path="res://Scenes/Battle/Characters/PC/PC_Combat_Idle1.png" id="2_ugaaj"]
+[ext_resource type="Texture2D" uid="uid://ejde2yqmwm12" path="res://Scenes/Battle/Characters/PC/PC_Combat_Idle1.png" id="2_ugaaj"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gojv8"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1aufq"]
 atlas = ExtResource("2_ugaaj")
-region = Rect2(0, 9, 16, 23)
+region = Rect2(0, 0, 16, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_88b3m"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_lyg3s"]
 atlas = ExtResource("2_ugaaj")
-region = Rect2(16, 9, 16, 23)
+region = Rect2(16, 0, 16, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_p8hg8"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gojv8")
+"texture": SubResource("AtlasTexture_1aufq")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_88b3m")
+"texture": SubResource("AtlasTexture_lyg3s")
 }],
 "loop": true,
 "name": &"default",
