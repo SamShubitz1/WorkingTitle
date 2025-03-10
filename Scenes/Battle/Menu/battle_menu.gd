@@ -117,11 +117,11 @@ func on_select_ability() -> void:
 	var attack_info = battle_controller.prompt_select_target(attack_name)
 	
 	match attack_info.target_type:
-		GameData.TargetType.ENEMY:
+		Data.TargetType.ENEMY:
 			targets_menu.activate_enemy_grid()
-		GameData.TargetType.HERO:
+		Data.TargetType.HERO:
 			targets_menu.activate_hero_grid()
-		GameData.TargetType.SELF:
+		Data.TargetType.SELF:
 			targets_menu.activate_hero_grid()
 			
 	targets_menu.set_current_shape(attack_info.shape)
@@ -130,9 +130,9 @@ func on_select_ability() -> void:
 	update_selected_menu(Data.BattleMenuType.TARGETS)
 	
 func on_select_move() -> void:
-	update_selected_menu(GameData.BattleMenuType.MOVEMENT)
+	update_selected_menu(Data.BattleMenuType.MOVEMENT)
 	movement_menu.activate_hero_grid()
-	movement_menu.set_current_shape(Data.AttackShapes.SINGLE)
+	movement_menu.set_current_shape(Data.AttackShape.SINGLE)
 	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
 	battle_controller.prompt_select_space()
 	
