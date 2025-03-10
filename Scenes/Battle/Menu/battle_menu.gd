@@ -115,13 +115,17 @@ func on_select_ability() -> void:
 	
 	var attack_name = selected_menu.get_selected_button().text
 	var attack_info = battle_controller.prompt_select_target(attack_name)
-	targets_menu.set_current_shape(attack_info.shape)
 	
 	match attack_info.target_type:
 		GameData.TargetType.ENEMY:
 			targets_menu.activate_enemy_grid()
 		GameData.TargetType.HERO:
 			targets_menu.activate_hero_grid()
+		GameData.TargetType.SELF:
+			targets_menu.activate_hero_grid()
+			
+	targets_menu.set_current_shape(attack_info.shape)
+	targets_menu.set_range(current_player.grid_position, attack_info.range)
 	
 	update_selected_menu(Data.BattleMenuType.TARGETS)
 	
@@ -191,8 +195,8 @@ func initialize_menus() -> void:
 	items_menu.init(items_node, items_buttons, cursor, initial_button_position)
 	
 	var targets_buttons = build_targets_cells()
-	targets_menu.init(targets_node, targets_buttons, cursor, null)
-	movement_menu.init(targets_node, targets_buttons, cursor, null, false)
+	targets_menu.init(targets_node, targets_buttons, cursor, null, false)
+	movement_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
 	
@@ -202,7 +206,7 @@ func initialize_menus() -> void:
 	
 func build_targets_cells() -> Array[Panel]:
 	var cells: Array[Panel]
-	for i in range(32): # battle_controller.get_grid_size()
+	for i in range(32): # battle_controller.get_grid_size() x * y
 		var cell = Panel.new()
 		cell.size_flags_horizontal = SIZE_EXPAND_FILL
 		cell.size_flags_vertical = SIZE_EXPAND_FILL

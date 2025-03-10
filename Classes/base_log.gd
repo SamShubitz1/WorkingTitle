@@ -59,5 +59,5 @@ func get_current_entry() -> String:
 func get_selected_button() -> Button:
 	return slots[0]
 
-func update_selected_button(index = null) -> void:
+func update_selected_button() -> void:
 	pass # override base menu behavior

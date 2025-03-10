@@ -138,7 +138,7 @@ func prompt_select_target(attack_name: String) -> Dictionary:
 	var hero_attack = GameData.abilities[attack_name]
 	selected_attack = hero_attack
 	play_dialog("Select a target!", false)
-	return {"shape": hero_attack.shape, "target_type": selected_attack.target_type}
+	return {"shape": hero_attack.shape, "target_type": selected_attack.target_type, "range": selected_attack.range}
 
 func prompt_select_space() -> void:
 	play_dialog("Select a space!", false)
@@ -262,7 +262,7 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 		
 	for cell in occupied_cells:
 		if selected_attack.target_type == GameData.TargetType.ENEMY:
-			if cell.x > 3: # if master grid width is constant, will always be '3'
+			if cell.x > 3: # if global grid width is constant, will always be '3'
 				valid_targets.append(cell)
 		elif selected_attack.target_type == GameData.TargetType.HERO:
 			if cell.x < 4:
@@ -277,7 +277,7 @@ func build_characters() -> void:
 	var pc = pc_scene.instantiate()
 	var pc_abilities = ["Clobber", "Laser"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", GameData.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
+	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
@@ -286,7 +286,7 @@ func build_characters() -> void:
 	var runt = runt_scene.instantiate()
 	var runt_abilities = ["Bite", "Reinforce"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	runt.init("Runt", GameData.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
+	runt.init("Runt", Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
@@ -294,14 +294,14 @@ func build_characters() -> void:
 	
 	var norman = norman_scene.instantiate()
 	var norman_abilities = ["Clobber"]
-	norman.init("Norman", GameData.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
+	norman.init("Norman", Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
 	var thumper_abilities = ["Clobber", "Bite"]
-	thumper.init("Thumper", GameData.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	thumper.init("Thumper", Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()

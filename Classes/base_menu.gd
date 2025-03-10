@@ -35,9 +35,7 @@ func activate() -> void:
 func disactivate() -> void:
 	is_active = false
 
-func update_selected_button(index = null) -> void:
-	if index:
-		selected_button_index = index
+func update_selected_button() -> void:
 	selected_button = buttons[selected_button_index]
 	cursor.move_cursor(selected_button.position)
 

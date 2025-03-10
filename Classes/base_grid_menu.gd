@@ -44,7 +44,6 @@ func update_grid(grid_size: Vector2i):
 			var grid_coords = Vector2i(x, rows - (y + 1))
 			targets_grid[grid_coords] = buttons[cell_index]
 			cell_index += 1
-	update_selected_cell(Vector2i(3,0))
 
 func activate_enemy_grid() -> void:
 	if current_grid_type != GridType.ENEMY:
@@ -110,15 +109,18 @@ func navigate_backward(e: InputEvent) -> void:
 func move_up() -> void:
 	var coords = targets_grid.find_key(selected_button)
 	var next_coords: Vector2i
+	
 	if coords.y == initial_grid_size.y - 1 && wrap:
 		next_coords = Vector2i(coords.x, 0)
-	elif coords.y == initial_grid_size.y && !wrap:
+	elif coords.y == initial_grid_size.y - 1 && !wrap:
 		next_coords = coords
 	else:
 		next_coords = Vector2i(coords.x, coords.y + 1)
+		
 	var is_in_range = check_range(next_coords)
 	if !is_in_range:
 		return
+		
 	update_selected_cell(next_coords)
 
 func move_down() -> void:
@@ -145,9 +147,10 @@ func move_left() -> void:
 		next_coords = coords
 	else:
 		next_coords = Vector2i(coords.x - 1, coords.y)
-	var is_in_range = check_range(next_coords)
-	if !is_in_range:
-		return
+	if !wrap:
+		var is_in_range = check_range(next_coords)
+		if !is_in_range:
+			return
 	selected_button.modulate.a = 0
 	update_selected_cell(next_coords)
 
@@ -172,7 +175,6 @@ func set_grid_type(type: GridType) -> void:
 func activate() -> void:
 	self.show_menu()
 	is_active = true
-	update_selected_cell(Vector2i.ZERO)
 	cursor.move_cursor(selected_button.position)
 
 func disactivate() -> void:
@@ -196,6 +198,8 @@ func set_current_shape(attack_shape: GameData.AttackShapes) -> void:
 func get_neighbor_coords(origin_coords: Vector2i) -> Array:
 	var neighbor_coords: Array
 	match current_shape:
+		GameData.AttackShapes.SINGLE:
+			return neighbor_coords
 		GameData.AttackShapes.DIAMOND:
 			if origin_coords.y < initial_grid_size.y - 1:
 				neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y + 1))
@@ -205,11 +209,11 @@ func get_neighbor_coords(origin_coords: Vector2i) -> Array:
 				neighbor_coords.append(Vector2i(origin_coords.x + 1, origin_coords.y))
 			if origin_coords.x > 0:
 				neighbor_coords.append(Vector2i(origin_coords.x - 1, origin_coords.y))
-	match current_shape:
 		GameData.AttackShapes.LINE:
-			var count = origin_coords.x + 1
+			var count = 0
 			while count < initial_grid_size.x / 2:
-				neighbor_coords.append(Vector2i(count, origin_coords.y))
+				if count != origin_coords.x:
+					neighbor_coords.append(Vector2i(count, origin_coords.y))
 				count += 1
 
 	return neighbor_coords
@@ -222,8 +226,11 @@ func reset_cells() -> void:
 func set_range(origin: Vector2i, range: Vector2i) -> void:
 	self.origin = origin
 	range_of_movement = range
-	update_selected_cell(origin)
-	
+	if current_grid_type == GridType.HERO:
+		update_selected_cell(origin)
+	else:
+		update_selected_cell(Vector2i.ZERO)
+
 func get_cell_color() -> Color:
 	if current_grid_type == GridType.ENEMY:
 		return Color(1, 0, 0)
@@ -231,8 +238,10 @@ func get_cell_color() -> Color:
 		return Color(0.5, 0.7, 1)
 		
 func check_range(coords: Vector2i):
-	if !range_of_movement:
-		return true
+	#if range_of_movement == null:
+		#return true
+	if current_grid_type == GridType.ENEMY: 
+		coords.x += (initial_grid_size.x / 2)
 	if abs(coords.x - origin.x) > range_of_movement.x:
 		return false
 	elif abs(coords.y - origin.y) > range_of_movement.y:
