@@ -3,8 +3,9 @@ extends Node2D
 @onready var game_controller = get_tree().current_scene
 @onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
 @onready var cursor = $"../BattleMenu/Cursor"
-@onready var display_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 
+@onready var display_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
+@onready var ap_display = $"../BattleMenu/Descriptions/Labels/ActionPointDisplay"
 @onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
 @onready var items_node = $"../BattleMenu/ItemsMenu"
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
@@ -139,19 +140,25 @@ func handle_attack(event: Dictionary) -> void:
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
-	var selected_targets: Array
-	for cell in target_cells: # move to base grid
-		if battle_grid.current_grid.has(cell):
-			selected_targets.append(cell)
-	
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
-	
-	for target in selected_targets:
-		var damage_event = current_player.calculate_attack_dmg(selected_attack)
-		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "emitter": current_player})
+	var cost = selected_attack.action_cost
+	var success = current_player.use_action(cost)
+	if success:
+		ap_display.update_action_points(cost)
+		var selected_targets: Array
+		for cell in target_cells: # move to base grid
+			if battle_grid.current_grid.has(cell):
+				selected_targets.append(cell)
 		
-	add_event({"type": EventType.END_TURN, "duration": 0})
-	increment_event_queue()
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
+		
+		for target in selected_targets:
+			var damage_event = current_player.calculate_attack_dmg(selected_attack)
+			add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "emitter": current_player})
+			
+		add_event({"type": EventType.END_TURN, "duration": 0})
+		increment_event_queue()
+	else:
+		prompt_action_points_insufficient()
 
 func prompt_select_target(attack_name: String) -> Dictionary:
 	var hero_attack = GameData.abilities[attack_name]
@@ -170,17 +177,20 @@ func on_select_invalid_target() -> void:
 		
 func on_use_item(item_index: int) -> void:
 	cursor.disable()
-	var item = current_player.items.pop_at(item_index) # expensive on large arrays
-	if current_player.items.is_empty():
-		current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
-	update_ui()
-	
-	add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "emitter": current_player})
-	current_player.items_equipped.append(item)
-	current_player.populate_buffs_array()
-	add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "emitter": current_player})
-	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player})
-	increment_event_queue()
+	var success = current_player.use_action(2)
+	if success:
+		var item = current_player.items.pop_at(item_index) # expensive on large arrays
+		if current_player.items.is_empty():
+			current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
+		update_ui()
+		
+		add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "emitter": current_player})
+		current_player.items_equipped.append(item)
+		current_player.populate_buffs_array()
+		add_event({"type": EventType.DIALOG, "text": item.effect_description, "duration": dialog_duration, "emitter": current_player})
+		increment_event_queue()
+	else:
+		prompt_action_points_insufficient()
 
 func on_try_retreat() -> void:
 	cursor.disable()
@@ -217,9 +227,14 @@ func get_enemy_attack() -> Dictionary:
 	
 func on_movement(next_coords: Array) -> void:
 	cursor.disable()
-	add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": attack_duration})
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
-	increment_event_queue()
+	var success = current_player.use_action(1)
+	if success:
+		ap_display.update_action_points(1)
+		add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": attack_duration})
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
+		increment_event_queue()
+	else:
+		prompt_action_points_insufficient()
 
 func handle_movement(event: Dictionary) -> void:
 	var target = event.target
@@ -357,11 +372,18 @@ func increment_turn_queue() -> void:
 		set_turn_order()
 	var next_player = turn_queue.pop_front()
 	current_player = next_player
+	current_player.start_turn()
+
+func prompt_action_points_insufficient() -> void:
+	play_dialog("AP is too low!", false)
+	cursor.enable()
 	
 func update_ui() -> void:
 	if current_player.alliance == GameData.Alliance.HERO:	
 		char_name_label.text = current_player.name
 		update_display_health()
+		
+		ap_display.set_action_points(current_player.action_points)
 
 		var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
 		for i in range(abilities_buttons.size()):
@@ -386,4 +408,5 @@ func initialize_battle() -> void:
 	build_characters()
 	populate_grid()
 	increment_turn_queue()
+	ap_display.initialize_ap_display()
 	update_ui()

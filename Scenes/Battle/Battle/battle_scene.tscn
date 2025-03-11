@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://clg4nd1ekycri"]
+[gd_scene load_steps=13 format=3 uid="uid://clg4nd1ekycri"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_controller.gd" id="1_jktho"]
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="2_tvtlk"]
 [ext_resource type="Script" path="res://Scenes/Battle/Cursor/battle_cursor.gd" id="3_nifbg"]
+[ext_resource type="Script" path="res://Scenes/Battle/Battle/action_point_display.gd" id="3_ywqhi"]
 
 [sub_resource type="Theme" id="Theme_y4e55"]
 
@@ -403,10 +404,16 @@ offset_bottom = 256.0
 theme = SubResource("Theme_om1ud")
 alignment = 1
 
-[node name="Label" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="ActionPointDisplay" type="HBoxContainer" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
-text = " Sucker Punch"
+script = ExtResource("3_ywqhi")
+
+[node name="ActionPoints" type="Label" parent="BattleMenu/Descriptions/Labels/ActionPointDisplay"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "AP:	"
+vertical_alignment = 2
 
 [node name="AbilityDescription" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2

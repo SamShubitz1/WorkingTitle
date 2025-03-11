@@ -8,6 +8,7 @@ var max_health: int
 var is_player: bool = false
 var health_bar: ProgressBar
 var sprite: AnimatedSprite2D
+var action_points: int = 5
 
 var attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
 
@@ -28,11 +29,13 @@ func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: Anim
 	set_health()
 	set_abilities(abilities)
 	set_items(items)
+	health_bar.z_index = -1
 	set_grid_position(grid_position)
 	sprite.play()
 
 func set_grid_position(next_position: Vector2i):
 	self.grid_position = next_position
+	self.z_index = 3 - grid_position.y
 	
 func set_health() -> void:
 	health_bar.max_value = max_health
@@ -96,3 +99,21 @@ func flip_sprite() -> void:
 func populate_buffs_array() -> void:
 	for i in items_equipped:
 		buffs[i.effect_type] = i.multiplier
+		
+func use_action(cost: int) -> bool:
+	var next_points = action_points - cost
+	if next_points < 0:
+		return false
+	else:
+		action_points = next_points
+		return true
+
+func start_turn():
+	if action_points < 5:
+		var next_points = action_points + 3
+		if next_points > 5:
+			action_points = 5
+		else:
+			action_points = next_points
+	
+	
