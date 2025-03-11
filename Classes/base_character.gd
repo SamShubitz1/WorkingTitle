@@ -57,6 +57,8 @@ func take_damage(damage_event: Dictionary) -> int:
 	var damage_type = damage_event.damage_type
 	var damage_result: int
 	match damage_type:
+		GameData.DamageType.NONE:
+			return false
 		GameData.DamageType.PHYSICAL:
 			var armor: float = attributes[GameData.Attributes.ARMOR]
 			var multiplier: float = 1 - (armor / 10)
@@ -88,10 +90,7 @@ func resolve_attribute_bonuses(selected_attack: Dictionary):
 func resolve_effect(effect: Dictionary):
 	var property = effect.affected_property
 	var value = effect.effect_value
-	var description = effect.effect_description
 	attributes[property] += value
-	if description:
-		return {"target": char_name, "effect_description": description}
 
 func flip_sprite() -> void:
 	sprite.flip_h = true

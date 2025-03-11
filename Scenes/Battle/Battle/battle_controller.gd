@@ -4,11 +4,14 @@ extends Node2D
 @onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
 @onready var cursor = $"../BattleMenu/Cursor"
 
-@onready var display_health = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
+@onready var health_display = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 @onready var ap_display = $"../BattleMenu/Descriptions/Labels/ActionPointDisplay"
 @onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
 @onready var items_node = $"../BattleMenu/ItemsMenu"
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
+
+var animation_player_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
+var animation_player: AnimatedSprite2D
 
 var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
@@ -81,6 +84,7 @@ func increment_event_queue() -> void:
 
 		if event.has("duration"):
 			await wait(event.duration)
+			animation_player.stop_animation()
 			increment_event_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
@@ -95,6 +99,9 @@ func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
 	battle_log.append(event.text)
 	update_dialog_queue()
+	
+	if event.has("animation"):
+		animation_player.start_animation(event.animation.target, event.animation.name)
 
 func play_dialog(text: String, should_log: bool) -> void:
 	dialog.text = text
@@ -111,30 +118,42 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 
 func handle_attack(event: Dictionary) -> void:
+	var effects = event.damage_event.effects
+	var animation = event.animation
 	var damage_result = event.target.take_damage(event.damage_event)
 	
-	var effect_dialog: Array
-	for effect in event.damage_event.effects:
-		if effect.effect_target == Data.EffectTarget.TARGET:
-			var dialog = event.target.resolve_effect(effect)
-			effect_dialog.append(dialog)
-		elif effect.effect_target == Data.EffectTarget.SELF:
-			var dialog = event.emitter.resolve_effect(effect)
-			effect_dialog.append(dialog)
-			
 	if damage_result:
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
-		if !effect_dialog.is_empty():
-			for dialog in effect_dialog:
-				add_event({"type": EventType.DIALOG, "text": dialog.target + " " + dialog.effect_description + "!", "duration": dialog_duration})
-				
-	elif !effect_dialog.is_empty():
-		var first_dialog = effect_dialog.pop_front()
-		play_dialog(first_dialog.target + " " + first_dialog.effect_description + "!", true)
-		for dialog in effect_dialog:
-			var next_dialog = effect_dialog.pop_front()
-			add_event({"type": EventType.DIALOG, "text": dialog.target + " " + dialog.effect_description + "!", "duration": dialog_duration})
+		animation_player.start_animation(event.target, event.animation.target)
 		
+		if !effects.is_empty():
+			for effect in effects:
+				if effect.effect_target == Data.EffectTarget.TARGET:
+					event.target.resolve_effect(effect)
+					add_event({"type": EventType.DIALOG, "text": event.target.char_name + " " + effect.effect_description + "!", "duration": dialog_duration})
+				elif effect.effect_target == Data.EffectTarget.SELF:
+					event.emitter.resolve_effect(effect)
+					add_event({"type": EventType.DIALOG, "text": event.emitter.char_name + " " + effect.effect_description + "!", "duration": dialog_duration})
+					
+	elif !effects.is_empty():
+		var first_effect = effects[0]
+		if first_effect.effect_target == Data.EffectTarget.TARGET:
+			event.target.resolve_effect(first_effect)
+			play_dialog(event.target.char_name + " " + first_effect.effect_description + "!", true)
+			animation_player.start_animation(event.target, event.animation.target)
+		elif first_effect.effect_target == Data.EffectTarget.SELF:
+			event.emitter.resolve_effect(first_effect)
+			play_dialog(event.emitter.char_name + " " + first_effect.effect_description + "!", true)
+			animation_player.start_animation(event.emitter, event.animation.self)
+			
+		for effect in effects.slice(1):
+			if effect.effect_target == Data.EffectTarget.TARGET:
+				event.target.resolve_effect(effect)
+				add_event({"type": EventType.DIALOG, "text": event.target.char_name + " " + effect.effect_description + "!", "duration": animation.duration, "animation": {"target": event.target, "name": animation.target}})
+			elif effect.effect_target == Data.EffectTarget.SELF:
+				event.emitter.resolve_effect(effect)
+				add_event({"type": EventType.DIALOG, "text": event.emitter.char_name + " " + effect.effect_description + "!", "duration": animation.duration, "animation": {"target": event.emitter, "name": animation.self}})
+
 	if event.target.health_bar.value <= 0:
 		on_target_death(event.target)
 
@@ -144,6 +163,7 @@ func on_use_attack(target_cells: Array) -> void:
 	var success = current_player.use_action(cost)
 	if success:
 		ap_display.update_action_points(cost)
+		
 		var selected_targets: Array
 		for cell in target_cells: # move to base grid
 			if battle_grid.current_grid.has(cell):
@@ -153,7 +173,7 @@ func on_use_attack(target_cells: Array) -> void:
 		
 		for target in selected_targets:
 			var damage_event = current_player.calculate_attack_dmg(selected_attack)
-			add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": attack_duration, "emitter": current_player})
+			add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": selected_attack.animation.duration, "emitter": current_player, "animation": selected_attack.animation})
 			
 		add_event({"type": EventType.END_TURN, "duration": 0})
 		increment_event_queue()
@@ -180,8 +200,6 @@ func on_use_item(item_index: int) -> void:
 	var success = current_player.use_action(2)
 	if success:
 		var item = current_player.items.pop_at(item_index) # expensive on large arrays
-		if current_player.items.is_empty():
-			current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
 		update_ui()
 		
 		add_event({"type": EventType.DIALOG, "text": str(current_player.char_name, " used " + item.name + "!"), "duration": dialog_duration, "emitter": current_player})
@@ -214,7 +232,7 @@ func perform_enemy_attack() -> void:
 	var damage_event = current_player.calculate_attack_dmg(enemy_attack)
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
-	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": attack_duration, "emitter": current_player})
+	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": selected_attack.animation.duration, "emitter": current_player, "animation": enemy_attack.animation})
 	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player})
 	
 	increment_event_queue()
@@ -380,10 +398,13 @@ func prompt_action_points_insufficient() -> void:
 	
 func update_ui() -> void:
 	if current_player.alliance == GameData.Alliance.HERO:	
+		
 		char_name_label.text = current_player.name
 		update_display_health()
-		
 		ap_display.set_action_points(current_player.action_points)
+		
+		if current_player.items.is_empty():
+			current_player.items.append({"name": "Empty", "menu_description": "You have no items"})
 
 		var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
 		for i in range(abilities_buttons.size()):
@@ -400,13 +421,18 @@ func update_ui() -> void:
 				items_buttons[i].text = "-"
 
 func update_display_health() -> void:
-	display_health.max_value = current_player.health_bar.max_value
-	display_health.value = current_player.health_bar.value
+	health_display.max_value = current_player.health_bar.max_value
+	health_display.value = current_player.health_bar.value
 				
 func initialize_battle() -> void:
 	dialog = dialog_box[0]
+	build_animation_player()
 	build_characters()
 	populate_grid()
 	increment_turn_queue()
 	ap_display.initialize_ap_display()
 	update_ui()
+	
+func build_animation_player() -> void:
+	animation_player = animation_player_scene.instantiate()
+	self.add_child(animation_player)

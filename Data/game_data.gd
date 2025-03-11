@@ -82,20 +82,20 @@ enum EffectTarget {
 # effect: {"type": ATTRIBUTES, "value": -2, "effected_property": Attributes.ARMOR}
 
 var abilities: Dictionary = {
-	"Clobber": {"name": "Clobber", "damage_type": DamageType.PHYSICAL, "damage": 80, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": []},
+	"Clobber": {"name": "Clobber", "damage_type": DamageType.PHYSICAL, "damage": 80, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": [], "animation": {"target": "Clobber", "duration": 0.8}},
 	
-	"Laser": {"name": "Laser", "damage_type": DamageType.ENERGY, "damage": 60, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": Vector2i.ZERO, "shape": AttackShape.LINE, "effects": []},
+	"Laser": {"name": "Laser", "damage_type": DamageType.ENERGY, "damage": 60, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": Vector2i.ZERO, "shape": AttackShape.LINE, "effects": [], "animation": {"target": "Laser", "duration": 0.8}},
 	
-	"Bite": {"name": "Bite", "damage_type": DamageType.PHYSICAL, "damage": 70, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": [{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_description": "lost 1 armor"}]},
+	"Bite": {"name": "Bite", "damage_type": DamageType.PHYSICAL, "damage": 70, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": [{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_description": "lost 1 armor"}], "animation": {"target": "Bite", "duration": 0.8}},
 	
 	"Reinforce": {"name": "Reinforce", "damage_type": DamageType.NONE, "damage": 0, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AttackShape.LINE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_description": "gained 1 armor"}]},
+		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_description": "gained 1 armor"}], "animation": {"target": "Reinforce", "duration": 0.8}},
 	
-	"Wave Beam": {"name": "Wave Beam", "damage_type": DamageType.ENERGY, "damage": 75, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AttackShape.SINGLE, "effects": []},
+	"Wave Beam": {"name": "Wave Beam", "damage_type": DamageType.ENERGY, "damage": 75, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AttackShape.SINGLE, "effects": [], "animation": {"target": "Wavebeam", "duration": 0.8}},
 	
 	"Armor Inversion": {"name": "Armor Inversion", "damage_type": DamageType.NONE, "damage": 0, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AttackShape.SINGLE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": -2, "affected_property": Attributes.ARMOR, "effect_description": "lost 2 armor"},
-		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF, "effect_value": +2, "affected_property": Attributes.ARMOR, "effect_description": "gained 2 armor"}]}
+		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF, "effect_value": +2, "affected_property": Attributes.ARMOR, "effect_description": "gained 2 armor"}], "animation": {"target": "ArmorInversionTarget", "self": "ArmorInversionSelf", "duration": 0.9}}
 	}
 	
 var items: Dictionary = {
@@ -104,6 +104,16 @@ var items: Dictionary = {
 	"Sharpener":{"name": "Sharpener", "effect_type": "Scissors", "effect_description": "Scissors attack went up!", "menu_description": "Adds damage to scissors attacks", "multiplier": .3},
 	
 	"Extra Paper":{"name": "Extra Paper", "effect_type": "Paper", "effect_description": "Paper attack went up!", "menu_description": "Adds damage to paper attacks", "multiplier": .3}}
+	
+var animations = {
+"ArmorInversionTarget": "res://Scenes/Battle/Animations/Abi_Armorinversion_Enemy.png",
+"ArmorInversionSelf": "res://Scenes/Battle/Animations/Abi_Armorinversion_Enemy.png",
+"Bite": "res://Scenes/Battle/Animations/Abi_Bite.png",
+"Clobber": "res://Scenes/Battle/Animations/Abi_Clobber.png",
+"Laser": "res://Scenes/Battle/Animations/Abi_Laser.png",
+"Reinforce": "res://Scenes/Battle/Animations/Abi_Reinforce.png",
+"Wavebeam": "res://Scenes/Battle/Animations/Abi_Wavebeam.png"
+}
 
 var pokedex = {
 	"Bulbasaur": {"name": "Bulbasaur", "type": ["Grass", "Poison"], "description": "A small, squat Pokémon with a plant bulb on its back, which grows into a large plant as it evolves."},
