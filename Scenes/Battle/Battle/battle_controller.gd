@@ -33,8 +33,7 @@ var battle_log: Array
 var dialog: Label
 var manual_increment: bool = false
 
-var dialog_duration: float = 0.7
-var attack_duration: float = 0.9
+const dialog_duration: float = 0.7
 
 var selected_attack: Dictionary
 
@@ -99,9 +98,6 @@ func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
 	battle_log.append(event.text)
 	update_dialog_queue()
-	
-	if event.has("animation"):
-		animation_player.start_animation(event.animation.target, event.animation.name)
 
 func play_dialog(text: String, should_log: bool) -> void:
 	dialog.text = text
@@ -118,44 +114,17 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 
 func handle_attack(event: Dictionary) -> void:
-	var effects = event.damage_event.effects
-	var animation = event.animation
-	var damage_result = event.target.take_damage(event.damage_event)
-	
-	if damage_result:
+	if event.has("damage_event"):
+		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
-		animation_player.start_animation(event.target, event.animation.target)
-		
-		if !effects.is_empty():
-			for effect in effects:
-				if effect.effect_target == Data.EffectTarget.TARGET:
-					event.target.resolve_effect(effect)
-					add_event({"type": EventType.DIALOG, "text": event.target.char_name + " " + effect.effect_description + "!", "duration": dialog_duration})
-				elif effect.effect_target == Data.EffectTarget.SELF:
-					event.emitter.resolve_effect(effect)
-					add_event({"type": EventType.DIALOG, "text": event.emitter.char_name + " " + effect.effect_description + "!", "duration": dialog_duration})
-					
-	elif !effects.is_empty():
-		var first_effect = effects[0]
-		if first_effect.effect_target == Data.EffectTarget.TARGET:
-			event.target.resolve_effect(first_effect)
-			play_dialog(event.target.char_name + " " + first_effect.effect_description + "!", true)
-			animation_player.start_animation(event.target, event.animation.target)
-		elif first_effect.effect_target == Data.EffectTarget.SELF:
-			event.emitter.resolve_effect(first_effect)
-			play_dialog(event.emitter.char_name + " " + first_effect.effect_description + "!", true)
-			animation_player.start_animation(event.emitter, event.animation.self)
-			
-		for effect in effects.slice(1):
-			if effect.effect_target == Data.EffectTarget.TARGET:
-				event.target.resolve_effect(effect)
-				add_event({"type": EventType.DIALOG, "text": event.target.char_name + " " + effect.effect_description + "!", "duration": animation.duration, "animation": {"target": event.target, "name": animation.target}})
-			elif effect.effect_target == Data.EffectTarget.SELF:
-				event.emitter.resolve_effect(effect)
-				add_event({"type": EventType.DIALOG, "text": event.emitter.char_name + " " + effect.effect_description + "!", "duration": animation.duration, "animation": {"target": event.emitter, "name": animation.self}})
-
-	if event.target.health_bar.value <= 0:
-		on_target_death(event.target)
+		if event.has("animation"):
+			animation_player.start_animation(event.target, event.animation)
+#
+	elif event.has("effect"):
+		event.target.resolve_effect(event.effect)
+		play_dialog(event.target.char_name + " " + event.effect.effect_description + "!", true)
+		if event.effect_animation != "":
+			animation_player.start_animation(event.target, event.effect_animation)
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
@@ -172,13 +141,40 @@ func on_use_attack(target_cells: Array) -> void:
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
 		
 		for target in selected_targets:
-			var damage_event = current_player.calculate_attack_dmg(selected_attack)
-			add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": selected_attack.animation.duration, "emitter": current_player, "animation": selected_attack.animation})
+			build_attack_event(target)
+				
+			for effect in selected_attack.effects:
+				build_effect_event(target, effect)
 			
 		add_event({"type": EventType.END_TURN, "duration": 0})
 		increment_event_queue()
 	else:
 		prompt_action_points_insufficient()
+		
+func build_attack_event(target: Character) -> void:
+	var damage_event = current_player.calculate_attack_dmg(selected_attack)
+	if damage_event:
+		var animation = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
+		if selected_attack.has("animation"):
+			animation["name"] = selected_attack.animation.name
+			animation["duration"] = selected_attack.animation.duration
+			
+		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
+
+func build_effect_event(target: Character, effect: Dictionary) -> void:
+	var effect_target: Character
+	var effect_animation: Dictionary = {"name": "", "duration": dialog_duration}
+				
+	if effect.effect_target == Data.EffectTarget.OTHER:
+		effect_target = battle_grid.current_grid[target]
+	elif effect.effect_target == Data.EffectTarget.SELF:
+		effect_target = current_player
+					
+	if effect.has("effect_animation"):
+		effect_animation["name"] = effect.effect_animation.name
+		effect_animation["duration"] = effect.effect_animation.duration
+					
+	add_event({"type": EventType.ATTACK, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
 
 func prompt_select_target(attack_name: String) -> Dictionary:
 	var hero_attack = GameData.abilities[attack_name]
@@ -232,7 +228,23 @@ func perform_enemy_attack() -> void:
 	var damage_event = current_player.calculate_attack_dmg(enemy_attack)
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
-	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": selected_attack.animation.duration, "emitter": current_player, "animation": enemy_attack.animation})
+	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": selected_attack.animation.duration, "emitter": current_player, "animation": enemy_attack.animation.name})
+	
+	for effect in selected_attack.effects:
+				var effect_target: Character
+				var effect_animation: Dictionary = {"name": "", "duration": dialog_duration}
+				
+				if effect.effect_target == Data.EffectTarget.OTHER:
+					effect_target = target
+				elif effect.effect_target == Data.EffectTarget.SELF:
+					effect_target = current_player
+					
+				if effect.has("effect_animation"):
+					effect_animation["name"] = effect.effect_animation.name
+					effect_animation["duration"] = effect.effect_animation.duration
+					
+				add_event({"type": EventType.ATTACK, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
+				
 	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player})
 	
 	increment_event_queue()
@@ -248,7 +260,7 @@ func on_movement(next_coords: Array) -> void:
 	var success = current_player.use_action(1)
 	if success:
 		ap_display.update_action_points(1)
-		add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": attack_duration})
+		add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": dialog_duration})
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
 		increment_event_queue()
 	else:

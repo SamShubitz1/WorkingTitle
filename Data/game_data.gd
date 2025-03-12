@@ -66,7 +66,7 @@ enum EffectType {
 }
 
 enum EffectTarget {
-	TARGET,
+	OTHER,
 	SELF
 }
 
@@ -82,21 +82,21 @@ enum EffectTarget {
 # effect: {"type": ATTRIBUTES, "value": -2, "effected_property": Attributes.ARMOR}
 
 var abilities: Dictionary = {
-	"Clobber": {"name": "Clobber", "damage_type": DamageType.PHYSICAL, "damage": 80, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": [], "animation": {"target": "Clobber", "duration": 0.8}},
+	"Clobber": {"name": "Clobber", "damage": { "damage_type": DamageType.PHYSICAL, "damage_value": 80}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": [], "animation": {"name": "Clobber", "duration": 0.8}},
 	
-	"Laser": {"name": "Laser", "damage_type": DamageType.ENERGY, "damage": 60, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": Vector2i.ZERO, "shape": AttackShape.LINE, "effects": [], "animation": {"target": "Laser", "duration": 0.8}},
+	"Laser": {"name": "Laser", "damage": { "damage_type": DamageType.ENERGY, "damage_value": 60}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": Vector2i.ZERO, "shape": AttackShape.LINE, "effects": [], "animation": {"name": "Laser", "duration": 0.8}},
 	
-	"Bite": {"name": "Bite", "damage_type": DamageType.PHYSICAL, "damage": 70, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": [{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_description": "lost 1 armor"}], "animation": {"target": "Bite", "duration": 0.8}},
+	"Bite": {"name": "Bite", "damage": { "damage_type": DamageType.PHYSICAL, "damage_value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": Vector2i(3,1), "shape": AttackShape.SINGLE, "effects": [{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_description": "lost 1 armor"}], "animation": {"name": "Bite", "duration": 0.8}},
 	
-	"Reinforce": {"name": "Reinforce", "damage_type": DamageType.NONE, "damage": 0, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AttackShape.LINE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_description": "gained 1 armor"}], "animation": {"target": "Reinforce", "duration": 0.8}},
+	"Reinforce": {"name": "Reinforce", "damage": { "damage_type": DamageType.NONE, "damage_value": 0}, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AttackShape.LINE, "effects": [
+		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_description": "gained 1 armor", "effect_animation": {"name": "Reinforce", "duration": 0.8}}]},
 	
-	"Wave Beam": {"name": "Wave Beam", "damage_type": DamageType.ENERGY, "damage": 75, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AttackShape.SINGLE, "effects": [], "animation": {"target": "Wavebeam", "duration": 0.8}},
+	"Wave Beam": {"name": "Wave Beam", "damage":{ "damage_type": DamageType.ENERGY, "damage_value": 75}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AttackShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.8}},
 	
-	"Armor Inversion": {"name": "Armor Inversion", "damage_type": DamageType.NONE, "damage": 0, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AttackShape.SINGLE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.TARGET, "effect_value": -2, "affected_property": Attributes.ARMOR, "effect_description": "lost 2 armor"},
-		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF, "effect_value": +2, "affected_property": Attributes.ARMOR, "effect_description": "gained 2 armor"}], "animation": {"target": "ArmorInversionTarget", "self": "ArmorInversionSelf", "duration": 0.9}}
-	}
+	"Armor Inversion": {"name": "Armor Inversion", "damage": { "damage_type": DamageType.NONE, "damage_value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AttackShape.SINGLE, "effects": [
+		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": -2, "affected_property": Attributes.ARMOR, "effect_description": "lost 2 armor", "effect_animation": {"name": "ArmorInversionOther", "duration": 0.9}},
+		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF, "effect_value": +2, "affected_property": Attributes.ARMOR, "effect_description": "gained 2 armor", "effect_animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]
+		}}
 	
 var items: Dictionary = {
 	"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "effect_description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3},

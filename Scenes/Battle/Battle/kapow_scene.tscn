@@ -9,42 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://cdkhva26je1c" path="res://Scenes/Battle/Animations/Abi_Wavebeam.png" id="7_l0oxw"]
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/animation_player.gd" id="8_eb3ju"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vlh1w"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_asqsj"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_caany"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7txmy"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(96, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gfe73"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(128, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xa8kq"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(160, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pona4"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(192, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_55tyb"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(224, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_17lgb"]
-atlas = ExtResource("1_n4es2")
-region = Rect2(256, 0, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_85xnk"]
 atlas = ExtResource("2_co6xs")
 region = Rect2(0, 0, 32, 32)
@@ -79,6 +43,42 @@ region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hwkm5"]
 atlas = ExtResource("2_co6xs")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vlh1w"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_asqsj"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_caany"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7txmy"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gfe73"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xa8kq"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pona4"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55tyb"]
+atlas = ExtResource("1_n4es2")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_17lgb"]
+atlas = ExtResource("1_n4es2")
 region = Rect2(256, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_etpah"]
@@ -245,6 +245,38 @@ region = Rect2(224, 0, 32, 32)
 animations = [{
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_85xnk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1uqwm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x2tub")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3gmi5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_egw17")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dr3iv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6p21r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4hwow")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwkm5")
+}],
+"loop": true,
+"name": &"ArmorInversionOther",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_vlh1w")
 }, {
 "duration": 1.0,
@@ -273,38 +305,6 @@ animations = [{
 }],
 "loop": true,
 "name": &"ArmorInversionSelf",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_85xnk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1uqwm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x2tub")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3gmi5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_egw17")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dr3iv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_6p21r")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4hwow")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hwkm5")
-}],
-"loop": true,
-"name": &"ArmorInversionTarget",
 "speed": 10.0
 }, {
 "frames": [{
@@ -456,5 +456,5 @@ animations = [{
 [node name="KapowSprite" type="AnimatedSprite2D"]
 z_index = 4
 sprite_frames = SubResource("SpriteFrames_g16yy")
-animation = &"ArmorInversionSelf"
+animation = &"ArmorInversionOther"
 script = ExtResource("8_eb3ju")

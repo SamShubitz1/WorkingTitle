@@ -72,13 +72,14 @@ func take_damage(damage_event: Dictionary) -> int:
 	
 	return damage_result
 
-func calculate_attack_dmg(selected_attack: Dictionary) -> Dictionary:
-	var damage: int = selected_attack.damage
-	var damage_with_range = damage * randf_range(.9, 1.1)
-	var attribute_multiplier = resolve_attribute_bonuses(selected_attack)
-	if attribute_multiplier:
-		damage_with_range *= float(attribute_multiplier)
-	return {"damage": int(damage_with_range), "damage_type": selected_attack.damage_type, "effects": selected_attack.effects}
+func calculate_attack_dmg(selected_attack: Dictionary):
+	if selected_attack.damage.damage_type != Data.DamageType.NONE:
+		var damage: int = selected_attack.damage.damage_value
+		var damage_with_range = damage * randf_range(.9, 1.1)
+		var attribute_multiplier = resolve_attribute_bonuses(selected_attack)
+		if attribute_multiplier:
+			damage_with_range *= float(attribute_multiplier)
+		return {"damage": int(damage_with_range), "damage_type": selected_attack.damage.damage_type}
 	
 func resolve_attribute_bonuses(selected_attack: Dictionary):
 	var attribute = selected_attack.attribute_bonus
