@@ -140,7 +140,8 @@ func on_use_attack(target_cells: Array) -> void:
 		
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
 		
-		for target in selected_targets:
+		for target_pos in selected_targets:
+			var target = battle_grid.current_grid[target_pos]
 			build_attack_event(target)
 				
 			for effect in selected_attack.effects:
@@ -159,14 +160,14 @@ func build_attack_event(target: Character) -> void:
 			animation["name"] = selected_attack.animation.name
 			animation["duration"] = selected_attack.animation.duration
 			
-		add_event({"type": EventType.ATTACK, "target": battle_grid.current_grid[target], "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
+		add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
 	var effect_animation: Dictionary = {"name": "", "duration": dialog_duration}
 				
 	if effect.effect_target == Data.EffectTarget.OTHER:
-		effect_target = battle_grid.current_grid[target]
+		effect_target = target
 	elif effect.effect_target == Data.EffectTarget.SELF:
 		effect_target = current_player
 					
