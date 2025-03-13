@@ -119,6 +119,9 @@ func handle_attack(event: Dictionary) -> void:
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		if event.has("animation"):
 			animation_player.start_animation(event.target, event.animation)
+			
+		if event.target.health_bar.value <= 0:
+			on_target_death(event.target)
 #
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
