@@ -35,9 +35,11 @@ func _input(e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_just_pressed("navigate_forward"):
 			selected_menu.navigate_forward(e)
+			update_description()
 
 		elif Input.is_action_just_pressed("navigate_backward"):
 			selected_menu.navigate_backward(e)
+			update_description()
 		
 		elif Input.is_action_just_pressed("navigate_log"):
 			if selected_menu != log_menu:
@@ -48,6 +50,7 @@ func _input(e) -> void:
 				on_cancel_target_select()
 			else:
 				go_back()
+				update_description()
 
 	if Input.is_action_just_pressed("ui_accept"):
 		if battle_controller.manual_increment:
@@ -102,6 +105,8 @@ func on_select_option() -> void:
 			update_selected_menu(Data.BattleMenuType.ABILITIES)
 		" Move":
 			on_select_move()
+		" Guard":
+			on_select_guard()
 		" Items":
 			log_menu.hide_menu()
 			update_selected_menu(Data.BattleMenuType.ITEMS)
@@ -135,6 +140,9 @@ func on_select_move() -> void:
 	movement_menu.set_current_shape(Data.AttackShape.SINGLE)
 	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
 	battle_controller.prompt_select_space()
+	
+func on_select_guard() -> void:
+	battle_controller.on_guard()
 	
 func on_select_target():
 	log_menu.show_menu()

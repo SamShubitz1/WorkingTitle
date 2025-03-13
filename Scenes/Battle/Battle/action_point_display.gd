@@ -1,17 +1,17 @@
 extends Control
 
-var orb_off = preload("res://Scenes/Battle/Menu/Action_Point_Orb_OFF.png")
-var orb_on = preload("res://Scenes/Battle/Menu/Action_Point_Orb_ON.png")
+var ap_orb_off = preload("res://Scenes/Battle/Menu/Action_Point_Orb_OFF.png")
+var ap_orb_on = preload("res://Scenes/Battle/Menu/Action_Point_Orb_ON.png")
 
 var max_count = 5
 var current_count: int
-var orbs: Array
+var ap_orbs: Array
 
 func initialize_ap_display() -> void:
 	for i in max_count:
-		var orb = build_orb()
-		self.add_child(orb)
-		orbs.append(orb)
+		var ap_orb = build_ap_orb()
+		self.add_child(ap_orb)
+		ap_orbs.append(ap_orb)
 
 func update_action_points(cost: int) -> void:
 	current_count -= cost
@@ -24,14 +24,13 @@ func set_action_points(count: int) -> void:
 func update_ui() -> void:
 	for i in max_count:
 		if i < current_count:
-			orbs[i].texture = orb_on
+			ap_orbs[i].texture = ap_orb_on
 		else:
-			orbs[i].texture = orb_off
+			ap_orbs[i].texture = ap_orb_off
 
-func build_orb() -> TextureRect:
-	var orb = TextureRect.new()
-	orb.z_index = 2
-	orb.size_flags_horizontal = SIZE_EXPAND_FILL
-	orb.size_flags_vertical = SIZE_EXPAND_FILL
-	
-	return orb
+func build_ap_orb() -> TextureRect:
+	var ap_orb = TextureRect.new()
+	ap_orb.z_index = 2
+	ap_orb.size_flags_horizontal = SIZE_EXPAND_FILL
+	ap_orb.size_flags_vertical = SIZE_EXPAND_FILL
+	return ap_orb

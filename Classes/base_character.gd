@@ -92,7 +92,7 @@ func resolve_effect(effect: Dictionary):
 	var property = effect.affected_property
 	var value = effect.effect_value
 	attributes[property] += value
-
+	
 func flip_sprite() -> void:
 	sprite.flip_h = true
 	

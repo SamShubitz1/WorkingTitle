@@ -35,11 +35,11 @@ var manual_increment: bool = false
 
 const dialog_duration: float = 0.7
 
-var selected_attack: Dictionary
+var selected_ability: Dictionary
 
 enum EventType {
 	DIALOG,
-	ATTACK,
+	ABILITY,
 	MOVEMENT,
 	DEATH,
 	RETREAT,
@@ -52,7 +52,7 @@ func _ready() -> void:
 	add_event({"type": EventType.DIALOG, "text": initial_dialog})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 	if current_player.alliance == GameData.Alliance.ENEMY:
-		perform_enemy_attack()
+		perform_enemy_turn()
 	else:
 		increment_event_queue()
 
@@ -70,8 +70,8 @@ func increment_event_queue() -> void:
 		match event.type:
 			EventType.DIALOG:
 				handle_dialog(event)
-			EventType.ATTACK:
-				handle_attack(event)
+			EventType.ABILITY:
+				handle_ability(event)
 			EventType.MOVEMENT:
 				handle_movement(event)
 			EventType.DEATH:
@@ -93,7 +93,7 @@ func increment_event_queue() -> void:
 			manual_increment = false
 			cursor.enable()
 		elif current_player.alliance == GameData.Alliance.ENEMY:
-			perform_enemy_attack()
+			perform_enemy_turn()
 
 func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
@@ -114,7 +114,7 @@ func update_dialog_queue() -> void:
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
 
-func handle_attack(event: Dictionary) -> void:
+func handle_ability(event: Dictionary) -> void:
 	if event.has("damage_event"):
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
@@ -134,7 +134,7 @@ func handle_attack(event: Dictionary) -> void:
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
-	var cost = selected_attack.action_cost
+	var cost = selected_ability.action_cost
 	var success = current_player.use_action(cost)
 	if success:
 		ap_display.update_action_points(cost)
@@ -144,13 +144,13 @@ func on_use_attack(target_cells: Array) -> void:
 			if battle_grid.current_grid.has(cell):
 				selected_targets.append(cell)
 		
-		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
 		
 		for target_pos in selected_targets:
 			var target = battle_grid.current_grid[target_pos]
 			build_attack_event(target)
 				
-			for effect in selected_attack.effects:
+			for effect in selected_ability.effects:
 				build_effect_event(target, effect)
 			
 		add_event({"type": EventType.END_TURN, "duration": 0})
@@ -159,14 +159,15 @@ func on_use_attack(target_cells: Array) -> void:
 		prompt_action_points_insufficient()
 		
 func build_attack_event(target: Character) -> void:
-	var damage_event = current_player.calculate_attack_dmg(selected_attack)
+	var damage_event = current_player.calculate_attack_dmg(selected_ability)
 	if damage_event:
 		var animation = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
-		if selected_attack.has("animation"):
-			animation["name"] = selected_attack.animation.name
-			animation["duration"] = selected_attack.animation.duration
-			
-		add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
+		if selected_ability.has("animation"):
+			animation["name"] = selected_ability.animation.name
+			animation["duration"] = selected_ability.animation.duration
+			var name
+
+		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
@@ -181,19 +182,19 @@ func build_effect_event(target: Character, effect: Dictionary) -> void:
 		effect_animation["name"] = effect.effect_animation.name
 		effect_animation["duration"] = effect.effect_animation.duration
 					
-	add_event({"type": EventType.ATTACK, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
+	add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
 
 func prompt_select_target(attack_name: String) -> Dictionary:
 	var hero_attack = GameData.abilities[attack_name]
-	selected_attack = hero_attack
+	selected_ability = hero_attack
 	play_dialog("Select a target!", false)
-	return {"shape": hero_attack.shape, "target_type": selected_attack.target_type, "range": selected_attack.range}
+	return {"shape": hero_attack.shape, "target_type": selected_ability.target_type, "range": selected_ability.range}
 
 func prompt_select_space() -> void:
 	play_dialog("Select a space!", false)
 
 func cancel_select_target() -> void:
-	selected_attack = {}
+	selected_ability = {}
 
 func on_select_invalid_target() -> void:
 	play_dialog("Not a valid target!", false)
@@ -224,43 +225,37 @@ func on_try_retreat() -> void:
 		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration})
 	increment_event_queue()
 
-func perform_enemy_attack() -> void:
-	var target
+func perform_enemy_turn() -> void:
+	var targets: Array
+	
 	for player in players:
 		if player.alliance == GameData.Alliance.HERO:
-			target = player
-			break
+			targets.append(player)
 	
-	var enemy_attack = get_enemy_attack()
-	var damage_event = current_player.calculate_attack_dmg(enemy_attack)
+	var target = select_target(targets)
+	var enemy_ability = get_enemy_ability()
+	var damage_event = current_player.calculate_attack_dmg(enemy_ability)
 	
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_attack.name + "!", "duration": dialog_duration, "emitter": current_player})
-	add_event({"type": EventType.ATTACK, "target": target, "damage_event": damage_event, "duration": selected_attack.animation.duration, "emitter": current_player, "animation": enemy_attack.animation.name})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
+	add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": selected_ability.animation.duration, "emitter": current_player, "animation": enemy_ability.animation.name})
 	
-	for effect in selected_attack.effects:
-				var effect_target: Character
-				var effect_animation: Dictionary = {"name": "", "duration": dialog_duration}
-				
-				if effect.effect_target == Data.EffectTarget.OTHER:
-					effect_target = target
-				elif effect.effect_target == Data.EffectTarget.SELF:
-					effect_target = current_player
-					
-				if effect.has("effect_animation"):
-					effect_animation["name"] = effect.effect_animation.name
-					effect_animation["duration"] = effect.effect_animation.duration
-					
-				add_event({"type": EventType.ATTACK, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
+	for effect in selected_ability.effects:
+		build_effect_event(target, effect)
 				
 	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player})
 	
 	increment_event_queue()
+
+func select_target(targets: Array) -> Character:
+	#targets.sort_custom(func(targetA, targetB): return targetA.grid_position.x > targetB.grid_position.x)
+	var random = randi() % targets.size()
+	return targets[random]
 	
-func get_enemy_attack() -> Dictionary:
-	var attack_index = randi() % current_player.abilities.size()
-	var attack = current_player.abilities[attack_index]
-	selected_attack = attack
-	return attack
+func get_enemy_ability() -> Dictionary:
+	var ability_index = randi() % current_player.abilities.size()
+	var ability = current_player.abilities[ability_index]
+	selected_ability = ability
+	return ability
 	
 func on_movement(next_coords: Array) -> void:
 	cursor.disable()
@@ -272,6 +267,14 @@ func on_movement(next_coords: Array) -> void:
 		increment_event_queue()
 	else:
 		prompt_action_points_insufficient()
+		
+func on_guard() -> void:
+	var guard_targets: Array
+	var guard_pos = current_player.grid_position
+	
+	for pos in battle_grid.current_grid:
+		if pos.x < guard_pos.x && pos.y == guard_pos.y:
+			guard_targets.append(battle_grid.current_grid[pos])
 
 func handle_movement(event: Dictionary) -> void:
 	var target = event.target
@@ -287,7 +290,7 @@ func on_target_death(target: Character) -> void:
 	add_event({"type": EventType.DEATH, "target": target})
 	
 func resolve_item_effect() -> float:
-	var buff = current_player.buffs.get(selected_attack.damage_type, 0) + 1
+	var buff = current_player.buffs.get(selected_ability.damage_type, 0) + 1
 	return buff
 	
 func handle_end_turn() -> void:
@@ -315,10 +318,10 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 		return true
 		
 	for cell in occupied_cells:
-		if selected_attack.target_type == GameData.TargetType.ENEMY:
+		if selected_ability.target_type == GameData.TargetType.ENEMY:
 			if cell.x > 3: # if global grid width is constant, will always be '3'
 				valid_targets.append(cell)
-		elif selected_attack.target_type == GameData.TargetType.HERO:
+		elif selected_ability.target_type == GameData.TargetType.HERO:
 			if cell.x < 4:
 				valid_targets.append(cell)
 	var is_valid_target: bool = false
