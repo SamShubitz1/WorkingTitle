@@ -10,8 +10,8 @@ extends Node2D
 @onready var items_node = $"../BattleMenu/ItemsMenu"
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
 
-var animation_player_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
-var animation_player: AnimatedSprite2D
+var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
+var current_kapow: Node
 
 var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
@@ -83,7 +83,8 @@ func increment_event_queue() -> void:
 
 		if event.has("duration"):
 			await wait(event.duration)
-			animation_player.stop_animation()
+			if current_kapow != null:
+				current_kapow.finish()
 			increment_event_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
@@ -118,7 +119,8 @@ func handle_attack(event: Dictionary) -> void:
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		if event.has("animation"):
-			animation_player.start_animation(event.target, event.animation)
+			current_kapow = get_kapow()
+			current_kapow.start(event.target.position, event.target.z_index, event.animation)
 			
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
@@ -127,7 +129,8 @@ func handle_attack(event: Dictionary) -> void:
 		event.target.resolve_effect(event.effect)
 		play_dialog(event.target.char_name + " " + event.effect.effect_description + "!", true)
 		if event.effect_animation != "":
-			animation_player.start_animation(event.target, event.effect_animation)
+			current_kapow = get_kapow()
+			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation)
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
@@ -442,13 +445,14 @@ func update_display_health() -> void:
 				
 func initialize_battle() -> void:
 	dialog = dialog_box[0]
-	build_animation_player()
+	get_kapow()
 	build_characters()
 	populate_grid()
 	increment_turn_queue()
 	ap_display.initialize_ap_display()
 	update_ui()
 	
-func build_animation_player() -> void:
-	animation_player = animation_player_scene.instantiate()
-	self.add_child(animation_player)
+func get_kapow() -> Node:
+	var kapow = kapow_scene.instantiate()
+	self.add_child(kapow)
+	return kapow

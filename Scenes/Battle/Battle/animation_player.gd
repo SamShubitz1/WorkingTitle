@@ -4,12 +4,12 @@ func _ready() -> void:
 	self.scale = Vector2(4,4)
 	self.hide()
 	
-func start_animation(target: Node, animation: String) -> void:
+func start(target_position: Vector2, z_index: int, animation: String) -> void:
+	self.position = target_position
+	self.z_index = z_index + 1
 	self.show()
-	self.position = target.position
-	self.z_index = target.z_index + 1
 	self.play(animation)
 
-func stop_animation() -> void:
+func finish() -> void:
 	self.stop()
-	self.hide()
+	self.queue_free()
