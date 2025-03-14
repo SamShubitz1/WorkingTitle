@@ -5,6 +5,7 @@ extends Control
 @onready var abilities_node = $AbilitiesMenu
 @onready var items_node = $ItemsMenu
 @onready var targets_node = $TargetsMenu
+@onready var pass_turn_node = $PassTurnMenu
 @onready var targets_grid = $TargetsGrid
 @onready var log_node = $DialogBox
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
@@ -20,6 +21,7 @@ var abilities_menu = BaseMenu.new()
 var items_menu = BaseMenu.new()
 var targets_menu = BaseGridMenu.new()
 var movement_menu = BaseGridMenu.new()
+var pass_turn_menu = BaseMenu.new()
 var log_menu = BaseLog.new()
 
 var selected_menu: BaseMenu
@@ -35,22 +37,18 @@ func _input(e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_just_pressed("navigate_forward"):
 			selected_menu.navigate_forward(e)
-			update_description()
 
 		elif Input.is_action_just_pressed("navigate_backward"):
 			selected_menu.navigate_backward(e)
-			update_description()
 		
 		elif Input.is_action_just_pressed("navigate_log"):
 			if selected_menu != log_menu:
 				navigate_log()
 			
 		elif Input.is_action_just_pressed("go_back"):
-			if selected_menu == targets_menu:
-				on_cancel_target_select()
-			else:
 				go_back()
-				update_description()
+				
+	update_description()
 
 	if Input.is_action_just_pressed("ui_accept"):
 		if battle_controller.manual_increment:
@@ -60,11 +58,19 @@ func _input(e) -> void:
 			on_press_button()
 
 func go_back():
+	if selected_menu == targets_menu:
+		on_cancel_target_select()
 	if selected_menu != options_menu:
+		options_menu.show_menu()
 		log_menu.show_menu()
 		items_menu.hide_menu()
 		abilities_menu.hide_menu()
 		update_selected_menu(Data.BattleMenuType.OPTIONS)
+		description_label.text = ""
+	else:
+		options_menu.hide_menu()
+		pass_turn_menu.show_menu()
+		update_selected_menu(Data.BattleMenuType.PASS_TURN)
 		description_label.text = ""
 
 func navigate_log() -> void:
@@ -97,6 +103,8 @@ func on_press_button() -> void:
 			on_select_target()
 		movement_menu:
 			on_select_movement()
+		pass_turn_menu:
+			on_pass_turn()
 
 func on_select_option() -> void:
 	match selected_menu.get_selected_button().text:
@@ -150,7 +158,7 @@ func on_select_target():
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
 		battle_controller.on_use_attack(target_cells)
-		abilities_menu.set_scroll_size(current_player.abilities.size()) #will be called on end turn
+		abilities_menu.set_scroll_size(current_player.abilities.size()) # will be called on end turn
 		go_back()
 	else:
 		battle_controller.on_select_invalid_target()
@@ -180,6 +188,16 @@ func on_select_movement() -> void:
 	if is_valid_target:
 		battle_controller.on_movement(cell_coords)
 		go_back()
+		
+func on_pass_turn() -> void:
+	var index = selected_menu.get_selected_button_index()
+	match index:
+		0:
+			battle_controller.end_turn()
+			go_back()
+		1:
+			go_back()
+	
 			
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()
@@ -188,28 +206,35 @@ func update_description() -> void:
 	elif selected_menu == items_menu:
 		if index < current_player.items.size():
 			description_label.text = current_player.items[index].menu_description
+	elif selected_menu == options_menu:
+		description_label.text = "Press Q to pass turn"
 			
 func initialize_menus() -> void:
-	var initial_button_position = Vector2i(0, 65)
+	var initial_cursor_pos = Vector2i(0, 65)
 	cursor = battle_cursor
 	
 	var options_buttons = options_node.get_child(0).get_children().slice(1)
 	options_menu.init(options_node, options_buttons, cursor, null)
 	
 	var abilities_buttons = abilities_node.get_child(0).get_children().slice(3)
-	abilities_menu.init(abilities_node, abilities_buttons, cursor, initial_button_position)
+	abilities_menu.init(abilities_node, abilities_buttons, cursor, initial_cursor_pos)
 	
 	var items_buttons = items_node.get_child(0).get_children().slice(3)
-	items_menu.init(items_node, items_buttons, cursor, initial_button_position)
+	items_menu.init(items_node, items_buttons, cursor, initial_cursor_pos)
 	
 	var targets_buttons = build_targets_cells()
-	targets_menu.init(targets_node, targets_buttons, cursor, null, false)
+	targets_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
 	movement_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
 	
-	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu, movement_menu]
+	var initial_pass_turn_cursor_pos = Vector2i(0, 90)
+	var pass_turn_buttons = pass_turn_node.get_child(0).get_children().slice(1)
+	pass_turn_menu.init(pass_turn_node, pass_turn_buttons, cursor, initial_pass_turn_cursor_pos)
+	
+	menus = [options_menu, abilities_menu, items_menu, targets_menu, log_menu, movement_menu, pass_turn_menu]
 	selected_menu = options_menu
+	update_description()
 	selected_menu.activate()
 	
 func build_targets_cells() -> Array[Panel]:

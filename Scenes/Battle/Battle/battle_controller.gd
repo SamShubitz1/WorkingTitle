@@ -153,8 +153,7 @@ func on_use_attack(target_cells: Array) -> void:
 			for effect in selected_ability.effects:
 				build_effect_event(target, effect)
 			
-		add_event({"type": EventType.END_TURN, "duration": 0})
-		increment_event_queue()
+		end_turn()
 	else:
 		prompt_action_points_insufficient()
 		
@@ -165,7 +164,6 @@ func build_attack_event(target: Character) -> void:
 		if selected_ability.has("animation"):
 			animation["name"] = selected_ability.animation.name
 			animation["duration"] = selected_ability.animation.duration
-			var name
 
 		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
 
@@ -242,9 +240,7 @@ func perform_enemy_turn() -> void:
 	for effect in selected_ability.effects:
 		build_effect_event(target, effect)
 				
-	add_event({"type": EventType.END_TURN, "duration": 0, "emitter": current_player})
-	
-	increment_event_queue()
+	end_turn()
 
 func select_target(targets: Array) -> Character:
 	#targets.sort_custom(func(targetA, targetB): return targetA.grid_position.x > targetB.grid_position.x)
@@ -287,7 +283,7 @@ func on_target_death(target: Character) -> void:
 	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.char_name != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.char_name != target.char_name)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
-	add_event({"type": EventType.DEATH, "target": target})
+	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
 	
 func resolve_item_effect() -> float:
 	var buff = current_player.buffs.get(selected_ability.damage_type, 0) + 1
@@ -307,6 +303,11 @@ func handle_death(event) -> void:
 	else:
 		event.target.visible = false
 		increment_event_queue()
+		
+func end_turn() -> void:
+	cursor.disable()
+	add_event({"type": EventType.END_TURN, "duration": 0})
+	increment_event_queue()
 
 func check_valid_targets(target_cells: Array, check_movement: bool = false) -> bool:
 	var valid_targets: Array[Vector2i]
@@ -384,9 +385,9 @@ func populate_grid() -> void:
 	for player in players:
 		battle_grid.set_object_at_grid_position(player)
 	
-func set_grid_cells() -> Vector2i:
+#func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
-	return Vector2i(8, 4)
+	#return Vector2i(8, 4)
 	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
@@ -394,12 +395,12 @@ func wait(seconds: float) -> void:
 func get_current_player() -> Node:
 	return current_player
 	
-func get_grid_info() -> Dictionary:
-	return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
+#func get_grid_info() -> Dictionary:
+	#return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
 	
 func set_position_by_grid_coords(character: Character) -> void:
 	var coords = character.grid_position
-	var x_pos = 192 + (coords.x * 128) # const grid_span = 128, const grid_offset = 192
+	var x_pos = 192 + (coords.x * 128) # const grid_span_x = 128, const grid_offset_x = 192
 	var y_pos = 390 + (coords.y * -100)
 	character.position = Vector2i(x_pos, y_pos)
 

@@ -15,7 +15,8 @@ enum BattleMenuType {
 	ITEMS,
 	TARGETS,
 	LOG,
-	MOVEMENT
+	MOVEMENT,
+	PASS_TURN
 }
 
 enum MenuType {

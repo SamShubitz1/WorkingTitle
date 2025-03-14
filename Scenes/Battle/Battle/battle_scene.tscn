@@ -447,5 +447,34 @@ scale = Vector2(0.594435, 1.19025)
 polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
 script = ExtResource("3_nifbg")
 
+[node name="PassTurnMenu" type="Panel" parent="BattleMenu"]
+layout_mode = 0
+offset_top = 511.0
+offset_right = 320.0
+offset_bottom = 768.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleMenu/PassTurnMenu"]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 257.0
+
+[node name="PassTurnLabel" type="Label" parent="BattleMenu/PassTurnMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Pass Turn?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PassButton" type="Button" parent="BattleMenu/PassTurnMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Confirm"
+
+[node name="Padding" type="Button" parent="BattleMenu/PassTurnMenu/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Go Back
+"
+
 [node name="BattleCamera" type="Camera2D" parent="."]
 position = Vector2(640, 384)
