@@ -40,6 +40,7 @@ var selected_ability: Dictionary
 enum EventType {
 	DIALOG,
 	ABILITY,
+	GUARD,
 	MOVEMENT,
 	DEATH,
 	RETREAT,
@@ -72,6 +73,8 @@ func increment_event_queue() -> void:
 				handle_dialog(event)
 			EventType.ABILITY:
 				handle_ability(event)
+			EventType.GUARD:
+				handle_guard(event)
 			EventType.MOVEMENT:
 				handle_movement(event)
 			EventType.DEATH:
@@ -97,8 +100,54 @@ func increment_event_queue() -> void:
 
 func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
-	battle_log.append(event.text)
-	update_dialog_queue()
+	play_dialog(dialog.text, true)
+	
+func handle_ability(event: Dictionary) -> void:
+	if event.has("damage_event"):
+		var damage_string = event.target.take_damage(event.damage_event)
+		if event.target == current_player:
+			update_display_health()
+
+		play_dialog(damage_string, true)
+		if event.has("animation"):
+			current_kapow = get_kapow()
+			current_kapow.start(event.target.position, event.target.z_index, event.animation)
+		
+		if event.target.health_bar.value <= 0:
+			on_target_death(event.target)
+#
+	elif event.has("effect"):
+		event.target.resolve_effect(event.effect)
+		play_dialog(event.target.char_name + " " + event.effect.effect_description + "!", true)
+		if event.effect_animation != "":
+			current_kapow = get_kapow()
+			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation)
+			
+func handle_movement(event: Dictionary) -> void:
+	var target = event.target
+	battle_grid.update_grid_object(target, event.next_position)
+	set_position_by_grid_coords(target)
+	
+func handle_guard(event: Dictionary) -> void:
+	var target = event.target
+	current_kapow = get_kapow()
+	current_kapow.start(event.target.position, event.target.z_index, event.animation)
+	play_dialog(target.char_name + " is protected!", true)
+
+func handle_death(event) -> void:
+	if event.target.is_player:
+		game_controller.switch_to_overworld_scene()
+	else:
+		event.target.visible = false
+		increment_event_queue()
+
+func handle_end_turn() -> void:
+	increment_turn_queue()
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
+	update_ui()
+
+func handle_retreat() -> void:
+	game_controller.switch_to_overworld_scene()
 
 func play_dialog(text: String, should_log: bool) -> void:
 	dialog.text = text
@@ -113,24 +162,6 @@ func update_dialog_queue() -> void:
 	dialog_box[0].modulate = Color(1, 1, 0)
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
-
-func handle_ability(event: Dictionary) -> void:
-	if event.has("damage_event"):
-		var damage_result = event.target.take_damage(event.damage_event)
-		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
-		if event.has("animation"):
-			current_kapow = get_kapow()
-			current_kapow.start(event.target.position, event.target.z_index, event.animation)
-			
-		if event.target.health_bar.value <= 0:
-			on_target_death(event.target)
-#
-	elif event.has("effect"):
-		event.target.resolve_effect(event.effect)
-		play_dialog(event.target.char_name + " " + event.effect.effect_description + "!", true)
-		if event.effect_animation != "":
-			current_kapow = get_kapow()
-			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation)
 
 func on_use_attack(target_cells: Array) -> void:
 	cursor.disable()
@@ -176,9 +207,9 @@ func build_effect_event(target: Character, effect: Dictionary) -> void:
 	elif effect.effect_target == Data.EffectTarget.SELF:
 		effect_target = current_player
 					
-	if effect.has("effect_animation"):
-		effect_animation["name"] = effect.effect_animation.name
-		effect_animation["duration"] = effect.effect_animation.duration
+	if effect.has("animation"):
+		effect_animation["name"] = effect.animation.name
+		effect_animation["duration"] = effect.animation.duration
 					
 	add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
 
@@ -265,17 +296,25 @@ func on_movement(next_coords: Array) -> void:
 		prompt_action_points_insufficient()
 		
 func on_guard() -> void:
+	cursor.disable()
+	
 	var guard_targets: Array
 	var guard_pos = current_player.grid_position
 	
 	for pos in battle_grid.current_grid:
 		if pos.x < guard_pos.x && pos.y == guard_pos.y:
 			guard_targets.append(battle_grid.current_grid[pos])
+	
+	if !guard_targets.is_empty():
+		for target in guard_targets:
+			target.update_status({"type": Data.StatusType.GUARD, "value": 1, "does_stack": false, "initiator": current_player})
+	
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used guard!", "duration": dialog_duration})
 
-func handle_movement(event: Dictionary) -> void:
-	var target = event.target
-	battle_grid.update_grid_object(target, event.next_position)
-	set_position_by_grid_coords(target)
+	for target in guard_targets:
+		add_event({"type": EventType.GUARD, "target": target, "duration": GameData.abilities["Reinforce"].effects[0].animation.duration, "animation": "Reinforce"})
+	
+	end_turn()
 
 func on_target_death(target: Character) -> void:
 	battle_grid.current_grid.erase(target.grid_position)
@@ -286,23 +325,8 @@ func on_target_death(target: Character) -> void:
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
 	
 func resolve_item_effect() -> float:
-	var buff = current_player.buffs.get(selected_ability.damage_type, 0) + 1
+	var buff = current_player.buffs.get(selected_ability.damage.type, 0) + 1
 	return buff
-	
-func handle_end_turn() -> void:
-	increment_turn_queue()
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
-	update_ui()
-
-func handle_retreat() -> void:
-	game_controller.switch_to_overworld_scene()
-
-func handle_death(event) -> void:
-	if event.target.is_player:
-		game_controller.switch_to_overworld_scene()
-	else:
-		event.target.visible = false
-		increment_event_queue()
 		
 func end_turn() -> void:
 	cursor.disable()

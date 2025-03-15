@@ -118,6 +118,8 @@ func on_select_option() -> void:
 		" Items":
 			log_menu.hide_menu()
 			update_selected_menu(Data.BattleMenuType.ITEMS)
+		" Aim":
+			pass
 		" Status":
 			pass
 		" Retreat":

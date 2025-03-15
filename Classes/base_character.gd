@@ -26,10 +26,10 @@ func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: Anim
 	self.sprite = char_sprite
 	self.health_bar = char_health
 	self.max_health = max_health
+	health_bar.z_index = -1
 	set_health()
 	set_abilities(abilities)
 	set_items(items)
-	health_bar.z_index = -1
 	set_grid_position(grid_position)
 	sprite.play()
 	
@@ -56,36 +56,47 @@ func set_items(items: Array) -> void:
 		char_items.append(GameData.items[item])
 	self.items = char_items
 
-func take_damage(damage_event: Dictionary) -> int:
-	var damage_type = damage_event.damage_type
+func take_damage(damage_event: Dictionary): # returns either a Dictionary or null
+	var guarded: bool
 	var damage_result: int
-	match damage_type:
-		GameData.DamageType.NONE:
-			return false
-		GameData.DamageType.PHYSICAL:
-			var armor: float = attributes[GameData.Attributes.ARMOR]
-			var multiplier: float = 1 - (armor / 10)
-			damage_result = damage_event.damage * multiplier
-		GameData.DamageType.ENERGY:
-			var shielding: float = attributes[GameData.Attributes.SHIELDING]
-			var multiplier: float = 1 - (shielding / 10)
-			damage_result = damage_event.damage * multiplier
-	if damage_result > 0:
-		health_bar.value -= damage_result
+	var result_string: String
 	
-	return damage_result
+	for status in status_effects:
+		if status.type == Data.StatusType.GUARD:
+			guarded = true
+			result_string = status.initiator.take_damage(damage_event)
+			status_effects.erase(status)
+			
+	if !guarded:
+		var damage_type = damage_event.type
+		match damage_type:
+			GameData.DamageType.NONE:
+				return null
+			GameData.DamageType.PHYSICAL:
+				var armor: float = attributes[GameData.Attributes.ARMOR]
+				var multiplier: float = 1 - (armor / 10)
+				damage_result = damage_event.damage * multiplier
+			GameData.DamageType.ENERGY:
+				var shielding: float = attributes[GameData.Attributes.SHIELDING]
+				var multiplier: float = 1 - (shielding / 10)
+				damage_result = damage_event.damage * multiplier
+		if damage_result > 0:
+			health_bar.value -= damage_result
+			result_string = char_name + " took " + str(damage_result) + " damage!" 
+		
+	return result_string
 
-func calculate_attack_dmg(selected_attack: Dictionary):
-	if selected_attack.damage.damage_type != Data.DamageType.NONE:
-		var damage: int = selected_attack.damage.damage_value
-		var damage_with_range = damage * randf_range(.9, 1.1)
-		var attribute_multiplier = resolve_attribute_bonuses(selected_attack)
+func calculate_attack_dmg(selected_ability: Dictionary):
+	if selected_ability.damage.type != Data.DamageType.NONE:
+		var damage: int = selected_ability.damage.value
+		var damage_with_range = int(damage * randf_range(.9, 1.1))
+		var attribute_multiplier = resolve_attribute_bonuses(selected_ability)
 		if attribute_multiplier:
 			damage_with_range *= float(attribute_multiplier)
-		return {"damage": int(damage_with_range), "damage_type": selected_attack.damage.damage_type}
+		return {"damage": int(damage_with_range), "type": selected_ability.damage.type}
 	
-func resolve_attribute_bonuses(selected_attack: Dictionary):
-	var attribute = selected_attack.attribute_bonus
+func resolve_attribute_bonuses(selected_ability: Dictionary):
+	var attribute = selected_ability.attribute_bonus
 	if attribute != GameData.Attributes.NONE:
 		var value: float = attributes[attribute]
 		var multiplier: float = 1 + (value / 10)
@@ -94,7 +105,9 @@ func resolve_attribute_bonuses(selected_attack: Dictionary):
 func resolve_effect(effect: Dictionary):
 	var property = effect.affected_property
 	var value = effect.effect_value
-	attributes[property] += value
+	match property:
+		Data.EffectType.ATTRIBUTE:
+			attributes[property] += value
 	
 func flip_sprite() -> void:
 	sprite.flip_h = true
@@ -111,12 +124,31 @@ func use_action(cost: int) -> bool:
 		action_points = next_points
 		return true
 
-func start_turn():
+func start_turn() -> void:
+	decrement_status_effects()
+	update_action_points()
+			
+func decrement_status_effects() -> void:
+	for status in status_effects:
+		if status.does_stack:
+			status.value -= 1
+	for status in status_effects: # apparently erasing items while iterating through an array is not supported
+		if status.value == 0:
+			status_effects.erase(status)
+			
+func update_action_points() -> void:
 	if action_points < 5:
 		var next_points = action_points + 3
 		if next_points > 5:
 			action_points = 5
 		else:
 			action_points = next_points
-	
-	
+
+func update_status(next_effect: Dictionary) -> void:
+	if status_effects.is_empty():
+		status_effects.append(next_effect)
+	for status in status_effects:
+		if status.type == next_effect.type && status.does_stack:
+			status.value += next_effect.value
+		elif status.type == next_effect.type:
+			pass
