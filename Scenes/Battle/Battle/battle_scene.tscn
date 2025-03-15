@@ -207,7 +207,7 @@ value = 100.0
 [node name="Attack" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
-text = " Attack"
+text = " Abilities"
 alignment = 0
 
 [node name="Move" type="Button" parent="BattleMenu/MainMenu/Menu"]

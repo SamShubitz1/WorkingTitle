@@ -24,7 +24,7 @@ var wrap: bool
 
 const initial_grid_size: Vector2i = Vector2i(8, 4)
 
-var current_shape: GameData.AttackShape
+var current_shape: GameData.AbilityShape
 
 func init(menu: Node, buttons: Array, menu_cursor: BaseCursor, initial_button_position = null, wrap = true) -> void:
 	super.init(menu, buttons, menu_cursor)
@@ -192,15 +192,15 @@ func update_selected_cell(next_coords) -> void:
 	selected_button.modulate = get_cell_color()
 	selected_button.modulate.a = 0.6
 	
-func set_current_shape(attack_shape: Data.AttackShape) -> void:
+func set_current_shape(attack_shape: Data.AbilityShape) -> void:
 	current_shape = attack_shape
 
 func get_neighbor_coords(origin_coords: Vector2i) -> Array:
 	var neighbor_coords: Array
 	match current_shape:
-		GameData.AttackShape.SINGLE:
+		GameData.AbilityShape.SINGLE:
 			return neighbor_coords
-		GameData.AttackShape.DIAMOND:
+		GameData.AbilityShape.DIAMOND:
 			if origin_coords.y < initial_grid_size.y - 1:
 				neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y + 1))
 			if origin_coords.y > 0:
@@ -209,7 +209,7 @@ func get_neighbor_coords(origin_coords: Vector2i) -> Array:
 				neighbor_coords.append(Vector2i(origin_coords.x + 1, origin_coords.y))
 			if origin_coords.x > 0:
 				neighbor_coords.append(Vector2i(origin_coords.x - 1, origin_coords.y))
-		GameData.AttackShape.LINE:
+		GameData.AbilityShape.LINE:
 			var col_index = 0
 			while col_index < initial_grid_size.x / 2:
 				if col_index != origin_coords.x:

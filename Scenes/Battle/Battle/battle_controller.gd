@@ -104,15 +104,12 @@ func handle_dialog(event: Dictionary) -> void:
 	
 func handle_ability(event: Dictionary) -> void:
 	if event.has("damage_event"):
-		var damage_string = event.target.take_damage(event.damage_event)
-		if event.target == current_player:
-			update_display_health()
-
-		play_dialog(damage_string, true)
+		var damage_result = event.target.take_damage(event.damage_event)
+		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		if event.has("animation"):
 			current_kapow = get_kapow()
 			current_kapow.start(event.target.position, event.target.z_index, event.animation)
-		
+			
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
 #
@@ -163,8 +160,7 @@ func update_dialog_queue() -> void:
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
 
-func on_use_attack(target_cells: Array) -> void:
-	cursor.disable()
+func on_use_ability(target_cells: Array) -> void:
 	var cost = selected_ability.action_cost
 	var success = current_player.use_action(cost)
 	if success:
@@ -183,7 +179,6 @@ func on_use_attack(target_cells: Array) -> void:
 				
 			for effect in selected_ability.effects:
 				build_effect_event(target, effect)
-			
 		end_turn()
 	else:
 		prompt_action_points_insufficient()
@@ -213,11 +208,11 @@ func build_effect_event(target: Character, effect: Dictionary) -> void:
 					
 	add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
 
-func prompt_select_target(attack_name: String) -> Dictionary:
-	var hero_attack = GameData.abilities[attack_name]
-	selected_ability = hero_attack
+func prompt_select_target(ability_name: String) -> Dictionary:
+	var hero_ability = GameData.abilities[ability_name]
+	selected_ability = hero_ability
 	play_dialog("Select a target!", false)
-	return {"shape": hero_attack.shape, "target_type": selected_ability.target_type, "range": selected_ability.range}
+	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range}
 
 func prompt_select_space() -> void:
 	play_dialog("Select a space!", false)
@@ -296,8 +291,6 @@ func on_movement(next_coords: Array) -> void:
 		prompt_action_points_insufficient()
 		
 func on_guard() -> void:
-	cursor.disable()
-	
 	var guard_targets: Array
 	var guard_pos = current_player.grid_position
 	
@@ -313,7 +306,7 @@ func on_guard() -> void:
 
 	for target in guard_targets:
 		add_event({"type": EventType.GUARD, "target": target, "duration": GameData.abilities["Reinforce"].effects[0].animation.duration, "animation": "Reinforce"})
-	
+		
 	end_turn()
 
 func on_target_death(target: Character) -> void:

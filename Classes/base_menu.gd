@@ -4,7 +4,7 @@ class_name BaseMenu
 
 var cursor: BaseCursor
 var menu: Node # reference to parent node to toggle visibility
-var buttons: Array # array of menu buttons
+var buttons: Array # array of menu button nodes
 var selected_button_index: int = 0 # track current selected button
 var selected_button: Node # same as buttons[selected_button_index]
 

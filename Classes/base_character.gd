@@ -56,35 +56,24 @@ func set_items(items: Array) -> void:
 		char_items.append(GameData.items[item])
 	self.items = char_items
 
-func take_damage(damage_event: Dictionary): # returns either a Dictionary or null
-	var guarded: bool
+func take_damage(damage_event: Dictionary) -> int:
+	var damage_type = damage_event.type
 	var damage_result: int
-	var result_string: String
+	match damage_type:
+		GameData.DamageType.NONE:
+			return false
+		GameData.DamageType.PHYSICAL:
+			var armor: float = attributes[GameData.Attributes.ARMOR]
+			var multiplier: float = 1 - (armor / 10)
+			damage_result = damage_event.damage * multiplier
+		GameData.DamageType.ENERGY:
+			var shielding: float = attributes[GameData.Attributes.SHIELDING]
+			var multiplier: float = 1 - (shielding / 10)
+			damage_result = damage_event.damage * multiplier
+	if damage_result > 0:
+		health_bar.value -= damage_result
 	
-	for status in status_effects:
-		if status.type == Data.StatusType.GUARD:
-			guarded = true
-			result_string = status.initiator.take_damage(damage_event)
-			status_effects.erase(status)
-			
-	if !guarded:
-		var damage_type = damage_event.type
-		match damage_type:
-			GameData.DamageType.NONE:
-				return null
-			GameData.DamageType.PHYSICAL:
-				var armor: float = attributes[GameData.Attributes.ARMOR]
-				var multiplier: float = 1 - (armor / 10)
-				damage_result = damage_event.damage * multiplier
-			GameData.DamageType.ENERGY:
-				var shielding: float = attributes[GameData.Attributes.SHIELDING]
-				var multiplier: float = 1 - (shielding / 10)
-				damage_result = damage_event.damage * multiplier
-		if damage_result > 0:
-			health_bar.value -= damage_result
-			result_string = char_name + " took " + str(damage_result) + " damage!" 
-		
-	return result_string
+	return damage_result
 
 func calculate_attack_dmg(selected_ability: Dictionary):
 	if selected_ability.damage.type != Data.DamageType.NONE:
@@ -130,7 +119,6 @@ func start_turn() -> void:
 			
 func decrement_status_effects() -> void:
 	for status in status_effects:
-		if status.does_stack:
 			status.value -= 1
 	for status in status_effects: # apparently erasing items while iterating through an array is not supported
 		if status.value == 0:
@@ -141,14 +129,15 @@ func update_action_points() -> void:
 		var next_points = action_points + 3
 		if next_points > 5:
 			action_points = 5
-		else:
+		else: 
 			action_points = next_points
 
 func update_status(next_effect: Dictionary) -> void:
 	if status_effects.is_empty():
 		status_effects.append(next_effect)
-	for status in status_effects:
-		if status.type == next_effect.type && status.does_stack:
-			status.value += next_effect.value
-		elif status.type == next_effect.type:
-			pass
+	else:
+		for status in status_effects:
+			if status.type == next_effect.type:
+				status.value += next_effect.value
+			elif status.type == next_effect.type:
+				pass

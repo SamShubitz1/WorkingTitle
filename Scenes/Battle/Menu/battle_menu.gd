@@ -58,27 +58,38 @@ func _input(e) -> void:
 			on_press_button()
 
 func go_back():
-	if selected_menu == targets_menu:
-		on_cancel_target_select()
-	if selected_menu != options_menu:
-		options_menu.show_menu()
-		log_menu.show_menu()
-		items_menu.hide_menu()
-		abilities_menu.hide_menu()
-		update_selected_menu(Data.BattleMenuType.OPTIONS)
-		description_label.text = ""
-	else:
-		options_menu.hide_menu()
-		pass_turn_menu.show_menu()
-		update_selected_menu(Data.BattleMenuType.PASS_TURN)
-		description_label.text = ""
+	match selected_menu:
+		options_menu:
+			options_menu.hide_menu()
+			pass_turn_menu.show_menu()
+			update_selected_menu(Data.BattleMenuType.PASS_TURN)
+			return
+		pass_turn_menu:
+			options_menu.show_menu()
+			pass_turn_menu.hide_menu()
+		targets_menu:
+			on_cancel_target_select()
+			log_menu.hide_menu()
+			update_selected_menu(Data.BattleMenuType.ABILITIES)
+			return
+		items_menu:
+			items_menu.hide_menu()
+			log_menu.show_menu()
+		abilities_menu:
+			abilities_menu.hide_menu()
+			log_menu.show_menu()
+		log_menu:
+			pass_turn_menu.hide_menu()
+			
+	update_selected_menu(Data.BattleMenuType.OPTIONS)
+
 
 func navigate_log() -> void:
 	update_selected_menu(Data.BattleMenuType.LOG)
 
 func update_selected_menu(selected_menu_index: int) -> void:
 	selected_menu.disactivate()
-	if selected_menu != options_menu && selected_menu != log_menu:
+	if selected_menu != options_menu && selected_menu != log_menu && selected_menu != pass_turn_menu:
 		selected_menu.hide_menu()
 	selected_menu = menus[selected_menu_index]
 	cursor.set_menu_type(selected_menu_index)
@@ -108,7 +119,7 @@ func on_press_button() -> void:
 
 func on_select_option() -> void:
 	match selected_menu.get_selected_button().text:
-		" Attack":
+		" Abilities":
 			log_menu.hide_menu()
 			update_selected_menu(Data.BattleMenuType.ABILITIES)
 		" Move":
@@ -128,10 +139,10 @@ func on_select_option() -> void:
 func on_select_ability() -> void:
 	log_menu.show_menu()
 	
-	var attack_name = selected_menu.get_selected_button().text
-	var attack_info = battle_controller.prompt_select_target(attack_name)
+	var ability_name = selected_menu.get_selected_button().text
+	var ability_info = battle_controller.prompt_select_target(ability_name)
 	
-	match attack_info.target_type:
+	match ability_info.target_type:
 		Data.TargetType.ENEMY:
 			targets_menu.activate_enemy_grid()
 		Data.TargetType.HERO:
@@ -139,15 +150,15 @@ func on_select_ability() -> void:
 		Data.TargetType.SELF:
 			targets_menu.activate_hero_grid()
 			
-	targets_menu.set_current_shape(attack_info.shape)
-	targets_menu.set_range(current_player.grid_position, attack_info.range)
+	targets_menu.set_current_shape(ability_info.shape)
+	targets_menu.set_range(current_player.grid_position, ability_info.range)
 	
 	update_selected_menu(Data.BattleMenuType.TARGETS)
 	
 func on_select_move() -> void:
 	update_selected_menu(Data.BattleMenuType.MOVEMENT)
 	movement_menu.activate_hero_grid()
-	movement_menu.set_current_shape(Data.AttackShape.SINGLE)
+	movement_menu.set_current_shape(Data.AbilityShape.SINGLE)
 	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
 	battle_controller.prompt_select_space()
 	
@@ -159,15 +170,13 @@ func on_select_target():
 	var target_cells = targets_menu.get_targeted_cell_coords()
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
-		battle_controller.on_use_attack(target_cells)
+		battle_controller.on_use_ability(target_cells)
 		abilities_menu.set_scroll_size(current_player.abilities.size()) # will be called on end turn
 		go_back()
 	else:
 		battle_controller.on_select_invalid_target()
 
 func on_cancel_target_select() -> void:
-	log_menu.hide_menu()
-	update_selected_menu(Data.BattleMenuType.ABILITIES)
 	battle_controller.cancel_select_target()
 
 func on_select_item() -> void:
