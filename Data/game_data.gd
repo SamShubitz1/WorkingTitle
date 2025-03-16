@@ -66,8 +66,9 @@ enum EffectType {
 	AILMENT
 }
 
-enum StatusType {
-	GUARD
+enum AbilityType {
+	ATTACK,
+	EFFECT
 }
 
 enum EffectTarget {
@@ -81,19 +82,19 @@ enum EffectTarget {
 #value: int
 
 var abilities: Dictionary = {
-	"Clobber": {"name": "Clobber", "damage": { "type": DamageType.PHYSICAL, "value": 80}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Clobber", "duration": 0.7}},
+	"Clobber": {"name": "Clobber", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 80}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Clobber", "duration": 0.7}},
 	
-	"Laser": {"name": "Laser", "damage": { "type": DamageType.ENERGY, "value": 60}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [], "animation": {"name": "Laser", "duration": 0.7}},
+	"Laser": {"name": "Laser", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 60}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "Deals damage to all enemies in a line", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [], "animation": {"name": "Laser", "duration": 0.7}},
 	
-	"Bite": {"name": "Bite", "damage": { "type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [
+	"Bite": {"name": "Bite", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that reduces armor by 1", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_description": "lost 1 armor"}], "animation": {"name": "Bite", "duration": 0.7}},
 	
-	"Reinforce": {"name": "Reinforce", "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [
+	"Reinforce": {"name": "Reinforce", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": 1, "affected_property": Attributes.ARMOR, "effect_description": "gained 1 armor", "animation": {"name": "Reinforce", "duration": 0.7}}]},
 	
-	"Wave Beam": {"name": "Wave Beam", "damage":{ "type": DamageType.ENERGY, "value": 75}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
+	"Wave Beam": {"name": "Wave Beam", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 75}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 	
-	"Armor Inversion": {"name": "Armor Inversion", "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AbilityShape.SINGLE, "effects": [
+	"Armor Inversion": {"name": "Armor Inversion", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": -2, "affected_property": Attributes.ARMOR, "effect_description": "lost 2 armor", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
 		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF, "effect_value": +2, "affected_property": Attributes.ARMOR, "effect_description": "gained 2 armor", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]}
 		}

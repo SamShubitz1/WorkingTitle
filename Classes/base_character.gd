@@ -78,13 +78,12 @@ func take_damage(damage_event: Dictionary) -> int:
 	return damage_result
 
 func calculate_attack_dmg(selected_ability: Dictionary):
-	if selected_ability.damage.type != Data.DamageType.NONE:
-		var damage: int = selected_ability.damage.value
-		var damage_with_range = int(damage * randf_range(.9, 1.1))
-		var attribute_multiplier = resolve_attribute_bonuses(selected_ability)
-		if attribute_multiplier:
-			damage_with_range *= float(attribute_multiplier)
-		return {"damage": int(damage_with_range), "type": selected_ability.damage.type}
+	var damage: int = selected_ability.damage.value
+	var damage_with_range = int(damage * randf_range(.9, 1.1))
+	var attribute_multiplier = resolve_attribute_bonuses(selected_ability)
+	if attribute_multiplier:
+		damage_with_range *= float(attribute_multiplier)
+	return {"damage": int(damage_with_range), "type": selected_ability.damage.type}
 	
 func resolve_attribute_bonuses(selected_ability: Dictionary):
 	var attribute = selected_ability.attribute_bonus
@@ -99,6 +98,26 @@ func resolve_effect(effect: Dictionary):
 	match property:
 		Data.EffectType.ATTRIBUTE:
 			attributes[property] += value
+			
+func check_success(selected_ability: Dictionary) -> bool:
+	var success: bool
+	var type = selected_ability.ability_type
+	match type:
+		Data.AbilityType.ATTACK:
+			var base_success = 0
+			var optics = attributes[Data.Attributes.OPTICS]
+			for optic in range(optics):
+				base_success += 2
+				success = randi_range(1, 100) < base_success
+				
+		Data.AbilityType.EFFECT:
+			var base_success = 0
+			var optics = attributes[Data.Attributes.OPTICS]
+			for optic in range(optics):
+				base_success += 4
+				success = randi_range(1, 100) < base_success
+	
+	return success
 
 func set_guardian(guard: Character = null) -> void:
 	self.guardian = guard

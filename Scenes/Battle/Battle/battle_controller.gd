@@ -170,8 +170,8 @@ func update_dialog_queue() -> void:
 
 func on_use_ability(target_cells: Array) -> void:
 	var cost = selected_ability.action_cost
-	var success = current_player.use_action(cost)
-	if success:
+	var ap_success = current_player.use_action(cost)
+	if ap_success:
 		ap_display.update_action_points(cost)
 		
 		var selected_targets: Array
@@ -181,25 +181,31 @@ func on_use_ability(target_cells: Array) -> void:
 		
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
 		
-		for target_pos in selected_targets:
-			var target = battle_grid.current_grid[target_pos]
-			build_attack_event(target)
-				
-			for effect in selected_ability.effects:
-				build_effect_event(target, effect)
+		var ability_success = current_player.check_success(selected_ability)
+		if ability_success:
+			for target_pos in selected_targets:
+				var target = battle_grid.current_grid[target_pos]
+				build_attack_event(target)
+					
+				for effect in selected_ability.effects:
+					build_effect_event(target, effect)
+		else:
+			add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+			
 		end_turn()
 	else:
 		prompt_action_points_insufficient()
 		
 func build_attack_event(target: Character) -> void:
-	var damage_event = current_player.calculate_attack_dmg(selected_ability)
-	if damage_event:
+	var ability_event = current_player.calculate_attack_dmg(selected_ability)
+	if ability_event.success:
+		print(ability_event.success)
 		var animation = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
 		if selected_ability.has("animation"):
 			animation["name"] = selected_ability.animation.name
 			animation["duration"] = selected_ability.animation.duration
 
-		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
+		add_event({"type": EventType.ABILITY, "target": target, "damage_event": ability_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
@@ -284,7 +290,6 @@ func perform_enemy_turn() -> void:
 	end_turn()
 
 func select_target(targets: Array) -> Character:
-	#targets.sort_custom(func(targetA, targetB): return targetA.grid_position.x > targetB.grid_position.x)
 	var random = randi() % targets.size()
 	return targets[random]
 	
@@ -378,6 +383,9 @@ func build_characters() -> void:
 	var pc_abilities = ["Clobber", "Laser"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
+	
+	pc.attributes[Data.Attributes.MOBILITY] = 2
+	
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
@@ -387,6 +395,9 @@ func build_characters() -> void:
 	var runt_abilities = ["Bite", "Reinforce"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	runt.init("Runt", Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
+	
+	runt.attributes[Data.Attributes.MOBILITY] = 4
+	
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
@@ -395,6 +406,9 @@ func build_characters() -> void:
 	var norman = norman_scene.instantiate()
 	var norman_abilities = ["Clobber"]
 	norman.init("Norman", Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
+	
+	norman.attributes[Data.Attributes.MOBILITY] = 6
+	
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
@@ -402,6 +416,9 @@ func build_characters() -> void:
 	var thumper = thumper_scene.instantiate()
 	var thumper_abilities = ["Clobber", "Bite"]
 	thumper.init("Thumper", Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	
+	thumper.attributes[Data.Attributes.MOBILITY] = 8
+	
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
@@ -410,6 +427,9 @@ func build_characters() -> void:
 	var mandrake = mandrake_scene.instantiate()
 	var mandrake_abilities = ["Wave Beam", "Bite"]
 	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
+	
+	mandrake.attributes[Data.Attributes.MOBILITY] = 7
+	
 	set_position_by_grid_coords(mandrake)
 	add_child(mandrake)
 	mandrake.flip_sprite()
@@ -417,7 +437,10 @@ func build_characters() -> void:
 	
 	var pilypile = pilypile_scene.instantiate()
 	var pilypile_abilities = ["Armor Inversion", "Bite"]
-	pilypile.init("Pily-Pile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 2)) # init props will be accessed from somewhere
+	pilypile.init("Pilypile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 2)) # init props will be accessed from somewhere
+	
+	pilypile.attributes[Data.Attributes.MOBILITY] = 10
+	
 	set_position_by_grid_coords(pilypile)
 	add_child(pilypile)
 	mandrake.flip_sprite()
@@ -446,14 +469,21 @@ func set_position_by_grid_coords(character: Character) -> void:
 	var y_pos = 390 + (coords.y * -100)
 	character.position = Vector2i(x_pos, y_pos)
 
-func set_turn_order() -> void: # pseudo turn order decider
-	players.shuffle()
-	turn_queue.append_array(players)
+func set_turn_order() -> void:
+	var positions: Array
+	for player in players:
+		var position_value = 100 / (float(player.attributes[Data.Attributes.MOBILITY] + 10))
+		for i in range(20):
+			positions.append({"character": player, "position_value": position_value * i})
+
+	positions.sort_custom(func(playerA, playerB): return playerA.position_value < playerB.position_value)
+
+	turn_queue.append_array(positions)
 	
 func increment_turn_queue() -> void:
-	if turn_queue.is_empty():
+	if turn_queue.is_empty || turn_queue.size() == 30:
 		set_turn_order()
-	var next_player = turn_queue.pop_front()
+	var next_player = turn_queue.pop_front().character
 	current_player = next_player
 	current_player.start_turn()
 
