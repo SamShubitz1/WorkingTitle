@@ -83,7 +83,6 @@ func go_back():
 			
 	update_selected_menu(Data.BattleMenuType.OPTIONS)
 
-
 func navigate_log() -> void:
 	update_selected_menu(Data.BattleMenuType.LOG)
 
@@ -154,30 +153,6 @@ func on_select_ability() -> void:
 	targets_menu.set_range(current_player.grid_position, ability_info.range)
 	
 	update_selected_menu(Data.BattleMenuType.TARGETS)
-	
-func on_select_move() -> void:
-	update_selected_menu(Data.BattleMenuType.MOVEMENT)
-	movement_menu.activate_hero_grid()
-	movement_menu.set_current_shape(Data.AbilityShape.SINGLE)
-	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
-	battle_controller.prompt_select_space()
-	
-func on_select_guard() -> void:
-	battle_controller.on_guard()
-	
-func on_select_target():
-	log_menu.show_menu()
-	var target_cells = targets_menu.get_targeted_cell_coords()
-	var is_valid_target = battle_controller.check_valid_targets(target_cells)
-	if is_valid_target:
-		battle_controller.on_use_ability(target_cells)
-		abilities_menu.set_scroll_size(current_player.abilities.size()) # will be called on end turn
-		go_back()
-	else:
-		battle_controller.on_select_invalid_target()
-
-func on_cancel_target_select() -> void:
-	battle_controller.cancel_select_target()
 
 func on_select_item() -> void:
 	var index = selected_menu.get_selected_button_index()
@@ -189,6 +164,33 @@ func on_select_item() -> void:
 		battle_controller.on_use_item(index)
 		go_back()
 		items_menu.set_scroll_size(current_player.items.size())
+	
+func on_select_move() -> void:
+	update_selected_menu(Data.BattleMenuType.MOVEMENT)
+	movement_menu.activate_hero_grid()
+	movement_menu.set_current_shape(Data.AbilityShape.SINGLE)
+	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
+	battle_controller.prompt_select_space()
+	
+func on_select_guard() -> void:
+	var coords = current_player.grid_position
+	targets_menu.set_guarded_cells(coords)
+	battle_controller.on_guard()
+	
+func on_select_target():
+	log_menu.show_menu()
+	var target_cells = targets_menu.get_targeted_cell_coords()
+	var is_valid_target = battle_controller.check_valid_targets(target_cells)
+	if is_valid_target:
+		battle_controller.on_use_ability(target_cells)
+		abilities_menu.set_scroll_size(current_player.abilities.size()) # will be called on end turn
+		update_selected_menu(Data.BattleMenuType.OPTIONS)
+	else:
+		battle_controller.on_select_invalid_target()
+
+
+func on_cancel_target_select() -> void:
+	battle_controller.cancel_select_target()
 
 func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
@@ -209,7 +211,6 @@ func on_pass_turn() -> void:
 		1:
 			go_back()
 	
-			
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()
 	if selected_menu == abilities_menu:

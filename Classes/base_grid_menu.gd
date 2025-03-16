@@ -91,6 +91,13 @@ func get_targeted_cell_coords() -> Array:
 			global_coords.append(coord)
 		selected_coords = global_coords
 	return selected_coords
+	
+func set_guarded_cells(coords: Vector2i) -> void:
+	var guarded_cells: Array
+	for i in range(coords.x + 1):
+		guarded_cells.append(Vector2i(coords.x - i, coords.y))
+	for cell in guarded_cells:
+		targets_grid[cell].modulate = Color(1.0, 0.84, 0.0)
 
 func navigate_forward(e: InputEvent) -> void:
 	if is_active:

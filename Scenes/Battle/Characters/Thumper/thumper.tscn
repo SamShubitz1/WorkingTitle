@@ -40,8 +40,7 @@ script = ExtResource("1_3lwtn")
 texture_filter = 1
 scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_fknt7")
-frame = 1
-frame_progress = 0.575419
+frame_progress = 0.634997
 
 [node name="CharHealth" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)
