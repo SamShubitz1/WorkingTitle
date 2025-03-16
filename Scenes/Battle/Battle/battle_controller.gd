@@ -141,7 +141,14 @@ func handle_death(event) -> void:
 
 func handle_end_turn() -> void:
 	increment_turn_queue()
+	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
+	
+	for player in players:
+		if player.alliance == Data.Alliance.HERO && player.guardian == current_player:
+			player.set_guardian(null)
+			add_event({"type": EventType.DIALOG, "text": player.char_name + " is no longer protected!", "duration": dialog_duration})
+		
 	update_ui()
 
 func handle_retreat() -> void:
@@ -263,7 +270,7 @@ func perform_enemy_turn() -> void:
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
 	
-	if target.guardian != null:
+	if target.guardian:
 		add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
 		
 		var next_target = target.guardian
@@ -294,6 +301,11 @@ func on_movement(next_coords: Array) -> void:
 		ap_display.update_action_points(1)
 		add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": dialog_duration})
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
+		
+		if current_player.guardian:
+			current_player.set_guardian(null)
+			add_event({"type": EventType.DIALOG, "text": current_player.char_name + " is no longer protected!", "duration": dialog_duration})
+			
 		increment_event_queue()
 	else:
 		prompt_action_points_insufficient()
@@ -318,6 +330,11 @@ func on_guard() -> void:
 	end_turn()
 
 func on_target_death(target: Character) -> void:
+	if target.alliance == Data.Alliance.HERO:
+		for player in players:
+			if player.alliance == Data.Alliance.HERO:
+				player.set_guardian(null)
+				
 	battle_grid.current_grid.erase(target.grid_position)
 	players = players.filter(func(p): return p.char_name != target.char_name)
 	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.char_name != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
