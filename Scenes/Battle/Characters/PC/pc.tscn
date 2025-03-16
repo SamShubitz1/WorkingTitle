@@ -1,7 +1,24 @@
-[gd_scene load_steps=8 format=3 uid="uid://cr3t2sex466g6"]
+[gd_scene load_steps=13 format=3 uid="uid://cr3t2sex466g6"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ge1t4"]
 [ext_resource type="Texture2D" uid="uid://ejde2yqmwm12" path="res://Scenes/Battle/Characters/PC/PC_Combat_Idle1.png" id="2_ugaaj"]
+[ext_resource type="Texture2D" uid="uid://dl56u5huotcwq" path="res://Scenes/Battle/Characters/PC/PC_Combat_Attack1.png" id="2_w0e05"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_28hp0"]
+atlas = ExtResource("2_w0e05")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_12721"]
+atlas = ExtResource("2_w0e05")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjt5m"]
+atlas = ExtResource("2_w0e05")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e327g"]
+atlas = ExtResource("2_w0e05")
+region = Rect2(48, 0, 16, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1aufq"]
 atlas = ExtResource("2_ugaaj")
@@ -13,6 +30,23 @@ region = Rect2(16, 0, 16, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_p8hg8"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_28hp0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_12721")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vjt5m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e327g")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1aufq")
@@ -40,7 +74,6 @@ script = ExtResource("1_ge1t4")
 texture_filter = 1
 scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_p8hg8")
-frame_progress = 0.176259
 
 [node name="CharHealth" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)

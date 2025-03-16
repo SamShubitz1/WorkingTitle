@@ -20,6 +20,8 @@ var buffs: Dictionary
 	
 var grid_position: Vector2i
 
+var guardian: Character = null
+
 func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, items: Array = []):
 	self.char_name = char_name
 	self.alliance = char_alliance
@@ -97,6 +99,12 @@ func resolve_effect(effect: Dictionary):
 	match property:
 		Data.EffectType.ATTRIBUTE:
 			attributes[property] += value
+
+func set_guardian(guard: Character = null) -> void:
+	self.guardian = guard
+
+func get_guardian():
+	return guardian
 	
 func flip_sprite() -> void:
 	sprite.flip_h = true

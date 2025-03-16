@@ -37,14 +37,11 @@ func _input(e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_just_pressed("navigate_forward"):
 			selected_menu.navigate_forward(e)
-
 		elif Input.is_action_just_pressed("navigate_backward"):
 			selected_menu.navigate_backward(e)
-		
 		elif Input.is_action_just_pressed("navigate_log"):
 			if selected_menu != log_menu:
 				navigate_log()
-			
 		elif Input.is_action_just_pressed("go_back"):
 				go_back()
 				
@@ -64,14 +61,14 @@ func go_back():
 			pass_turn_menu.show_menu()
 			update_selected_menu(Data.BattleMenuType.PASS_TURN)
 			return
-		pass_turn_menu:
-			options_menu.show_menu()
-			pass_turn_menu.hide_menu()
 		targets_menu:
 			on_cancel_target_select()
 			log_menu.hide_menu()
 			update_selected_menu(Data.BattleMenuType.ABILITIES)
 			return
+		pass_turn_menu:
+			options_menu.show_menu()
+			pass_turn_menu.hide_menu()
 		items_menu:
 			items_menu.hide_menu()
 			log_menu.show_menu()
@@ -173,9 +170,10 @@ func on_select_move() -> void:
 	battle_controller.prompt_select_space()
 	
 func on_select_guard() -> void:
-	var coords = current_player.grid_position
-	targets_menu.set_guarded_cells(coords)
+	#var coords = current_player.grid_position
+	#targets_menu.set_guarded_cells(coords)
 	battle_controller.on_guard()
+	update_selected_menu(Data.BattleMenuType.OPTIONS)
 	
 func on_select_target():
 	log_menu.show_menu()
@@ -187,7 +185,6 @@ func on_select_target():
 		update_selected_menu(Data.BattleMenuType.OPTIONS)
 	else:
 		battle_controller.on_select_invalid_target()
-
 
 func on_cancel_target_select() -> void:
 	battle_controller.cancel_select_target()

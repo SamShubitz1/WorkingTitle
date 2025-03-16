@@ -88,6 +88,7 @@ func increment_event_queue() -> void:
 			await wait(event.duration)
 			if current_kapow != null:
 				current_kapow.finish()
+			current_player.sprite.play("default")
 			increment_event_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
@@ -102,7 +103,7 @@ func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
 	play_dialog(dialog.text, true)
 	
-func handle_ability(event: Dictionary) -> void:
+func handle_ability(event: Dictionary) -> void:	
 	if event.has("damage_event"):
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
@@ -261,6 +262,13 @@ func perform_enemy_turn() -> void:
 	var damage_event = current_player.calculate_attack_dmg(enemy_ability)
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
+	
+	if target.guardian != null:
+		add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+		
+		var next_target = target.guardian
+		target = next_target
+	
 	add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": selected_ability.animation.duration, "emitter": current_player, "animation": enemy_ability.animation.name})
 	
 	for effect in selected_ability.effects:
@@ -300,12 +308,12 @@ func on_guard() -> void:
 	
 	if !guard_targets.is_empty():
 		for target in guard_targets:
-			target.update_status({"type": Data.StatusType.GUARD, "value": 1, "does_stack": false, "initiator": current_player})
+			target.set_guardian(current_player)
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used guard!", "duration": dialog_duration})
 
 	for target in guard_targets:
-		add_event({"type": EventType.GUARD, "target": target, "duration": GameData.abilities["Reinforce"].effects[0].animation.duration, "animation": "Reinforce"})
+		add_event({"type": EventType.GUARD, "target": target, "duration": 0.7, "animation": "Reinforce"})
 		
 	end_turn()
 
