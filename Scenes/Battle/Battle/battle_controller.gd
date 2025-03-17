@@ -203,7 +203,7 @@ func build_attack_event(target: Character) -> void:
 		animation["name"] = selected_ability.animation.name
 		animation["duration"] = selected_ability.animation.duration
 
-		add_event({"type": EventType.ABILITY, "target": target, "damage_event": ability_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
+	add_event({"type": EventType.ABILITY, "target": target, "damage_event": ability_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
