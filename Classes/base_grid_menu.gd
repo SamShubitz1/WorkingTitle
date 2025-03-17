@@ -222,6 +222,8 @@ func get_neighbor_coords(origin_coords: Vector2i) -> Array:
 				if col_index != origin_coords.x:
 					neighbor_coords.append(Vector2i(col_index, origin_coords.y))
 				col_index += 1
+		GameData.AbilityShape.ALL:
+			return targets_grid.keys()
 
 	return neighbor_coords
 

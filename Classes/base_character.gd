@@ -98,25 +98,28 @@ func resolve_effect(effect: Dictionary):
 	match property:
 		Data.EffectType.ATTRIBUTE:
 			attributes[property] += value
-			
+		Data.EffectType.AILMENT:
+			update_status({"type": property, "value": value, "turn_stack": 1})
+	resolve_status_effects()
+	
 func check_success(selected_ability: Dictionary) -> bool:
 	var success: bool
 	var type = selected_ability.ability_type
 	match type:
 		Data.AbilityType.ATTACK:
-			var base_success = 0
+			var base_success = 80
 			var optics = attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 2
-				success = randi_range(1, 100) < base_success
-				
+				var range = randi_range(1, 100)
+				success = range < base_success
 		Data.AbilityType.EFFECT:
-			var base_success = 0
+			var base_success = 60
 			var optics = attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 4
-				success = randi_range(1, 100) < base_success
-	
+				var range = randi_range(1, 100)
+				success = range < base_success
 	return success
 
 func set_guardian(guard: Character = null) -> void:
@@ -143,12 +146,29 @@ func use_action(cost: int) -> bool:
 func start_turn() -> void:
 	decrement_status_effects()
 	update_action_points()
+	
+func resolve_status_effects() -> void:
+	for status in status_effects:
+		match status.type:
+			Data.Ailments.OVERHEATED:
+				attributes[Data.Attributes.BATTERY] -= status.value
+				attributes[Data.Attributes.SHIELDING] -= status.value
+			Data.Ailments.ACIDIZED:
+				attributes[Data.Attributes.ARMOR] -= status.value
+				attributes[Data.Attributes.MOBILITY] -= status.value
+			Data.Ailments.BLANCHED:
+				attributes[Data.Attributes.MEMORY] -= status.value
+				attributes[Data.Attributes.OPTICS] -= status.value
+			Data.Ailments.CONCUSSED:
+				attributes[Data.Attributes.STRENGTH] -= status.value
+				attributes[Data.Attributes.FLUX] -= status.value
 			
 func decrement_status_effects() -> void:
 	for status in status_effects:
-			status.value -= 1
+		status.value -= 1
+		status.turn_stack -= 1
 	for status in status_effects: # apparently erasing items while iterating through an array is not supported
-		if status.value == 0:
+		if status.value == 0 || status.turn_stack == 0:
 			status_effects.erase(status)
 			
 func update_action_points() -> void:
@@ -166,5 +186,6 @@ func update_status(next_effect: Dictionary) -> void:
 		for status in status_effects:
 			if status.type == next_effect.type:
 				status.value += next_effect.value
+				status.turn_stack += 1
 			elif status.type == next_effect.type:
 				pass
