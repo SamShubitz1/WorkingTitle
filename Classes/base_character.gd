@@ -21,6 +21,7 @@ var buffs: Dictionary
 var grid_position: Vector2i
 
 var guardian: Character = null
+var mobility_changed: bool
 
 func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, items: Array = []):
 	self.char_name = char_name
@@ -93,7 +94,7 @@ func resolve_attribute_bonuses(selected_ability: Dictionary):
 		return multiplier
 
 func resolve_effect(effect: Dictionary):
-	var property = effect.affected_property
+	var property = effect.effect_type
 	var value = effect.effect_value
 	match property:
 		Data.EffectType.ATTRIBUTE:
@@ -144,6 +145,7 @@ func use_action(cost: int) -> bool:
 		return true
 
 func start_turn() -> void:
+	mobility_changed = false
 	decrement_status_effects()
 	update_action_points()
 	
@@ -156,6 +158,7 @@ func resolve_status_effects() -> void:
 			Data.Ailments.ACIDIZED:
 				attributes[Data.Attributes.ARMOR] -= status.value
 				attributes[Data.Attributes.MOBILITY] -= status.value
+				mobility_changed = true
 			Data.Ailments.BLANCHED:
 				attributes[Data.Attributes.MEMORY] -= status.value
 				attributes[Data.Attributes.OPTICS] -= status.value

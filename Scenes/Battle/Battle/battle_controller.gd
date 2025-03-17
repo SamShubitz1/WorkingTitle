@@ -209,7 +209,7 @@ func build_attack_event(target: Character) -> void:
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
-	var effect_animation: Dictionary = {"name": "", "duration": dialog_duration}
+	var effect_animation: Dictionary = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
 				
 	if effect.effect_target == Data.EffectTarget.OTHER:
 		effect_target = target
@@ -321,6 +321,7 @@ func on_movement(next_coords: Array) -> void:
 		prompt_action_points_insufficient()
 		
 func on_guard() -> void:
+	cursor.disable()
 	var guard_targets: Array
 	var guard_pos = current_player.grid_position
 	
@@ -336,8 +337,6 @@ func on_guard() -> void:
 
 	for target in guard_targets:
 		add_event({"type": EventType.GUARD, "target": target, "duration": 0.7, "animation": "Reinforce"})
-		
-	end_turn()
 
 func on_target_death(target: Character) -> void:
 	if target.alliance == Data.Alliance.HERO:
@@ -348,7 +347,7 @@ func on_target_death(target: Character) -> void:
 	battle_grid.current_grid.erase(target.grid_position)
 	players = players.filter(func(p): return p.char_name != target.char_name)
 	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.char_name != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
-	turn_queue = turn_queue.filter(func(c): return c.char_name != target.char_name)
+	turn_queue = turn_queue.filter(func(c): return c.character.char_name != target.char_name)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
 	
@@ -388,9 +387,6 @@ func build_characters() -> void:
 	var pc_abilities = ["Clobber", "Laser", "Screen Flash"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
-	
-	pc.attributes[Data.Attributes.MOBILITY] = 2
-	
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
@@ -400,9 +396,6 @@ func build_characters() -> void:
 	var runt_abilities = ["Bite", "Reinforce", "Flamethrower", "Headbutt"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	runt.init("Runt", Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
-	
-	runt.attributes[Data.Attributes.SHIELDING] = 3
-	
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
@@ -411,9 +404,6 @@ func build_characters() -> void:
 	var norman = norman_scene.instantiate()
 	var norman_abilities = ["Clobber"]
 	norman.init("Norman", Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
-	
-	norman.attributes[Data.Attributes.SHIELDING] = 3
-	
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
@@ -421,9 +411,6 @@ func build_characters() -> void:
 	var thumper = thumper_scene.instantiate()
 	var thumper_abilities = ["Clobber", "Bite"]
 	thumper.init("Thumper", Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
-	
-	thumper.attributes[Data.Attributes.SHIELDING] = 3
-	
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
@@ -432,9 +419,6 @@ func build_characters() -> void:
 	var mandrake = mandrake_scene.instantiate()
 	var mandrake_abilities = ["Wave Beam", "Bite"]
 	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
-	
-	mandrake.attributes[Data.Attributes.SHIELDING] = 3
-	
 	set_position_by_grid_coords(mandrake)
 	add_child(mandrake)
 	mandrake.flip_sprite()
@@ -443,9 +427,6 @@ func build_characters() -> void:
 	var pilypile = pilypile_scene.instantiate()
 	var pilypile_abilities = ["Armor Inversion", "Bite", "Acid Cloud"]
 	pilypile.init("Pilypile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 2)) # init props will be accessed from somewhere
-	
-	pilypile.attributes[Data.Attributes.SHIELDING] = 2
-	
 	set_position_by_grid_coords(pilypile)
 	add_child(pilypile)
 	mandrake.flip_sprite()
@@ -486,11 +467,22 @@ func set_turn_order() -> void:
 	turn_queue.append_array(positions)
 	
 func increment_turn_queue() -> void:
-	if turn_queue.is_empty || turn_queue.size() == 30:
+	var mobility_changed = check_mobility_change()
+	if mobility_changed || turn_queue.is_empty() || turn_queue.size() < 30:
 		set_turn_order()
 	var next_player = turn_queue.pop_front().character
 	current_player = next_player
 	current_player.start_turn()
+	
+func check_mobility_change() -> bool:
+	var has_changed: bool
+	for player in players:
+		if player.mobility_changed == true:
+			has_changed = true
+	if has_changed:
+		return true
+	else:
+		return false
 
 func prompt_action_points_insufficient() -> void:
 	play_dialog("AP is too low!", false)
@@ -498,7 +490,6 @@ func prompt_action_points_insufficient() -> void:
 	
 func update_ui() -> void:
 	if current_player.alliance == GameData.Alliance.HERO:	
-		
 		char_name_label.text = current_player.name
 		update_display_health()
 		ap_display.set_action_points(current_player.action_points)
