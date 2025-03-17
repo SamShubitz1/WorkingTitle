@@ -86,9 +86,10 @@ func increment_event_queue() -> void:
 
 		if event.has("duration"):
 			await wait(event.duration)
+			
 			if current_kapow != null:
 				current_kapow.finish()
-			current_player.sprite.play("default")
+			
 			increment_event_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
@@ -185,7 +186,8 @@ func on_use_ability(target_cells: Array) -> void:
 		if ability_success:
 			for target_pos in selected_targets:
 				var target = battle_grid.current_grid[target_pos]
-				build_attack_event(target)
+				if !selected_ability.damage.type == Data.DamageType.NONE:
+					build_attack_event(target)
 					
 				for effect in selected_ability.effects:
 					build_effect_event(target, effect)
@@ -197,13 +199,13 @@ func on_use_ability(target_cells: Array) -> void:
 		prompt_action_points_insufficient()
 		
 func build_attack_event(target: Character) -> void:
-	var ability_event = current_player.calculate_attack_dmg(selected_ability)
+	var damage_event = current_player.calculate_attack_dmg(selected_ability)
 	var animation = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
 	if selected_ability.has("animation"):
 		animation["name"] = selected_ability.animation.name
 		animation["duration"] = selected_ability.animation.duration
 
-	add_event({"type": EventType.ABILITY, "target": target, "damage_event": ability_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
+	add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character

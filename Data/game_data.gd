@@ -120,7 +120,7 @@ var abilities: Dictionary = {
 	
 	"Headbutt": {"name": "Headbutt", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that applies 1 concussed", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "effect_target": EffectTarget.OTHER, "effect_value": 1, "affected_property":
-			Ailments.CONCUSSED, "effect_description": "gained 2 concussed", "animation": {"name": "Headbutt", "duration": 0.9}}]},
+			Ailments.CONCUSSED, "effect_description": "gained 1 concussed", "animation": {"name": "Headbutt", "duration": 0.9}}]},
 	}
 	
 var items: Dictionary = {
