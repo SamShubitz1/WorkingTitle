@@ -99,8 +99,10 @@ func resolve_effect(effect: Dictionary):
 	match property:
 		Data.EffectType.ATTRIBUTE:
 			attributes[property] += value
+			if attributes[property] < 0:
+				attributes[property] = 0
 		Data.EffectType.AILMENT:
-			update_status({"type": property, "value": value, "turn_stack": 1})
+			update_status({"type": property, "value": value})
 	resolve_status_effects()
 	
 func check_success(selected_ability: Dictionary) -> bool:
@@ -145,6 +147,7 @@ func use_action(cost: int) -> bool:
 		return true
 
 func start_turn() -> void:
+	print(char_name, " ", status_effects, attributes)
 	mobility_changed = false
 	decrement_status_effects()
 	update_action_points()
@@ -165,13 +168,16 @@ func resolve_status_effects() -> void:
 			Data.Ailments.CONCUSSED:
 				attributes[Data.Attributes.STRENGTH] -= status.value
 				attributes[Data.Attributes.FLUX] -= status.value
+				
+	for attribute in attributes:
+		if attributes[attribute] < 0:
+			attributes[attribute] = 0;
 			
 func decrement_status_effects() -> void:
 	for status in status_effects:
 		status.value -= 1
-		status.turn_stack -= 1
 	for status in status_effects: # apparently erasing items while iterating through an array is not supported
-		if status.value == 0 || status.turn_stack == 0:
+		if status.value == 0:
 			status_effects.erase(status)
 			
 func update_action_points() -> void:
@@ -189,6 +195,5 @@ func update_status(next_effect: Dictionary) -> void:
 		for status in status_effects:
 			if status.type == next_effect.type:
 				status.value += next_effect.value
-				status.turn_stack += 1
 			elif status.type == next_effect.type:
 				pass
