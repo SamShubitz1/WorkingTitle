@@ -337,6 +337,8 @@ func on_guard() -> void:
 
 	for target in guard_targets:
 		add_event({"type": EventType.GUARD, "target": target, "duration": 0.7, "animation": "Reinforce"})
+	
+	increment_event_queue()
 
 func on_target_death(target: Character) -> void:
 	if target.alliance == Data.Alliance.HERO:
