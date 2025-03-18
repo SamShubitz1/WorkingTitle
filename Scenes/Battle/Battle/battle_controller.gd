@@ -117,7 +117,7 @@ func handle_ability(event: Dictionary) -> void:
 #
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
-		play_dialog(event.target.char_name + " " + event.effect.effect_description + "!", true)
+		play_dialog(event.target.char_name + " " + event.effect.description + "!", true)
 		if event.effect_animation != "":
 			current_kapow = get_kapow()
 			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation)
@@ -145,11 +145,15 @@ func handle_end_turn() -> void:
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
+	var result = current_player.start_turn()
+	if result:
+		add_event({"type": EventType.DIALOG, "text": result + " wore off!", "duration": dialog_duration})
+	
 	for player in players:
 		if player.alliance == Data.Alliance.HERO && player.guardian == current_player:
 			player.set_guardian(null)
 			add_event({"type": EventType.DIALOG, "text": player.char_name + " is no longer protected!", "duration": dialog_duration})
-		
+			
 	update_ui()
 
 func handle_retreat() -> void:
@@ -211,9 +215,9 @@ func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
 	var effect_animation: Dictionary = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
 				
-	if effect.effect_target == Data.EffectTarget.OTHER:
+	if effect.target == Data.EffectTarget.OTHER:
 		effect_target = target
-	elif effect.effect_target == Data.EffectTarget.SELF:
+	elif effect.target == Data.EffectTarget.SELF:
 		effect_target = current_player
 					
 	if effect.has("animation"):
@@ -460,7 +464,7 @@ func set_position_by_grid_coords(character: Character) -> void:
 func set_turn_order() -> void:
 	var positions: Array
 	for player in players:
-		var position_value = 100 / (float(player.attributes[Data.Attributes.MOBILITY] + 10))
+		var position_value = 100 / (float(player.current_attributes[Data.Attributes.MOBILITY] + 10))
 		for i in range(20):
 			positions.append({"character": player, "position_value": position_value * i})
 
@@ -474,8 +478,7 @@ func increment_turn_queue() -> void:
 		set_turn_order()
 	var next_player = turn_queue.pop_front().character
 	current_player = next_player
-	current_player.start_turn()
-	
+		
 func check_mobility_change() -> bool:
 	var has_changed: bool
 	for player in players:

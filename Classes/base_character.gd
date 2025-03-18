@@ -10,18 +10,20 @@ var health_bar: ProgressBar
 var sprite: AnimatedSprite2D
 var action_points: int = 5
 
-var attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+var base_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+var current_attributes = base_attributes.duplicate(true)
 
 var items: Array
 var abilities: Array
 var items_equipped: Array
 var status_effects: Array
-var buffs: Dictionary
+#var buffs: Dictionary
 	
 var grid_position: Vector2i
 
 var guardian: Character = null
 var mobility_changed: bool
+var movement_range = Vector2i(1, 1)
 
 func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, items: Array = []):
 	self.char_name = char_name
@@ -66,11 +68,11 @@ func take_damage(damage_event: Dictionary) -> int:
 		GameData.DamageType.NONE:
 			return false
 		GameData.DamageType.PHYSICAL:
-			var armor: float = attributes[GameData.Attributes.ARMOR]
+			var armor: float = current_attributes[GameData.Attributes.ARMOR]
 			var multiplier: float = 1 - (armor / 10)
 			damage_result = damage_event.damage * multiplier
 		GameData.DamageType.ENERGY:
-			var shielding: float = attributes[GameData.Attributes.SHIELDING]
+			var shielding: float = current_attributes[GameData.Attributes.SHIELDING]
 			var multiplier: float = 1 - (shielding / 10)
 			damage_result = damage_event.damage * multiplier
 	if damage_result > 0:
@@ -89,22 +91,12 @@ func calculate_attack_dmg(selected_ability: Dictionary):
 func resolve_attribute_bonuses(selected_ability: Dictionary):
 	var attribute = selected_ability.attribute_bonus
 	if attribute != GameData.Attributes.NONE:
-		var value: float = attributes[attribute]
+		var value: float = current_attributes[attribute]
 		var multiplier: float = 1 + (value / 10)
 		return multiplier
 
 func resolve_effect(effect: Dictionary):
-	var type = effect.effect_type
-	var property = effect.affected_property
-	var value = effect.effect_value
-	#var duration = effect.duration
-	match type:
-		Data.EffectType.ATTRIBUTE:
-			attributes[property] += value
-			if attributes[property] < 0:
-				attributes[property] = 0
-		Data.EffectType.AILMENT:
-			update_status({"type": property, "value": value})
+	update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
 	resolve_status_effects()
 	
 func check_success(selected_ability: Dictionary) -> bool:
@@ -113,14 +105,14 @@ func check_success(selected_ability: Dictionary) -> bool:
 	match type:
 		Data.AbilityType.ATTACK:
 			var base_success = 90
-			var optics = attributes[Data.Attributes.OPTICS]
+			var optics = current_attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 2
 				var range = randi_range(1, 100)
 				success = range < base_success
 		Data.AbilityType.EFFECT:
 			var base_success = 70
-			var optics = attributes[Data.Attributes.OPTICS]
+			var optics = current_attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 4
 				var range = randi_range(1, 100)
@@ -136,9 +128,9 @@ func get_guardian():
 func flip_sprite() -> void:
 	sprite.flip_h = true
 	
-func populate_buffs_array() -> void:
-	for i in items_equipped:
-		buffs[i.effect_type] = i.multiplier
+#func populate_buffs_array() -> void:
+	#for i in items_equipped:
+		#buffs[i.effect_type] = i.multiplier
 		
 func use_action(cost: int) -> bool:
 	var next_points = action_points - cost
@@ -148,40 +140,58 @@ func use_action(cost: int) -> bool:
 		action_points = next_points
 		return true
 
-func start_turn() -> void:
-	print(char_name, " ", status_effects, attributes)
+func start_turn():
 	mobility_changed = false
-	decrement_status_effects()
 	update_action_points()
+	var result = decrement_status_effects()
+	if result:
+		return result
 	
 func resolve_status_effects() -> void:
+	current_attributes = base_attributes.duplicate(true)
 	for status in status_effects:
-		match status.type:
-			Data.Ailments.OVERHEATED:
-				attributes[Data.Attributes.BATTERY] -= status.value
-				attributes[Data.Attributes.SHIELDING] -= status.value
-			Data.Ailments.ACIDIZED:
-				attributes[Data.Attributes.ARMOR] -= status.value
-				attributes[Data.Attributes.MOBILITY] -= status.value
-				mobility_changed = true
-			Data.Ailments.BLANCHED:
-				attributes[Data.Attributes.MEMORY] -= status.value
-				attributes[Data.Attributes.OPTICS] -= status.value
-			Data.Ailments.CONCUSSED:
-				attributes[Data.Attributes.STRENGTH] -= status.value
-				attributes[Data.Attributes.FLUX] -= status.value
+		if status.type == Data.EffectType.ATTRIBUTE:
+				current_attributes[status.property] += status.value
+		elif status.type == Data.EffectType.AILMENT:
+			match status.property:
+				Data.Ailments.OVERHEATED:
+					current_attributes[Data.Attributes.BATTERY] -= status.value
+					current_attributes[Data.Attributes.SHIELDING] -= status.value
+				Data.Ailments.ACIDIZED:
+					current_attributes[Data.Attributes.ARMOR] -= status.value
+					current_attributes[Data.Attributes.MOBILITY] -= status.value
+					mobility_changed = true
+				Data.Ailments.BLANCHED:
+					current_attributes[Data.Attributes.MEMORY] -= status.value
+					current_attributes[Data.Attributes.OPTICS] -= status.value
+				Data.Ailments.CONCUSSED:
+					current_attributes[Data.Attributes.STRENGTH] -= status.value
+					current_attributes[Data.Attributes.FLUX] -= status.value
 				
-	for attribute in attributes.keys():
-		if attributes[attribute] < 0:
-			attributes[attribute] = 0;
+	for attribute in base_attributes.keys():
+		if current_attributes[attribute] < 0:
+			current_attributes[attribute] = 0;
 			
-func decrement_status_effects() -> void:
+func decrement_status_effects():
 	for status in status_effects:
-		status.value -= 1
+		if status.type == Data.EffectType.AILMENT:
+			status.value -= 1
+	resolve_status_effects()
 	for status in status_effects: # apparently erasing items while iterating through an array is not supported
 		if status.value == 0:
 			status_effects.erase(status)
-			
+			var effect_name: String
+			match status.type:
+				Data.Ailments.OVERHEATED:
+					effect_name = "Overheated"
+				Data.Ailments.ACIDIZED:
+					effect_name = "Acidized"
+				Data.Ailments.BLANCHED:
+					effect_name = "Blanched"
+				Data.Ailments.CONCUSSED:
+					effect_name = "Concussed"
+			return effect_name
+				
 func update_action_points() -> void:
 	if action_points < 5:
 		var next_points = action_points + 3
@@ -195,7 +205,5 @@ func update_status(next_effect: Dictionary) -> void:
 		status_effects.append(next_effect)
 	else:
 		for status in status_effects:
-			if status.type == next_effect.type:
+			if status.property == next_effect.property:
 				status.value += next_effect.value
-			elif status.type == next_effect.type:
-				pass
