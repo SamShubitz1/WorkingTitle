@@ -142,7 +142,6 @@ func handle_death(event) -> void:
 
 func handle_end_turn() -> void:
 	increment_turn_queue()
-	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
 	var result = current_player.start_turn()
@@ -474,7 +473,7 @@ func set_turn_order() -> void:
 	
 func increment_turn_queue() -> void:
 	var mobility_changed = check_mobility_change()
-	if mobility_changed || turn_queue.is_empty() || turn_queue.size() < 30:
+	if mobility_changed || turn_queue.size() < 30:
 		set_turn_order()
 	var next_player = turn_queue.pop_front().character
 	current_player = next_player

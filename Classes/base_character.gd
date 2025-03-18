@@ -31,7 +31,6 @@ func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: Anim
 	self.sprite = char_sprite
 	self.health_bar = char_health
 	self.max_health = max_health
-	health_bar.z_index = -1
 	set_health()
 	set_abilities(abilities)
 	set_items(items)
@@ -48,6 +47,7 @@ func set_grid_position(next_position: Vector2i):
 func set_health() -> void:
 	health_bar.max_value = max_health
 	health_bar.value = max_health
+	health_bar.z_index = -1
 		
 func set_abilities(abilities: Array) -> void:
 	var char_abilities: Array
@@ -146,9 +146,11 @@ func start_turn():
 	var result = decrement_status_effects()
 	if result:
 		return result
+	print_stats()
 	
 func resolve_status_effects() -> void:
 	current_attributes = base_attributes.duplicate(true)
+	
 	for status in status_effects:
 		if status.type == Data.EffectType.ATTRIBUTE:
 				current_attributes[status.property] += status.value
@@ -207,3 +209,22 @@ func update_status(next_effect: Dictionary) -> void:
 		for status in status_effects:
 			if status.property == next_effect.property:
 				status.value += next_effect.value
+				
+func print_stats():
+	print(char_name, " ", "current attributes:")
+	for attribute in current_attributes:
+		match attribute:
+			Data.Attributes.STRENGTH:
+				print("Strength: ", current_attributes[attribute])
+			Data.Attributes.ARMOR:
+				print("Armor: ", current_attributes[attribute])
+			Data.Attributes.SHIELDING:
+				print("Shielding: ", current_attributes[attribute])
+			Data.Attributes.FLUX:
+				print("Flux: ", current_attributes[attribute])
+			Data.Attributes.MOBILITY:
+				print("Mobility: ", current_attributes[attribute])
+			Data.Attributes.OPTICS:
+				print("Optics: ", current_attributes[attribute])
+			Data.Attributes.MEMORY:
+				print("Memory: ", current_attributes[attribute])
