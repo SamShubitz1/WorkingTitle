@@ -94,9 +94,11 @@ func resolve_attribute_bonuses(selected_ability: Dictionary):
 		return multiplier
 
 func resolve_effect(effect: Dictionary):
-	var property = effect.effect_type
+	var type = effect.effect_type
+	var property = effect.affected_property
 	var value = effect.effect_value
-	match property:
+	#var duration = effect.duration
+	match type:
 		Data.EffectType.ATTRIBUTE:
 			attributes[property] += value
 			if attributes[property] < 0:
@@ -110,14 +112,14 @@ func check_success(selected_ability: Dictionary) -> bool:
 	var type = selected_ability.ability_type
 	match type:
 		Data.AbilityType.ATTACK:
-			var base_success = 80
+			var base_success = 90
 			var optics = attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 2
 				var range = randi_range(1, 100)
 				success = range < base_success
 		Data.AbilityType.EFFECT:
-			var base_success = 60
+			var base_success = 70
 			var optics = attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 4
@@ -169,7 +171,7 @@ func resolve_status_effects() -> void:
 				attributes[Data.Attributes.STRENGTH] -= status.value
 				attributes[Data.Attributes.FLUX] -= status.value
 				
-	for attribute in attributes:
+	for attribute in attributes.keys():
 		if attributes[attribute] < 0:
 			attributes[attribute] = 0;
 			

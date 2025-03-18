@@ -84,11 +84,6 @@ enum EffectTarget {
 	SELF
 }
 
-#status_effect
-#type: enum StatusEffectType
-#does_stack: bool
-#value: int
-
 var abilities: Dictionary = {
 	"Clobber": {"name": "Clobber", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 80}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A simple melee attack", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Clobber", "duration": 0.7}},
 	
@@ -111,7 +106,7 @@ var abilities: Dictionary = {
 			Ailments.OVERHEATED, "effect_description": "gained 2 overheat", "animation": {"name": "Flamethrower", "duration": 0.9}}]},
 	
 	"Acid Cloud": {"name": "Acid Cloud", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 3 acidize to enemies in a circle", "range": Vector2i(7,4), "shape": AbilityShape.DIAMOND, "effects": [
-		{"effect_type": EffectType.AILMENT, "effect_target": EffectTarget.OTHER, "effect_value": 3, "affected_property":
+		{"effect_type": EffectType.AILMENT, "effect_target": EffectTarget.OTHER, "effect_value": 2, "affected_property":
 			Ailments.ACIDIZED, "effect_description": "gained 2 acidized", "animation": {"name": "Acid Cloud", "duration": 0.9}}]},
 			
 	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 blanched to all enemies", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "effects": [
