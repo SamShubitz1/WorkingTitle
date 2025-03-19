@@ -144,9 +144,7 @@ func handle_end_turn() -> void:
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
-	var result = current_player.start_turn()
-	if result:
-		add_event({"type": EventType.DIALOG, "text": result + " wore off!", "duration": dialog_duration})
+	current_player.start_turn()
 	
 	for player in players:
 		if player.alliance == Data.Alliance.HERO && player.guardian == current_player:
@@ -362,6 +360,11 @@ func resolve_item_effect() -> float:
 		
 func end_turn() -> void:
 	cursor.disable()
+	
+	var effect_name = current_player.end_turn()
+	if effect_name:
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " is no longer " + effect_name + "!", "duration": dialog_duration})
+		
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
@@ -381,6 +384,7 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 		elif selected_ability.target_type == GameData.TargetType.HERO:
 			if cell.x < 4:
 				valid_targets.append(cell)
+				
 	var is_valid_target: bool = false
 	for cell in target_cells:
 		if valid_targets.has(cell):

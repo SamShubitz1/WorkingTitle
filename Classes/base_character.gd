@@ -143,10 +143,11 @@ func use_action(cost: int) -> bool:
 func start_turn():
 	mobility_changed = false
 	update_action_points()
+
+func end_turn():
 	var result = decrement_status_effects()
 	if result:
 		return result
-	print_stats()
 	
 func resolve_status_effects() -> void:
 	current_attributes = base_attributes.duplicate(true)
@@ -170,7 +171,7 @@ func resolve_status_effects() -> void:
 					current_attributes[Data.Attributes.STRENGTH] -= status.value
 					current_attributes[Data.Attributes.FLUX] -= status.value
 				
-	for attribute in base_attributes.keys():
+	for attribute in current_attributes.keys():
 		if current_attributes[attribute] < 0:
 			current_attributes[attribute] = 0;
 			
@@ -183,7 +184,7 @@ func decrement_status_effects():
 		if status.value == 0:
 			status_effects.erase(status)
 			var effect_name: String
-			match status.type:
+			match status.property:
 				Data.Ailments.OVERHEATED:
 					effect_name = "Overheated"
 				Data.Ailments.ACIDIZED:
