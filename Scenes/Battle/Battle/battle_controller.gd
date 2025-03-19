@@ -143,10 +143,9 @@ func handle_death(event) -> void:
 		increment_event_queue()
 
 func handle_end_turn() -> void:
-	
 	var effect_name = current_player.end_turn()
 	if effect_name:
-		play_dialog(current_player.char_name + " is no longer " + effect_name + "!", true)
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " is no longer " + effect_name + "!", "duration": dialog_duration, "emitter": current_player})
 		
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
@@ -364,7 +363,7 @@ func resolve_item_effect() -> float:
 		
 func end_turn() -> void:
 	cursor.disable()
-	add_event({"type": EventType.END_TURN, "duration": dialog_duration})
+	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
 func check_valid_targets(target_cells: Array, check_movement: bool = false) -> bool:
