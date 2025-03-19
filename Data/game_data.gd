@@ -29,7 +29,6 @@ enum AbilityType {
 	EFFECT
 }
 
-
 enum DamageType {
 	PHYSICAL,
 	ENERGY,
@@ -39,7 +38,6 @@ enum DamageType {
 enum TargetType {
 	HERO,
 	ENEMY,
-	SELF
 }
 
 enum AbilityShape {
@@ -51,7 +49,6 @@ enum AbilityShape {
 	COLUMN,
 	ALL
 }
-
 
 enum Alliance {
 	HERO,
@@ -72,8 +69,9 @@ enum Attributes {
 
 enum SpecialStat {
 	AP,
-	REGEN,
-	AILMENTS
+	ENERGY,
+	AILMENTS, # meaning all ailments
+	MOVE_RANGE
 }
 
 enum Ailments {
@@ -95,16 +93,10 @@ enum EffectTarget {
 	SELF
 }
 
-#status_effect
-#type: enum StatusEffectType
-#does_stack: bool
-#value: int
-
-
 #############################################################  ABILITY CREATOR  #####################################################
 #AbilityType: .ATTACK , .EFFECT
 #DamageType: .PHYSICAL , .ENERGY , .NONE
-#TargetType: .HERO , .ENEMY , .SELF
+#TargetType: .HERO , .ENEMY
 #Range: X: 3-7 , Y: 1-4
 #AbilityShape: .SINGLE , .LINE , .SQUARE , .DIAMOND , .MULTIPLE , .COLUMN , .ALL
 #EffectType: .STATUS , .ATTRIBUTE , .AILMENT
@@ -114,7 +106,7 @@ var abilities: Dictionary = {
 	"Clobber": {"name": "Clobber", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 80}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "80 physical damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Clobber", "duration": 0.7}},
 	
 	"Heat Ray": {"name": "Heat Ray", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 55}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "50 energy damage and 2 overheated to all enemies in a line.", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [
-		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property": Attributes.NONE, "description": "gained 2 overheated"}], "animation": {"name": "Laser", "duration": 0.7}},
+		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property": Ailments.OVERHEATED, "description": "gained 2 overheated"}], "animation": {"name": "Laser", "duration": 0.7}},
 	
 	"Ripjaw": {"name": "Ripjaw", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage and loses 1 armor.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.ARMOR, "description": "lost 1 armor"}], "animation": {"name": "Bite", "duration": 0.7}},
@@ -143,7 +135,7 @@ var abilities: Dictionary = {
 			Ailments.BLANCHED, "description": "gained 2 blanched", "animation": {"name": "Screen Flash", "duration": 0.9}}]},
 			
 	"Hop": {"name": "Hop", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 2, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Move to any space.", "range": Vector2i(7,3), "shape": AbilityShape.SINGLE, "effects": [
-		{"effect_type": EffectType.STATUS, "target": EffectTarget.OTHER, "value": 0, "property": Attributes.NONE, "description": "moved to a new space!", "animation": {"name": "Reinforce", "duration": 0.7}}]},
+		{"effect_type": EffectType.STATUS, "target": EffectTarget.OTHER, "value": 0, "property": SpecialStat.MOVE_RANGE, "description": "moved to a new space!", "animation": {"name": "Reinforce", "duration": 0.7}}]},
 		
 	"Zap": {"name": "Zap", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 40}, "action_cost": 2, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "40 energy damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 		

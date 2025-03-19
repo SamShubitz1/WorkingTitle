@@ -16,3 +16,7 @@ func update_grid_object(object: Node, next_position: Vector2i) -> void:
 	current_grid.erase(object.grid_position)
 	object.set_grid_position(next_position)
 	current_grid[next_position] = object
+	
+func populate_grid(objects: Array) -> void:
+	for object in objects:
+		set_object_at_grid_position(object)

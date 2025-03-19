@@ -146,8 +146,6 @@ func handle_end_turn() -> void:
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
-	current_player.start_turn()
-	
 	for player in players:
 		if player.alliance == Data.Alliance.HERO && player.guardian == current_player:
 			player.set_guardian(null)
@@ -441,10 +439,6 @@ func build_characters() -> void:
 	add_child(pilypile)
 	mandrake.flip_sprite()
 	players.append(pilypile)
-			
-func populate_grid() -> void:
-	for player in players:
-		battle_grid.set_object_at_grid_position(player)
 	
 #func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
@@ -482,6 +476,7 @@ func increment_turn_queue() -> void:
 		set_turn_order()
 	var next_player = turn_queue.pop_front().character
 	current_player = next_player
+	current_player.start_turn()
 		
 func check_mobility_change() -> bool:
 	var has_changed: bool
@@ -526,9 +521,8 @@ func update_display_health() -> void:
 				
 func initialize_battle() -> void:
 	dialog = dialog_box[0]
-	get_kapow()
 	build_characters()
-	populate_grid()
+	battle_grid.populate_grid(players)
 	increment_turn_queue()
 	ap_display.initialize_ap_display()
 	update_ui()

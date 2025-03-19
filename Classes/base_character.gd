@@ -146,11 +146,21 @@ func use_action(cost: int) -> bool:
 		return true
 
 func start_turn():
-	mobility_changed = false
+	if alliance == Data.Alliance.HERO:
+		print("after start of turn")
+		print_stats()
+		
 	update_action_points()
+	resolve_status_effects()
 
 func end_turn():
+	mobility_changed = false
 	var result = decrement_status_effects()
+	
+	if alliance == Data.Alliance.HERO:
+		print("before end of turn")
+		print_stats()
+		
 	if result:
 		return result
 	
@@ -233,7 +243,7 @@ func update_status(next_effect: Dictionary) -> void:
 				status.value += next_effect.value
 				
 func print_stats():
-	print(char_name, " ", "current attributes:")
+	print(char_name, " current attributes:")
 	for attribute in current_attributes:
 		match attribute:
 			Data.Attributes.STRENGTH:
@@ -250,3 +260,42 @@ func print_stats():
 				print("Optics: ", current_attributes[attribute])
 			Data.Attributes.MEMORY:
 				print("Memory: ", current_attributes[attribute])
+				
+	print(char_name, " current status effects: ")
+	for status in status_effects:
+		match status.type:
+			Data.EffectType.AILMENT:
+				print("Ailment:")
+				match status.property:
+					Data.Ailments.ACIDIZED:
+						print("acidized for ", status.value)
+					Data.Ailments.BLANCHED:
+						print("blanched for ", status.value)
+					Data.Ailments.OVERHEATED:
+						print("overheated for ", status.value)
+					Data.Ailments.CONCUSSED:
+						print("concussed for ", status.value)
+			Data.EffectType.ATTRIBUTE:
+				match status.property:
+					Data.Attributes.ARMOR:
+						print("armor for ", status.value)
+					Data.Attributes.SHIELDING:
+						print("shielding ", status.value)
+					Data.Attributes.STRENGTH:
+						print("strength for ", status.value)
+					Data.Attributes.FLUX:
+						print("flux for ", status.value)
+					Data.Attributes.OPTICS:
+						print("optics for ", status.value)
+					Data.Attributes.MEMORY:
+						print("memory for ", status.value)
+					Data.Attributes.MOBILITY:
+						print("mobility for ", status.value)
+			Data.EffectType.RESTORE:
+				match status.property:
+					Data.SpecialStat.AP:
+						print("AP for ", status.value)
+					Data.SpecialStat.ENERGY:
+						print("Energy for ", status.value)
+					Data.SpecialStat.AILMENTS:
+						print("All ailments for ", status.value)

@@ -142,8 +142,6 @@ func on_select_ability() -> void:
 			targets_menu.activate_enemy_grid()
 		Data.TargetType.HERO:
 			targets_menu.activate_hero_grid()
-		Data.TargetType.SELF:
-			targets_menu.activate_hero_grid()
 			
 	targets_menu.set_current_shape(ability_info.shape)
 	targets_menu.set_range(current_player.grid_position, ability_info.range)
