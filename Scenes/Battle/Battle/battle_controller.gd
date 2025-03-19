@@ -278,15 +278,14 @@ func perform_enemy_turn() -> void:
 	
 	var success = current_player.check_success(enemy_ability)
 	if success:
-		var damage_event = current_player.calculate_attack_dmg(enemy_ability)
-		
 		if target.guardian:
 			add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
 			
 			var next_target = target.guardian
 			target = next_target
-		
-		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": selected_ability.animation.duration, "emitter": current_player, "animation": enemy_ability.animation.name})
+			
+		if !selected_ability.damage.type == Data.DamageType.NONE:
+			build_attack_event(target)
 		
 		for effect in selected_ability.effects:
 			build_effect_event(target, effect)
