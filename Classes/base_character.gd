@@ -11,6 +11,7 @@ var sprite: AnimatedSprite2D
 var action_points: int = 5
 
 var base_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+
 var current_attributes = base_attributes.duplicate(true)
 
 var items: Array
@@ -96,7 +97,11 @@ func resolve_attribute_bonuses(selected_ability: Dictionary):
 		return multiplier
 
 func resolve_effect(effect: Dictionary):
-	update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
+	if effect.has("duration"):
+		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value, "duration": effect.duration})
+	else:
+		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
+		
 	resolve_status_effects()
 	
 func check_success(selected_ability: Dictionary) -> bool:
@@ -170,6 +175,17 @@ func resolve_status_effects() -> void:
 				Data.Ailments.CONCUSSED:
 					current_attributes[Data.Attributes.STRENGTH] -= status.value
 					current_attributes[Data.Attributes.FLUX] -= status.value
+		elif status.type == Data.EffectType.RESTORE:
+			match status.property:
+				Data.SpecialStat.AP:
+					action_points += status.value
+					if action_points > 5:
+						action_points = 5
+				Data.SpecialStat.AILMENTS:
+					if status.type == Data.EffectType.AILMENT:
+						print(char_name, " ", status_effects)
+						status_effects.erase(status)
+						print(char_name, " ", status_effects)
 				
 	for attribute in current_attributes.keys():
 		if current_attributes[attribute] < 0:
@@ -179,9 +195,11 @@ func decrement_status_effects():
 	for status in status_effects:
 		if status.type == Data.EffectType.AILMENT:
 			status.value -= 1
+		elif status.has("duration"):
+			status.duration -= 1
 	resolve_status_effects()
-	for status in status_effects: # apparently erasing items while iterating through an array is not supported
-		if status.value == 0:
+	for status in status_effects:
+		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)
 			var effect_name: String
 			match status.property:
@@ -194,6 +212,9 @@ func decrement_status_effects():
 				Data.Ailments.CONCUSSED:
 					effect_name = "Concussed"
 			return effect_name
+		elif status.has("duration"):
+			if status.duration == 0: # duration check for status effects
+				status_effects.erase(status)
 				
 func update_action_points() -> void:
 	if action_points < 5:
