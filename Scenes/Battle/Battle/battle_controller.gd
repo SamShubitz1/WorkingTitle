@@ -386,7 +386,7 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 
 func build_characters() -> void:
 	var pc = pc_scene.instantiate()
-	var pc_abilities = ["Clobber", "Laser", "Screen Flash"]
+	var pc_abilities = ["Clobber", "Heat Ray", "Screen Flash"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
@@ -395,7 +395,7 @@ func build_characters() -> void:
 	players.append(pc)
 	
 	var runt = runt_scene.instantiate()
-	var runt_abilities = ["Bite", "Reinforce", "Flamethrower", "Headbutt"]
+	var runt_abilities = ["Ripjaw", "Reinforce", "Acid Cloud", "Ramming Strike"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 	runt.init("Runt", Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
@@ -411,7 +411,7 @@ func build_characters() -> void:
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
-	var thumper_abilities = ["Clobber", "Bite"]
+	var thumper_abilities = ["Clobber", "Ripjaw"]
 	thumper.init("Thumper", Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
@@ -419,7 +419,7 @@ func build_characters() -> void:
 	players.append(thumper)
 	
 	var mandrake = mandrake_scene.instantiate()
-	var mandrake_abilities = ["Wave Beam", "Bite"]
+	var mandrake_abilities = ["Sonic Pulse", "Ripjaw"]
 	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(mandrake)
 	add_child(mandrake)
@@ -427,7 +427,7 @@ func build_characters() -> void:
 	players.append(mandrake)
 	
 	var pilypile = pilypile_scene.instantiate()
-	var pilypile_abilities = ["Armor Inversion", "Bite", "Acid Cloud"]
+	var pilypile_abilities = ["Bulk Inversion", "Ripjaw", "Acid Cloud"]
 	pilypile.init("Pilypile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 2)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pilypile)
 	add_child(pilypile)
