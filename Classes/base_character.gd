@@ -146,21 +146,12 @@ func use_action(cost: int) -> bool:
 		return true
 
 func start_turn():
-	if alliance == Data.Alliance.HERO:
-		print("after start of turn")
-		print_stats()
-		
 	update_action_points()
 	resolve_status_effects()
 
 func end_turn():
 	mobility_changed = false
 	var result = decrement_status_effects()
-	
-	if alliance == Data.Alliance.HERO:
-		print("before end of turn")
-		print_stats()
-		
 	if result:
 		return result
 	
@@ -192,11 +183,8 @@ func resolve_status_effects() -> void:
 					if action_points > 5:
 						action_points = 5
 				Data.SpecialStat.AILMENTS:
-					if status.type == Data.EffectType.AILMENT:
-						print(char_name, " ", status_effects)
-						status_effects.erase(status)
-						print(char_name, " ", status_effects)
-				
+					status_effects = status_effects.filter(func(status): return status.type != Data.EffectType.AILMENT)
+					
 	for attribute in current_attributes.keys():
 		if current_attributes[attribute] < 0:
 			current_attributes[attribute] = 0;
@@ -208,6 +196,7 @@ func decrement_status_effects():
 		elif status.has("duration"):
 			status.duration -= 1
 	resolve_status_effects()
+	
 	for status in status_effects:
 		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)
@@ -235,67 +224,72 @@ func update_action_points() -> void:
 			action_points = next_points
 
 func update_status(next_effect: Dictionary) -> void:
-	if status_effects.is_empty():
+	var status_exists: bool = false
+	for status in status_effects:
+		if status.property == next_effect.property:
+			status.value += next_effect.value
+			status_exists = true
+	if !status_exists:
 		status_effects.append(next_effect)
-	else:
-		for status in status_effects:
-			if status.property == next_effect.property:
-				status.value += next_effect.value
 				
 func print_stats():
-	print(char_name, " current attributes:")
-	for attribute in current_attributes:
-		match attribute:
-			Data.Attributes.STRENGTH:
-				print("Strength: ", current_attributes[attribute])
-			Data.Attributes.ARMOR:
-				print("Armor: ", current_attributes[attribute])
-			Data.Attributes.SHIELDING:
-				print("Shielding: ", current_attributes[attribute])
-			Data.Attributes.FLUX:
-				print("Flux: ", current_attributes[attribute])
-			Data.Attributes.MOBILITY:
-				print("Mobility: ", current_attributes[attribute])
-			Data.Attributes.OPTICS:
-				print("Optics: ", current_attributes[attribute])
-			Data.Attributes.MEMORY:
-				print("Memory: ", current_attributes[attribute])
-				
-	print(char_name, " current status effects: ")
-	for status in status_effects:
-		match status.type:
-			Data.EffectType.AILMENT:
-				print("Ailment:")
-				match status.property:
-					Data.Ailments.ACIDIZED:
-						print("acidized for ", status.value)
-					Data.Ailments.BLANCHED:
-						print("blanched for ", status.value)
-					Data.Ailments.OVERHEATED:
-						print("overheated for ", status.value)
-					Data.Ailments.CONCUSSED:
-						print("concussed for ", status.value)
-			Data.EffectType.ATTRIBUTE:
-				match status.property:
-					Data.Attributes.ARMOR:
-						print("armor for ", status.value)
-					Data.Attributes.SHIELDING:
-						print("shielding ", status.value)
-					Data.Attributes.STRENGTH:
-						print("strength for ", status.value)
-					Data.Attributes.FLUX:
-						print("flux for ", status.value)
-					Data.Attributes.OPTICS:
-						print("optics for ", status.value)
-					Data.Attributes.MEMORY:
-						print("memory for ", status.value)
-					Data.Attributes.MOBILITY:
-						print("mobility for ", status.value)
-			Data.EffectType.RESTORE:
-				match status.property:
-					Data.SpecialStat.AP:
-						print("AP for ", status.value)
-					Data.SpecialStat.ENERGY:
-						print("Energy for ", status.value)
-					Data.SpecialStat.AILMENTS:
-						print("All ailments for ", status.value)
+	if alliance == Data.Alliance.HERO:
+		for attribute in current_attributes:
+			match attribute:
+				Data.Attributes.STRENGTH:
+					print("Strength: ", current_attributes[attribute])
+				Data.Attributes.ARMOR:
+					print("Armor: ", current_attributes[attribute])
+				Data.Attributes.SHIELDING:
+					print("Shielding: ", current_attributes[attribute])
+				Data.Attributes.FLUX:
+					print("Flux: ", current_attributes[attribute])
+				Data.Attributes.MOBILITY:
+					print("Mobility: ", current_attributes[attribute])
+				Data.Attributes.OPTICS:
+					print("Optics: ", current_attributes[attribute])
+				Data.Attributes.MEMORY:
+					print("Memory: ", current_attributes[attribute])
+				Data.Attributes.BATTERY:
+					print("Battery: ", current_attributes[attribute])
+					
+		print(char_name, " current status effects: ")
+		for status in status_effects:
+			match status.type:
+				Data.EffectType.AILMENT:
+					print("Ailment:")
+					match status.property:
+						Data.Ailments.ACIDIZED:
+							print("acidized for ", status.value)
+						Data.Ailments.BLANCHED:
+							print("blanched for ", status.value)
+						Data.Ailments.OVERHEATED:
+							print("overheated for ", status.value)
+						Data.Ailments.CONCUSSED:
+							print("concussed for ", status.value)
+				Data.EffectType.ATTRIBUTE:
+					match status.property:
+						Data.Attributes.ARMOR:
+							print("armor for ", status.value)
+						Data.Attributes.SHIELDING:
+							print("shielding ", status.value)
+						Data.Attributes.STRENGTH:
+							print("strength for ", status.value)
+						Data.Attributes.FLUX:
+							print("flux for ", status.value)
+						Data.Attributes.OPTICS:
+							print("optics for ", status.value)
+						Data.Attributes.MEMORY:
+							print("memory for ", status.value)
+						Data.Attributes.MOBILITY:
+							print("mobility for ", status.value)
+						Data.Attributes.BATTERY:
+							print("battery for ", status.value)
+				Data.EffectType.RESTORE:
+					match status.property:
+						Data.SpecialStat.AP:
+							print("AP for ", status.value)
+						Data.SpecialStat.ENERGY:
+							print("Energy for ", status.value)
+						Data.SpecialStat.AILMENTS:
+							print("All ailments for ", status.value)

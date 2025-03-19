@@ -154,7 +154,6 @@ var abilities: Dictionary = {
 	
 	"Wave Beam": {"name": "Wave Beam", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 65}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "65 energy damage to the front two enemies in this row", "range": Vector2i(4,0), "shape": AbilityShape.LINE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 		
-		
 	"Burst Rifle": {"name": "Burst Rifle", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 90}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "90 physical damage. You gain +2 overheated.", "range": Vector2i(7,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.SELF, "value": 2, "property":
 			Ailments.OVERHEATED, "description": "gained 2 overheated", "animation": {"name": "Headbutt", "duration": 0.9}}]},
