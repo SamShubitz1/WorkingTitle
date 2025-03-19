@@ -115,7 +115,7 @@ var abilities: Dictionary = {
 		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_description": "lost 1 armor"}], "animation": {"name": "Bite", "duration": 0.7}},
 	
 	"Reinforce": {"name": "Reinforce", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER, "effect_value": -1, "affected_property": Attributes.ARMOR, "effect_description": "gained 1 armor", "animation": {"name": "Reinforce", "duration": 0.7}}]},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.ARMOR, "description": "gained 1 armor", "animation": {"name": "Reinforce", "duration": 0.7}}]},
 	
 	"Sonic Pulse": {"name": "Sonic Pulse", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 75}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "effect_target": EffectTarget.SELF, "effect_value": 2, "affected_property":
@@ -129,9 +129,9 @@ var abilities: Dictionary = {
 		#{"effect_type": EffectType.AILMENT, "effect_target": EffectTarget.OTHER, "effect_value": 2, "affected_property":
 			#Ailments.OVERHEATED, "effect_description": "gained 2 overheat", "animation": {"name": "Flamethrower", "duration": 0.9}}]},
 	
-	"Acid Cloud": {"name": "Acid Cloud", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 3 acidize to enemies in a circle", "range": Vector2i(7,4), "shape": AbilityShape.DIAMOND, "effects": [
-		{"effect_type": EffectType.AILMENT, "effect_target": EffectTarget.OTHER, "effect_value": 3, "affected_property":
-			Ailments.ACIDIZED, "effect_description": "gained 2 acidized", "animation": {"name": "Acid Cloud", "duration": 0.9}}]},
+	"Acid Cloud": {"name": "Acid Cloud", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 acidize to enemies in a circle", "range": Vector2i(7,4), "shape": AbilityShape.DIAMOND, "effects": [
+		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property":
+			Ailments.ACIDIZED, "description": "gained 2 acidized", "animation": {"name": "Acid Cloud", "duration": 0.9}}]},
 			
 	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 blanched to all enemies", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "effects": [
 		{"effect_type": EffectType.AILMENT, "effect_target": EffectTarget.OTHER, "effect_value": 2, "affected_property":

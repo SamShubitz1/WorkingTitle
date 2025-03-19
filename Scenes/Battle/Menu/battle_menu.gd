@@ -165,7 +165,7 @@ func on_select_move() -> void:
 	update_selected_menu(Data.BattleMenuType.MOVEMENT)
 	movement_menu.activate_hero_grid()
 	movement_menu.set_current_shape(Data.AbilityShape.SINGLE)
-	movement_menu.set_range(current_player.grid_position, Vector2i(1,1))
+	movement_menu.set_range(current_player.grid_position, current_player.movement_range)
 	battle_controller.prompt_select_space()
 	
 func on_select_guard() -> void:
