@@ -166,9 +166,9 @@ var abilities: Dictionary = {
 		
 	"Seeker Rockets": {"name": "Seeker Rockets", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 45}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Two random enemies are dealt 40 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 		
-	"Ramming Strike": {"name": "Ramming Strike", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that applies 1 concussed", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [
+	"Ramming Strike": {"name": "Ramming Strike", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that applies 1 concussed", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "animation": {"name": "RammingStrike", "duration": 0.8}, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 1, "property":
-			Ailments.CONCUSSED, "description": "gained 1 concussed", "animation": {"name": "RammingStrike", "duration": 0.9}}]},
+			Ailments.CONCUSSED, "description": "gained 1 concussed"}]},
 	}
 	
 var items: Dictionary = {
