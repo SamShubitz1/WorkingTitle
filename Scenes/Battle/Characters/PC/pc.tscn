@@ -60,10 +60,10 @@ animations = [{
 }]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hrpm"]
-bg_color = Color(0.92, 0.1288, 0.1288, 1)
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hy8r4"]
-bg_color = Color(0.44607, 0.671498, 0.355604, 1)
+bg_color = Color(0.870588, 0.121569, 0.180392, 1)
 
 [node name="PC" type="Node2D"]
 position = Vector2(554, 381)
@@ -76,11 +76,11 @@ scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_p8hg8")
 
 [node name="CharHealth" type="ProgressBar" parent="."]
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(200, 20)
 offset_left = -100.0
-offset_top = -168.0
+offset_top = 116.0
 offset_right = 100.0
-offset_bottom = -145.0
+offset_bottom = 131.0
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_7hrpm")
@@ -88,3 +88,5 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_hy8r4")
 max_value = 80.0
 step = 1.0
 value = 80.0
+rounded = true
+show_percentage = false

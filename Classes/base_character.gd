@@ -37,9 +37,6 @@ func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: Anim
 	set_items(items)
 	set_grid_position(grid_position)
 	sprite.play()
-	
-	if alliance == Data.Alliance.HERO:
-		health_bar.hide()
 
 func set_grid_position(next_position: Vector2i):
 	self.grid_position = next_position

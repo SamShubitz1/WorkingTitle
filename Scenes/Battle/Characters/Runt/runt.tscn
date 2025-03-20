@@ -26,10 +26,10 @@ animations = [{
 }]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gsre"]
-bg_color = Color(0.92, 0.1288, 0.1288, 1)
+bg_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fxy7r"]
-bg_color = Color(0.44607, 0.671498, 0.355604, 1)
+bg_color = Color(0.79101, 0.0984888, 0.155483, 1)
 
 [node name="Runt" type="Node2D"]
 position = Vector2(807, 406)
@@ -45,9 +45,9 @@ frame_progress = 0.173919
 [node name="CharHealth" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)
 offset_left = -100.0
-offset_top = -134.0
+offset_top = 98.0
 offset_right = 100.0
-offset_bottom = -111.0
+offset_bottom = 118.0
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_0gsre")
@@ -55,3 +55,4 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_fxy7r")
 max_value = 80.0
 step = 1.0
 value = 80.0
+show_percentage = false
