@@ -128,7 +128,7 @@ var abilities: Dictionary = {
 	
 	"Acid Cloud": {"name": "Acid Cloud", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 acidize to enemies in a circle", "range": Vector2i(7,4), "shape": AbilityShape.DIAMOND, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property":
-			Ailments.ACIDIZED, "description": "gained 2 acidized", "animation": {"name": "Acid Cloud", "duration": 0.9}}]},
+			Ailments.ACIDIZED, "description": "gained 2 acidized", "animation": {"name": "AcidCloud", "duration": 0.9}}]},
 			
 	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 blanched to all enemies", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property":
@@ -168,7 +168,7 @@ var abilities: Dictionary = {
 		
 	"Ramming Strike": {"name": "Ramming Strike", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that applies 1 concussed", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 1, "property":
-			Ailments.CONCUSSED, "description": "gained 1 concussed", "animation": {"name": "Headbutt", "duration": 0.9}}]},
+			Ailments.CONCUSSED, "description": "gained 1 concussed", "animation": {"name": "RammingStrike", "duration": 0.9}}]},
 	}
 	
 var items: Dictionary = {
