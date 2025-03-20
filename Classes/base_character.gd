@@ -201,16 +201,17 @@ func decrement_status_effects():
 		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)
 			var effect_name: String
-			match status.property:
-				Data.Ailments.OVERHEATED:
-					effect_name = "Overheated"
-				Data.Ailments.ACIDIZED:
-					effect_name = "Acidized"
-				Data.Ailments.BLANCHED:
-					effect_name = "Blanched"
-				Data.Ailments.CONCUSSED:
-					effect_name = "Concussed"
-			return effect_name
+			if status.type == Data.EffectType.AILMENT:
+				match status.property:
+					Data.Ailments.OVERHEATED:
+						effect_name = "Overheated"
+					Data.Ailments.ACIDIZED:
+						effect_name = "Acidized"
+					Data.Ailments.BLANCHED:
+						effect_name = "Blanched"
+					Data.Ailments.CONCUSSED:
+						effect_name = "Concussed"
+				return effect_name
 		elif status.has("duration"):
 			if status.duration == 0: # duration check for status effects
 				status_effects.erase(status)
