@@ -86,11 +86,8 @@ func increment_event_queue() -> void:
 
 		if event.has("duration"):
 			await wait(event.duration)
-			
-			if current_kapow != null:
-				current_kapow.finish()
-			
 			increment_event_queue() # can recursively call itself :O
+			
 		else:
 			manual_increment = true
 	else:
@@ -110,7 +107,7 @@ func handle_ability(event: Dictionary) -> void:
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		if event.has("animation"):
 			current_kapow = get_kapow()
-			current_kapow.start(event.target.position, event.target.z_index, event.animation)
+			current_kapow.start(event.target.position, event.target.z_index, event.animation, event.duration)
 			
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
@@ -120,7 +117,7 @@ func handle_ability(event: Dictionary) -> void:
 		play_dialog(event.target.char_name + " " + event.effect.description + "!", true)
 		if event.effect_animation != "":
 			current_kapow = get_kapow()
-			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation)
+			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation, event.duration)
 		if event.effect.property == Data.SpecialStat.AP:
 			ap_display.set_action_points(current_player.action_points)
 			
@@ -140,7 +137,6 @@ func handle_death(event) -> void:
 		game_controller.switch_to_overworld_scene()
 	else:
 		event.target.visible = false
-		increment_event_queue()
 
 func handle_end_turn() -> void:
 	var effect_name = current_player.end_turn()
@@ -393,7 +389,7 @@ func build_characters() -> void:
 	var pc = pc_scene.instantiate()
 	var pc_abilities = ["Clobber", "Heat Ray", "Screen Flash", "Zap", "Process Crunch"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
+	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 30, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
@@ -402,7 +398,7 @@ func build_characters() -> void:
 	var runt = runt_scene.instantiate()
 	var runt_abilities = ["Ripjaw", "Reinforce", "Acid Cloud", "Ramming Strike", "Process Crunch"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	runt.init("Runt", Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
+	runt.init("Runt", Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 30, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
@@ -410,14 +406,14 @@ func build_characters() -> void:
 	
 	var norman = norman_scene.instantiate()
 	var norman_abilities = ["Clobber", "Heat Ray"]
-	norman.init("Norman", Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
+	norman.init("Norman", Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 30, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
 	var thumper_abilities = ["Acid Cloud"]
-	thumper.init("Thumper", Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	thumper.init("Thumper", Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 30, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
@@ -425,7 +421,7 @@ func build_characters() -> void:
 	
 	var mandrake = mandrake_scene.instantiate()
 	var mandrake_abilities = ["Sonic Pulse", "Ripjaw", "Heat Ray"]
-	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
+	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 30, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(mandrake)
 	add_child(mandrake)
 	mandrake.flip_sprite()
