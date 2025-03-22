@@ -270,33 +270,51 @@ func perform_enemy_turn() -> void:
 	for player in players:
 		if player.alliance == GameData.Alliance.HERO:
 			targets.append(player)
-	
-	var target = select_target(targets)
+			
 	var enemy_ability = get_enemy_ability()
-	
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
-	
-	var success = current_player.check_success(enemy_ability)
-	if success:
-		if target.guardian:
-			add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
-			
-			var next_target = target.guardian
-			target = next_target
-			
-		if !selected_ability.damage.type == Data.DamageType.NONE:
-			build_attack_event(target)
-		
-		for effect in selected_ability.effects:
-			build_effect_event(target, effect)
+	var target = select_target(targets, enemy_ability)
+	if !target:
+		var next_pos
+		var next_x = current_player.grid_position.x - 1
+		var next_y = current_player.grid_position.y + 1
+		if next_x >= 4 && next_x <= 7:
+			next_pos = Vector2i(next_x, current_player.grid_position.y)
+		elif next_y >= 0 && next_y <= 3:
+			next_pos = Vector2i(current_player.grid_position.x, next_y)
+		on_movement(next_pos)
+		end_turn()
 	else:
-		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
-				
-	end_turn()
+		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
+	
+		var success = current_player.check_success(enemy_ability)
+		if success:
+			if target.guardian:
+				add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+			
+				var next_target = target.guardian
+				target = next_target
+			
+			if !selected_ability.damage.type == Data.DamageType.NONE:
+				build_attack_event(target)
+			
+			for effect in selected_ability.effects:
+				build_effect_event(target, effect)
+		else:
+			add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+					
+		end_turn()
 
-func select_target(targets: Array) -> Character:
-	var random = randi() % targets.size()
-	return targets[random]
+func select_target(targets: Array, enemy_ability: Dictionary):
+	var max_range = enemy_ability.range
+	var viable_targets: Array
+	for target in targets:
+		if max_range.x >= current_player.grid_position.x - target.grid_position.x && max_range.y >= abs(current_player.grid_position.y - target.grid_position.y):
+			viable_targets.append(target)
+		elif enemy_ability.shape == Data.AbilityShape.LINE && target.grid_position.y == current_player.grid_position.y:
+			viable_targets.append(target)
+	if !viable_targets.is_empty():
+		var random = randi() % viable_targets.size()
+		return viable_targets[random]
 	
 func get_enemy_ability() -> Dictionary:
 	var ability_index = randi() % current_player.abilities.size()
@@ -304,19 +322,20 @@ func get_enemy_ability() -> Dictionary:
 	selected_ability = ability
 	return ability
 	
-func on_movement(next_coords: Array) -> void:
+func on_movement(next_coords: Vector2i) -> void:
 	cursor.disable()
 	var success = current_player.use_action(1)
 	if success:
 		ap_display.update_action_points(1)
-		add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords[0], "duration": dialog_duration})
+		add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": next_coords, "duration": dialog_duration})
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
 		
 		if current_player.guardian:
 			current_player.set_guardian(null)
 			add_event({"type": EventType.DIALOG, "text": current_player.char_name + " is no longer protected!", "duration": dialog_duration})
 			
-		increment_event_queue()
+		if current_player.alliance == Data.Alliance.HERO:
+			increment_event_queue()
 	else:
 		prompt_action_points_insufficient()
 		
@@ -373,7 +392,7 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 		
 	for cell in occupied_cells:
 		if selected_ability.target_type == GameData.TargetType.ENEMY:
-			if cell.x > 3: # if global grid width is constant, will always be '3'
+			if cell.x > 3: # (# of columns / 2) - 1
 				valid_targets.append(cell)
 		elif selected_ability.target_type == GameData.TargetType.HERO:
 			if cell.x < 4:

@@ -193,7 +193,7 @@ func on_select_movement() -> void:
 	var cell_coords: Array = movement_menu.get_targeted_cell_coords()
 	var is_valid_target = battle_controller.check_valid_targets(cell_coords, true)
 	if is_valid_target:
-		battle_controller.on_movement(cell_coords)
+		battle_controller.on_movement(cell_coords[0])
 		go_back()
 		
 func on_pass_turn() -> void:

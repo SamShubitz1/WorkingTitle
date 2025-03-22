@@ -438,14 +438,6 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
 
-[node name="Cursor" type="Polygon2D" parent="BattleMenu"]
-z_index = 1
-position = Vector2(84, 558)
-rotation = 1.5708
-scale = Vector2(0.594435, 1.19025)
-polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
-script = ExtResource("3_nifbg")
-
 [node name="PassTurnMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 0
 offset_top = 511.0
@@ -474,6 +466,14 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Go Back
 "
+
+[node name="Cursor" type="Polygon2D" parent="BattleMenu"]
+z_index = 1
+position = Vector2(84, 558)
+rotation = 1.5708
+scale = Vector2(0.594435, 1.19025)
+polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
+script = ExtResource("3_nifbg")
 
 [node name="BattleCamera" type="Camera2D" parent="."]
 position = Vector2(640, 384)
