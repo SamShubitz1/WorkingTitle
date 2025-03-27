@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://clg4nd1ekycri"]
+[gd_scene load_steps=14 format=3 uid="uid://clg4nd1ekycri"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_controller.gd" id="1_jktho"]
+[ext_resource type="Script" path="res://ai_controller.gd" id="2_8a0eq"]
 [ext_resource type="Script" path="res://Scenes/Battle/Menu/battle_menu.gd" id="2_tvtlk"]
 [ext_resource type="Script" path="res://Scenes/Battle/Cursor/battle_cursor.gd" id="3_nifbg"]
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/action_point_display.gd" id="3_ywqhi"]
@@ -41,6 +42,9 @@ bg_color = Color(0.44607, 0.671498, 0.355604, 1)
 
 [node name="BattleController" type="Node2D" parent="."]
 script = ExtResource("1_jktho")
+
+[node name="AiController" type="Node" parent="BattleController"]
+script = ExtResource("2_8a0eq")
 
 [node name="BattleMenu" type="Control" parent="."]
 layout_mode = 3

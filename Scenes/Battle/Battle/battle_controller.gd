@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var ai_controller = $AiController
 @onready var game_controller = get_tree().current_scene
 @onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
 @onready var cursor = $"../BattleMenu/Cursor"
@@ -87,7 +88,6 @@ func increment_event_queue() -> void:
 		if event.has("duration"):
 			await wait(event.duration)
 			increment_event_queue() # can recursively call itself :O
-			
 		else:
 			manual_increment = true
 	else:
@@ -265,62 +265,32 @@ func on_try_retreat() -> void:
 	increment_event_queue()
 
 func perform_enemy_turn() -> void:
-	var targets: Array
-	
-	for player in players:
-		if player.alliance == GameData.Alliance.HERO:
-			targets.append(player)
-			
-	var enemy_ability = get_enemy_ability()
-	var target = select_target(targets, enemy_ability)
-	if !target:
-		var next_pos
-		var next_x = current_player.grid_position.x - 1
-		var next_y = current_player.grid_position.y + 1
-		if next_x >= 4 && next_x <= 7:
-			next_pos = Vector2i(next_x, current_player.grid_position.y)
-		elif next_y >= 0 && next_y <= 3:
-			next_pos = Vector2i(current_player.grid_position.x, next_y)
-		on_movement(next_pos)
-		end_turn()
-	else:
-		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + enemy_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
-	
-		var success = current_player.check_success(enemy_ability)
-		if success:
-			if target.guardian:
-				add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
-			
-				var next_target = target.guardian
-				target = next_target
-			
-			if !selected_ability.damage.type == Data.DamageType.NONE:
-				build_attack_event(target)
-			
-			for effect in selected_ability.effects:
-				build_effect_event(target, effect)
-		else:
-			add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+	var enemy_turn = ai_controller.build_turn(current_player, players)
+	for action in enemy_turn:
+		match action.type:
+			Data.EnemyAction.MOVE:
+				add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": action.position, "duration": dialog_duration})
+				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
+				
+			Data.EnemyAction.ABILITY:
+				selected_ability = action.ability
+				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
+				
+				var success = current_player.check_success(selected_ability)
+				if success:
+					if action.target.guardian:
+						add_event({"type": EventType.DIALOG, "text": action.target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+						var next_target = action.target.guardian
+						action.target = next_target
+					if !selected_ability.damage.type == Data.DamageType.NONE:
+						build_attack_event(action.target)
 					
-		end_turn()
-
-func select_target(targets: Array, enemy_ability: Dictionary):
-	var max_range = enemy_ability.range
-	var viable_targets: Array
-	for target in targets:
-		if max_range.x >= current_player.grid_position.x - target.grid_position.x && max_range.y >= abs(current_player.grid_position.y - target.grid_position.y):
-			viable_targets.append(target)
-		elif enemy_ability.shape == Data.AbilityShape.LINE && target.grid_position.y == current_player.grid_position.y:
-			viable_targets.append(target)
-	if !viable_targets.is_empty():
-		var random = randi() % viable_targets.size()
-		return viable_targets[random]
-	
-func get_enemy_ability() -> Dictionary:
-	var ability_index = randi() % current_player.abilities.size()
-	var ability = current_player.abilities[ability_index]
-	selected_ability = ability
-	return ability
+					for effect in selected_ability.effects:
+						build_effect_event(action.target, effect)
+				else:
+					add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+							
+	end_turn()
 	
 func on_movement(next_coords: Vector2i) -> void:
 	cursor.disable()

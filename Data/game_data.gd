@@ -93,6 +93,12 @@ enum EffectTarget {
 	SELF
 }
 
+enum EnemyAction {
+	ABILITY,
+	MOVE,
+	GUARD,
+}
+
 #############################################################  ABILITY CREATOR  #####################################################
 #AbilityType: .ATTACK , .EFFECT
 #DamageType: .PHYSICAL , .ENERGY , .NONE
