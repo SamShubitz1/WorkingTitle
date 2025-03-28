@@ -1,23 +1,24 @@
 extends Node
 
-func get_valid_targets(enemy: Character, targets: Array, ability: Dictionary) -> Array[Character]:
-	var max_range = ability.range
-	if ability.shape == Data.AbilityShape.DIAMOND:
-		max_range += Vector2i(1, 1)
-	var valid_targets: Array[Character]
-	for target in targets:
-		if ability.shape == Data.AbilityShape.ALL:
-			valid_targets.append(target)
-		elif ability.shape == Data.AbilityShape.LINE && target.grid_position.y == enemy.grid_position.y:
-			valid_targets.append(target)
-		elif max_range.x >= enemy.grid_position.x - target.grid_position.x && max_range.y >= abs(enemy.grid_position.y - target.grid_position.y):
-			valid_targets.append(target)
+func get_valid_targets(enemy: Character, targets: Array, ability: Dictionary) -> Array:
+	var range = ability.range
+	var valid_targets: Array
+	for x in range(range.x):
+		for y in range(range.y):
+			var target_scan =  {"ability": ability, "targets": [], "origin": Vector2i(x, y)}
+			var cells = Utils.get_neighbor_coords(enemy.grid_position, ability.shape, range)
+			for cell in cells:
+				for target in targets: 
+					if target.grid_position == cell:
+						target_scan.append(target)
+			if !target_scan.targets.is_empty():
+				valid_targets.append(target_scan)
 	return valid_targets
 
 func get_priority_target(targets: Array) -> Object:
 	targets.sort_custom(func(targetA, targetB): targetA.health_bar.value < targetB.health_bar.value)
 	var targets_with_priorities: Array
-	for i in range(targets.size()):
+	for i in range(targets.size()):	
 		var priority = i * 10
 		targets_with_priorities.append({"target": targets[i], "priority": priority})
 		
