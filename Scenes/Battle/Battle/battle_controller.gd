@@ -278,15 +278,16 @@ func perform_enemy_turn() -> void:
 				
 				var success = current_player.check_success(selected_ability)
 				if success:
-					if action.target.guardian:
-						add_event({"type": EventType.DIALOG, "text": action.target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
-						var next_target = action.target.guardian
-						action.target = next_target
-					if !selected_ability.damage.type == Data.DamageType.NONE:
-						build_attack_event(action.target)
+					for target in action.targets:
+						if target.guardian:
+							add_event({"type": EventType.DIALOG, "text": action.target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+							var next_target = action.target.guardian
+							target = next_target
+						if !selected_ability.damage.type == Data.DamageType.NONE:
+							build_attack_event(target)
 					
-					for effect in selected_ability.effects:
-						build_effect_event(action.target, effect)
+						for effect in selected_ability.effects:
+							build_effect_event(target, effect)
 				else:
 					add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
 							
@@ -378,7 +379,7 @@ func build_characters() -> void:
 	var pc = pc_scene.instantiate()
 	var pc_abilities = ["Clobber", "Heat Ray", "Screen Flash", "Zap", "Process Crunch"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 0), pc_items) # init props will be accessed from somewhere
+	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 2), pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)

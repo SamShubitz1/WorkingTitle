@@ -1,6 +1,6 @@
 extends Node
 
-func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, grid_size: Vector2i) -> Array:
+func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, grid_size: Vector2i, alliance: Data.Alliance) -> Array:
 	var neighbor_coords = [origin_coords]
 	match shape:
 		GameData.AbilityShape.SINGLE:
@@ -15,13 +15,20 @@ func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, grid
 			if origin_coords.x > 0:
 				neighbor_coords.append(Vector2i(origin_coords.x - 1, origin_coords.y))
 		GameData.AbilityShape.LINE:
-			var col_index = 0
-			while col_index < grid_size.x / 2:
-				if col_index != origin_coords.x:
-					neighbor_coords.append(Vector2i(col_index, origin_coords.y))
-				col_index += 1
+			if alliance == Data.Alliance.HERO:
+				var col_index = 0
+				while col_index < grid_size.x / 2:
+					if col_index != origin_coords.x:
+						neighbor_coords.append(Vector2i(col_index, origin_coords.y))
+					col_index += 1
+			elif alliance == Data.Alliance.ENEMY:
+				var col_index = origin_coords.x
+				while col_index >= 0:
+					if col_index != origin_coords.x:
+						neighbor_coords.append(Vector2i(col_index, origin_coords.y))
+					col_index -= 1
 		GameData.AbilityShape.ALL:
-			for x in grid_size.x:
+			for x in grid_size.x / 2:
 				for y in grid_size.y:
 					neighbor_coords.append(Vector2i(x, y))
 	return neighbor_coords

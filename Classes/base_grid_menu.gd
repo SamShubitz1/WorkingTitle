@@ -83,7 +83,7 @@ func get_player_cells() -> Array:
 		
 func get_targeted_cell_coords() -> Array:
 	var origin = targets_grid.find_key(selected_button) 
-	var selected_coords = Utils.get_neighbor_coords(origin, current_shape, initial_grid_size)
+	var selected_coords = Utils.get_neighbor_coords(origin, current_shape, initial_grid_size, Data.Alliance.HERO)
 	var global_coords: Array
 	if current_grid_type == GridType.ENEMY:
 		for coord in selected_coords:
@@ -190,7 +190,7 @@ func disactivate() -> void:
 
 func update_selected_cell(next_coords) -> void:
 	reset_cells()
-	var neighbor_coords = Utils.get_neighbor_coords(next_coords, current_shape, initial_grid_size)
+	var neighbor_coords = Utils.get_neighbor_coords(next_coords, current_shape, initial_grid_size, Data.Alliance.HERO)
 	for coords in neighbor_coords:
 		var neighbor = targets_grid[coords]
 		neighbor.modulate = get_cell_color()
