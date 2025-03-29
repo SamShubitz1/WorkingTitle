@@ -180,8 +180,7 @@ func on_select_target():
 		battle_controller.on_use_ability(target_cells)
 		abilities_menu.set_scroll_size(current_player.abilities.size()) # will be called on end turn
 		update_selected_menu(Data.BattleMenuType.OPTIONS)
-	else:
-		battle_controller.on_select_invalid_target()
+
 
 func on_cancel_target_select() -> void:
 	battle_controller.cancel_select_target()

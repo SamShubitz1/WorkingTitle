@@ -1,30 +1,32 @@
 extends Node
 
-# select_by_priority() is the main player here. You pass it an array of elements with the shape {"object": Object, "priority": int} and it returns an object fron the list based off priority
+# select_by_priority() is the main thing. You pass it an array of elements with the shape {"object": Object, "priority": int} and it returns an object fron the array based off priority
 
-# most of the other functions are for calculating priorities from a list of objects and building priority objects
+# most of the other functions are for calculating priorities from an array of objects and building priority objects
 
-# a target_survey has the shape {"ability": Data.Abilities, "targets": Array[Character]} - we choose a target survey based off of priority - and to calculate target survey priority, we also take into account individual target priorities
+# a target_survey has the shape {"ability": Data.Abilities, "targets": Array[Character], "should_move": bool} - we choose a target survey based off of priority - and to calculate target survey priority, we also take into account and calculate individual target priorities
 
 # build_turn() coordinates all of this and returns a list of enemy actions for the turn
 
 func build_turn(enemy: Character, players: Array) -> Array:
 	var enemy_turn: Array
+	
 	#var action = get_priority_action()
 	var selected_ability: Dictionary = get_priority_ability(enemy.abilities)
 	var targets = get_targets(players, selected_ability)
-	var targets_with_priorities = get_targets_with_priorities(targets)
-	var target_surveys = get_target_surveys(enemy, targets_with_priorities, selected_ability)
+	var target_surveys = get_target_surveys(enemy, targets, selected_ability)
 	
 	if target_surveys.is_empty():
 		pass
-		#var selected_ability_scan = get_priority_targets(targets)
-		#var next_pos = get_priority_move(players, enemy, selected_ability_scan.targets)
+		#var selected_target_survey = get_priority_targets(targets)
+		#var next_pos = get_priority_move(players, enemy, selected_target_survey.targets)
 		#if next_pos != enemy.grid_position:
 			#enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
 			#enemy_turn.append
 	else:
+		var targets_with_priorities = get_targets_with_priorities(targets)
 		var selected_target_survey = get_priority_survey(target_surveys, targets_with_priorities)
+		
 		enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_target_survey.ability, "targets": selected_target_survey.targets})
 			
 	return enemy_turn
@@ -79,24 +81,24 @@ func get_priority_survey(target_surveys, targets_with_priorities) -> Dictionary:
 	var selected_target_survey = select_by_priority(surveys_with_priorities)
 	return selected_target_survey
 
-func get_target_surveys(enemy: Character, targets_with_priorities: Array, ability: Dictionary) -> Array:
+func get_target_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array:
 	var max_range = ability.range + Vector2i(1, 1)
 	var target_surveys: Array
 	var origin = enemy.grid_position
 	
-	for x in range(max_range.x + 1):
-		for y in range(max_range.y + 1):
-			var survey = {"ability": ability, "targets": [], "should_move": false}
-			var cells = Utils.get_neighbor_coords(origin - Vector2i(x, y), ability.shape, max_range, Data.Alliance.ENEMY)
-			for target_with_priority in targets_with_priorities: 
-				var target = target_with_priority.target
-				if target.grid_position in cells:
-					if origin.x - target.grid_position.x == max_range.x || abs(origin.y - target.grid_position.x) == max_range.y:
-						survey.should_move = true
-					survey.targets.append(target)
-			if !survey.targets.is_empty():
-				target_surveys.append(survey)
-
+	var valid_cells = get_valid_cells(origin, ability)
+	
+	for cell in valid_cells:
+		var survey = {"ability": ability, "targets": [], "should_move": false}
+		var selected_cells = Utils.get_neighbor_coords(cell, ability.shape, Data.Alliance.ENEMY)
+		for target in targets: 
+			if target.grid_position in selected_cells:
+				if abs(origin.x - max_range.x) == target.grid_position.x || abs(origin.y - max_range.y) == target.grid_position.y:
+					survey.should_move = true
+				survey.targets.append(target)
+		if !survey.targets.is_empty():
+			target_surveys.append(survey)
+#
 	return target_surveys
 
 func get_targets_with_priorities(targets) -> Array:
@@ -138,6 +140,32 @@ func get_targets(players: Array[Character], ability: Dictionary) -> Array:
 	elif ability.target_type == Data.TargetType.HERO:
 		targets = players.filter(func(player): return player.alliance == Data.Alliance.ENEMY)
 	return targets
+	
+func get_valid_cells(origin: Vector2i, ability) -> Array:
+	var max_range = ability.range + Vector2i(1, 1)
+	var valid_cells: Array
+	
+	if ability.range == Vector2i.ZERO:
+		valid_cells.append(origin)
+	
+	var valid_x_values: Array # hard coded
+	var x_range: Vector2i
+	if ability.target_type == Data.TargetType.ENEMY:
+		valid_x_values = [0,1,2,3]
+		x_range = Vector2i(origin.x - max_range.x, origin.x)
+	elif ability.target_type == Data.TargetType.HERO:
+		valid_x_values = [4,5,6,7]
+		x_range = Vector2i(origin.x - max_range.x, origin.x + max_range.x)
+		
+	var valid_y_values = [0,1,2,3]
+	var y_range = Vector2i(origin.y - max_range.y, origin.y + max_range.y)
+	
+	for y in range(y_range.x, y_range.y):
+		for x in range(x_range.x, x_range.y):
+			if x in valid_x_values && y in valid_y_values:
+				valid_cells.append(Vector2i(x,y))
+	
+	return valid_cells
 		
 func roll_dice(attempts: int, sides: int) -> int:
 	var result = 0

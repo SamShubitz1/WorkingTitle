@@ -1,19 +1,23 @@
 extends Node
 
-func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, grid_size: Vector2i, alliance: Data.Alliance) -> Array:
+func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, alliance: Data.Alliance, grid_size: Vector2i = Vector2i(8, 4)) -> Array:
 	var neighbor_coords = [origin_coords]
 	match shape:
 		GameData.AbilityShape.SINGLE:
 			return neighbor_coords
 		GameData.AbilityShape.DIAMOND:
-			if origin_coords.y < grid_size.y - 1:
-				neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y + 1))
-			if origin_coords.y > 0:
-				neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y - 1))
-			if origin_coords.x < grid_size.x / 2 - 1: # if enemy origin active
-				neighbor_coords.append(Vector2i(origin_coords.x + 1, origin_coords.y))
-			if origin_coords.x > 0:
-				neighbor_coords.append(Vector2i(origin_coords.x - 1, origin_coords.y))
+				if origin_coords.y < grid_size.y - 1:
+					neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y + 1))
+				if origin_coords.y > 0:
+					neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y - 1))
+				if alliance == Data.Alliance.HERO:
+					if origin_coords.x < grid_size.x / 2 - 1:
+						neighbor_coords.append(Vector2i(origin_coords.x + 1, origin_coords.y))
+				else:
+					if origin_coords.x < grid_size.x:
+						neighbor_coords.append(Vector2i(origin_coords.x + 1, origin_coords.y))
+				if origin_coords.x > 0:
+						neighbor_coords.append(Vector2i(origin_coords.x - 1, origin_coords.y))
 		GameData.AbilityShape.LINE:
 			if alliance == Data.Alliance.HERO:
 				var col_index = 0

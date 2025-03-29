@@ -171,33 +171,40 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 
 func on_use_ability(target_cells: Array) -> void:
+	var is_valid_target = check_valid_targets(target_cells)
+	if !is_valid_target:
+		on_select_invalid_target()
+		return
+		
 	var cost = selected_ability.action_cost
 	var ap_success = current_player.use_action(cost)
-	if ap_success:
+	if !ap_success:
 		ap_display.update_action_points(cost)
-		
-		var selected_targets: Array
-		for cell in target_cells: # move to base grid
-			if battle_grid.current_grid.has(cell):
-				selected_targets.append(cell)
-		
-		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
-		
-		var ability_success = current_player.check_success(selected_ability)
-		if ability_success:
-			for target_pos in selected_targets:
-				var target = battle_grid.current_grid[target_pos]
-				if !selected_ability.damage.type == Data.DamageType.NONE:
-					build_attack_event(target)
-					
-				for effect in selected_ability.effects:
-					build_effect_event(target, effect)
-		else:
-			add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
-			
-		end_turn()
-	else:
 		prompt_action_points_insufficient()
+		return
+
+	var selected_targets: Array
+	for cell in target_cells: # move to base grid
+		if battle_grid.current_grid.has(cell):
+			selected_targets.append(cell)
+	
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
+	
+	var ability_success = current_player.check_success(selected_ability)
+	if ability_success:
+		for target_pos in selected_targets:
+			var target = battle_grid.current_grid[target_pos]
+			if !selected_ability.damage.type == Data.DamageType.NONE:
+				build_attack_event(target)
+				
+			for effect in selected_ability.effects:
+				build_effect_event(target, effect)
+	else:
+		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+		
+	end_turn()
+
+		
 		
 func build_attack_event(target: Character) -> void:
 	var damage_event = current_player.calculate_attack_dmg(selected_ability)
