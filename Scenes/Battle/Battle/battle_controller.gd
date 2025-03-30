@@ -398,7 +398,7 @@ func build_characters() -> void:
 	
 	var norman = norman_scene.instantiate()
 	var norman_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
-	var norman_abilities = ["Reinforce"]
+	var norman_abilities = ["Reinforce", "Clobber"]
 	norman.init("Norman", norman_attributes, Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 320, norman_abilities, Vector2i(5, 0), Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)

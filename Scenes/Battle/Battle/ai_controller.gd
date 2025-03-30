@@ -26,14 +26,15 @@ func build_turn(enemy: Character, players: Array) -> Array:
 	else:
 		var targets_with_priorities = get_targets_with_priorities(targets)
 		var selected_survey = get_priority_survey(surveys, targets_with_priorities)
-		var next_pos: Vector2i
 		if selected_survey.should_move:
-			next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
+			var next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
 			if next_pos:
 				enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
-		if target_in_range(next_pos, selected_survey.selected_cell, selected_ability.range):
+			if target_in_range(next_pos, selected_survey.selected_cell, selected_ability.range):
+				enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
+		else:
 			enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
-
+			
 	return enemy_turn
 
 func select_by_priority(objects_with_priorities: Array):
