@@ -99,6 +99,33 @@ enum EnemyAction {
 	GUARD,
 }
 
+#enum AbilityRole {
+	#EMELEE,
+	#PMELEE,
+	#EMIDRANGE,
+	#PMIDRANGE,
+	#ELONGRANGE,
+	#PLONGRANGE,
+	#EOFFENSIVE,
+	#POFFESNIVE,
+	#EDEFENSIVE,
+	#PDEFENSIVE
+#}
+
+enum MachineRole {
+	ETANK,
+	PTANK,
+	ESNIPER,
+	PSNIPER,
+	EASSAULTER,
+	PASSAULTER,
+	EOSUPPORT,
+	POSUPPORT,
+	EDSUPPORT,
+	PDSUPPORT,
+	NONE
+}
+
 #############################################################  ABILITY CREATOR  #####################################################
 #AbilityType: .ATTACK , .EFFECT
 #DamageType: .PHYSICAL , .ENERGY , .NONE

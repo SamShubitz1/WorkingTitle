@@ -384,41 +384,46 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 
 func build_characters() -> void:
 	var pc = pc_scene.instantiate()
+	var pc_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 4, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 1}
 	var pc_abilities = ["Clobber", "Heat Ray", "Screen Flash", "Zap", "Process Crunch"]
 	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 300, pc_abilities, Vector2i(2, 2), pc_items) # init props will be accessed from somewhere
+	pc.init("PC", pc_attributes, Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 340, pc_abilities, Vector2i(2, 2), Data.MachineRole.NONE, pc_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pc)
 	pc.is_player = true
 	add_child(pc)
 	players.append(pc)
 	
 	var runt = runt_scene.instantiate()
+	var runt_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 0, Data.Attributes.BATTERY: 0, Data.Attributes.OPTICS: 0, Data.Attributes.MOBILITY: 1}
 	var runt_abilities = ["Ripjaw", "Reinforce", "Acid Cloud", "Ramming Strike", "Process Crunch"]
 	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	runt.init("Runt", Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 300, runt_abilities, Vector2i(3, 0), runt_items) # init props will be accessed from somewhere
+	runt.init("Runt", runt_attributes, Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 320, runt_abilities, Vector2i(3, 1), Data.MachineRole.NONE, runt_items) # init props will be accessed from somewhere
 	set_position_by_grid_coords(runt)
 	add_child(runt)
 	players.append(runt)
 	runt.flip_sprite()
 	
 	var norman = norman_scene.instantiate()
-	var norman_abilities = ["Clobber"]
-	norman.init("Norman", Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
+	var norman_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+	var norman_abilities = ["Clobber", "Wave Beam", "Process Crunch"]
+	norman.init("Norman", norman_attributes, Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 320, norman_abilities, Vector2i(5, 0), Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
-	var thumper_abilities = ["Acid Cloud"]
-	thumper.init("Thumper", Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0)) # init props will be accessed from somewhere
+	var thumper_abilities = ["Ripjaw", "Bulk Inversion", "Acid Cloud"]
+	var thumper_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 0, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 3}
+	thumper.init("Thumper", thumper_attributes, Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0), Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
 	add_child(thumper)
 	thumper.flip_sprite()
 	players.append(thumper)
 	
 	var mandrake = mandrake_scene.instantiate()
-	var mandrake_abilities = ["Sonic Pulse"]
-	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
+	var mandrake_abilities = ["Sonic Pulse", "Acid Cloud", "Zap", "Burst Rifle"]
+	var mandrake_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+	mandrake.init("Mandrake", mandrake_attributes, GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2), Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(mandrake)
 	add_child(mandrake)
 	mandrake.flip_sprite()
@@ -426,11 +431,12 @@ func build_characters() -> void:
 	
 	var pilypile = pilypile_scene.instantiate()
 	var pilypile_abilities = ["Bulk Inversion", "Ripjaw", "Acid Cloud", "Contemplate"]
-	pilypile.init("Pilypile", GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 300, pilypile_abilities, Vector2i(3, 2)) # init props will be accessed from somewhere
+	var pilypile_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 0, Data.Attributes.MOBILITY: 0}
+	pilypile.init("Pilypile", pilypile_attributes, GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 340, pilypile_abilities, Vector2i(1, 1), Data.MachineRole.NONE, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(pilypile)
 	add_child(pilypile)
-	mandrake.flip_sprite()
 	players.append(pilypile)
+	
 	
 #func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle

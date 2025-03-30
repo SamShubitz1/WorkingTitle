@@ -226,16 +226,16 @@ size_flags_vertical = 3
 text = " Guard"
 alignment = 0
 
+[node name="Aim" type="Button" parent="BattleMenu/MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = " Aim"
+alignment = 0
+
 [node name="Items" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Items"
-alignment = 0
-
-[node name="Aim" type="Button" parent="BattleMenu/MainMenu/Menu"]
-layout_mode = 2
-size_flags_vertical = 3
-text = " Status"
 alignment = 0
 
 [node name="Retreat" type="Button" parent="BattleMenu/MainMenu/Menu"]

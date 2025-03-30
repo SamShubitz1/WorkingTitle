@@ -9,10 +9,11 @@ var is_player: bool = false
 var health_bar: ProgressBar
 var sprite: AnimatedSprite2D
 var action_points: int = 5
+var role: Data.MachineRole
 
-var base_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+var base_attributes = {}
 
-var current_attributes = base_attributes.duplicate(true)
+var current_attributes = {}
 
 var items: Array
 var abilities: Array
@@ -25,14 +26,17 @@ var grid_position: Vector2i
 var guardian: Character = null
 var mobility_changed: bool
 var movement_range = Vector2i(1, 1)
+var turn_count: int
 
-func init(char_name: String, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, items: Array = []):
+func init(char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
 	self.char_name = char_name
 	self.alliance = char_alliance
 	self.sprite = char_sprite
 	self.health_bar = char_health
 	self.max_health = max_health
+	self.role = role
 	set_health()
+	set_attributes(char_attributes)
 	set_abilities(abilities)
 	set_items(items)
 	set_grid_position(grid_position)
@@ -46,7 +50,11 @@ func set_health() -> void:
 	health_bar.max_value = max_health
 	health_bar.value = max_health
 	health_bar.z_index = -1
-		
+
+func set_attributes(char_attributes):
+	self.base_attributes = char_attributes
+	current_attributes = base_attributes.duplicate(true)
+	
 func set_abilities(abilities: Array) -> void:
 	var char_abilities: Array
 	for ability in abilities:
@@ -144,6 +152,10 @@ func use_action(cost: int) -> bool:
 		return true
 
 func start_turn():
+	turn_count = (turn_count + 1 % 5)
+	if turn_count == 0:
+		turn_count = 1
+		
 	update_action_points()
 	resolve_status_effects()
 

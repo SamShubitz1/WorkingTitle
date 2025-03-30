@@ -12,9 +12,9 @@ func build_turn(enemy: Character, players: Array) -> Array:
 	var enemy_turn: Array
 	
 	#var action = get_priority_action()
-	var selected_ability: Dictionary = get_priority_ability(enemy.abilities)
-	var targets = get_targets(players, selected_ability)
-	var surveys = get_surveys(enemy, targets, selected_ability)
+	var selected_ability: Dictionary = get_priority_ability(enemy.abilities, enemy)
+	var targets: Array = get_targets(players, selected_ability)
+	var surveys: Array = get_surveys(enemy, targets, selected_ability)
 	
 	if surveys.is_empty():
 		pass
@@ -32,7 +32,7 @@ func build_turn(enemy: Character, players: Array) -> Array:
 				enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
 			
 		enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
-			
+
 	return enemy_turn
 
 func select_by_priority(objects_with_priorities: Array):
@@ -40,8 +40,8 @@ func select_by_priority(objects_with_priorities: Array):
 	var max = objects_with_priorities[0].priority
 	var selected_object: Dictionary
 	var difference: int
+	var result = roll_dice(5, max + 10) # should be padded?
 	for object in objects_with_priorities:
-		var result = roll_dice(1, max + 10) # should be padded?
 		var next_difference = abs(result - object.priority)
 		if !difference:
 			difference = next_difference
@@ -52,15 +52,48 @@ func select_by_priority(objects_with_priorities: Array):
 	
 	return selected_object.object
 
-func get_priority_ability(abilities: Array) -> Dictionary:
-	abilities.sort_custom(func(abilityA, abilityB): abilityA.damage.value > abilityB.damage.value)
+func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary:
 	var abilities_with_priorities: Array
-	for i in range(abilities.size()):
-		var priority = i * 10
-		for effect in abilities[i].effects:
-			priority += 10
+	
+	for ability in abilities:
+		var ability_with_priority = {"object": ability, "priority": 10}
 		
-		abilities_with_priorities.append({"object": abilities[i], "priority": priority})
+		#match enemy.role:
+			#Data.MachineRole.ETANK:
+		if ability.damage.type == Data.DamageType.ENERGY:
+			ability_with_priority.priority += 10
+		if ability.target_type == Data.TargetType.ENEMY:
+			ability_with_priority.priority += 7
+			if enemy.turn_count > 2:
+				ability_with_priority.priority += 5
+		if ability.target_type == Data.TargetType.HERO:
+			ability_with_priority.priority += 4
+		if ability.attribute_bonus == Data.Attributes.FLUX:
+			ability_with_priority.priority += 7
+			
+		var target_is_self = false
+		for effect in ability.effects:
+			if effect.target == Data.EffectTarget.SELF:
+				target_is_self = true
+		if target_is_self:
+			ability_with_priority.priority += 5
+			if enemy.turn_count < 3:
+				ability_with_priority.priority += 5
+			
+		if !ability.effects.is_empty():
+			ability_with_priority.priority += 10
+			
+		abilities_with_priorities.append(ability_with_priority)
+		
+				
+	#for i in range(abilities.size()):
+		#var priority = i * 10
+		#for effect in abilities[i].effects:
+			#priority += 10
+		#
+		#abilities_with_priorities.append({"object": abilities[i], "priority": priority})
+	#
+	#abilities.sort_custom(func(abilityA, abilityB): abilityA.damage.value > abilityB.damage.value)
 	
 	var selected_ability = select_by_priority(abilities_with_priorities)
 	return selected_ability
@@ -70,7 +103,7 @@ func get_priority_survey(surveys, targets_with_priorities) -> Dictionary:
 
 	for survey in surveys:
 		var survey_with_priority = {"object": survey, "priority": 0}
-		survey_with_priority.priority += survey.targets.size() * 50
+		survey_with_priority.priority += survey.targets.size() * 10
 		for pt in targets_with_priorities:
 			if pt.target in survey.targets:
 				var max_priority
@@ -116,9 +149,9 @@ func get_targets_with_priorities(targets) -> Array:
 	return targets_with_priorities
 	
 func check_valid_move(origin: Vector2i, target_pos: Vector2i, range: Vector2i):
-	if origin.x - range.x + 1 == target_pos.x && origin.x - 1 > 3:
+	if origin.x - range.x + 1 == target_pos.x && origin.x - 1 > 3: # hard coded
 		return Vector2i(origin.x - 1, origin.y)
-	elif origin.y - range.x + 1 == target_pos.x && origin.x - 1 > 3:
+	elif origin.y - range.x + 1 == target_pos.x && origin.x - 1 > 3: # hard coded
 		return Vector2i(origin.x - 1, origin.y)
 	
 func get_next_position(players, enemy, selected_cell) -> Vector2i:
