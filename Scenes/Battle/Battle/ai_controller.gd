@@ -1,10 +1,10 @@
 extends Node
 
-# select_by_priority() is the main thing. You pass it an array of elements with the shape {"object": Object, "priority": int} and it returns an object fron the array based off priority
+# select_by_priority() is the main thing. You pass it an array of elements with the shape {"object": Object, "priority": int} and it returns an object fron the array based off priority.
 
-# most of the other functions are for calculating priorities from an array of objects (abilities, targets, surveys) and building priority objects
+# most of the other functions are for calculating priorities from an array of objects (abilities, targets, surveys) and building priority objects -
 
-# a survey has the shape {"ability": Data.Abilities, "targets": Array[Character], "should_move": bool} - we choose a target survey based off of priority - and to calculate target survey priority, we also take into account and calculate individual target priorities
+# a survey has the shape {"ability": Data.Abilities, "targets": Array[Character], "should_move": bool, "selected_cell": Vector2i} - we choose a target survey based off of priority - and to calculate target survey priority, we also take into account and calculate individual target priorities
 
 # build_turn() coordinates all of this and returns a list of enemy actions for the turn
 
@@ -26,12 +26,13 @@ func build_turn(enemy: Character, players: Array) -> Array:
 	else:
 		var targets_with_priorities = get_targets_with_priorities(targets)
 		var selected_survey = get_priority_survey(surveys, targets_with_priorities)
+		var next_pos: Vector2i
 		if selected_survey.should_move:
-			var next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
-			if next_pos != enemy.grid_position:
+			next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
+			if next_pos:
 				enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
-			
-		enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
+		if target_in_range(next_pos, selected_survey.selected_cell, selected_ability.range):
+			enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
 
 	return enemy_turn
 
@@ -57,7 +58,6 @@ func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary:
 	
 	for ability in abilities:
 		var ability_with_priority = {"object": ability, "priority": 10}
-		
 		#match enemy.role:
 			#Data.MachineRole.ETANK:
 		if ability.damage.type == Data.DamageType.ENERGY:
@@ -85,7 +85,6 @@ func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary:
 			
 		abilities_with_priorities.append(ability_with_priority)
 		
-				
 	#for i in range(abilities.size()):
 		#var priority = i * 10
 		#for effect in abilities[i].effects:
@@ -131,8 +130,7 @@ func get_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array
 		for target in targets: 
 			if target.grid_position in selected_cells:
 				survey.selected_cell = Vector2i(cell)
-				if (origin.x - max_range.x) == target.grid_position.x || abs(origin.y - max_range.y) == target.grid_position.y:
-					survey.should_move = true
+				survey.should_move = should_move(origin, target.grid_position, max_range)
 				survey.targets.append(target)
 		if !survey.targets.is_empty():
 			surveys.append(survey)
@@ -154,7 +152,7 @@ func check_valid_move(origin: Vector2i, target_pos: Vector2i, range: Vector2i):
 	elif origin.y - range.x + 1 == target_pos.x && origin.x - 1 > 3: # hard coded
 		return Vector2i(origin.x - 1, origin.y)
 	
-func get_next_position(players, enemy, selected_cell) -> Vector2i:
+func get_next_position(players, enemy, selected_cell):
 	var current_x = enemy.grid_position.x
 	var current_y = enemy.grid_position.y
 	
@@ -171,8 +169,11 @@ func get_next_position(players, enemy, selected_cell) -> Vector2i:
 		current_x += 1
 	elif selected_cell.x < current_x && current_x > 4 && Vector2i(current_x - 1, current_y) not in enemy_positions:
 		current_x -= 1
-		
-	return Vector2i(current_x, current_y)
+	
+	var next_pos = Vector2i(current_x, current_y)
+	
+	if next_pos != enemy.grid_position:
+		return Vector2i(current_x, current_y)
 		
 func get_targets(players: Array[Character], ability: Dictionary) -> Array:
 	var targets: Array
@@ -186,14 +187,15 @@ func get_valid_cells(origin: Vector2i, ability) -> Array:
 	var max_range = ability.range + Vector2i(1, 1)
 	var valid_cells: Array
 	
-	if ability.range == Vector2i.ZERO:
-		valid_cells.append(origin)
+	if ability.shape == Data.AbilityShape.LINE:
+		valid_cells.append(Vector2i(7, origin.y)) #hard coded
+		return valid_cells
 	
-	var valid_x_values: Array # hard coded
+	var valid_x_values: Array # currently hard coded
 	var x_range: Vector2i
 	if ability.target_type == Data.TargetType.ENEMY:
 		valid_x_values = [0,1,2,3]
-		x_range = Vector2i(origin.x - max_range.x, origin.x)
+		x_range = Vector2i(origin.x - max_range.x, origin.x + max_range.x)
 	elif ability.target_type == Data.TargetType.HERO:
 		valid_x_values = [4,5,6,7]
 		x_range = Vector2i(origin.x - max_range.x, origin.x + max_range.x)
@@ -204,9 +206,21 @@ func get_valid_cells(origin: Vector2i, ability) -> Array:
 	for y in range(y_range.x, y_range.y):
 		for x in range(x_range.x, x_range.y):
 			if x in valid_x_values && y in valid_y_values:
-				valid_cells.append(Vector2i(x,y))
+				var next_cell
+				if next_cell not in valid_cells:
+					valid_cells.append(Vector2i(x,y))
 	
 	return valid_cells
+	
+func should_move(origin: Vector2i, target_pos: Vector2i, max_range: Vector2i) -> bool:
+	if abs(origin.x - target_pos.x) == max_range.x && abs(origin.y - target_pos.y) == max_range.y && max_range != Vector2i(1,1): #max_range being (1,1) means ability range is (0,0), this is an edge case thing
+		return true
+	return false
+	
+func target_in_range(origin: Vector2i, target_cell: Vector2i, range: Vector2i) -> bool:
+	if abs(origin.x - target_cell.x) <= range.x && abs(origin.y - target_cell.y) <= range.y || range == Vector2i.ZERO:
+		return true
+	return false
 		
 func roll_dice(attempts: int, sides: int) -> int:
 	var result = 0

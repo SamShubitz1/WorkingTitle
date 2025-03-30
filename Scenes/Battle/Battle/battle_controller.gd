@@ -12,7 +12,6 @@ extends Node2D
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
 
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
-var current_kapow: Node
 
 var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
@@ -106,7 +105,7 @@ func handle_ability(event: Dictionary) -> void:
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		if event.has("animation"):
-			current_kapow = get_kapow()
+			var current_kapow = get_kapow()
 			current_kapow.start(event.target.position, event.target.z_index, event.animation, event.duration)
 			
 		if event.target.health_bar.value <= 0:
@@ -116,7 +115,7 @@ func handle_ability(event: Dictionary) -> void:
 		event.target.resolve_effect(event.effect)
 		play_dialog(event.target.char_name + " " + event.effect.description + "!", true)
 		if event.effect_animation != "":
-			current_kapow = get_kapow()
+			var current_kapow = get_kapow()
 			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation, event.duration)
 		if event.effect.property == Data.SpecialStat.AP:
 			ap_display.set_action_points(current_player.action_points)
@@ -128,7 +127,7 @@ func handle_movement(event: Dictionary) -> void:
 	
 func handle_guard(event: Dictionary) -> void:
 	var target = event.target
-	current_kapow = get_kapow()
+	var current_kapow = get_kapow()
 	current_kapow.start(event.target.position, event.target.z_index, event.animation)
 	play_dialog(target.char_name + " is protected!", true)
 
@@ -171,11 +170,6 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 
 func on_use_ability(target_cells: Array) -> void:
-	var is_valid_target = check_valid_targets(target_cells)
-	if !is_valid_target:
-		on_select_invalid_target()
-		return
-		
 	var cost = selected_ability.action_cost
 	var ap_success = current_player.use_action(cost)
 	if !ap_success:
@@ -204,8 +198,6 @@ func on_use_ability(target_cells: Array) -> void:
 		
 	end_turn()
 
-		
-		
 func build_attack_event(target: Character) -> void:
 	var damage_event = current_player.calculate_attack_dmg(selected_ability)
 	var animation = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
@@ -243,7 +235,7 @@ func cancel_select_target() -> void:
 	selected_ability = {}
 
 func on_select_invalid_target() -> void:
-	play_dialog("Not a valid target!", false)
+	play_dialog("No valid target!", false)
 		
 func on_use_item(item_index: int) -> void:
 	cursor.disable()
@@ -380,6 +372,7 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 	for cell in target_cells:
 		if valid_targets.has(cell):
 			is_valid_target = true
+			
 	return is_valid_target
 
 func build_characters() -> void:
@@ -405,7 +398,7 @@ func build_characters() -> void:
 	
 	var norman = norman_scene.instantiate()
 	var norman_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
-	var norman_abilities = ["Clobber", "Wave Beam", "Process Crunch"]
+	var norman_abilities = ["Reinforce"]
 	norman.init("Norman", norman_attributes, Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 320, norman_abilities, Vector2i(5, 0), Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)

@@ -34,5 +34,7 @@ func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, alli
 		GameData.AbilityShape.ALL:
 			for x in grid_size.x / 2:
 				for y in grid_size.y:
-					neighbor_coords.append(Vector2i(x, y))
+					var next_pos = Vector2i(x, y)
+					if next_pos != origin_coords:
+						neighbor_coords.append(Vector2i(x, y))
 	return neighbor_coords

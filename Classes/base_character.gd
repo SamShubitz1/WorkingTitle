@@ -127,7 +127,7 @@ func check_success(selected_ability: Dictionary) -> bool:
 				base_success += 4
 				var range = randi_range(1, 100)
 				success = range < base_success
-
+	success = true
 	return success
 
 func set_guardian(guard: Character = null) -> void:
