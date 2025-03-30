@@ -113,12 +113,13 @@ func check_success(selected_ability: Dictionary) -> bool:
 				var range = randi_range(1, 100)
 				success = range < base_success
 		Data.AbilityType.EFFECT:
-			var base_success = 70
+			var base_success = 75
 			var optics = current_attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 4
 				var range = randi_range(1, 100)
 				success = range < base_success
+
 	return success
 
 func set_guardian(guard: Character = null) -> void:

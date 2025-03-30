@@ -402,7 +402,7 @@ func build_characters() -> void:
 	runt.flip_sprite()
 	
 	var norman = norman_scene.instantiate()
-	var norman_abilities = ["Clobber", "Heat Ray"]
+	var norman_abilities = ["Clobber"]
 	norman.init("Norman", Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 300, norman_abilities, Vector2i(5, 0)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(norman)
 	add_child(norman)
@@ -417,7 +417,7 @@ func build_characters() -> void:
 	players.append(thumper)
 	
 	var mandrake = mandrake_scene.instantiate()
-	var mandrake_abilities = ["Sonic Pulse", "Ripjaw", "Heat Ray"]
+	var mandrake_abilities = ["Sonic Pulse"]
 	mandrake.init("Mandrake", GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2)) # init props will be accessed from somewhere
 	set_position_by_grid_coords(mandrake)
 	add_child(mandrake)
