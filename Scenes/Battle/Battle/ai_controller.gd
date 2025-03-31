@@ -10,33 +10,49 @@ extends Node
 
 func build_turn(enemy: Character, players: Array) -> Array:
 	var enemy_turn: Array
+	var current_abilities = enemy.abilities
+	var current_ability: Dictionary
 	
-	#var action = get_priority_action()
-	var selected_ability: Dictionary = get_priority_ability(enemy.abilities, enemy)
-	var targets: Array = get_targets(players, selected_ability)
-	var surveys: Array = get_surveys(enemy, targets, selected_ability)
-	
-	if surveys.is_empty():
-		pass
-		#var selected_survey = get_priority_targets(targets)
-		#var next_pos = get_priority_move(players, enemy, selected_survey.targets)
-		#if next_pos != enemy.grid_position:
-			#enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
-			#enemy_turn.append
-	else:
-		var targets_with_priorities = get_targets_with_priorities(targets)
-		var selected_survey = get_priority_survey(surveys, targets_with_priorities)
-		if selected_survey.should_move:
-			var next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
-			if next_pos:
-				enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
-			if target_in_range(next_pos, selected_survey.selected_cell, selected_ability.range):
-				enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
+	for i in range(current_abilities.size()):
+		current_ability = get_priority_ability(current_abilities, enemy)
+		enemy_turn = get_next_turn(enemy, players, current_ability)
+		if !enemy_turn.is_empty():
+			break
 		else:
-			enemy_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
-			
+			current_abilities = enemy.abilities.filter(func(a): return a.name != current_ability.name)
+	
+	if enemy_turn.is_empty():
+		var target = get_priority_target(players, current_ability)
+		var next_pos = get_next_position(players, enemy, target.grid_position)
+		if next_pos:
+			enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
+	
 	return enemy_turn
 
+func get_next_turn(enemy, players, ability) -> Array:
+	var next_turn: Array
+
+	#var action = get_priority_action()
+	var targets: Array = get_targets(players, ability)
+	var surveys: Array = get_surveys(enemy, targets, ability)
+	
+	if surveys.is_empty():
+		return []
+	
+	var targets_with_priorities = get_targets_with_priorities(targets)
+	var selected_survey = get_priority_survey(surveys, targets_with_priorities)
+	
+	if selected_survey.should_move:
+		var next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
+		if next_pos:
+			next_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
+			if target_in_range(next_pos, selected_survey.selected_cell, ability.range):
+				next_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
+	else:
+		next_turn.append({"type": Data.EnemyAction.ABILITY, "ability": selected_survey.ability, "targets": selected_survey.targets})
+			
+	return next_turn
+	
 func select_by_priority(objects_with_priorities: Array):
 	objects_with_priorities.sort_custom(func(objectA, objectB): return objectA.priority > objectB.priority)
 	var max = objects_with_priorities[0].priority
@@ -105,7 +121,7 @@ func get_priority_survey(surveys, targets_with_priorities) -> Dictionary:
 		var survey_with_priority = {"object": survey, "priority": 0}
 		survey_with_priority.priority += survey.targets.size() * 10
 		for pt in targets_with_priorities:
-			if pt.target in survey.targets:
+			if pt.object in survey.targets:
 				var max_priority
 				for survey_target in survey.targets:
 					if !max_priority:
@@ -140,12 +156,19 @@ func get_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array
 
 func get_targets_with_priorities(targets) -> Array:
 	var targets_with_priorities: Array
-	targets.sort_custom(func(targetA, targetB): targetA.health_bar.value < targetB.health_bar.value)
+	targets.sort_custom(func(targetA, targetB): targetA.health_bar.value < targetB.health_bar.value) # placeholder logic
 	for i in range(targets.size()):
 		var priority = i * 10
-		targets_with_priorities.append({"target": targets[i], "priority": priority})
+		targets_with_priorities.append({"object": targets[i], "priority": priority})
 		
 	return targets_with_priorities
+
+func get_priority_target(players, ability): #returns Character or null
+	var targets = get_targets(players, ability)
+	var targets_with_priorities = get_targets_with_priorities(targets)
+	var selected_target = select_by_priority(targets_with_priorities)
+	if selected_target:
+		return selected_target
 	
 func check_valid_move(origin: Vector2i, target_pos: Vector2i, range: Vector2i):
 	if origin.x - range.x + 1 == target_pos.x && origin.x - 1 > 3: # hard coded
@@ -162,9 +185,9 @@ func get_next_position(players, enemy, selected_cell):
 		if player.alliance == Data.Alliance.ENEMY:
 			enemy_positions.append(player.grid_position)
 	
-	if selected_cell.y - current_y == 1 && Vector2i(current_x, current_y + 1) not in enemy_positions:
+	if selected_cell.y > current_y && Vector2i(current_x, current_y + 1) not in enemy_positions:
 		current_y += 1
-	elif selected_cell.y - current_y == -1 && Vector2i(current_x, current_y - 1) not in enemy_positions:
+	elif selected_cell.y < current_y && Vector2i(current_x, current_y - 1) not in enemy_positions:
 		current_y -= 1
 	if selected_cell.x > current_x && Vector2i(current_x + 1, current_y) not in enemy_positions:
 		current_x += 1
@@ -172,7 +195,6 @@ func get_next_position(players, enemy, selected_cell):
 		current_x -= 1
 	
 	var next_pos = Vector2i(current_x, current_y)
-	
 	if next_pos != enemy.grid_position:
 		return Vector2i(current_x, current_y)
 		
@@ -214,7 +236,7 @@ func get_valid_cells(origin: Vector2i, ability) -> Array:
 	return valid_cells
 	
 func should_move(origin: Vector2i, target_pos: Vector2i, max_range: Vector2i) -> bool:
-	if abs(origin.x - target_pos.x) == max_range.x && abs(origin.y - target_pos.y) == max_range.y && max_range != Vector2i(1,1): #max_range being (1,1) means ability range is (0,0), this is an edge case thing
+	if (abs(origin.x - target_pos.x) == max_range.x || abs(origin.y - target_pos.y) == max_range.y) && max_range != Vector2i(1,1): #max_range being (1, 1) means ability range is (0, 0), this is an edge case
 		return true
 	return false
 	
