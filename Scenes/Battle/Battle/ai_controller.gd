@@ -1,12 +1,8 @@
 extends Node
 
-# select_by_priority() is the main thing. You pass it an array of elements with the shape {"object": Object, "priority": int} and it returns an object fron the array based off priority.
-
-# most of the other functions are for calculating priorities from an array of objects (abilities, targets, surveys) and building priority objects -
-
 # a survey has the shape {"ability": Data.Abilities, "targets": Array[Character], "should_move": bool, "selected_cell": Vector2i} - we choose a target survey based off of priority - and to calculate target survey priority, we also take into account and calculate individual target priorities
 
-# build_turn() coordinates all of this and returns a list of enemy actions for the turn
+# build_turn() chooses an ability and builds a turn from it - if ability didn't produce a valid action (moving if needed + use ability) we filter the ability out and repeat the process - if we run out of abilities we calculate a new priority target and move towards it
 
 func build_turn(enemy: Character, players: Array) -> Array:
 	var enemy_turn: Array
@@ -58,7 +54,8 @@ func select_by_priority(objects_with_priorities: Array):
 	var max = objects_with_priorities[0].priority
 	var selected_object: Dictionary
 	var difference: int
-	var result = roll_dice(5, max + 10) # should be padded?
+	var result = roll_dice(3, max + 10) # should be padded?
+	
 	for object in objects_with_priorities:
 		var next_difference = abs(result - object.priority)
 		if !difference:
@@ -170,12 +167,12 @@ func get_priority_target(players, ability): #returns Character or null
 	if selected_target:
 		return selected_target
 	
-func check_valid_move(origin: Vector2i, target_pos: Vector2i, range: Vector2i):
-	if origin.x - range.x + 1 == target_pos.x && origin.x - 1 > 3: # hard coded
-		return Vector2i(origin.x - 1, origin.y)
-	elif origin.y - range.x + 1 == target_pos.x && origin.x - 1 > 3: # hard coded
-		return Vector2i(origin.x - 1, origin.y)
-	
+func move_is_valid(next_pos) -> bool:
+	if next_pos.x > 3:
+		return true
+	else:
+		return false
+		
 func get_next_position(players, enemy, selected_cell):
 	var current_x = enemy.grid_position.x
 	var current_y = enemy.grid_position.y
@@ -185,18 +182,10 @@ func get_next_position(players, enemy, selected_cell):
 		if player.alliance == Data.Alliance.ENEMY:
 			enemy_positions.append(player.grid_position)
 	
-	if selected_cell.y > current_y && Vector2i(current_x, current_y + 1) not in enemy_positions:
-		current_y += 1
-	elif selected_cell.y < current_y && Vector2i(current_x, current_y - 1) not in enemy_positions:
-		current_y -= 1
-	if selected_cell.x > current_x && Vector2i(current_x + 1, current_y) not in enemy_positions:
-		current_x += 1
-	elif selected_cell.x < current_x && current_x > 4 && Vector2i(current_x - 1, current_y) not in enemy_positions:
-		current_x -= 1
+	var next_pos = calculate_next_pos(selected_cell, enemy.grid_position, enemy_positions)
 	
-	var next_pos = Vector2i(current_x, current_y)
-	if next_pos != enemy.grid_position:
-		return Vector2i(current_x, current_y)
+	if move_is_valid(next_pos):
+		return next_pos
 		
 func get_targets(players: Array[Character], ability: Dictionary) -> Array:
 	var targets: Array
@@ -214,10 +203,10 @@ func get_valid_cells(origin: Vector2i, ability) -> Array:
 		valid_cells.append(Vector2i(7, origin.y)) #hard coded
 		return valid_cells
 	
-	var valid_x_values: Array # currently hard coded
+	var valid_x_values: Array 
 	var x_range: Vector2i
 	if ability.target_type == Data.TargetType.ENEMY:
-		valid_x_values = [0,1,2,3]
+		valid_x_values = [0,1,2,3] # currently hard coded
 		x_range = Vector2i(origin.x - max_range.x, origin.x + max_range.x)
 	elif ability.target_type == Data.TargetType.HERO:
 		valid_x_values = [4,5,6,7]
@@ -236,7 +225,7 @@ func get_valid_cells(origin: Vector2i, ability) -> Array:
 	return valid_cells
 	
 func should_move(origin: Vector2i, target_pos: Vector2i, max_range: Vector2i) -> bool:
-	if (abs(origin.x - target_pos.x) == max_range.x || abs(origin.y - target_pos.y) == max_range.y) && max_range != Vector2i(1,1): #max_range being (1, 1) means ability range is (0, 0), this is an edge case
+	if (abs(origin.x - target_pos.x) == max_range.x || abs(origin.y - target_pos.y) == max_range.y) && max_range != Vector2i(1,1): #max_range being (1, 1) means ability range is (0, 0), edge case
 		return true
 	return false
 	
@@ -252,3 +241,57 @@ func roll_dice(attempts: int, sides: int) -> int:
 		if next_result > result:
 			result = next_result
 	return result
+
+func calculate_next_pos(selected_cell: Vector2i, current_pos: Vector2i, occupied_cells: Array):
+	var left = Vector2i(current_pos.x - 1, current_pos.y)
+	var right = Vector2i(current_pos.x + 1, current_pos.y)
+	var up = Vector2i(current_pos.x, current_pos.y + 1)
+	var down = Vector2i(current_pos.x, current_pos.y - 1)
+	var up_left = Vector2i(current_pos.x - 1, current_pos.y + 1)
+	var up_right = Vector2i(current_pos.x + 1, current_pos.y + 1)
+	var down_left = Vector2i(current_pos.x - 1, current_pos.y - 1)
+	var down_right = Vector2i(current_pos.x + 1, current_pos.y - 1)
+
+	if selected_cell.x < current_pos.x:
+		if selected_cell.y < current_pos.y:
+			if down_left not in occupied_cells:
+				return down_left
+			elif down not in occupied_cells:
+				return down
+			elif left not in occupied_cells:
+				return left
+		elif selected_cell.y > current_pos.y:
+			if up_left not in occupied_cells:
+				return up_left
+			elif up not in occupied_cells:
+				return up
+			elif left not in occupied_cells:
+				return left
+		elif selected_cell.y == current_pos.y:
+			if left not in occupied_cells:
+				return left
+	elif selected_cell.x > current_pos.x:
+		if selected_cell.y < current_pos.y:
+			if down_right not in occupied_cells:
+				return down_right
+			elif down not in occupied_cells:
+				return down
+			elif right not in occupied_cells:
+				return right
+		elif selected_cell.y > current_pos.y:
+			if up_right not in occupied_cells:
+				return up_right
+			elif up not in occupied_cells:
+				return up
+			elif right not in occupied_cells:
+				return right
+		elif selected_cell.y == current_pos.y:
+			if right not in occupied_cells:
+				return right
+	elif selected_cell.x == current_pos.x:
+		if selected_cell.y > current_pos.y:
+			if up not in occupied_cells:
+				return up
+		elif selected_cell.y < current_pos.y:
+			if down not in occupied_cells:
+				return down

@@ -276,19 +276,21 @@ func perform_enemy_turn() -> void:
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
 				
 				var success = current_player.check_success(selected_ability)
-				if success:
-					for target in action.targets:
-						if target.guardian:
-							add_event({"type": EventType.DIALOG, "text": action.target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
-							var next_target = action.target.guardian
-							target = next_target
-						if !selected_ability.damage.type == Data.DamageType.NONE:
-							build_attack_event(target)
-					
-						for effect in selected_ability.effects:
-							build_effect_event(target, effect)
-				else:
+				if !success:
 					add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+					end_turn()
+					return
+					
+				for target in action.targets:
+					if target.guardian:
+						add_event({"type": EventType.DIALOG, "text": action.target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+						var next_target = action.target.guardian
+						target = next_target
+					if !selected_ability.damage.type == Data.DamageType.NONE:
+						build_attack_event(target)
+				
+					for effect in selected_ability.effects:
+						build_effect_event(target, effect)
 							
 	end_turn()
 	
@@ -414,7 +416,7 @@ func build_characters() -> void:
 	players.append(thumper)
 	
 	var mandrake = mandrake_scene.instantiate()
-	var mandrake_abilities = ["Zap"]
+	var mandrake_abilities = ["Zap", "Burst Rifle", "Process Crunch"]
 	var mandrake_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
 	mandrake.init("Mandrake", mandrake_attributes, GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2), Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(mandrake)
