@@ -139,49 +139,49 @@ var abilities: Dictionary = {
 	"Clobber": {"name": "Clobber", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 80}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "80 physical damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Clobber", "duration": 0.7}},
 	
 	"Heat Ray": {"name": "Heat Ray", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 55}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "50 energy damage and 2 overheated to all enemies in a line.", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [
-		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property": Ailments.OVERHEATED, "description": "gained 2 overheated"}], "animation": {"name": "Laser", "duration": 0.7}},
+		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property": Ailments.OVERHEATED, "dialog": "gained 2 overheated"}], "animation": {"name": "Laser", "duration": 0.7}},
 	
 	"Ripjaw": {"name": "Ripjaw", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage and loses 1 armor.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.ARMOR, "description": "lost 1 armor"}], "animation": {"name": "Bite", "duration": 0.7}},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.ARMOR, "dialog": "lost 1 armor"}], "animation": {"name": "Bite", "duration": 0.7}},
 	
 	"Reinforce": {"name": "Reinforce", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Increases armor to allies in a line", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.ARMOR, "description": "gained 1 armor", "animation": {"name": "Reinforce", "duration": 0.7}}]},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.ARMOR, "dialog": "gained 1 armor", "animation": {"name": "Reinforce", "duration": 0.7}}]},
 	
 	"Sonic Pulse": {"name": "Sonic Pulse", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 75}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "A simple energy attack", "range": Vector2i(2,0), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property":
-			Ailments.BLANCHED, "description": "gained 2 blanched", "animation": {"name": "Wavebeam", "duration": 0.6}}]},
+			Ailments.BLANCHED, "dialog": "gained 2 blanched", "animation": {"name": "Wavebeam", "duration": 0.6}}]},
 	
 	"Bulk Inversion": {"name": "Bulk Inversion", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Steals 2 armor from a target", "range": Vector2i(4,2), "shape": AbilityShape.SINGLE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -2, "property": Attributes.ARMOR, "description": "lost 2 armor", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 2, "property": Attributes.ARMOR, "description": "gained 2 armor", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -2, "property": Attributes.ARMOR, "dialog": "lost 2 armor", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 2, "property": Attributes.ARMOR, "dialog": "gained 2 armor", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
 		
 	#"Flamethrower": {"name": "Flamethrower", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.ENERGY, "value": 50}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Causes heat damage in a line", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "effects": [
 		#{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property":
-			#Ailments.OVERHEATED, "description": "gained 2 overheat", "animation": {"name": "Flamethrower", "duration": 0.9}}]},
+			#Ailments.OVERHEATED, "dialog": "gained 2 overheat", "animation": {"name": "Flamethrower", "duration": 0.9}}]},
 	
 	"Acid Cloud": {"name": "Acid Cloud", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 acidize to enemies in a circle", "range": Vector2i(7,4), "shape": AbilityShape.DIAMOND, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property":
-			Ailments.ACIDIZED, "description": "gained 2 acidized", "animation": {"name": "AcidCloud", "duration": 0.9}}]},
+			Ailments.ACIDIZED, "dialog": "gained 2 acidized", "animation": {"name": "AcidCloud", "duration": 0.9}}]},
 			
 	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 blanched to all enemies", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property":
-			Ailments.BLANCHED, "description": "gained 2 blanched", "animation": {"name": "Screen Flash", "duration": 0.9}}]},
+			Ailments.BLANCHED, "dialog": "gained 2 blanched", "animation": {"name": "Screen Flash", "duration": 0.9}}]},
 			
 	"Hop": {"name": "Hop", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 2, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Move to any space.", "range": Vector2i(7,3), "shape": AbilityShape.SINGLE, "effects": [
-		{"effect_type": EffectType.STATUS, "target": EffectTarget.OTHER, "value": 0, "property": SpecialStat.MOVE_RANGE, "description": "moved to a new space!", "animation": {"name": "Reinforce", "duration": 0.7}}]},
+		{"effect_type": EffectType.STATUS, "target": EffectTarget.OTHER, "value": 0, "property": SpecialStat.MOVE_RANGE, "dialog": "moved to a new space!", "animation": {"name": "Reinforce", "duration": 0.7}}]},
 		
 	"Zap": {"name": "Zap", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 40}, "action_cost": 2, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "40 energy damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 		
 	"Power Strike": {"name": "Power Strike", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 40}, "action_cost": 2, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "40 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 	
-	"Contemplate": {"name": "Contemplate", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 0, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Gain 2 action points and +2 memory.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "effects": [
-		{"effect_type": EffectType.RESTORE, "target": EffectTarget.SELF, "value": 2, "property": SpecialStat.AP, "description": "gained 2 action points!", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 2, "property": Attributes.MEMORY, "description": "gained 2 memory!", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
+	"Contemplate": {"name": "Contemplate", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 0, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Gain +2 action points and +2 memory.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "effects": [
+		{"effect_type": EffectType.RESTORE, "target": EffectTarget.SELF, "value": 2, "property": SpecialStat.AP, "dialog": "gained +2 action points", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 2, "property": Attributes.MEMORY, "dialog": "gained +2 memory", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
 		
 	"Process Crunch": {"name": "Process Crunch", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 2, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Removes all ailments. Gain +4 memory and +4 flux during your next turn.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "effects": [
-		{"effect_type": EffectType.RESTORE, "target": EffectTarget.SELF, "value": 0, "property": SpecialStat.AILMENTS, "description": "removed all ailments", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 4, "duration": 1, "property": Attributes.FLUX, "description": "Gain +4 flux until end of your next turn", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 4, "duration": 1, "property": Attributes.MEMORY, "description": "Gain +4 memory until end of your next turn", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
+		{"effect_type": EffectType.RESTORE, "target": EffectTarget.SELF, "value": 0, "property": SpecialStat.AILMENTS, "dialog": "removed all ailments", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 4, "duration": 1, "property": Attributes.FLUX, "dialog": "gained +4 flux until end ofnext turn", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 4, "duration": 1, "property": Attributes.MEMORY, "dialog": "gained +4 memory end of until next turn", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
 		
 	"Trample": {"name": "Trample", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage. If a move action was made, increase damage by 20.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Clobber", "duration": 0.7}},
 	
@@ -189,19 +189,19 @@ var abilities: Dictionary = {
 		
 	"Burst Rifle": {"name": "Burst Rifle", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 90}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "90 physical damage. You gain +2 overheated.", "range": Vector2i(7,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.SELF, "value": 2, "property":
-			Ailments.OVERHEATED, "description": "gained 2 overheated", "animation": {"name": "Headbutt", "duration": 0.9}}]},
+			Ailments.OVERHEATED, "dialog": "gained 2 overheated", "animation": {"name": "Headbutt", "duration": 0.9}}]},
 		
 	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.NONE, "value": -75}, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 75 health. On its next turn, restore 75 health, then skip the turn.", "range": Vector2i(4,0), "shape": AbilityShape.LINE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 	
 	"Rallied Surge": {"name": "Rallied Surge", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Each adjacent ally gains +2 Strength and +2 Flux", "range": Vector2i.ZERO, "shape": AbilityShape.SQUARE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 2, "property": Attributes.STRENGTH, "description": "gained 2 power!", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": +2, "property": Attributes.MEMORY, "description": "gained 2 flux!", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": 2, "property": Attributes.STRENGTH, "dialog": "gained 2 power", "animation": {"name": "ArmorInversionOther", "duration": 0.9}},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.SELF, "value": +2, "property": Attributes.MEMORY, "dialog": "gained 2 flux", "animation": {"name": "ArmorInversionSelf", "duration": 0.9}}]},
 		
 	"Seeker Rockets": {"name": "Seeker Rockets", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 45}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Two random enemies are dealt 40 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Wavebeam", "duration": 0.6}},
 		
 	"Ramming Strike": {"name": "Ramming Strike", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that applies 1 concussed", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "animation": {"name": "RammingStrike", "duration": 0.7}, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 1, "property":
-			Ailments.CONCUSSED, "description": "gained 1 concussed"}]},
+			Ailments.CONCUSSED, "dialog": "gained 1 concussed"}]},
 	}
 	
 var items: Dictionary = {

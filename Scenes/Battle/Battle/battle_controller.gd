@@ -113,7 +113,7 @@ func handle_ability(event: Dictionary) -> void:
 #
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
-		play_dialog(event.target.char_name + " " + event.effect.description + "!", true)
+		play_dialog(event.target.char_name + " " + event.effect.dialog + "!", true)
 		if event.effect_animation != "":
 			var current_kapow = get_kapow()
 			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation, event.duration)
@@ -407,7 +407,7 @@ func build_characters() -> void:
 	players.append(norman)
 	
 	var thumper = thumper_scene.instantiate()
-	var thumper_abilities = ["Ripjaw", "Bulk Inversion", "Acid Cloud"]
+	var thumper_abilities = ["Ripjaw", "Bulk Inversion", "Acid Cloud", "Heat Ray"]
 	var thumper_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 0, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 3}
 	thumper.init("Thumper", thumper_attributes, Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0), Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(thumper)
@@ -416,7 +416,7 @@ func build_characters() -> void:
 	players.append(thumper)
 	
 	var mandrake = mandrake_scene.instantiate()
-	var mandrake_abilities = ["Zap", "Burst Rifle", "Process Crunch"]
+	var mandrake_abilities = ["Process Crunch"]
 	var mandrake_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
 	mandrake.init("Mandrake", mandrake_attributes, GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2), Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 	set_position_by_grid_coords(mandrake)
@@ -431,7 +431,6 @@ func build_characters() -> void:
 	set_position_by_grid_coords(pilypile)
 	add_child(pilypile)
 	players.append(pilypile)
-	
 	
 #func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
@@ -470,7 +469,7 @@ func increment_turn_queue() -> void:
 	var next_player = turn_queue.pop_front().character
 	current_player = next_player
 	current_player.start_turn()
-		
+	
 func check_mobility_change() -> bool:
 	var has_changed: bool
 	for player in players:
