@@ -1,6 +1,6 @@
 extends Node
 
-func build_turn(enemy: Character, players: Array) -> Array: #selects an ability based off calculated priorities, then uses it to build an enemy turn - if a valid turn is not found, selected ability is filtered out and we try again until we run out of abilities - if valid turn is not found, we choose a target based off calculated priorities and move towards it
+func build_turn(enemy: Character, players: Array) -> Array: #selects an ability based off calculated priorities, then uses it to build an enemy turn
 	var enemy_turn: Array
 	var current_abilities = enemy.abilities
 	var current_ability: Dictionary
@@ -10,10 +10,10 @@ func build_turn(enemy: Character, players: Array) -> Array: #selects an ability 
 		enemy_turn = get_next_turn(enemy, players, current_ability)
 		if !enemy_turn.is_empty():
 			break
-		else:
+		else: #if a valid turn is not found, selected ability is filtered out and we try again until we run out of abilities 
 			current_abilities = enemy.abilities.filter(func(a): return a.name != current_ability.name)
 	
-	if enemy_turn.is_empty():
+	if enemy_turn.is_empty(): #if valid turn is not found, we choose a target based off calculated priorities and move towards it
 		var target = get_priority_target(players, current_ability)
 		var next_pos = get_next_position(players, enemy, target.grid_position)
 		if next_pos:
@@ -176,7 +176,8 @@ func get_next_position(players, enemy, selected_cell): #gets next position when 
 	if move_is_valid(next_pos):
 		return next_pos
 		
-func get_valid_cells(origin: Vector2i, ability) -> Array: #scans every grid cell the enemy could reach if they moved once, gets neighbor cells of each selected cell based on ability shape, check for targets
+func get_valid_cells(origin: Vector2i, ability) -> Array: #scans every grid cell the enemy could reach if they moved once
+	
 	var max_range = ability.range + Vector2i(1, 1)
 	var valid_cells: Array
 	
@@ -277,10 +278,3 @@ func calculate_next_pos(selected_cell: Vector2i, current_pos: Vector2i, occupied
 		elif selected_cell.y == current_pos.y:
 			if right not in occupied_cells:
 				return right
-	elif selected_cell.x == current_pos.x:
-		if selected_cell.y > current_pos.y:
-			if up not in occupied_cells:
-				return up
-		elif selected_cell.y < current_pos.y:
-			if down not in occupied_cells:
-				return down
