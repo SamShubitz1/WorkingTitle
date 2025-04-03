@@ -18,6 +18,7 @@ config/icon="res://Art/Animations/simple_bot_idledown.png"
 [autoload]
 
 GameData="*res://Data/game_data.gd"
+Utils="*res://Data/utils.gd"
 
 [display]
 

@@ -182,7 +182,7 @@ func on_select_target():
 		update_selected_menu(Data.BattleMenuType.OPTIONS)
 	else:
 		battle_controller.on_select_invalid_target()
-
+		
 func on_cancel_target_select() -> void:
 	battle_controller.cancel_select_target()
 
