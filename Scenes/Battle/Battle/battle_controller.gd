@@ -128,7 +128,8 @@ func handle_movement(event: Dictionary) -> void:
 func handle_guard(event: Dictionary) -> void:
 	var target = event.target
 	var current_kapow = get_kapow()
-	current_kapow.start(event.target.position, event.target.z_index, event.animation)
+	current_kapow.start(event.target.position, event.target.z_index, event.animation, event.duration)
+
 	play_dialog(target.char_name + " is protected!", true)
 
 func handle_death(event) -> void:
@@ -283,8 +284,8 @@ func perform_enemy_turn() -> void:
 					
 				for target in action.targets:
 					if target.guardian:
-						add_event({"type": EventType.DIALOG, "text": action.target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
-						var next_target = action.target.guardian
+						add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+						var next_target = target.guardian
 						target = next_target
 					if !selected_ability.damage.type == Data.DamageType.NONE:
 						build_attack_event(target)

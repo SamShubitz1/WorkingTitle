@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://i2b0l3s7fb3i"
-path="res://.godot/imported/MarsConcreteGroundWalls.png-89517acb784e0e3d834264cff372d947.ctex"
+uid="uid://g8l3pa1sdgdh"
+path="res://.godot/imported/T1_Rail_Tram_Slider.png-7af0dd3fb3aab7575a117a6d1a398562.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/MarsConcreteGroundWalls.png"
-dest_files=["res://.godot/imported/MarsConcreteGroundWalls.png-89517acb784e0e3d834264cff372d947.ctex"]
+source_file="res://Art/WorldSprites/T1_Rail_Tram_Slider.png"
+dest_files=["res://.godot/imported/T1_Rail_Tram_Slider.png-7af0dd3fb3aab7575a117a6d1a398562.ctex"]
 
 [params]
 

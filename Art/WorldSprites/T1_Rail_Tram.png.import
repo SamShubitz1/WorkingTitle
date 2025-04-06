@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://85hqk3doau8y"
-path="res://.godot/imported/MarsDoodads.png-063b9f800da3efd05b43c161ea3d01c3.ctex"
+uid="uid://bsv51ybt302bj"
+path="res://.godot/imported/T1_Rail_Tram.png-a2fe01fa4874b5bc39f5e3de16ad4257.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/MarsDoodads.png"
-dest_files=["res://.godot/imported/MarsDoodads.png-063b9f800da3efd05b43c161ea3d01c3.ctex"]
+source_file="res://Art/WorldSprites/T1_Rail_Tram.png"
+dest_files=["res://.godot/imported/T1_Rail_Tram.png-a2fe01fa4874b5bc39f5e3de16ad4257.ctex"]
 
 [params]
 

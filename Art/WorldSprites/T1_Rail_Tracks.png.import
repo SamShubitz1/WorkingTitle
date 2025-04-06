@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://06b7cup0vpx6"
-path="res://.godot/imported/MarsConcretePitWalls.png-dcedef77c468bf1410b54058e1029735.ctex"
+uid="uid://bojdciu8jb2g6"
+path="res://.godot/imported/T1_Rail_Tracks.png-5583f7347c49be984f8c7a8ffee48266.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/MarsConcretePitWalls.png"
-dest_files=["res://.godot/imported/MarsConcretePitWalls.png-dcedef77c468bf1410b54058e1029735.ctex"]
+source_file="res://Art/WorldSprites/T1_Rail_Tracks.png"
+dest_files=["res://.godot/imported/T1_Rail_Tracks.png-5583f7347c49be984f8c7a8ffee48266.ctex"]
 
 [params]
 

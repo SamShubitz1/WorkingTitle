@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdqxbnnl6fn4k"
-path="res://.godot/imported/MarsConcretePanelTrim.png-2c0e28d4680b905df31e36236d54f92f.ctex"
+uid="uid://cp0dilt2xfxxn"
+path="res://.godot/imported/T1_Newsboy.png-4616e1988d99072428c6981e22f5a1a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/MarsConcretePanelTrim.png"
-dest_files=["res://.godot/imported/MarsConcretePanelTrim.png-2c0e28d4680b905df31e36236d54f92f.ctex"]
+source_file="res://Art/WorldSprites/T1_Newsboy.png"
+dest_files=["res://.godot/imported/T1_Newsboy.png-4616e1988d99072428c6981e22f5a1a1.ctex"]
 
 [params]
 

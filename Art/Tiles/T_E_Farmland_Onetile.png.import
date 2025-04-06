@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmy2hcnsqi83l"
-path="res://.godot/imported/pixel art diff - pixelscenery_00010_.png-41d683824b210f97dc8e15850ff12a1b.ctex"
+uid="uid://cwvf5o0n53a8c"
+path="res://.godot/imported/T_E_Farmland_Onetile.png-bf01ee963da78846661aa708c49f7be6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/pixel art diff - pixelscenery_00010_.png"
-dest_files=["res://.godot/imported/pixel art diff - pixelscenery_00010_.png-41d683824b210f97dc8e15850ff12a1b.ctex"]
+source_file="res://Art/Tiles/T_E_Farmland_Onetile.png"
+dest_files=["res://.godot/imported/T_E_Farmland_Onetile.png-bf01ee963da78846661aa708c49f7be6.ctex"]
 
 [params]
 

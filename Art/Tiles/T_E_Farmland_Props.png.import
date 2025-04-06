@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rho7acgcfce8"
-path="res://.godot/imported/MarsConcreteCutWalls.png-d37fdf2bd9dcdcaf0b33e2dc1835370e.ctex"
+uid="uid://dgai3sow7pw2g"
+path="res://.godot/imported/T_E_Farmland_Props.png-0dcbb48ddf607b307e6f72f6824df2d3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/MarsConcreteCutWalls.png"
-dest_files=["res://.godot/imported/MarsConcreteCutWalls.png-d37fdf2bd9dcdcaf0b33e2dc1835370e.ctex"]
+source_file="res://Art/Tiles/T_E_Farmland_Props.png"
+dest_files=["res://.godot/imported/T_E_Farmland_Props.png-0dcbb48ddf607b307e6f72f6824df2d3.ctex"]
 
 [params]
 

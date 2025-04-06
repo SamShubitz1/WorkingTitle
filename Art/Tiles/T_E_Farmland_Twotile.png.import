@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://myq37tfsf55x"
-path="res://.godot/imported/MarsConcreteFull_F_Cloth_Sharp.png-eee7e25893e9e2e9708fefc8b5ffbf25.ctex"
+uid="uid://bhfkobo7taxri"
+path="res://.godot/imported/T_E_Farmland_Twotile.png-c3552fef56162d2be24c6af5e2e5344e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Tiles/MarsConcreteFull_F_Cloth_Sharp.png"
-dest_files=["res://.godot/imported/MarsConcreteFull_F_Cloth_Sharp.png-eee7e25893e9e2e9708fefc8b5ffbf25.ctex"]
+source_file="res://Art/Tiles/T_E_Farmland_Twotile.png"
+dest_files=["res://.godot/imported/T_E_Farmland_Twotile.png-c3552fef56162d2be24c6af5e2e5344e.ctex"]
 
 [params]
 
