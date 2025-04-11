@@ -5,7 +5,8 @@ class_name BaseGridMenu
 enum GridType {
 	GLOBAL,
 	ENEMY,
-	HERO
+	HERO,
+	CUSTOM
 }
 
 enum Direction {
@@ -25,7 +26,9 @@ var wrap: bool
 const initial_grid_size: Vector2i = Vector2i(8, 4)
 
 var current_shape: GameData.AbilityShape
-
+#var custom_cells: Array
+var custom_index = 0
+	
 func init(menu: Node, buttons: Array, menu_cursor: BaseCursor, initial_button_position = null, wrap = true) -> void:
 	super.init(menu, buttons, menu_cursor)
 	self.wrap = wrap
@@ -45,6 +48,20 @@ func update_grid(grid_size: Vector2i):
 			targets_grid[grid_coords] = buttons[cell_index]
 			cell_index += 1
 
+func custom_update_grid(cells):
+	var custom_buttons: Array
+	var offset = Vector2i(4,0)
+	for cell in targets_grid.keys():
+		if cell in cells:
+			var next_button = targets_grid[cell]
+			custom_buttons.append(next_button)
+	custom_buttons.reverse()
+	targets_grid = {}
+	var index = 0
+	for cell in cells:
+		targets_grid[cell] = custom_buttons[index]
+		index += 1
+		
 func activate_enemy_grid() -> void:
 	if current_grid_type == GridType.ENEMY:
 		return
@@ -83,37 +100,54 @@ func get_player_cells() -> Array:
 				player_cells.append(global_cells[i + j])
 	return player_cells
 		
-func get_targeted_cell_coords() -> Array:
+func get_target_cells() -> Array:
 	var origin = targets_grid.find_key(selected_button) 
 	var selected_coords = Utils.get_neighbor_coords(origin, current_shape, Data.Alliance.HERO)
 	var global_coords: Array
-	if current_grid_type == GridType.ENEMY:
+	if current_grid_type == GridType.ENEMY || current_grid_type == GridType.CUSTOM:
 		for coord in selected_coords:
 			coord.x += 4
 			global_coords.append(coord)
 		selected_coords = global_coords
 	return selected_coords
 	
-func set_guarded_cells(coords: Vector2i) -> void:
-	var guarded_cells: Array
-	for i in range(coords.x + 1):
-		guarded_cells.append(Vector2i(coords.x - i, coords.y))
-	for cell in guarded_cells:
-		targets_grid[cell].modulate = Color(1.0, 0.84, 0.0)
+#func set_guarded_cells(coords: Vector2i) -> void:
+	#var guarded_cells: Array
+	#for i in range(coords.x + 1):
+		#guarded_cells.append(Vector2i(coords.x - i, coords.y))
+	#for cell in guarded_cells:
+		#targets_grid[cell].modulate = Color(1.0, 0.84, 0.0)
 
 func navigate_forward(e: InputEvent) -> void:
-	if is_active:
-		if e.keycode == KEY_DOWN || e.keycode == KEY_S:
-			move_down()
-		elif e.keycode == KEY_RIGHT || e.keycode == KEY_D:
-			move_right()
+	if !is_active:
+		return
+		
+	if current_grid_type == GridType.CUSTOM:
+		var next_index = (custom_index + 1) % targets_grid.size()
+		custom_index = next_index
+		update_selected_cell(targets_grid.keys()[custom_index])
+		return
+		
+	elif e.keycode == KEY_DOWN || e.keycode == KEY_S: 
+		move_down()
+	elif e.keycode == KEY_RIGHT || e.keycode == KEY_D:
+		move_right()
 			
 func navigate_backward(e: InputEvent) -> void:
-	if is_active:
-		if e.keycode == KEY_UP || e.keycode == KEY_W:
-			move_up()
-		elif e.keycode == KEY_LEFT || e.keycode == KEY_A:
-			move_left()
+	if !is_active:
+		return
+		
+	if current_grid_type == GridType.CUSTOM:
+		if custom_index > 0:
+			custom_index -= 1
+		else:
+			custom_index = targets_grid.size() - 1
+		update_selected_cell(targets_grid.keys()[custom_index])
+		
+	elif e.keycode == KEY_UP || e.keycode == KEY_W:
+		move_up()
+	elif e.keycode == KEY_LEFT || e.keycode == KEY_A:
+		move_left()
 
 func move_up() -> void:
 	var coords = targets_grid.find_key(selected_button)
@@ -203,6 +237,16 @@ func update_selected_cell(next_coords) -> void:
 	
 func set_current_shape(attack_shape: Data.AbilityShape) -> void:
 	current_shape = attack_shape
+	
+func set_custom_cells(cells: Array) -> void:
+	var custom_cells = []
+	current_shape = Data.AbilityShape.SINGLE
+	set_grid_type(GridType.CUSTOM)
+	for cell in cells:
+		var offset = Vector2i(4,0)
+		custom_cells.append(cell - offset)
+	custom_update_grid(custom_cells)
+	update_selected_cell(custom_cells[0])
 
 func reset_cells() -> void:
 	for button in buttons:
@@ -218,7 +262,7 @@ func set_range(origin: Vector2i, range: Vector2i) -> void:
 		update_selected_cell(Vector2i(0, origin.y))
 
 func get_cell_color() -> Color:
-	if current_grid_type == GridType.ENEMY:
+	if current_grid_type == GridType.ENEMY || current_grid_type == GridType.CUSTOM:
 		return Color(1, 0, 0)
 	else:
 		return Color(0.5, 0.7, 1)

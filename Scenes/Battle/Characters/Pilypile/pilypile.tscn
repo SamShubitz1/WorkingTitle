@@ -1,27 +1,71 @@
-[gd_scene load_steps=8 format=3 uid="uid://cvl2fih8c6rlq"]
+[gd_scene load_steps=14 format=3 uid="uid://cvl2fih8c6rlq"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_6etg3"]
-[ext_resource type="Texture2D" uid="uid://b2mbmsh3tpqhv" path="res://Scenes/Battle/Characters/Pilypile/Pilypile_Combat_Idle1.png" id="2_b5l32"]
+[ext_resource type="Texture2D" uid="uid://dpk0218y7aqp" path="res://Scenes/Battle/Characters/Pilypile/Pilypile_Combat_Attack1.png" id="2_ixjvj"]
+[ext_resource type="Texture2D" uid="uid://ddlqywn0fract" path="res://Scenes/Battle/Characters/Pilypile/Pilypile_Combat_Idle1.png" id="3_liher"]
+[ext_resource type="Script" path="res://player_animation.gd" id="4_vfdia"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_4tyfl"]
-atlas = ExtResource("2_b5l32")
-region = Rect2(0, 0, 16, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_u774l"]
+atlas = ExtResource("2_ixjvj")
+region = Rect2(0, 0, 32, 128)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_iq2c1"]
-atlas = ExtResource("2_b5l32")
-region = Rect2(16, 0, 16, 64)
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1c60"]
+atlas = ExtResource("2_ixjvj")
+region = Rect2(32, 0, 32, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ekp0d"]
+atlas = ExtResource("2_ixjvj")
+region = Rect2(64, 0, 32, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rxg50"]
+atlas = ExtResource("2_ixjvj")
+region = Rect2(96, 0, 32, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_87fcl"]
+atlas = ExtResource("3_liher")
+region = Rect2(0, 0, 32, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aq2cv"]
+atlas = ExtResource("3_liher")
+region = Rect2(32, 0, 32, 128)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_4tyfl")
+"texture": SubResource("AtlasTexture_u774l")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_iq2c1")
+"texture": SubResource("AtlasTexture_d1c60")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ekp0d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rxg50")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ekp0d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1c60")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u774l")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_87fcl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aq2cv")
 }],
 "loop": true,
-"name": &"default",
+"name": &"idle",
 "speed": 2.0
 }]
 
@@ -32,7 +76,6 @@ bg_color = Color(0, 0, 0, 1)
 bg_color = Color(0.870588, 0.121569, 0.180392, 1)
 
 [node name="Pilypile" type="Node2D"]
-position = Vector2(807, 406)
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_6etg3")
 
@@ -40,14 +83,17 @@ script = ExtResource("1_6etg3")
 texture_filter = 1
 scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_fknt7")
-frame_progress = 0.947323
+animation = &"attack"
+frame = 6
+frame_progress = 1.0
+script = ExtResource("4_vfdia")
 
 [node name="CharHealth" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 20)
 offset_left = -100.0
-offset_top = 116.0
+offset_top = 100.0
 offset_right = 100.0
-offset_bottom = 126.0
+offset_bottom = 120.0
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_0gsre")

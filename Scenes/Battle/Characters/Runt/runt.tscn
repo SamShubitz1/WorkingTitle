@@ -1,27 +1,71 @@
-[gd_scene load_steps=8 format=3 uid="uid://dwve78hpko5l"]
+[gd_scene load_steps=14 format=3 uid="uid://dwve78hpko5l"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_j8ld1"]
-[ext_resource type="Texture2D" uid="uid://0xoxpr7251q8" path="res://Scenes/Battle/Characters/Runt/Runt_Combat_Idle1.png" id="2_m6xea"]
+[ext_resource type="Texture2D" uid="uid://cvwuko1cnu2fq" path="res://Scenes/Battle/Characters/Runt/Runt_Combat_Attack1.png" id="2_7pgxd"]
+[ext_resource type="Texture2D" uid="uid://bklvw27h0cknu" path="res://Scenes/Battle/Characters/Runt/Runt_Combat_Idle1.png" id="2_m6xea"]
+[ext_resource type="Script" path="res://player_animation.gd" id="3_krvcf"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ytlto"]
-atlas = ExtResource("2_m6xea")
-region = Rect2(0, 15, 16, 17)
+[sub_resource type="AtlasTexture" id="AtlasTexture_lndaw"]
+atlas = ExtResource("2_7pgxd")
+region = Rect2(0, 0, 32, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_alwwj"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_wruaq"]
+atlas = ExtResource("2_7pgxd")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pvnq1"]
+atlas = ExtResource("2_7pgxd")
+region = Rect2(64, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5kpy"]
+atlas = ExtResource("2_7pgxd")
+region = Rect2(96, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_webld"]
 atlas = ExtResource("2_m6xea")
-region = Rect2(16, 15, 16, 17)
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvx55"]
+atlas = ExtResource("2_m6xea")
+region = Rect2(32, 0, 32, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ytlto")
+"texture": SubResource("AtlasTexture_lndaw")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_alwwj")
+"texture": SubResource("AtlasTexture_wruaq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pvnq1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u5kpy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pvnq1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wruaq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lndaw")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_webld")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cvx55")
 }],
 "loop": true,
-"name": &"default",
+"name": &"idle",
 "speed": 2.0
 }]
 
@@ -32,22 +76,23 @@ bg_color = Color(0, 0, 0, 1)
 bg_color = Color(0.79101, 0.0984888, 0.155483, 1)
 
 [node name="Runt" type="Node2D"]
-position = Vector2(807, 406)
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_j8ld1")
 
 [node name="CharSprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
+position = Vector2(0, -74)
 scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_fknt7")
-frame_progress = 0.173919
+animation = &"idle"
+script = ExtResource("3_krvcf")
 
 [node name="CharHealth" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)
 offset_left = -100.0
-offset_top = 98.0
+offset_top = 100.0
 offset_right = 100.0
-offset_bottom = 118.0
+offset_bottom = 120.0
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_0gsre")
@@ -56,3 +101,4 @@ max_value = 80.0
 step = 1.0
 value = 80.0
 show_percentage = false
+metadata/_edit_use_anchors_ = true

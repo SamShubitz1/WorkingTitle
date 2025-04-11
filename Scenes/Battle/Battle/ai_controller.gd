@@ -60,7 +60,7 @@ func select_by_priority(objects_with_priorities: Array): #takes an array of obje
 		elif next_difference < difference:
 			difference = next_difference
 			selected_object = object
-	
+			
 	return selected_object.object
 
 func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary: #select an ability based off calculated priorities
@@ -139,7 +139,7 @@ func get_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array
 	var surveys: Array
 	var origin = enemy.grid_position
 	
-	var valid_cells = get_valid_cells(origin, ability)
+	var valid_cells = get_valid_cells(origin, ability, targets)
 	
 	for cell in valid_cells:
 		var survey = {"ability": ability, "targets": [], "should_move": false, "selected_cell": Vector2i.ZERO}
@@ -176,13 +176,15 @@ func get_next_position(players, enemy, selected_cell): #gets next position when 
 	if move_is_valid(next_pos):
 		return next_pos
 		
-func get_valid_cells(origin: Vector2i, ability) -> Array: #scans every grid cell the enemy could reach if they moved once
-	
+func get_valid_cells(origin: Vector2i, ability: Dictionary, targets: Array) -> Array: #returns every cell the enemy could select if they moved once
 	var max_range = ability.range + Vector2i(1, 1)
 	var valid_cells: Array
 	
 	if ability.shape == Data.AbilityShape.LINE:
 		valid_cells.append(Vector2i(7, origin.y)) #hard coded
+		return valid_cells
+	elif ability.shape == Data.AbilityShape.MELEE:
+		valid_cells = get_melee_targets(targets)
 		return valid_cells
 	elif ability.range == Vector2i(0,0) && ability.target_type == Data.TargetType.HERO:
 		return [origin]
@@ -207,6 +209,20 @@ func get_valid_cells(origin: Vector2i, ability) -> Array: #scans every grid cell
 					valid_cells.append(next_cell)
 	
 	return valid_cells
+	
+func get_melee_targets(targets: Array) -> Array:
+	var melee_target_cells: Dictionary
+	for target in targets:
+		if target.grid_position.y in melee_target_cells.keys():
+			var neighbor_cell = melee_target_cells[target.grid_position.y]
+			if neighbor_cell.x > target.grid_position.x:
+				break
+			else:
+				melee_target_cells[target.grid_position.y] = target.grid_position
+		else:
+			melee_target_cells[target.grid_position.y] = target.grid_position
+			
+	return melee_target_cells.values()
 
 func move_is_valid(next_pos): #ensures the enemy doesn't move too far left, tracking/moving logic already disallows enemy from moving too far in other directions
 	if !next_pos:
@@ -233,14 +249,16 @@ func roll_dice(attempts: int, sides: int) -> int:
 	return result
 
 func calculate_next_pos(selected_cell: Vector2i, current_pos: Vector2i, occupied_cells: Array): #prioritizes moving diagonal if needed, then up or down, then left or right
-	var left = Vector2i(current_pos.x - 1, current_pos.y)
-	var right = Vector2i(current_pos.x + 1, current_pos.y)
 	var up = Vector2i(current_pos.x, current_pos.y + 1)
 	var down = Vector2i(current_pos.x, current_pos.y - 1)
+	var left = Vector2i(current_pos.x - 1, current_pos.y)
+	var right = Vector2i(current_pos.x + 1, current_pos.y)
 	var up_left = Vector2i(current_pos.x - 1, current_pos.y + 1)
 	var up_right = Vector2i(current_pos.x + 1, current_pos.y + 1)
 	var down_left = Vector2i(current_pos.x - 1, current_pos.y - 1)
 	var down_right = Vector2i(current_pos.x + 1, current_pos.y - 1)
+
+
 
 	if selected_cell.x < current_pos.x:
 		if selected_cell.y < current_pos.y:

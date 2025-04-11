@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bklvw27h0cknu"
-path="res://.godot/imported/Runt_Combat_Idle1.png-29151a887b95b6774143402ac982b1f5.ctex"
+uid="uid://bqo2kltxjvt58"
+path="res://.godot/imported/Abi_Zap.png-eb9cd02520950cbeac904154d2b4c137.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Battle/Characters/Runt/Runt_Combat_Idle1.png"
-dest_files=["res://.godot/imported/Runt_Combat_Idle1.png-29151a887b95b6774143402ac982b1f5.ctex"]
+source_file="res://Scenes/Battle/Animations/Abi_Zap.png"
+dest_files=["res://.godot/imported/Abi_Zap.png-eb9cd02520950cbeac904154d2b4c137.ctex"]
 
 [params]
 
