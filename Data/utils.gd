@@ -5,6 +5,8 @@ func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, alli
 	match shape:
 		GameData.AbilityShape.SINGLE:
 			return neighbor_coords
+		GameData.AbilityShape.MELEE:
+			return neighbor_coords
 		GameData.AbilityShape.DIAMOND:
 				if origin_coords.y < grid_size.y - 1:
 					neighbor_coords.append(Vector2i(origin_coords.x, origin_coords.y + 1))

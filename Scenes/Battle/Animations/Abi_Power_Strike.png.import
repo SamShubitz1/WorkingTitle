@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dl56u5huotcwq"
-path="res://.godot/imported/PC_Combat_Attack1.png-2496e7c68aafc374d41801394368e2df.ctex"
+uid="uid://fnxtlq44sext"
+path="res://.godot/imported/Abi_Power_Strike.png-e0d982d475cc37c075c76d389ae414bb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Battle/Characters/PC/PC_Combat_Attack1.png"
-dest_files=["res://.godot/imported/PC_Combat_Attack1.png-2496e7c68aafc374d41801394368e2df.ctex"]
+source_file="res://Scenes/Battle/Animations/Abi_Power_Strike.png"
+dest_files=["res://.godot/imported/Abi_Power_Strike.png-e0d982d475cc37c075c76d389ae414bb.ctex"]
 
 [params]
 

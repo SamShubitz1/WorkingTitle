@@ -7,6 +7,7 @@ extends Node2D
 
 @onready var health_display = $"../BattleMenu/MainMenu/Menu/CharPanel/Health"
 @onready var ap_display = $"../BattleMenu/Descriptions/Labels/ActionPointDisplay"
+@onready var reticle = $Reticle
 @onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
 @onready var items_node = $"../BattleMenu/ItemsMenu"
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
@@ -15,13 +16,14 @@ var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
 
 var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
-var pc_scene = preload("res://Scenes/Battle/Characters/PC/pc.tscn")
+var mage_scene = preload("res://Scenes/Battle/Characters/Mage/mage.tscn")
 var runt_scene = preload("res://Scenes/Battle/Characters/Runt/runt.tscn")
 var mandrake_scene = preload("res://Scenes/Battle/Characters/Mandrake/mandrake.tscn")
 var pilypile_scene = preload("res://Scenes/Battle/Characters/Pilypile/pilypile.tscn")
 
 var players: Array[Character]
 var current_player: Character
+var player_id = 0
 
 var battle_grid: BaseGrid = BaseGrid.new()
 
@@ -105,18 +107,38 @@ func handle_ability(event: Dictionary) -> void:
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		if event.has("animation"):
-			var current_kapow = get_kapow()
-			current_kapow.start(event.target.position, event.target.z_index, event.animation, event.duration)
+			var kapow = get_kapow()
 			
+			var position: Vector2i
+			if event.animation.origin == Data.AnimOrigin.OTHER:
+				position = event.target.position
+			elif event.animation.origin == Data.AnimOrigin.SELF:
+				position = current_player.position
+				
+			kapow.start(position, event.target.z_index, event.animation.name, event.duration)
+	
+		current_player.sprite.attack(event.duration)
+		
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
 #
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
 		play_dialog(event.target.char_name + " " + event.effect.dialog + "!", true)
-		if event.effect_animation != "":
-			var current_kapow = get_kapow()
-			current_kapow.start(event.target.position, event.target.z_index, event.effect_animation, event.duration)
+		
+		if event.has("effect_animation"): #placeholder logic
+			
+			var position: Vector2i
+			if event.effect_animation.origin == Data.AnimOrigin.OTHER:
+				position = event.target.position
+			elif event.effect_animation.origin == Data.AnimOrigin.SELF:
+				position = current_player.position
+			
+			var effect_kapow = get_kapow()
+			effect_kapow.start(position, event.target.z_index, event.effect_animation.name, event.duration)
+			
+		current_player.sprite.attack(event.duration)
+		
 		if event.effect.property == Data.SpecialStat.AP:
 			ap_display.set_action_points(current_player.action_points)
 			
@@ -124,11 +146,12 @@ func handle_movement(event: Dictionary) -> void:
 	var target = event.target
 	battle_grid.update_grid_object(target, event.next_position)
 	set_position_by_grid_coords(target)
+	reticle.move(target.position)
 	
 func handle_guard(event: Dictionary) -> void:
 	var target = event.target
 	var current_kapow = get_kapow()
-	current_kapow.start(event.target.position, event.target.z_index, event.animation)
+	current_kapow.start(event.target.position, event.target.z_index, event.animation, event.duration)
 	play_dialog(target.char_name + " is protected!", true)
 
 func handle_death(event) -> void:
@@ -200,33 +223,33 @@ func on_use_ability(target_cells: Array) -> void:
 
 func build_attack_event(target: Character) -> void:
 	var damage_event = current_player.calculate_attack_dmg(selected_ability)
-	var animation = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
+	
 	if selected_ability.has("animation"):
-		animation["name"] = selected_ability.animation.name
-		animation["duration"] = selected_ability.animation.duration
-
-	add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": animation.duration, "emitter": current_player, "animation": animation.name})
+		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": selected_ability.animation.duration, "emitter": current_player, "animation": selected_ability.animation})
+	else:
+		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": dialog_duration, "emitter": current_player})
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
-	var effect_animation: Dictionary = {"name": "", "duration": dialog_duration} # dummy animation because null checking is weak
-				
+				#
 	if effect.target == Data.EffectTarget.OTHER:
 		effect_target = target
 	elif effect.target == Data.EffectTarget.SELF:
 		effect_target = current_player
-					
+					#
 	if effect.has("animation"):
-		effect_animation["name"] = effect.animation.name
-		effect_animation["duration"] = effect.animation.duration
-					
-	add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": effect_animation.duration, "emitter": current_player, "effect_animation": effect_animation.name})
+		add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": effect.animation.duration, "emitter": current_player, "effect_animation": effect.animation})
+	else:
+		add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": dialog_duration, "emitter": current_player})
 
 func prompt_select_target(ability_name: String) -> Dictionary:
+	var target_cells = []
 	var hero_ability = GameData.abilities[ability_name]
 	selected_ability = hero_ability
 	play_dialog("Select a target!", false)
-	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range}
+	if hero_ability.shape == Data.AbilityShape.MELEE: #for melee attacks, battle controller passes valid targets to battle menu
+		target_cells = get_melee_targets()
+	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range, "origin": current_player.grid_position, "target_cells": target_cells}
 
 func prompt_select_space() -> void:
 	play_dialog("Select a space!", false)
@@ -235,7 +258,7 @@ func cancel_select_target() -> void:
 	selected_ability = {}
 
 func on_select_invalid_target() -> void:
-	play_dialog("No valid target!", false)
+	play_dialog("Not a valid target!", false)
 		
 func on_use_item(item_index: int) -> void:
 	cursor.disable()
@@ -283,8 +306,8 @@ func perform_enemy_turn() -> void:
 					
 				for target in action.targets:
 					if target.guardian:
-						add_event({"type": EventType.DIALOG, "text": action.target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
-						var next_target = action.target.guardian
+						add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+						var next_target = target.guardian
 						target = next_target
 					if !selected_ability.damage.type == Data.DamageType.NONE:
 						build_attack_event(target)
@@ -338,9 +361,9 @@ func on_target_death(target: Character) -> void:
 				player.set_guardian(null)
 				
 	battle_grid.current_grid.erase(target.grid_position)
-	players = players.filter(func(p): return p.char_name != target.char_name)
-	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.char_name != target.char_name || e.has("target") && e.target.char_name != target.char_name) # make sure this works
-	turn_queue = turn_queue.filter(func(c): return c.character.char_name != target.char_name)
+	players = players.filter(func(p): return p.player_id != target.player_id)
+	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.char_name != target.char_name || e.has("target") && e.target.player_id != target.player_id) # make sure this works
+	turn_queue = turn_queue.filter(func(c): return c.character.player_id != target.player_id)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
 	
@@ -376,61 +399,62 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 			is_valid_target = true
 			
 	return is_valid_target
-
-func build_characters() -> void:
-	var pc = pc_scene.instantiate()
-	var pc_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 4, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 1}
-	var pc_abilities = ["Clobber", "Heat Ray", "Screen Flash", "Zap", "Process Crunch"]
-	var pc_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	pc.init("PC", pc_attributes, Data.Alliance.HERO, pc.get_node("CharSprite"), pc.get_node("CharHealth"), 340, pc_abilities, Vector2i(3, 1), Data.MachineRole.NONE, pc_items) # init props will be accessed from somewhere
-	set_position_by_grid_coords(pc)
-	pc.is_player = true
-	add_child(pc)
-	players.append(pc)
 	
-	var runt = runt_scene.instantiate()
-	var runt_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 0, Data.Attributes.BATTERY: 0, Data.Attributes.OPTICS: 0, Data.Attributes.MOBILITY: 1}
-	var runt_abilities = ["Ripjaw", "Reinforce", "Acid Cloud", "Ramming Strike", "Process Crunch"]
-	var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-	runt.init("Runt", runt_attributes, Data.Alliance.HERO, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 320, runt_abilities, Vector2i(2, 0), Data.MachineRole.NONE, runt_items) # init props will be accessed from somewhere
-	set_position_by_grid_coords(runt)
-	add_child(runt)
-	players.append(runt)
-	runt.flip_sprite()
+func get_melee_targets() -> Array:
+	var occupied_cells = battle_grid.current_grid.keys()
+	var target_cells: Array
+	for y in range(4): #hard coded for now
+		for x in range(4, 8):
+			var current_cell = Vector2i(x, y)
+			if current_cell in occupied_cells:
+				target_cells.append(current_cell)
+				break
+	return target_cells
+		
+func get_players() -> void:
+	var positions = get_enemies_by_position()
+	for pos in positions:
+		var next_enemy = build_character(positions[pos], Data.Alliance.ENEMY, pos)
+		players.append(next_enemy)
 	
-	var norman = norman_scene.instantiate()
-	var norman_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
-	var norman_abilities = ["Reinforce", "Clobber"]
-	norman.init("Norman", norman_attributes, Data.Alliance.ENEMY, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 320, norman_abilities, Vector2i(5, 0), Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
-	set_position_by_grid_coords(norman)
-	add_child(norman)
-	players.append(norman)
+	var mage = mage_scene.instantiate()
+	var mage_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 4, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 1}
+	var mage_abilities = ["Clobber", "Heat Ray", "Screen Flash", "Zap", "Process Crunch"]
+	var mage_items = ["Extra Rock", "Extra Paper", "Sharpener"]
+	mage.init(player_id, "Mage", mage_attributes, Data.Alliance.HERO, mage.get_node("CharSprite"), mage.get_node("CharHealth"), 340, mage_abilities, Vector2i(3, 1), Data.MachineRole.NONE, mage_items) # init props will be accessed from somewhere
+	set_position_by_grid_coords(mage)
+	mage.is_player = true
+	add_child(mage)
+	player_id += 1
+	players.append(mage)
 	
-	var thumper = thumper_scene.instantiate()
-	var thumper_abilities = ["Ripjaw", "Bulk Inversion", "Acid Cloud", "Heat Ray"]
-	var thumper_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 0, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 3}
-	thumper.init("Thumper", thumper_attributes, Data.Alliance.ENEMY, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, Vector2i(6, 0), Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
-	set_position_by_grid_coords(thumper)
-	add_child(thumper)
-	thumper.flip_sprite()
-	players.append(thumper)
-	
-	var mandrake = mandrake_scene.instantiate()
-	var mandrake_abilities = ["Process Crunch"]
-	var mandrake_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
-	mandrake.init("Mandrake", mandrake_attributes, GameData.Alliance.ENEMY, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, Vector2i(6, 2), Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
-	set_position_by_grid_coords(mandrake)
-	add_child(mandrake)
-	mandrake.flip_sprite()
+	var mandrake = build_character("mandrake", Data.Alliance.HERO, Vector2i(2,2))
 	players.append(mandrake)
 	
-	var pilypile = pilypile_scene.instantiate()
-	var pilypile_abilities = ["Bulk Inversion", "Ripjaw", "Acid Cloud", "Contemplate"]
-	var pilypile_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 0, Data.Attributes.MOBILITY: 0}
-	pilypile.init("Pilypile", pilypile_attributes, GameData.Alliance.HERO, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 340, pilypile_abilities, Vector2i(2, 3), Data.MachineRole.NONE, []) # init props will be accessed from somewhere
-	set_position_by_grid_coords(pilypile)
-	add_child(pilypile)
+	var pilypile = build_character("pilypile", Data.Alliance.HERO, Vector2i(2,0))
 	players.append(pilypile)
+	
+func get_enemies_by_position():
+	var enemies = select_enemies()
+	var occupied_cells: Array
+	var positions: Dictionary
+	for i in range(enemies.size()):
+		while positions.size() < i + 1:
+			var next_position = Vector2i(randi_range(4,7), randi_range(0,3)) # hard coded
+			if next_position not in occupied_cells:
+				positions[next_position] = enemies[i]
+				occupied_cells.append(next_position)
+	return positions
+
+func select_enemies():
+	var enemy_pool = ["runt", "pilypile", "norman", "thumper", "mandrake"]
+	var selected_enemies: Array
+	var number_of_enemies = randi_range(2, 5)
+	for i in range(number_of_enemies):
+		var enemy_index = randi() % (enemy_pool.size() - 1)
+		selected_enemies.append(enemy_pool[enemy_index])
+	
+	return selected_enemies
 	
 #func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
@@ -468,6 +492,7 @@ func increment_turn_queue() -> void:
 		set_turn_order()
 	var next_player = turn_queue.pop_front().character
 	current_player = next_player
+	reticle.move(current_player.position)
 	current_player.start_turn()
 	
 func check_mobility_change() -> bool:
@@ -486,7 +511,7 @@ func prompt_action_points_insufficient() -> void:
 	
 func update_ui() -> void:
 	if current_player.alliance == GameData.Alliance.HERO:	
-		char_name_label.text = current_player.name
+		char_name_label.text = current_player.char_name
 		update_display_health()
 		ap_display.set_action_points(current_player.action_points)
 		
@@ -513,7 +538,7 @@ func update_display_health() -> void:
 				
 func initialize_battle() -> void:
 	dialog = dialog_box[0]
-	build_characters()
+	get_players()
 	battle_grid.populate_grid(players)
 	increment_turn_queue()
 	ap_display.initialize_ap_display()
@@ -523,3 +548,52 @@ func get_kapow() -> Node:
 	var kapow = kapow_scene.instantiate()
 	self.add_child(kapow)
 	return kapow
+	
+func build_character(name: String, char_alliance: Data.Alliance, position: Vector2i):
+	match name:
+		"runt":
+			var runt = runt_scene.instantiate()
+			var runt_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 0, Data.Attributes.BATTERY: 0, Data.Attributes.OPTICS: 0, Data.Attributes.MOBILITY: 1}
+			var runt_abilities = ["Ramming Strike"]
+			var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
+			runt.init(player_id, "Runt", runt_attributes, char_alliance, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 320, runt_abilities, position, Data.MachineRole.NONE, runt_items) # init props will be accessed from somewhere
+			add_child(runt)
+			set_position_by_grid_coords(runt)
+			player_id += 1
+			return runt
+		"pilypile":
+			var pilypile = pilypile_scene.instantiate()
+			var pilypile_abilities = ["Bulk Inversion", "Acid Cloud", "Contemplate"]
+			var pilypile_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 0, Data.Attributes.MOBILITY: 0}
+			pilypile.init(player_id, "Pilypile", pilypile_attributes, char_alliance, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 340, pilypile_abilities, position, Data.MachineRole.NONE, []) # init props will be accessed from somewhere
+			add_child(pilypile)
+			set_position_by_grid_coords(pilypile)
+			player_id += 1
+			return pilypile
+		"norman":
+			var norman = norman_scene.instantiate()
+			var norman_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+			var norman_abilities = ["Ramming Strike"]
+			norman.init(player_id, "Norman", norman_attributes, char_alliance, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 320, norman_abilities, position, Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
+			add_child(norman)
+			set_position_by_grid_coords(norman)
+			player_id += 1
+			return norman
+		"mandrake":
+			var mandrake = mandrake_scene.instantiate()
+			var mandrake_abilities = ["Process Crunch", "Burst Rifle"]
+			var mandrake_attributes = {Data.Attributes.STRENGTH: 0, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
+			mandrake.init(player_id, "Mandrake", mandrake_attributes, char_alliance, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 300, mandrake_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
+			add_child(mandrake)
+			set_position_by_grid_coords(mandrake)
+			player_id += 1
+			return mandrake
+		"thumper":
+			var thumper = thumper_scene.instantiate()
+			var thumper_abilities = ["Clobber"]
+			var thumper_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 0, Data.Attributes.ARMOR: 0, Data.Attributes.SHIELDING: 0, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 3}
+			thumper.init(player_id, "Thumper", thumper_attributes, char_alliance, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 300, thumper_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
+			add_child(thumper)
+			set_position_by_grid_coords(thumper)
+			player_id += 1
+			return thumper

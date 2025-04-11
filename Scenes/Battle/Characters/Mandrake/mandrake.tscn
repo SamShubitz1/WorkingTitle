@@ -1,27 +1,62 @@
-[gd_scene load_steps=8 format=3 uid="uid://bvd2jl6prp014"]
+[gd_scene load_steps=14 format=3 uid="uid://bvd2jl6prp014"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ejhso"]
-[ext_resource type="Texture2D" uid="uid://gm0mkns6d1d8" path="res://Scenes/Battle/Characters/Mandrake/Mandrake_Combat_Idle1.png" id="2_yao61"]
+[ext_resource type="Texture2D" uid="uid://bn6mmtm2885pj" path="res://Scenes/Battle/Characters/Mandrake/Mandrake_Combat_Attack1.png" id="2_xwr3v"]
+[ext_resource type="Texture2D" uid="uid://c788hft1xyydb" path="res://Scenes/Battle/Characters/Mandrake/Mandrake_Combat_Idle1.png" id="2_yao61"]
+[ext_resource type="Script" path="res://player_animation.gd" id="3_q8g1q"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e6nhl"]
-atlas = ExtResource("2_yao61")
-region = Rect2(0, 2, 16, 42)
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0wnp"]
+atlas = ExtResource("2_xwr3v")
+region = Rect2(0, 0, 32, 96)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sjllk"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_cveny"]
+atlas = ExtResource("2_xwr3v")
+region = Rect2(32, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppbhq"]
+atlas = ExtResource("2_xwr3v")
+region = Rect2(64, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cs4pv"]
+atlas = ExtResource("2_xwr3v")
+region = Rect2(96, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_glru8"]
 atlas = ExtResource("2_yao61")
-region = Rect2(16, 2, 16, 42)
+region = Rect2(0, 0, 32, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gcsfy"]
+atlas = ExtResource("2_yao61")
+region = Rect2(32, 0, 32, 96)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e6nhl")
+"texture": SubResource("AtlasTexture_n0wnp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_sjllk")
+"texture": SubResource("AtlasTexture_cveny")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ppbhq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cs4pv")
 }],
 "loop": true,
-"name": &"default",
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_glru8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gcsfy")
+}],
+"loop": true,
+"name": &"idle",
 "speed": 2.0
 }]
 
@@ -32,7 +67,6 @@ bg_color = Color(0, 0, 0, 1)
 bg_color = Color(0.870588, 0.121569, 0.180392, 1)
 
 [node name="Mandrake" type="Node2D"]
-position = Vector2(807, 406)
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ejhso")
 
@@ -40,14 +74,15 @@ script = ExtResource("1_ejhso")
 texture_filter = 1
 scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_fknt7")
-frame_progress = 0.947323
+animation = &"idle"
+script = ExtResource("3_q8g1q")
 
 [node name="CharHealth" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)
 offset_left = -100.0
-offset_top = 116.0
+offset_top = 100.0
 offset_right = 100.0
-offset_bottom = 136.0
+offset_bottom = 120.0
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_0gsre")
@@ -55,3 +90,4 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_fxy7r")
 max_value = 80.0
 value = 80.0
 show_percentage = false
+metadata/_edit_use_anchors_ = true

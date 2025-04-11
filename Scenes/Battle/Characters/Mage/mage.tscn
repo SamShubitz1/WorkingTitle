@@ -1,0 +1,105 @@
+[gd_scene load_steps=14 format=3 uid="uid://cr3t2sex466g6"]
+
+[ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ge1t4"]
+[ext_resource type="Texture2D" uid="uid://dluixngiwseb5" path="res://Scenes/Battle/Characters/Mage/Mage_Combat_Attack1.png" id="2_4dyix"]
+[ext_resource type="Script" path="res://player_animation.gd" id="3_ne4sa"]
+[ext_resource type="Texture2D" uid="uid://d07n848nosdmn" path="res://Scenes/Battle/Characters/Mage/Mage_Combat_Idle.png" id="3_oiqil"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_orfo0"]
+atlas = ExtResource("2_4dyix")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bay73"]
+atlas = ExtResource("2_4dyix")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sfy1p"]
+atlas = ExtResource("2_4dyix")
+region = Rect2(64, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w6a7e"]
+atlas = ExtResource("2_4dyix")
+region = Rect2(96, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wxfh"]
+atlas = ExtResource("3_oiqil")
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u04yq"]
+atlas = ExtResource("3_oiqil")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p8hg8"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_orfo0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bay73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sfy1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w6a7e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sfy1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bay73")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_orfo0")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wxfh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u04yq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 2.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hrpm"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hy8r4"]
+bg_color = Color(0.870588, 0.121569, 0.180392, 1)
+
+[node name="Mage" type="Node2D"]
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_ge1t4")
+
+[node name="CharSprite" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -52)
+scale = Vector2(16, 16)
+sprite_frames = SubResource("SpriteFrames_p8hg8")
+animation = &"idle"
+frame_progress = 0.445983
+script = ExtResource("3_ne4sa")
+
+[node name="CharHealth" type="ProgressBar" parent="."]
+custom_minimum_size = Vector2(200, 20)
+offset_left = -100.0
+offset_top = 102.0
+offset_right = 100.0
+offset_bottom = 122.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/background = SubResource("StyleBoxFlat_7hrpm")
+theme_override_styles/fill = SubResource("StyleBoxFlat_hy8r4")
+max_value = 80.0
+step = 1.0
+value = 80.0
+rounded = true
+show_percentage = false

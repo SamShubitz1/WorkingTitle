@@ -1,27 +1,71 @@
-[gd_scene load_steps=8 format=3 uid="uid://dvomnd5imb1vx"]
+[gd_scene load_steps=14 format=3 uid="uid://dvomnd5imb1vx"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_3lwtn"]
-[ext_resource type="Texture2D" uid="uid://di0oumndkirvh" path="res://Scenes/Battle/Characters/Thumper/Thumper_Combat_Idle1.png" id="2_brmt2"]
+[ext_resource type="Texture2D" uid="uid://dtmtn4iqtilxb" path="res://Scenes/Battle/Characters/Thumper/Thumper_Combat_Idle1.png" id="2_brmt2"]
+[ext_resource type="Texture2D" uid="uid://dsmfadekkm12a" path="res://Scenes/Battle/Characters/Thumper/Thumper_Combat_Attack1.png" id="2_r2r8x"]
+[ext_resource type="Script" path="res://player_animation.gd" id="3_akwu1"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_saw46"]
-atlas = ExtResource("2_brmt2")
-region = Rect2(0, 15, 16, 16)
+[sub_resource type="AtlasTexture" id="AtlasTexture_555hk"]
+atlas = ExtResource("2_r2r8x")
+region = Rect2(0, 0, 32, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_r5y6g"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ol857"]
+atlas = ExtResource("2_r2r8x")
+region = Rect2(32, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qph3i"]
+atlas = ExtResource("2_r2r8x")
+region = Rect2(64, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aj8ef"]
+atlas = ExtResource("2_r2r8x")
+region = Rect2(96, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eeyjf"]
 atlas = ExtResource("2_brmt2")
-region = Rect2(16, 15, 16, 16)
+region = Rect2(0, 0, 32, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fx4xu"]
+atlas = ExtResource("2_brmt2")
+region = Rect2(32, 0, 32, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_saw46")
+"texture": SubResource("AtlasTexture_555hk")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_r5y6g")
+"texture": SubResource("AtlasTexture_ol857")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qph3i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aj8ef")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qph3i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ol857")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_555hk")
+}],
+"loop": false,
+"name": &"attack",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eeyjf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fx4xu")
 }],
 "loop": true,
-"name": &"default",
+"name": &"idle",
 "speed": 2.0
 }]
 
@@ -32,22 +76,25 @@ bg_color = Color(0, 0, 0, 1)
 bg_color = Color(0.869876, 0.121373, 0.180198, 1)
 
 [node name="Thumper" type="Node2D"]
-position = Vector2(807, 406)
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_3lwtn")
 
 [node name="CharSprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
+position = Vector2(0, -58)
 scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_fknt7")
-frame_progress = 0.634997
+animation = &"attack"
+frame = 6
+frame_progress = 1.0
+script = ExtResource("3_akwu1")
 
 [node name="CharHealth" type="ProgressBar" parent="."]
 custom_minimum_size = Vector2(200, 0)
 offset_left = -100.0
-offset_top = 104.0
+offset_top = 110.0
 offset_right = 100.0
-offset_bottom = 124.0
+offset_bottom = 130.0
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_styles/background = SubResource("StyleBoxFlat_jn55w")
@@ -56,3 +103,4 @@ max_value = 80.0
 step = 1.0
 value = 80.0
 show_percentage = false
+metadata/_edit_use_anchors_ = true

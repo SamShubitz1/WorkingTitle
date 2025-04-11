@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ejde2yqmwm12"
-path="res://.godot/imported/PC_Combat_Idle1.png-4d03681a38e2fee46d892a36d73fe0e7.ctex"
+uid="uid://h7k7tyrh35ks"
+path="res://.godot/imported/Abi_Burst_Rifle.png-c88663c61a7f36d151f133ad8efc7694.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Battle/Characters/PC/PC_Combat_Idle1.png"
-dest_files=["res://.godot/imported/PC_Combat_Idle1.png-4d03681a38e2fee46d892a36d73fe0e7.ctex"]
+source_file="res://Scenes/Battle/Animations/Abi_Burst_Rifle.png"
+dest_files=["res://.godot/imported/Abi_Burst_Rifle.png-c88663c61a7f36d151f133ad8efc7694.ctex"]
 
 [params]
 

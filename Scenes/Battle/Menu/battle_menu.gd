@@ -142,9 +142,12 @@ func on_select_ability() -> void:
 			targets_menu.activate_enemy_grid()
 		Data.TargetType.HERO:
 			targets_menu.activate_hero_grid()
-			
-	targets_menu.set_current_shape(ability_info.shape)
-	targets_menu.set_range(current_player.grid_position, ability_info.range)
+	
+	if ability_info.shape == Data.AbilityShape.MELEE:
+		targets_menu.set_custom_cells(ability_info.target_cells)
+	else:
+		targets_menu.set_current_shape(ability_info.shape)
+		targets_menu.set_range(current_player.grid_position, ability_info.range)
 	
 	update_selected_menu(Data.BattleMenuType.TARGETS)
 
@@ -174,7 +177,7 @@ func on_select_guard() -> void:
 	
 func on_select_target():
 	log_menu.show_menu()
-	var target_cells = targets_menu.get_targeted_cell_coords()
+	var target_cells = targets_menu.get_target_cells()
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
 		battle_controller.on_use_ability(target_cells)
@@ -190,7 +193,7 @@ func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 	
 func on_select_movement() -> void:
-	var cell_coords: Array = movement_menu.get_targeted_cell_coords()
+	var cell_coords: Array = movement_menu.get_target_cells()
 	var is_valid_target = battle_controller.check_valid_targets(cell_coords, true)
 	if is_valid_target:
 		battle_controller.on_movement(cell_coords[0])

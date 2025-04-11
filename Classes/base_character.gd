@@ -12,7 +12,6 @@ var action_points: int = 5
 var role: Data.MachineRole
 
 var base_attributes = {}
-
 var current_attributes = {}
 
 var items: Array
@@ -26,12 +25,17 @@ var grid_position: Vector2i
 var guardian: Character = null
 var mobility_changed: bool
 var movement_range = Vector2i(1, 1)
-var turn_count: int
 
-func init(char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
+var turn_count: int
+var player_id: int
+
+func init(id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
+	self.player_id = id
 	self.char_name = char_name
 	self.alliance = char_alliance
 	self.sprite = char_sprite
+	if alliance == Data.Alliance.ENEMY:
+		flip_sprite()
 	self.health_bar = char_health
 	self.max_health = max_health
 	self.role = role
