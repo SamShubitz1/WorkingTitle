@@ -11,6 +11,8 @@ extends Control
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
 @onready var battle_controller = $"../BattleController"
 @onready var description_label = $Descriptions/Labels/AbilityDescription
+@onready var energy_cost_label = $Descriptions/Labels/EnergyCost
+@onready var ap_cost_label = $Descriptions/Labels/ApCost
 
 var current_player: Node
 #var grid_info: Dictionary
@@ -181,7 +183,7 @@ func on_select_target():
 	var is_valid_target = battle_controller.check_valid_targets(target_cells)
 	if is_valid_target:
 		battle_controller.on_use_ability(target_cells)
-		abilities_menu.set_scroll_size(current_player.abilities.size()) # will be called on end turn
+		abilities_menu.set_scroll_size(current_player.current_abilities.size()) # will be called on end turn
 		update_selected_menu(Data.BattleMenuType.OPTIONS)
 	else:
 		battle_controller.on_select_invalid_target()
@@ -211,13 +213,17 @@ func on_pass_turn() -> void:
 func update_description() -> void:
 	var index = selected_menu.get_selected_button_index()
 	if selected_menu == abilities_menu:
-		description_label.text = current_player.abilities[index].description
+		description_label.text = current_player.current_abilities[index].description
+		energy_cost_label.text = str("EP cost: ", current_player.current_abilities[index].energy_cost)
+		ap_cost_label.text = str("AP cost: ", current_player.current_abilities[index].action_cost)
 	elif selected_menu == items_menu:
 		if index < current_player.items.size():
 			description_label.text = current_player.items[index].menu_description
 	elif selected_menu == options_menu:
 		description_label.text = "Press Q to pass turn"
-			
+		energy_cost_label.text = "Ep cost: "
+		ap_cost_label.text = "Ap cost: "
+
 func initialize_menus() -> void:
 	var initial_cursor_pos = Vector2i(0, 65)
 	cursor = battle_cursor
@@ -262,5 +268,5 @@ func build_targets_cells() -> Array[Panel]:
 	
 func update_scroll_size() -> void:
 	current_player = battle_controller.get_current_player()
-	abilities_menu.set_scroll_size(current_player.abilities.size())
+	abilities_menu.set_scroll_size(current_player.current_abilities.size())
 	items_menu.set_scroll_size(current_player.items.size())

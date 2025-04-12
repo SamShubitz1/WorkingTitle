@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://clg4nd1ekycri"]
+[gd_scene load_steps=18 format=3 uid="uid://clg4nd1ekycri"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_controller.gd" id="1_jktho"]
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/ai_controller.gd" id="2_8a0eq"]
@@ -34,11 +34,17 @@ corner_radius_bottom_left = 5
 font_color = Color(0.91664, 0.91664, 0.91664, 1)
 outline_color = Color(0.000159503, 0.000108775, 2.53083e-05, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4cy1y"]
-bg_color = Color(0.92, 0.1288, 0.1288, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_emdjm"]
+bg_color = Color(0, 0, 0, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xnljf"]
-bg_color = Color(0.44607, 0.671498, 0.355604, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7tb7j"]
+bg_color = Color(0.816611, 0.0953585, 0.156886, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_36wqr"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lxaq2"]
+bg_color = Color(0.905143, 0.803698, 0.225756, 1)
 
 [node name="BattleScene" type="Node2D"]
 
@@ -189,11 +195,11 @@ alignment = 1
 
 [node name="CharPanel" type="HBoxContainer" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 
 [node name="NameLabel" type="Label" parent="BattleMenu/MainMenu/Menu/CharPanel"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 text = "
 "
@@ -204,15 +210,32 @@ custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Health" type="ProgressBar" parent="BattleMenu/MainMenu/Menu/CharPanel"]
-custom_minimum_size = Vector2(200, 0)
+[node name="StatusBars" type="VBoxContainer" parent="BattleMenu/MainMenu/Menu/CharPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_styles/background = SubResource("StyleBoxFlat_4cy1y")
-theme_override_styles/fill = SubResource("StyleBoxFlat_xnljf")
+
+[node name="Health" type="ProgressBar" parent="BattleMenu/MainMenu/Menu/CharPanel/StatusBars"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_emdjm")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7tb7j")
+max_value = 300.0
+step = 1.0
+value = 300.0
+rounded = true
+show_percentage = false
+
+[node name="Energy" type="ProgressBar" parent="BattleMenu/MainMenu/Menu/CharPanel/StatusBars"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/background = SubResource("StyleBoxFlat_36wqr")
+theme_override_styles/fill = SubResource("StyleBoxFlat_lxaq2")
 step = 1.0
 value = 100.0
+rounded = true
+show_percentage = false
 
 [node name="Attack" type="Button" parent="BattleMenu/MainMenu/Menu"]
 layout_mode = 2
@@ -428,15 +451,13 @@ vertical_alignment = 2
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Label3" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="EnergyCost" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Text"
 
-[node name="Label4" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="ApCost" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Text"
 
 [node name="Label5" type="Label" parent="BattleMenu/Descriptions/Labels"]
 layout_mode = 2

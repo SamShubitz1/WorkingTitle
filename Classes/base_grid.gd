@@ -20,3 +20,27 @@ func update_grid_object(object: Node, next_position: Vector2i) -> void:
 func populate_grid(objects: Array) -> void:
 	for object in objects:
 		set_object_at_grid_position(object)
+		
+func check_valid_targets(target_cells: Array, target_type: Data.TargetType, check_movement: bool = false) -> bool:
+	var valid_targets: Array[Vector2i]
+	var occupied_cells = current_grid.keys()
+	
+	if check_movement && occupied_cells.has(target_cells[0]):
+		return false
+	elif check_movement:
+		return true
+		
+	for cell in occupied_cells:
+		if target_type == Data.TargetType.ENEMY:
+			if cell.x > 3: # (# of columns / 2) - 1
+				valid_targets.append(cell)
+		elif target_type == Data.TargetType.HERO:
+			if cell.x < 4:
+				valid_targets.append(cell)
+				
+	var is_valid_target: bool = false
+	for cell in target_cells:
+		if valid_targets.has(cell):
+			is_valid_target = true
+			
+	return is_valid_target

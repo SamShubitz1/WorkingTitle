@@ -5,6 +5,9 @@ class_name Character
 var char_name: String
 var alliance: GameData.Alliance
 var max_health: int
+var max_energy: int
+var current_energy: int
+
 var is_player: bool = false
 var health_bar: ProgressBar
 var sprite: AnimatedSprite2D
@@ -15,7 +18,10 @@ var base_attributes = {}
 var current_attributes = {}
 
 var items: Array
-var abilities: Array
+
+var base_abilities: Array
+var current_abilities: Array
+
 var items_equipped: Array
 var status_effects: Array
 #var buffs: Dictionary
@@ -25,11 +31,12 @@ var grid_position: Vector2i
 var guardian: Character = null
 var mobility_changed: bool
 var movement_range = Vector2i(1, 1)
+var has_moved: bool = false
 
 var turn_count: int
 var player_id: int
 
-func init(id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
+func init(id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, energy: int, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
 	self.player_id = id
 	self.char_name = char_name
 	self.alliance = char_alliance
@@ -38,6 +45,8 @@ func init(id: int, char_name: String, char_attributes: Dictionary, char_alliance
 		flip_sprite()
 	self.health_bar = char_health
 	self.max_health = max_health
+	self.max_energy = energy
+	self.current_energy = max_energy
 	self.role = role
 	set_health()
 	set_attributes(char_attributes)
@@ -63,7 +72,8 @@ func set_abilities(abilities: Array) -> void:
 	var char_abilities: Array
 	for ability in abilities:
 		char_abilities.append(GameData.abilities[ability])
-	self.abilities = char_abilities
+	self.base_abilities = char_abilities
+	set_abilities_by_memory()
 
 func set_items(items: Array) -> void:
 	var char_items: Array
@@ -92,6 +102,10 @@ func take_damage(damage_event: Dictionary) -> int:
 
 func calculate_attack_dmg(selected_ability: Dictionary):
 	var damage: int = selected_ability.damage.value
+	match selected_ability.name:
+		"Trample":
+			if has_moved:
+				damage += 20
 	var damage_with_range = int(damage * randf_range(.9, 1.1))
 	var attribute_multiplier = resolve_attribute_bonuses(selected_ability)
 	if attribute_multiplier:
@@ -108,8 +122,6 @@ func resolve_attribute_bonuses(selected_ability: Dictionary):
 func resolve_effect(effect: Dictionary):
 	if effect.has("duration"):
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value, "duration": effect.duration})
-	else:
-		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
 		
 	resolve_status_effects()
 	
@@ -142,10 +154,6 @@ func get_guardian():
 	
 func flip_sprite() -> void:
 	sprite.flip_h = true
-	
-#func populate_buffs_array() -> void:
-	#for i in items_equipped:
-		#buffs[i.effect_type] = i.multiplier
 		
 func use_action(cost: int) -> bool:
 	var next_points = action_points - cost
@@ -155,13 +163,23 @@ func use_action(cost: int) -> bool:
 		action_points = next_points
 		return true
 
+func use_energy(cost: int) -> bool:
+	var next_points = current_energy - cost
+	if next_points < 0:
+		return false
+	else:
+		current_energy = next_points
+		return true
+
 func start_turn():
-	turn_count = (turn_count + 1 % 5)
+	turn_count = (turn_count + 1 % 5) #move into enemy class?
 	if turn_count == 0:
 		turn_count = 1
-		
-	update_action_points()
+	has_moved = false
 	resolve_status_effects()
+	set_abilities_by_memory()
+	update_action_points()
+	update_energy()
 
 func end_turn():
 	mobility_changed = false
@@ -171,7 +189,7 @@ func end_turn():
 	
 func resolve_status_effects() -> void:
 	current_attributes = base_attributes.duplicate(true)
-	
+
 	for status in status_effects:
 		if status.type == Data.EffectType.ATTRIBUTE:
 				current_attributes[status.property] += status.value
@@ -207,7 +225,7 @@ func decrement_status_effects():
 	for status in status_effects:
 		if status.type == Data.EffectType.AILMENT:
 			status.value -= 1
-		elif status.has("duration"):
+		elif status.duration > 0:
 			status.duration -= 1
 	resolve_status_effects()
 	
@@ -238,6 +256,25 @@ func update_action_points() -> void:
 		else: 
 			action_points = next_points
 
+func update_energy() -> void:
+	var base_modifier = .25
+	var battery_modifier = float(current_attributes[Data.Attributes.BATTERY] * 5)/100 + base_modifier
+	var threshold = int(max_energy * battery_modifier)
+		
+	if current_energy < threshold:
+		var recharge = 2 + current_attributes[Data.Attributes.BATTERY]
+		current_energy += recharge
+	
+		if current_energy > threshold:
+			current_energy = threshold
+
+func set_abilities_by_memory() -> void:
+	var memory = current_attributes[Data.Attributes.MEMORY]
+	current_abilities.clear()
+	for i in range(2 + memory):
+		if i <= base_abilities.size() - 1:
+			current_abilities.append(base_abilities[i])
+
 func update_status(next_effect: Dictionary) -> void:
 	var status_exists: bool = false
 	for status in status_effects:
@@ -246,65 +283,7 @@ func update_status(next_effect: Dictionary) -> void:
 			status_exists = true
 	if !status_exists:
 		status_effects.append(next_effect)
-				
-func print_stats():
-	if alliance == Data.Alliance.HERO:
-		for attribute in current_attributes:
-			match attribute:
-				Data.Attributes.STRENGTH:
-					print("Strength: ", current_attributes[attribute])
-				Data.Attributes.ARMOR:
-					print("Armor: ", current_attributes[attribute])
-				Data.Attributes.SHIELDING:
-					print("Shielding: ", current_attributes[attribute])
-				Data.Attributes.FLUX:
-					print("Flux: ", current_attributes[attribute])
-				Data.Attributes.MOBILITY:
-					print("Mobility: ", current_attributes[attribute])
-				Data.Attributes.OPTICS:
-					print("Optics: ", current_attributes[attribute])
-				Data.Attributes.MEMORY:
-					print("Memory: ", current_attributes[attribute])
-				Data.Attributes.BATTERY:
-					print("Battery: ", current_attributes[attribute])
-					
-		print(char_name, " current status effects: ")
-		for status in status_effects:
-			match status.type:
-				Data.EffectType.AILMENT:
-					print("Ailment:")
-					match status.property:
-						Data.Ailments.ACIDIZED:
-							print("acidized for ", status.value)
-						Data.Ailments.BLANCHED:
-							print("blanched for ", status.value)
-						Data.Ailments.OVERHEATED:
-							print("overheated for ", status.value)
-						Data.Ailments.CONCUSSED:
-							print("concussed for ", status.value)
-				Data.EffectType.ATTRIBUTE:
-					match status.property:
-						Data.Attributes.ARMOR:
-							print("armor for ", status.value)
-						Data.Attributes.SHIELDING:
-							print("shielding ", status.value)
-						Data.Attributes.STRENGTH:
-							print("strength for ", status.value)
-						Data.Attributes.FLUX:
-							print("flux for ", status.value)
-						Data.Attributes.OPTICS:
-							print("optics for ", status.value)
-						Data.Attributes.MEMORY:
-							print("memory for ", status.value)
-						Data.Attributes.MOBILITY:
-							print("mobility for ", status.value)
-						Data.Attributes.BATTERY:
-							print("battery for ", status.value)
-				Data.EffectType.RESTORE:
-					match status.property:
-						Data.SpecialStat.AP:
-							print("AP for ", status.value)
-						Data.SpecialStat.ENERGY:
-							print("Energy for ", status.value)
-						Data.SpecialStat.AILMENTS:
-							print("All ailments for ", status.value)
+
+enum Status {
+	ATTRIBUTE
+}

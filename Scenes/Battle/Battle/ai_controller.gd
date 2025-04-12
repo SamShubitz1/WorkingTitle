@@ -2,7 +2,7 @@ extends Node
 
 func build_turn(enemy: Character, players: Array) -> Array: #selects an ability based off calculated priorities, then uses it to build an enemy turn
 	var enemy_turn: Array
-	var current_abilities = enemy.abilities
+	var current_abilities = enemy.current_abilities
 	var current_ability: Dictionary
 	
 	for i in range(current_abilities.size()):
@@ -11,7 +11,7 @@ func build_turn(enemy: Character, players: Array) -> Array: #selects an ability 
 		if !enemy_turn.is_empty():
 			break
 		else: #if a valid turn is not found, selected ability is filtered out and we try again until we run out of abilities 
-			current_abilities = enemy.abilities.filter(func(a): return a.name != current_ability.name)
+			current_abilities = enemy.current_abilities.filter(func(a): return a.name != current_ability.name)
 	
 	if enemy_turn.is_empty(): #if valid turn is not found, we choose a target based off calculated priorities and move towards it
 		var target = get_priority_target(players, current_ability)

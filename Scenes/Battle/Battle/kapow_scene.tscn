@@ -419,38 +419,6 @@ region = Rect2(224, 0, 32, 32)
 atlas = ExtResource("8_gll17")
 region = Rect2(256, 0, 32, 32)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_u0kek"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tkbap"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_keijf"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m5g3r"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(96, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3hjn1"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(128, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kr2qb"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(160, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_w4cy6"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(192, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lovuw"]
-atlas = ExtResource("7_hqgpr")
-region = Rect2(224, 0, 32, 32)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_1ymys"]
 atlas = ExtResource("6_gql55")
 region = Rect2(0, 0, 32, 32)
@@ -514,6 +482,38 @@ region = Rect2(576, 0, 96, 96)
 [sub_resource type="AtlasTexture" id="AtlasTexture_bj3wd"]
 atlas = ExtResource("15_tpx7y")
 region = Rect2(672, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u0kek"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tkbap"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_keijf"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m5g3r"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3hjn1"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kr2qb"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w4cy6"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lovuw"]
+atlas = ExtResource("7_hqgpr")
+region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0poom"]
 atlas = ExtResource("7_l0oxw")
@@ -943,35 +943,6 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_u0kek")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tkbap")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_keijf")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m5g3r")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_3hjn1")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kr2qb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_w4cy6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lovuw")
-}],
-"loop": false,
-"name": &"RammingStrike",
-"speed": 10.0
-}, {
-"frames": [{
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_1ymys")
 }, {
 "duration": 1.0,
@@ -1026,6 +997,35 @@ animations = [{
 }],
 "loop": true,
 "name": &"ScreenFlash",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u0kek")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tkbap")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_keijf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m5g3r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3hjn1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kr2qb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w4cy6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lovuw")
+}],
+"loop": false,
+"name": &"Trample",
 "speed": 10.0
 }, {
 "frames": [{
@@ -1093,6 +1093,5 @@ animations = [{
 [node name="KapowSprite" type="AnimatedSprite2D"]
 z_index = 4
 sprite_frames = SubResource("SpriteFrames_g16yy")
-animation = &"ScreenFlash"
-frame_progress = 0.873412
+animation = &"Trample"
 script = ExtResource("8_eb3ju")

@@ -1,6 +1,6 @@
 extends BaseCursor
 
-var options_offset = Vector2i(95, 520)
+var options_offset = Vector2i(100, 520)
 var items_offset = Vector2i(500, 535)
 var abilities_offset = Vector2i(520, 535)
 var targets_offset = Vector2i(240, 90)
