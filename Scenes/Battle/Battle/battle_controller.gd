@@ -12,7 +12,6 @@ extends Node2D
 @onready var items_node = $"../BattleMenu/ItemsMenu"
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
-
 var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
 var mage_scene = preload("res://Scenes/Battle/Characters/Mage/mage.tscn")
@@ -126,8 +125,7 @@ func handle_ability(event: Dictionary) -> void:
 		event.target.resolve_effect(event.effect)
 		play_dialog(event.target.char_name + " " + event.effect.dialog + "!", true)
 		
-		if event.has("effect_animation"): #placeholder logic
-			
+		if event.has("effect_animation"):
 			var position: Vector2i
 			if event.effect_animation.origin == Data.AnimOrigin.OTHER:
 				position = event.target.position
@@ -193,12 +191,12 @@ func update_dialog_queue() -> void:
 		battle_log = battle_log.slice(1)
 
 func on_use_ability(target_cells: Array) -> void:
-	var cost = selected_ability.action_cost
 	var energy_success = current_player.use_energy(selected_ability.energy_cost)
 	if !energy_success:
 		prompt_action_energy_insufficient()
 		return
 	update_energy_display()
+	var cost = selected_ability.action_cost
 	var ap_success = current_player.use_action(cost)
 	if !ap_success:
 		prompt_action_points_insufficient()
@@ -253,7 +251,7 @@ func prompt_select_target(ability_name: String) -> Dictionary:
 	selected_ability = hero_ability
 	play_dialog("Select a target!", false)
 	if hero_ability.shape == Data.AbilityShape.MELEE: #for melee attacks, battle controller passes valid targets to battle menu
-		target_cells = get_melee_targets()
+		target_cells = battle_grid.get_melee_targets(Data.Alliance.HERO)
 	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range, "origin": current_player.grid_position, "target_cells": target_cells}
 
 func prompt_select_space() -> void:
@@ -376,7 +374,7 @@ func on_target_death(target: Character) -> void:
 				
 	battle_grid.current_grid.erase(target.grid_position)
 	players = players.filter(func(p): return p.player_id != target.player_id)
-	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.char_name != target.char_name || e.has("target") && e.target.player_id != target.player_id) # make sure this works
+	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.player_id != target.player_id || e.has("target") && e.target.player_id != target.player_id) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.character.player_id != target.player_id)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
@@ -413,17 +411,6 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 			is_valid_target = true
 			
 	return is_valid_target
-	
-func get_melee_targets() -> Array:
-	var occupied_cells = battle_grid.current_grid.keys()
-	var target_cells: Array
-	for y in range(4): #hard coded for now
-		for x in range(4, 8):
-			var current_cell = Vector2i(x, y)
-			if current_cell in occupied_cells:
-				target_cells.append(current_cell)
-				break
-	return target_cells
 		
 func get_players() -> void:
 	var positions = get_enemies_by_position()
@@ -433,10 +420,8 @@ func get_players() -> void:
 	
 	var mage = build_character("mage", Data.Alliance.HERO, Vector2i(3,1))
 	players.append(mage)
-	
 	var mandrake = build_character("mandrake", Data.Alliance.HERO, Vector2i(2,2))
 	players.append(mandrake)
-	
 	var pilypile = build_character("pilypile", Data.Alliance.HERO, Vector2i(2,0))
 	players.append(pilypile)
 	
@@ -455,7 +440,7 @@ func get_enemies_by_position():
 func select_enemies():
 	var enemy_pool = ["runt", "pilypile", "norman", "thumper", "mandrake"]
 	var selected_enemies: Array
-	var number_of_enemies = randi_range(1, 1)
+	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
 		var enemy_index = randi() % (enemy_pool.size() - 1)
 		selected_enemies.append(enemy_pool[enemy_index])
@@ -485,9 +470,8 @@ func set_turn_order() -> void:
 	var positions: Array
 	for player in players:
 		var position_value = 100 / (float(player.current_attributes[Data.Attributes.MOBILITY] + 10))
-		for i in range(20):
+		for i in range(1, 15):
 			positions.append({"character": player, "position_value": position_value * i})
-
 	positions.sort_custom(func(playerA, playerB): return playerA.position_value < playerB.position_value)
 
 	turn_queue.append_array(positions)
@@ -579,7 +563,7 @@ func build_character(name: String, char_alliance: Data.Alliance, position: Vecto
 		"runt":
 			var runt = runt_scene.instantiate()
 			var runt_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}
-			var runt_abilities = ["Crush"]
+			var runt_abilities = ["Crush", "Zap", "Process Crunch",]
 			var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
 			runt.init(player_id, "Runt", runt_attributes, char_alliance, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 100, 320, runt_abilities, position, Data.MachineRole.NONE, runt_items) # init props will be accessed from somewhere
 			add_child(runt)
@@ -598,7 +582,7 @@ func build_character(name: String, char_alliance: Data.Alliance, position: Vecto
 		"norman":
 			var norman = norman_scene.instantiate()
 			var norman_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}
-			var norman_abilities = ["Crush"]
+			var norman_abilities = ["Crush", "Trample", "Burst Rifle"]
 			norman.init(player_id, "Norman", norman_attributes, char_alliance, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 100, 320, norman_abilities, position, Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
 			add_child(norman)
 			set_position_by_grid_coords(norman)
@@ -615,7 +599,7 @@ func build_character(name: String, char_alliance: Data.Alliance, position: Vecto
 			return mandrake
 		"thumper":
 			var thumper = thumper_scene.instantiate()
-			var thumper_abilities = ["Clobber"]
+			var thumper_abilities = ["Clobber", "Heat Ray", "Bulk Inversion"]
 			var thumper_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}
 			thumper.init(player_id, "Thumper", thumper_attributes, char_alliance, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 100, 300, thumper_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 			add_child(thumper)

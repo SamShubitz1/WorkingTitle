@@ -44,3 +44,20 @@ func check_valid_targets(target_cells: Array, target_type: Data.TargetType, chec
 			is_valid_target = true
 			
 	return is_valid_target
+
+func get_melee_targets(alliance) -> Array:
+	var x_range
+	if alliance == Data.Alliance.HERO:
+		x_range = Vector2i(4,8)
+	elif alliance == Data.Alliance.ENEMY:
+		x_range = Vector2i(0,4)
+		
+	var occupied_cells = current_grid.keys()
+	var target_cells: Array
+	for y in range(4): #hard coded for now
+		for x in range(x_range.x, x_range.y):
+			var current_cell = Vector2i(x, y)
+			if current_cell in occupied_cells:
+				target_cells.append(current_cell)
+				break
+	return target_cells

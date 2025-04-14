@@ -1,9 +1,9 @@
 extends Node2D
 
-@onready var Player: PlayerClass = $MyPlayer
-@onready var Map_Controller = $"../MapController"
-@onready var Game_Controller = get_tree().current_scene
-@onready var Player_Camera = Player.Player_Camera
+@onready var player: PlayerClass = $MyPlayer
+@onready var map_controller = $"../MapController"
+@onready var game_controller = get_tree().current_scene
+@onready var player_camera = player.player_camera
 
 @export var DEBUG_PLAYER: bool = true
 
@@ -13,26 +13,26 @@ var can_action = false
 func _ready() -> void:
 	can_action = false
 	# get updated reference for grid location
-	Player.grid_position = Map_Controller.point_to_grid(Player.position)
-	Player.Animation_Object.play("idle_down")
+	player.grid_position = map_controller.point_to_grid(player.position)
+	player.animation_object.play("idle_down")
 
-	# load player Player.position from preference file
+	# load player player.position from preference file
 	load_data()
-	Player.position = Map_Controller.grid_to_point(Player.Initial_Position_Override)
-	Player.set_grid_position(Player.Initial_Position_Override)
+	player.position = map_controller.grid_to_point(player.initial_position_override)
+	player.set_grid_position(player.initial_position_override)
 	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	#DEBUG hotkey for info print to console
-	if (DEBUG_PLAYER and Input.is_action_just_pressed("testbutton")):
-		print_player_info()
+	#if (DEBUG_PLAYER and Input.is_action_just_pressed("testbutton")):
+		#print_player_info()
 
 	process_player_movement(delta)
 	process_player_inputs()
 		# set_next_move(dir)
-		# Player.is_moving
+		# player.is_moving
 	if (not can_action):
 		can_action = true
 	pass
@@ -42,82 +42,82 @@ func _process(delta: float) -> void:
 #TODO possibly refactor for event / interrupt based input handling
 func process_player_inputs() -> void:
 	if Input.is_action_pressed("ui_up"):
-		set_next_move(Player.Direction.UP)
+		set_next_move(player.Direction.UP)
 	elif Input.is_action_pressed("ui_down"):
-		set_next_move(Player.Direction.DOWN)
+		set_next_move(player.Direction.DOWN)
 	elif Input.is_action_pressed("ui_left"):
-		set_next_move(Player.Direction.LEFT)
+		set_next_move(player.Direction.LEFT)
 	elif Input.is_action_pressed("ui_right"):
-		set_next_move(Player.Direction.RIGHT)
+		set_next_move(player.Direction.RIGHT)
 	elif Input.is_action_just_pressed("ui_accept"):
 		player_action_pressed()
 	return # end process_player_inputs()
 
 # set all values before process_player_movement() operates on incoming move command
 func set_next_move(dir: int) -> void:
-	if Player.is_moving:
+	if player.is_moving:
 		# already moving, exit this function
 		return
 
 	# set player direction
-	Player.current_direction = dir
+	player.current_direction = dir
 
 	# sets destination grid
 	match dir:
-		Player.Direction.UP:
-			Player.dest_grid.y = Player.grid_position.y - 1
-		Player.Direction.DOWN:
-			Player.dest_grid.y = Player.grid_position.y + 1
-		Player.Direction.LEFT:
-			Player.dest_grid.x = Player.grid_position.x - 1
-		Player.Direction.RIGHT:
-			Player.dest_grid.x = Player.grid_position.x + 1
+		player.Direction.UP:
+			player.dest_grid.y = player.grid_position.y - 1
+		player.Direction.DOWN:
+			player.dest_grid.y = player.grid_position.y + 1
+		player.Direction.LEFT:
+			player.dest_grid.x = player.grid_position.x - 1
+		player.Direction.RIGHT:
+			player.dest_grid.x = player.grid_position.x + 1
 		_:
 			#TODO catch error for bad input value on dir
 			print_debug("ERROR: Bad direction input given to player on set_next_move(dir)")
 
 	# set player animation based on direction
-	set_player_animation(Player.current_direction, false)
+	set_player_animation(player.current_direction, false)
 
 	# check if next move is valid
-	var tile_collision_check = Map_Controller.check_grid_for_collider(Player.dest_grid)
-	var object_collision_check = Map_Controller.get_object_at_coords(Player.dest_grid)
+	var tile_collision_check = map_controller.check_grid_for_collider(player.dest_grid)
+	var object_collision_check = map_controller.get_object_at_coords(player.dest_grid)
 	if (tile_collision_check or object_collision_check):
 		# collider found, reset move state and values, and exit early
-		if (DEBUG_PLAYER): print_debug("Player collision at cell: " + str(Player.dest_grid))
-		var collided_object = Map_Controller.get_object_at_coords(Player.dest_grid)
+		if (DEBUG_PLAYER): print_debug("player collision at cell: " + str(player.dest_grid))
+		var collided_object = map_controller.get_object_at_coords(player.dest_grid)
 		if (DEBUG_PLAYER): print_debug("Collided with: " + str(collided_object))
-		Player.is_moving = false
-		Player.dest_grid = Player.grid_position
+		player.is_moving = false
+		player.dest_grid = player.grid_position
 		check_move_complete()
 		return # collider found, return early to stop moving
 
 	# set player as moving, do not process new movements until this move completes
-	Player.is_moving = true
+	player.is_moving = true
 	return
 
 # move player
 func process_player_movement(_delta) -> void:
-	if not Player.is_moving:
+	if not player.is_moving:
 		# no move command to operate on, exit
 		return
 
-	# move player object by Player.speed value
-	match Player.current_direction:
-		Player.Direction.UP:
-			Player.position.y -= Player.speed * _delta
-		Player.Direction.DOWN:
-			Player.position.y += Player.speed * _delta
-		Player.Direction.LEFT:
-			Player.position.x -= Player.speed * _delta
-		Player.Direction.RIGHT:
-			Player.position.x += Player.speed * _delta
+	# move player object by player.speed value
+	match player.current_direction:
+		player.Direction.UP:
+			player.position.y -= player.speed * _delta
+		player.Direction.DOWN:
+			player.position.y += player.speed * _delta
+		player.Direction.LEFT:
+			player.position.x -= player.speed * _delta
+		player.Direction.RIGHT:
+			player.position.x += player.speed * _delta
 		_:
 			#TODO catch error for bad player dir
 			print_debug("ERROR: Bad direction on player process_player_movement()")
 
 	# update player grid coords reference
-	Player.grid_position = Map_Controller.point_to_grid(Player.position, Player.image_offset_px)
+	player.grid_position = map_controller.point_to_grid(player.position, player.image_offset_px)
 	# check if at destination
 	check_move_complete()
 	return # end process_player_movement()
@@ -126,21 +126,21 @@ func process_player_movement(_delta) -> void:
 func check_move_complete() -> void:
 	var move_finished: bool = false # local/temp var for tracking move state
 
-	match Player.current_direction:
-		Player.Direction.UP:
-			if (Player.position.y <= ((Player.dest_grid.y * Map_Controller.GRID_CELL_SIZE_PX) + Player.image_offset_px.y)):
+	match player.current_direction:
+		player.Direction.UP:
+			if (player.position.y <= ((player.dest_grid.y * map_controller.GRID_CELL_SIZE_PX) + player.image_offset_px.y)):
 				# AT UP DEST
 				move_finished = true
-		Player.Direction.DOWN:
-			if (Player.position.y >= ((Player.dest_grid.y * Map_Controller.GRID_CELL_SIZE_PX) + Player.image_offset_px.y)):
+		player.Direction.DOWN:
+			if (player.position.y >= ((player.dest_grid.y * map_controller.GRID_CELL_SIZE_PX) + player.image_offset_px.y)):
 				# AT DOWN DEST
 				move_finished = true
-		Player.Direction.LEFT:
-			if (Player.position.x <= ((Player.dest_grid.x * Map_Controller.GRID_CELL_SIZE_PX) + Player.image_offset_px.x)):
+		player.Direction.LEFT:
+			if (player.position.x <= ((player.dest_grid.x * map_controller.GRID_CELL_SIZE_PX) + player.image_offset_px.x)):
 				# AT LEFT DEST
 				move_finished = true
-		Player.Direction.RIGHT:
-			if (Player.position.x >= ((Player.dest_grid.x * Map_Controller.GRID_CELL_SIZE_PX) + Player.image_offset_px.x)):
+		player.Direction.RIGHT:
+			if (player.position.x >= ((player.dest_grid.x * map_controller.GRID_CELL_SIZE_PX) + player.image_offset_px.x)):
 				# AT RIGHT DEST
 				move_finished = true
 		_:
@@ -150,14 +150,14 @@ func check_move_complete() -> void:
 	if (move_finished):
 		# set player idle animation based on direction
 		#print_debug("setting player to idle")
-		set_player_animation(Player.current_direction, true)
+		set_player_animation(player.current_direction, true)
 
 	if (move_finished):
-		Player.is_moving = false
-		# force player Player.position to dest point
-		Player.position = Map_Controller.grid_to_point(Player.dest_grid, Player.image_offset_px)
+		player.is_moving = false
+		# force player player.position to dest point
+		player.position = map_controller.grid_to_point(player.dest_grid, player.image_offset_px)
 		# update reference to player grid
-		Player.grid_position = Map_Controller.point_to_grid(Player.position, Player.image_offset_px)
+		player.grid_position = map_controller.point_to_grid(player.position, player.image_offset_px)
 
 	return
 
@@ -167,25 +167,25 @@ func player_action_pressed() -> void:
 	if (not can_action):
 		return
 	# get action coords / tilespot in front of player in direction facing
-	var action_coords = Player.grid_position
-	match Player.current_direction:
-		Player.Direction.UP:
+	var action_coords = player.grid_position
+	match player.current_direction:
+		player.Direction.UP:
 			action_coords.y -= 1
-		Player.Direction.DOWN:
+		player.Direction.DOWN:
 			action_coords.y += 1
-		Player.Direction.LEFT:
+		player.Direction.LEFT:
 			action_coords.x -= 1
-		Player.Direction.RIGHT:
+		player.Direction.RIGHT:
 			action_coords.x += 1
 
 	print("player obj id: " + str(self))
 	# get tile info
-	var tile_report = Map_Controller.get_world_tile_report(action_coords)
+	var tile_report = map_controller.get_world_tile_report(action_coords)
 	print_debug("action_button: " + str(tile_report))
 
 	# get object from map-object-collection
-	var object = Map_Controller.get_object_at_coords(action_coords)
-	var actioned_tile = Map_Controller.get_tile_at_grid_coords(action_coords)
+	var object = map_controller.get_object_at_coords(action_coords)
+	var actioned_tile = map_controller.get_tile_at_grid_coords(action_coords)
 	if(object == null and actioned_tile == null):
 		return
 
@@ -195,8 +195,8 @@ func player_action_pressed() -> void:
 			if (object.battle_ready):
 				enter_battle_scene(object)
 		elif (object is BaseDoor):
-			print("PlayerController - Door_Destination: " + str(object.Door_Destination))
-			Game_Controller.enter_door(object)
+			print("playerController - Door_Destination: " + str(object.Door_Destination))
+			game_controller.enter_door(object)
 		else:
 			print("unknown object")
 	return
@@ -205,77 +205,77 @@ func player_action_pressed() -> void:
 # begin battle scene
 func enter_battle_scene(object: Node) -> void:
 	save_data()
-	Game_Controller.switch_to_battle_scene()
+	game_controller.switch_to_battle_scene()
 	return
 
 # set player animation based on direction
 func set_player_animation(dir: int, idle: bool) -> void:
 	match dir:
-		Player.Direction.UP when idle:
-			Player.Animation_Object.play("idle_up")
-		Player.Direction.UP when not idle:
-			Player.Animation_Object.play("walk_up")
-		Player.Direction.DOWN when idle:
-			Player.Animation_Object.play("idle_down")
-		Player.Direction.DOWN when not idle:
-			Player.Animation_Object.play("walk_down")
-		Player.Direction.LEFT when idle:
-			Player.Animation_Object.play("idle_side")
-			Player.Animation_Object.flip_h = true
-		Player.Direction.LEFT when not idle:
-			Player.Animation_Object.play("walk_side")
-			Player.Animation_Object.flip_h = true
-		Player.Direction.RIGHT when idle:
-			Player.Animation_Object.play("idle_side")
-			Player.Animation_Object.flip_h = false
-		Player.Direction.RIGHT when not idle:
-			Player.Animation_Object.play("walk_side")
-			Player.Animation_Object.flip_h = false
+		player.Direction.UP when idle:
+			player.animation_object.play("idle_up")
+		player.Direction.UP when not idle:
+			player.animation_object.play("walk_up")
+		player.Direction.DOWN when idle:
+			player.animation_object.play("idle_down")
+		player.Direction.DOWN when not idle:
+			player.animation_object.play("walk_down")
+		player.Direction.LEFT when idle:
+			player.animation_object.play("idle_side")
+			player.animation_object.flip_h = true
+		player.Direction.LEFT when not idle:
+			player.animation_object.play("walk_side")
+			player.animation_object.flip_h = true
+		player.Direction.RIGHT when idle:
+			player.animation_object.play("idle_side")
+			player.animation_object.flip_h = false
+		player.Direction.RIGHT when not idle:
+			player.animation_object.play("walk_side")
+			player.animation_object.flip_h = false
 	return
 
-# set player Player.position directly and update values
+# set player player.position directly and update values
 func set_player_position(pos: Vector2i, scope: String) -> void:
 	match scope:
 		"grid":
-			var newPos = Map_Controller.grid_to_point(pos, Player.image_offset_px)
-			Player.position = newPos
-			Player.grid_position = pos
-			Player.dest_grid = pos
-			Map_Controller.remove_object_from_map_collection(self)
-			#Map_Controller.set_object_at_coords(self, pos)
+			var newPos = map_controller.grid_to_point(pos, player.image_offset_px)
+			player.position = newPos
+			player.grid_position = pos
+			player.dest_grid = pos
+			map_controller.remove_object_from_map_collection(self)
+			#map_controller.set_object_at_coords(self, pos)
 	return
 
 func _exit_tree() -> void:
-	print("Player_controller is about to die")
+	print("player_controller is about to die")
 	return
 
 # set player direction
 func set_player_direction(dir: int, idle: bool = true) -> void:
-	Player.current_direction = dir
+	player.current_direction = dir
 	print("dir: " + str(dir))
-	print("player dir: " + str(Player.current_direction))
+	print("player dir: " + str(player.current_direction))
 	match dir:
-		Player.Direction.UP when idle:
-			Player.Animation_Object.play("idle_up")
-		Player.Direction.DOWN when idle:
-			Player.Animation_Object.play("idle_down")
-		Player.Direction.LEFT when idle:
-			Player.Animation_Object.play("idle_side")
-			Player.Animation_Object.flip_h = true
-		Player.Direction.RIGHT when idle:
-			Player.Animation_Object.play("idle_side")
-			Player.Animation_Object.flip_h = false
+		player.Direction.UP when idle:
+			player.animation_object.play("idle_up")
+		player.Direction.DOWN when idle:
+			player.animation_object.play("idle_down")
+		player.Direction.LEFT when idle:
+			player.animation_object.play("idle_side")
+			player.animation_object.flip_h = true
+		player.Direction.RIGHT when idle:
+			player.animation_object.play("idle_side")
+			player.animation_object.flip_h = false
 	return
 
 #DEBUG player debug print to console
 func print_player_info() -> void:
 	var player_info_report = {
-		"Player.is_moving": Player.is_moving,
-		"Player.current_direction": Player.Direction.keys()[Player.current_direction],
-		"player_world_coords": Player.position,
-		"Player.dest_grid_coords": Player.dest_grid,
-		"Player.grid_position_cords": Player.grid_position,
-		"tile_colliders_on_player_point": Map_Controller.check_grid_for_collider(Player.grid_position)
+		"player.is_moving": player.is_moving,
+		"player.current_direction": player.Direction.keys()[player.current_direction],
+		"player_world_coords": player.position,
+		"player.dest_grid_coords": player.dest_grid,
+		"player.grid_position_cords": player.grid_position,
+		"tile_colliders_on_player_point": map_controller.check_grid_for_collider(player.grid_position)
 	}
 	print_debug("player_info: " + str(player_info_report))
 	return
@@ -299,14 +299,14 @@ func save_data() -> bool:
 	if err != OK:
 		# file not found, creating new
 		print_debug("Creating user preference file...")
-		config.set_value("player", "grid_position", Player.grid_position)
-		config.set_value("player", "direction", Player.current_direction)
+		config.set_value("player", "grid_position", player.grid_position)
+		config.set_value("player", "direction", player.current_direction)
 		result = config.save(PREFERENCE_FILE)
 	else:
 		# existing file found, updating
-		print_debug("Updating user preference file: " + str(Player.grid_position))
-		config.set_value("player", "grid_position", Player.grid_position)
-		config.set_value("player", "direction", Player.current_direction)
+		print_debug("Updating user preference file: " + str(player.grid_position))
+		config.set_value("player", "grid_position", player.grid_position)
+		config.set_value("player", "direction", player.current_direction)
 		result = config.save(PREFERENCE_FILE)
 
 	return result
@@ -320,8 +320,8 @@ func load_data() -> bool:
 	if err != OK:
 		# file not found, creating new
 		print_debug("Creating user preference file...")
-		config.set_value("player", "grid_position", Player.grid_position)
-		config.set_value("player", "direction", Player.current_direction)
+		config.set_value("player", "grid_position", player.grid_position)
+		config.set_value("player", "direction", player.current_direction)
 		_result = config.save(PREFERENCE_FILE)
 	else:
 		# existing file found, reading it
@@ -329,6 +329,6 @@ func load_data() -> bool:
 		var loaded_direction = config.get_value("player", "direction")
 		set_player_position(loaded_grid_position, "grid")
 		set_player_direction(loaded_direction)
-		print_debug("loaded config: " + str(Player.grid_position))
+		print_debug("loaded config: " + str(player.grid_position))
 
 	return true

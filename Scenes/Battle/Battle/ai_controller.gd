@@ -111,6 +111,7 @@ func get_priority_survey(surveys, targets_with_priorities) -> Dictionary: #selec
 	for survey in surveys: 
 		var survey_with_priority = {"object": survey, "priority": 0}
 		survey_with_priority.priority += survey.targets.size() * 10
+		
 		for pt in targets_with_priorities: #we find the target in the survey with the highest priority and add it to the survey's own priority
 			if pt.object in survey.targets:
 				var max_priority
@@ -119,6 +120,8 @@ func get_priority_survey(surveys, targets_with_priorities) -> Dictionary: #selec
 						max_priority = pt.priority
 					elif pt.priority > max_priority:
 						max_priority = pt.priority
+
+				survey_with_priority.priority += max_priority
 		
 		surveys_with_priorities.append(survey_with_priority)
 					
@@ -181,7 +184,8 @@ func get_valid_cells(origin: Vector2i, ability: Dictionary, targets: Array) -> A
 	var valid_cells: Array
 	
 	if ability.shape == Data.AbilityShape.LINE:
-		valid_cells.append(Vector2i(7, origin.y)) #hard coded
+		valid_cells.append_array([Vector2i(7, origin.y),Vector2i(7, origin.y),Vector2i(7, origin.y - 1)])
+		 #hard coded
 		return valid_cells
 	elif ability.shape == Data.AbilityShape.MELEE:
 		valid_cells = get_melee_targets(targets)
