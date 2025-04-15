@@ -7,8 +7,6 @@ extends Node2D
 
 @export var DEBUG_PLAYER: bool = true
 
-var can_action = false
-
 func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
 	player.animation_object.play("idle_down")
@@ -23,8 +21,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	process_player_inputs()
 	process_player_movement(delta)
-	if not can_action:
-		can_action = true
 
 func process_player_movement(delta) -> void:
 	if !player.is_moving:
@@ -87,7 +83,7 @@ func check_move_complete():
 
 # player action button, spacebar
 func player_action_pressed() -> void:
-	if !can_action:
+	if player.is_moving:
 		return
 	# get action coords / tilespot in front of player in direction facing
 	var action_coords = player.grid_position + player.current_direction

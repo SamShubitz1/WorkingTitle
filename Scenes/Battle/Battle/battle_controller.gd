@@ -291,6 +291,7 @@ func on_try_retreat() -> void:
 
 func perform_enemy_turn() -> void:
 	var enemy_turn = ai_controller.build_turn(current_player, players)
+	
 	for action in enemy_turn:
 		match action.type:
 			Data.EnemyAction.MOVE:
