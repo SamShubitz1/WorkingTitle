@@ -21,7 +21,7 @@ var pilypile_scene = preload("res://Scenes/Battle/Characters/Pilypile/pilypile.t
 
 var players: Array[Character]
 var current_player: Character
-var player_id = 0
+var battle_id = 0
 
 var battle_grid: BaseGrid = BaseGrid.new()
 
@@ -373,9 +373,9 @@ func on_target_death(target: Character) -> void:
 				player.set_guardian(null)
 				
 	battle_grid.current_grid.erase(target.grid_position)
-	players = players.filter(func(p): return p.player_id != target.player_id)
-	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.player_id != target.player_id || e.has("target") && e.target.player_id != target.player_id) # make sure this works
-	turn_queue = turn_queue.filter(func(c): return c.character.player_id != target.player_id)
+	players = players.filter(func(p): return p.battle_id != target.battle_id)
+	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.battle_id != target.battle_id || e.has("target") && e.target.battle_id != target.battle_id) # make sure this works
+	turn_queue = turn_queue.filter(func(c): return c.character.battle_id != target.battle_id)
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
 	
@@ -554,55 +554,55 @@ func build_character(name: String, char_alliance: Data.Alliance, position: Vecto
 			var mage_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}
 			var mage_abilities = ["Trample", "Screen Flash", "Zap", "Process Crunch", "Ignite", "Process Crunch"]
 			var mage_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-			mage.init(player_id, "Mage", mage_attributes, char_alliance, mage.get_node("CharSprite"), mage.get_node("CharHealth"), 100, 340, mage_abilities, position, Data.MachineRole.NONE, mage_items) # init props will be accessed from somewhere
+			mage.init(battle_id, "Mage", mage_attributes, char_alliance, mage.get_node("CharSprite"), mage.get_node("CharHealth"), 100, 340, mage_abilities, position, Data.MachineRole.NONE, mage_items) # init props will be accessed from somewhere
 			set_position_by_grid_coords(mage)
 			mage.is_player = true
 			add_child(mage)
-			player_id += 1
+			battle_id += 1
 			return mage
 		"runt":
 			var runt = runt_scene.instantiate()
 			var runt_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}
 			var runt_abilities = ["Crush", "Zap", "Process Crunch",]
 			var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-			runt.init(player_id, "Runt", runt_attributes, char_alliance, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 100, 320, runt_abilities, position, Data.MachineRole.NONE, runt_items) # init props will be accessed from somewhere
+			runt.init(battle_id, "Runt", runt_attributes, char_alliance, runt.get_node("CharSprite"), runt.get_node("CharHealth"), 100, 320, runt_abilities, position, Data.MachineRole.NONE, runt_items) # init props will be accessed from somewhere
 			add_child(runt)
 			set_position_by_grid_coords(runt)
-			player_id += 1
+			battle_id += 1
 			return runt
 		"pilypile":
 			var pilypile = pilypile_scene.instantiate()
 			var pilypile_abilities = ["Process Crunch", "Ignite", "Acid Cloud", "Contemplate"]
 			var pilypile_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 2, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
-			pilypile.init(player_id, "Pilypile", pilypile_attributes, char_alliance, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 100, 340, pilypile_abilities, position, Data.MachineRole.NONE, []) # init props will be accessed from somewhere
+			pilypile.init(battle_id, "Pilypile", pilypile_attributes, char_alliance, pilypile.get_node("CharSprite"), pilypile.get_node("CharHealth"), 100, 340, pilypile_abilities, position, Data.MachineRole.NONE, []) # init props will be accessed from somewhere
 			add_child(pilypile)
 			set_position_by_grid_coords(pilypile)
-			player_id += 1
+			battle_id += 1
 			return pilypile
 		"norman":
 			var norman = norman_scene.instantiate()
 			var norman_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}
 			var norman_abilities = ["Crush", "Trample", "Burst Rifle"]
-			norman.init(player_id, "Norman", norman_attributes, char_alliance, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 100, 320, norman_abilities, position, Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
+			norman.init(battle_id, "Norman", norman_attributes, char_alliance, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 100, 320, norman_abilities, position, Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
 			add_child(norman)
 			set_position_by_grid_coords(norman)
-			player_id += 1
+			battle_id += 1
 			return norman
 		"mandrake":
 			var mandrake = mandrake_scene.instantiate()
 			var mandrake_abilities = ["Process Crunch", "Power Strike", "Burst Rifle"]
 			var mandrake_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 3, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 3, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}
-			mandrake.init(player_id, "Mandrake", mandrake_attributes, char_alliance, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 100, 300, mandrake_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
+			mandrake.init(battle_id, "Mandrake", mandrake_attributes, char_alliance, mandrake.get_node("CharSprite"), mandrake.get_node("CharHealth"), 100, 300, mandrake_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 			add_child(mandrake)
 			set_position_by_grid_coords(mandrake)
-			player_id += 1
+			battle_id += 1
 			return mandrake
 		"thumper":
 			var thumper = thumper_scene.instantiate()
 			var thumper_abilities = ["Clobber", "Heat Ray", "Bulk Inversion"]
 			var thumper_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}
-			thumper.init(player_id, "Thumper", thumper_attributes, char_alliance, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 100, 300, thumper_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
+			thumper.init(battle_id, "Thumper", thumper_attributes, char_alliance, thumper.get_node("CharSprite"), thumper.get_node("CharHealth"), 100, 300, thumper_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
 			add_child(thumper)
 			set_position_by_grid_coords(thumper)
-			player_id += 1
+			battle_id += 1
 			return thumper

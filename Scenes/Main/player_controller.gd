@@ -17,7 +17,7 @@ func _ready() -> void:
 	if !success:
 		return
 		
-	player.position = map_controller.grid_to_point(player.initial_position_override) + player.image_offset_px
+	player.position = map_controller.grid_to_point(player.initial_position_override) + player.sprite_offset
 	player.set_grid_position(player.initial_position_override)
 
 func _process(delta: float) -> void:
@@ -62,10 +62,10 @@ func check_collision(direction: Vector2i) -> void:
 		set_player_animation(player.current_direction, true)
 		player.is_moving = false
 
-func check_move_complete():	
-	var dest_pos = map_controller.grid_to_point(player.grid_position + player.current_direction) + player.image_offset_px
-	var move_finished: bool
+func check_move_complete():
+	var dest_pos = map_controller.grid_to_point(player.grid_position + player.current_direction) + player.sprite_offset
 	
+	var move_finished: bool
 	var difference = dest_pos - player.position
 	match player.current_direction:
 		Vector2i.DOWN:
@@ -83,7 +83,7 @@ func check_move_complete():
 		player.is_moving = false
 		set_player_animation(player.current_direction, true)
 		player.position = dest_pos # force player player.position to dest point
-		player.grid_position = map_controller.point_to_grid(player.position, player.image_offset_px) # update reference to player grid
+		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset) # update reference to player grid
 
 # player action button, spacebar
 func player_action_pressed() -> void:
@@ -146,7 +146,7 @@ func set_player_animation(dir: Vector2i, idle: bool) -> void:
 func set_loaded_position(pos: Vector2i, scope: String) -> void:
 	match scope:
 		"grid":
-			var newPos = map_controller.grid_to_point(pos, player.image_offset_px)
+			var newPos = map_controller.grid_to_point(pos, player.sprite_offset)
 			player.position = newPos
 			player.grid_position = pos
 			map_controller.remove_object_from_map_collection(self)

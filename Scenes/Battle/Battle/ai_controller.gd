@@ -137,7 +137,7 @@ func get_targets_with_priorities(targets) -> Array: #returns a list of targets w
 		
 	return targets_with_priorities
 
-func get_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array: #surveys represent a particular spot on the grid selected by a particular ability and the targets in range at the spot, including targets that could be selected after one movement
+func get_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array: #surveys represent a particular spot on the grid selected by a particular ability and the targets in range at that spot, including targets that could be selected after one movement
 	var max_range = ability.range + Vector2i(1, 1)
 	var surveys: Array
 	var origin = enemy.grid_position
@@ -147,14 +147,14 @@ func get_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array
 	for cell in valid_cells:
 		var survey = {"ability": ability, "targets": [], "should_move": false, "selected_cell": Vector2i.ZERO}
 		var selected_cells = Utils.get_neighbor_coords(cell, ability.shape, Data.Alliance.ENEMY)
-		for target in targets: 
+		for target in targets:
 			if target.grid_position in selected_cells:
 				survey.selected_cell = Vector2i(cell)
 				survey.should_move = should_move(origin, target.grid_position, max_range)
 				survey.targets.append(target)
 		if !survey.targets.is_empty():
 			surveys.append(survey)
-#
+
 	return surveys
 
 func get_targets(players: Array[Character], ability: Dictionary) -> Array: #determines which players are valid targets
@@ -235,7 +235,7 @@ func move_is_valid(next_pos): #ensures the enemy doesn't move too far left, trac
 		return true
 	
 func should_move(origin: Vector2i, target_pos: Vector2i, max_range: Vector2i) -> bool: #used to determine if the enemy needs to move one space before target is in range
-	if (abs(origin.x - target_pos.x) == max_range.x || abs(origin.y - target_pos.y) == max_range.y) && max_range != Vector2i(1,1): #max_range being (1, 1) means ability range is (0, 0), edge case
+	if (abs(origin.x - target_pos.x) == max_range.x || abs(origin.y - target_pos.y) == max_range.y):
 		return true
 	return false
 	
@@ -261,8 +261,6 @@ func calculate_next_pos(selected_cell: Vector2i, current_pos: Vector2i, occupied
 	var up_right = Vector2i(current_pos.x + 1, current_pos.y + 1)
 	var down_left = Vector2i(current_pos.x - 1, current_pos.y - 1)
 	var down_right = Vector2i(current_pos.x + 1, current_pos.y - 1)
-
-
 
 	if selected_cell.x < current_pos.x:
 		if selected_cell.y < current_pos.y:
