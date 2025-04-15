@@ -5,23 +5,15 @@ extends CharacterBody2D
 @onready var player_camera = $OverworldCamera
 
 @export var DEBUG_PLAYER: bool = true
-@export var speed = 75
+@export var speed = 64
 @export var image_offset_px = Vector2i(8,8)
 @export var initial_position_override = Vector2i(12,3)
 
 var is_moving: bool = false
-var dest_grid = Vector2i(0,0)
+
 var grid_position = Vector2i(0,0)
 
-enum Direction {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-	NONE
-}
-#var current_direction: Direction = Direction.DOWN
-var current_direction = 3
+var current_direction = Vector2i(0,1)
 
 func get_grid_position() -> Vector2i:
 	return grid_position
@@ -30,10 +22,10 @@ func set_grid_position(grid_pos: Vector2i) -> void:
 	grid_position = grid_pos
 	return
 
-func get_direction() -> Direction:
+func get_direction() -> Vector2i:
 	return current_direction
 
-func set_direction(dir: Direction) -> void:
+func set_direction(dir: Vector2i) -> void:
 	current_direction = dir
 	return
 
