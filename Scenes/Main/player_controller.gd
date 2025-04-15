@@ -19,8 +19,8 @@ func _ready() -> void:
 	player.set_grid_position(player.initial_position_override)
 
 func _process(delta: float) -> void:
-	process_player_inputs()
-	process_player_movement(delta)
+	process_player_inputs() # gets input direction, checks for collision
+	process_player_movement(delta) # moves player, checks for complete move
 
 func process_player_movement(delta) -> void:
 	if !player.is_moving:
@@ -45,10 +45,10 @@ func process_player_inputs() -> void:
 	if input_direction != Vector2i.ZERO:
 		player.is_moving = true
 		player.current_direction = input_direction
-		check_collision(input_direction)
+		check_collision()
 
-func check_collision(direction: Vector2i) -> void:
-	var dest_coords = player.grid_position + direction
+func check_collision() -> void:
+	var dest_coords = player.grid_position + player.current_direction
 	set_player_animation(player.current_direction, false)
 
 	var tile_collision_check = map_controller.check_grid_for_collider(dest_coords)
@@ -113,28 +113,26 @@ func enter_battle_scene(object: Node) -> void:
 	save_data()
 	game_controller.switch_to_battle_scene()
 
-# set player animation based on direction
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
-	if idle:
-		if dir.y == -1:
+	match player.current_direction:
+		Vector2i.UP when idle:
 			player.animation_object.play("idle_up")
-		elif dir.y == 1:
+		Vector2i.DOWN when idle:
 			player.animation_object.play("idle_down")
-		elif dir.x == -1:
+		Vector2i.LEFT when idle:
 			player.animation_object.play("idle_side")
 			player.animation_object.flip_h = true
-		elif dir.x == 1:
+		Vector2i.RIGHT when idle:
 			player.animation_object.play("idle_side")
 			player.animation_object.flip_h = false
-	elif !idle:
-		if dir.y == -1:
+		Vector2i.UP:
 			player.animation_object.play("walk_up")
-		elif dir.y == 1:
+		Vector2i.DOWN:
 			player.animation_object.play("walk_down")
-		elif dir.x == -1:
+		Vector2i.LEFT:
 			player.animation_object.play("walk_side")
 			player.animation_object.flip_h = true
-		elif dir.x == 1:
+		Vector2i.RIGHT:
 			player.animation_object.play("walk_side")
 			player.animation_object.flip_h = false
 
@@ -142,8 +140,8 @@ func set_player_animation(dir: Vector2i, idle: bool) -> void:
 func set_loaded_position(pos: Vector2i, scope: String) -> void:
 	match scope:
 		"grid":
-			var newPos = map_controller.grid_to_point(pos, player.sprite_offset)
-			player.position = newPos
+			var new_pos = map_controller.grid_to_point(pos, player.sprite_offset)
+			player.position = new_pos
 			player.grid_position = pos
 			map_controller.remove_object_from_map_collection(self)
 			#map_controller.set_object_at_coords(self, pos)
