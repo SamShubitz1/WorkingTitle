@@ -29,8 +29,6 @@ func _process(delta: float) -> void:
 func process_player_movement(delta) -> void:
 	if !player.is_moving:
 		return
-
-	# move player object by player.speed value
 	player.position += player.speed * delta * player.current_direction
 	check_move_complete()
 	
@@ -50,13 +48,11 @@ func process_player_inputs() -> void:
 	
 	if input_direction != Vector2i.ZERO:
 		player.is_moving = true
-		set_next_move(input_direction)
+		player.current_direction = input_direction
+		check_collision(input_direction)
 
-# set all values before process_player_movement() operates on incoming move command
-func set_next_move(direction: Vector2i) -> void:
-	player.current_direction = direction
+func check_collision(direction: Vector2i) -> void:
 	var dest_coords = player.grid_position + direction
-
 	set_player_animation(player.current_direction, false)
 
 	var tile_collision_check = map_controller.check_grid_for_collider(dest_coords)
@@ -64,15 +60,13 @@ func set_next_move(direction: Vector2i) -> void:
 	
 	if tile_collision_check || object_collision_check:
 		set_player_animation(player.current_direction, true)
-		var collided_object = map_controller.get_object_at_coords(dest_coords) # not doing anything currently
-		
 		player.is_moving = false
 
 func check_move_complete():	
 	var dest_pos = map_controller.grid_to_point(player.grid_position + player.current_direction) + player.image_offset_px
 	var move_finished: bool
 	
-	var difference = Vector2(dest_pos) - player.position
+	var difference = dest_pos - player.position
 	match player.current_direction:
 		Vector2i.DOWN:
 			move_finished = difference.y <= 0
@@ -83,7 +77,7 @@ func check_move_complete():
 		Vector2i.LEFT:
 			move_finished = difference.x >= 0
 		_:
-			print("Invalid input direction in check_move_complete()")
+			print("Invalid input direction in player controller")
  
 	if move_finished:
 		player.is_moving = false

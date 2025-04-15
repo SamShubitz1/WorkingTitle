@@ -44,7 +44,7 @@ func point_to_grid(point_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0))
 func grid_to_point(grid_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0)) -> Vector2i:
 	var x = round((grid_coords.x * GRID_CELL_SIZE_PX) + img_offset.x)
 	var y = round((grid_coords.y * GRID_CELL_SIZE_PX) + img_offset.y)
-	return Vector2i(x,y)
+	return Vector2(x,y)
 
 # get collider count at grid coords
 func check_grid_for_collider(grid_coords: Vector2i) -> bool:
