@@ -41,7 +41,7 @@ func point_to_grid(point_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0))
 	return Vector2i(x,y)
 
 # translate from grid coords to world coords
-func grid_to_point(grid_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0)) -> Vector2i:
+func grid_to_point(grid_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0)) -> Vector2:
 	var x = round((grid_coords.x * GRID_CELL_SIZE_PX) + img_offset.x)
 	var y = round((grid_coords.y * GRID_CELL_SIZE_PX) + img_offset.y)
 	return Vector2(x,y)
