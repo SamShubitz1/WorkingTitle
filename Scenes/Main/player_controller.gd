@@ -17,7 +17,7 @@ func _ready() -> void:
 	if !success:
 		return
 		
-	player.position = map_controller.grid_to_point(player.initial_position_override)
+	player.position = map_controller.grid_to_point(player.initial_position_override) + player.image_offset_px
 	player.set_grid_position(player.initial_position_override)
 
 func _process(delta: float) -> void:
@@ -63,7 +63,6 @@ func set_next_move(direction: Vector2i) -> void:
 	var object_collision_check = map_controller.get_object_at_coords(dest_coords)
 	
 	if tile_collision_check || object_collision_check:
-		print(tile_collision_check)
 		set_player_animation(player.current_direction, true)
 		var collided_object = map_controller.get_object_at_coords(dest_coords) # not doing anything currently
 		
@@ -210,8 +209,6 @@ func load_data() -> bool:
 	var PREFERENCE_FILE : String = "user://preferences.cfg"
 	var config = ConfigFile.new()
 	var err = config.load(PREFERENCE_FILE)
-	config.set_value("player", "grid_position", Vector2i(10,10))
-	config.set_value("player", "direction", player.current_direction)
 	if err != OK:
 		# file not found, creating new
 		print_debug("Creating user preference file...")

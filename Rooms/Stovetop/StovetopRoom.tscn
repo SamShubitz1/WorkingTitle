@@ -194,4 +194,4 @@ Door_Destination = "res://Rooms/T1/T1Room.tscn"
 texture = ExtResource("3_4ur0x")
 
 [node name="Norman" parent="Dodads" instance=ExtResource("4_cbd18")]
-position = Vector2(184, 88)
+position = Vector2(176, 80)

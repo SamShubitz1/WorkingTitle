@@ -5,7 +5,7 @@ extends CharacterBody2D
 @onready var player_camera = $OverworldCamera
 
 @export var DEBUG_PLAYER: bool = true
-@export var speed = 64
+@export var speed = 60
 @export var image_offset_px = Vector2i(8,8)
 @export var initial_position_override = Vector2i(12,3)
 
