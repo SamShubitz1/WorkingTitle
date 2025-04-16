@@ -583,7 +583,7 @@ func build_character(name: String, char_alliance: Data.Alliance, position: Vecto
 		"norman":
 			var norman = norman_scene.instantiate()
 			var norman_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}
-			var norman_abilities = ["Crush", "Trample", "Burst Rifle"]
+			var norman_abilities = ["Screen Flash"]
 			norman.init(battle_id, "Norman", norman_attributes, char_alliance, norman.get_node("CharSprite"), norman.get_node("CharHealth"), 100, 320, norman_abilities, position, Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
 			add_child(norman)
 			set_position_by_grid_coords(norman)

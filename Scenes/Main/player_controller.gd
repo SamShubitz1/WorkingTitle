@@ -173,7 +173,7 @@ func print_action_object_report(object) -> void:
 # save player data to disk
 func save_data() -> bool:
 	var result = 0
-	var PREFERENCE_FILE : String = "user://preferences.cfg"
+	var PREFERENCE_FILE: String = "user://preferences.cfg"
 	var config = ConfigFile.new()
 	var err = config.load(PREFERENCE_FILE)
 	if err != OK:

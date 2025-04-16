@@ -150,7 +150,7 @@ func get_surveys(enemy: Character, targets: Array, ability: Dictionary) -> Array
 		for target in targets:
 			if target.grid_position in selected_cells:
 				survey.selected_cell = Vector2i(cell)
-				survey.should_move = should_move(origin, target.grid_position, max_range)
+				survey.should_move = should_move(origin, target.grid_position, max_range) && ability.shape != Data.AbilityShape.ALL
 				survey.targets.append(target)
 		if !survey.targets.is_empty():
 			surveys.append(survey)
@@ -183,16 +183,19 @@ func get_valid_cells(origin: Vector2i, ability: Dictionary, targets: Array) -> A
 	var max_range = ability.range + Vector2i(1, 1)
 	var valid_cells: Array
 	
-	if ability.shape == Data.AbilityShape.LINE:
-		valid_cells.append_array([Vector2i(7, origin.y),Vector2i(7, origin.y),Vector2i(7, origin.y - 1)])
-		 #hard coded
-		return valid_cells
-	elif ability.shape == Data.AbilityShape.MELEE:
-		valid_cells = get_melee_targets(targets)
-		return valid_cells
-	elif ability.range == Vector2i(0,0) && ability.target_type == Data.TargetType.HERO:
+	if ability.range == Vector2i.ZERO && ability.target_type == Data.TargetType.HERO:
 		return [origin]
-	
+		
+	match ability.shape:
+		Data.AbilityShape.LINE:
+			valid_cells.append_array([Vector2i(7, origin.y),Vector2i(7, origin.y),Vector2i(7, origin.y - 1)]) #hard coded
+			return valid_cells
+		Data.AbilityShape.MELEE:
+			valid_cells = get_melee_targets(targets)
+			return valid_cells
+		Data.AbilityShape.ALL:
+			return [origin]
+				
 	var valid_x_values: Array 
 	var x_range: Vector2i
 	if ability.target_type == Data.TargetType.ENEMY:
