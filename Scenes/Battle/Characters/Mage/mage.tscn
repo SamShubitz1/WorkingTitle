@@ -1,9 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://cr3t2sex466g6"]
+[gd_scene load_steps=16 format=3 uid="uid://cr3t2sex466g6"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ge1t4"]
 [ext_resource type="Texture2D" uid="uid://dluixngiwseb5" path="res://Scenes/Battle/Characters/Mage/Mage_Combat_Attack1.png" id="2_4dyix"]
 [ext_resource type="Script" path="res://player_animation.gd" id="3_ne4sa"]
 [ext_resource type="Texture2D" uid="uid://d07n848nosdmn" path="res://Scenes/Battle/Characters/Mage/Mage_Combat_Idle.png" id="3_oiqil"]
+[ext_resource type="AudioStream" uid="uid://dqoh787ogrkxm" path="res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA1.wav" id="5_fi0nc"]
+[ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="6_2ec51"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_orfo0"]
 atlas = ExtResource("2_4dyix")
@@ -103,3 +105,7 @@ step = 1.0
 value = 80.0
 rounded = true
 show_percentage = false
+
+[node name="CharSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_fi0nc")
+script = ExtResource("6_2ec51")

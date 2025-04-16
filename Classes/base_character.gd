@@ -10,7 +10,10 @@ var current_energy: int
 
 var is_player: bool = false
 var health_bar: ProgressBar
+
 var sprite: AnimatedSprite2D
+var sound: AudioStreamPlayer
+
 var action_points: int = 5
 var role: Data.MachineRole
 
@@ -36,11 +39,13 @@ var has_moved: bool = false
 var turn_count: int
 var battle_id: int
 
-func init(player_id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_health: ProgressBar, energy: int, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
+func init(player_id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_sound: AudioStreamPlayer, char_health: ProgressBar, energy: int, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
 	self.battle_id = player_id
 	self.char_name = char_name
 	self.alliance = char_alliance
 	self.sprite = char_sprite
+	self.sound = char_sound
+	
 	if alliance == Data.Alliance.ENEMY:
 		flip_sprite()
 	self.health_bar = char_health

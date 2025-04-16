@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://dk0vha0gj1182"]
+[gd_scene load_steps=15 format=3 uid="uid://dk0vha0gj1182"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_urc5j"]
 [ext_resource type="Texture2D" uid="uid://bmoapt7fd5rxa" path="res://Scenes/Battle/Characters/Norman/Norman_Combat_Attack1.png" id="2_0amh6"]
 [ext_resource type="Texture2D" uid="uid://qq7nfbn3rp2u" path="res://Scenes/Battle/Characters/Norman/Norman_Combat_Idle1.png" id="2_hcv4l"]
 [ext_resource type="Script" path="res://player_animation.gd" id="3_ee120"]
+[ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="5_ys5pm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tf1n8"]
 atlas = ExtResource("2_0amh6")
@@ -102,3 +103,6 @@ max_value = 80.0
 step = 1.0
 value = 80.0
 show_percentage = false
+
+[node name="CharSound" type="AudioStreamPlayer" parent="."]
+script = ExtResource("5_ys5pm")

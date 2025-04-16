@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://bvd2jl6prp014"]
+[gd_scene load_steps=15 format=3 uid="uid://bvd2jl6prp014"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ejhso"]
 [ext_resource type="Texture2D" uid="uid://bn6mmtm2885pj" path="res://Scenes/Battle/Characters/Mandrake/Mandrake_Combat_Attack1.png" id="2_xwr3v"]
 [ext_resource type="Texture2D" uid="uid://c788hft1xyydb" path="res://Scenes/Battle/Characters/Mandrake/Mandrake_Combat_Idle1.png" id="2_yao61"]
 [ext_resource type="Script" path="res://player_animation.gd" id="3_q8g1q"]
+[ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="5_47nuc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_n0wnp"]
 atlas = ExtResource("2_xwr3v")
@@ -91,3 +92,6 @@ max_value = 80.0
 value = 80.0
 show_percentage = false
 metadata/_edit_use_anchors_ = true
+
+[node name="CharSound" type="AudioStreamPlayer" parent="."]
+script = ExtResource("5_47nuc")

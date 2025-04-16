@@ -38,7 +38,7 @@ func process_player_inputs() -> void:
 		input_direction.x = int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left"))
 	if input_direction.x == 0:
 		input_direction.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
-		
+
 	if Input.is_action_just_pressed("ui_accept"):
 		player_action_pressed()
 	

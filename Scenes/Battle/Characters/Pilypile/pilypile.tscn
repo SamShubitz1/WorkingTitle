@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://cvl2fih8c6rlq"]
+[gd_scene load_steps=15 format=3 uid="uid://cvl2fih8c6rlq"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_6etg3"]
 [ext_resource type="Texture2D" uid="uid://dpk0218y7aqp" path="res://Scenes/Battle/Characters/Pilypile/Pilypile_Combat_Attack1.png" id="2_ixjvj"]
 [ext_resource type="Texture2D" uid="uid://ddlqywn0fract" path="res://Scenes/Battle/Characters/Pilypile/Pilypile_Combat_Idle1.png" id="3_liher"]
 [ext_resource type="Script" path="res://player_animation.gd" id="4_vfdia"]
+[ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="5_stgrc"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_u774l"]
 atlas = ExtResource("2_ixjvj")
@@ -101,3 +102,6 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_fxy7r")
 max_value = 80.0
 value = 80.0
 show_percentage = false
+
+[node name="CharSound" type="AudioStreamPlayer" parent="."]
+script = ExtResource("5_stgrc")

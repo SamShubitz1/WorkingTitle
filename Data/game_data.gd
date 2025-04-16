@@ -9,6 +9,11 @@ enum MainMenuType {
 	POKEDEX
 }
 
+#1.	'character used X', - duration
+#2	player animation, player attack sound - duration
+#3. ability animation, ability sound - duration
+#4. 'character took x damage' / 'character gained x effect' - duration
+
 enum BattleMenuType {
 	OPTIONS,
 	ABILITIES,
@@ -46,6 +51,8 @@ enum AbilityShape {
 	SQUARE,
 	DIAMOND,
 	MELEE,
+	TWOSQUAREH,
+	TWOSQUAREV,
 	MULTIPLE,
 	COLUMN,
 	ALL
@@ -72,7 +79,7 @@ enum SpecialStat {
 	AP,
 	ENERGY,
 	AILMENTS, # meaning all ailments
-	MOVE_RANGE
+	MOVE_RANGE,
 }
 
 enum Ailments {
@@ -132,6 +139,12 @@ enum MachineRole {
 	NONE
 }
 
+enum SoundAction {
+	START,
+	ATTACK,
+	DEATH,
+}
+
 #############################################################  ABILITY CREATOR  #####################################################
 #AbilityType: .ATTACK , .EFFECT
 #DamageType: .PHYSICAL , .ENERGY , .NONE
@@ -188,13 +201,13 @@ var abilities: Dictionary = {
 		
 	"Trample": {"name": "Trample", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "+70 physical damage. If a move action was made, increase damage by 20.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Trample", "origin": AnimOrigin.OTHER, "duration": 0.7}},
 	
-	"Wave Beam": {"name": "Wave Beam", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 65}, "action_cost": 3, "energy_cost": 10, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "65 energy damage to the front two enemies in this row", "range": Vector2i(4,0), "shape": AbilityShape.LINE, "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.6}},
-		
+	"Wave Beam": {"name": "Wave Beam", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 65}, "action_cost": 3, "energy_cost": 10, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "65 energy damage dealt to enemy and enemy behind", "range": Vector2i(4,0), "shape": AbilityShape.TWOSQUAREH, "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.6}},
+	
 	"Burst Rifle": {"name": "Burst Rifle", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 90}, "action_cost": 3, "energy_cost": 5, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "90 physical damage. You gain +2 overheated.", "range": Vector2i(7,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.SELF, "value": 2, "property":
 			Ailments.OVERHEATED, "dialog": "gained 2 overheated",}], "animation": {"name": "BurstRifle", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		
-	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.NONE, "value": -75}, "action_cost": 3, "energy_cost": 12, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 75 health. On its next turn, restore 75 health, then skip the turn.", "range": Vector2i(4,0), "shape": AbilityShape.LINE, "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.6}},
+	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.NONE, "value": -75}, "action_cost": 3, "energy_cost": 12, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 75 health. On your next turn, restore 75 health, then skip the turn.", "range": Vector2i(4,0), "shape": AbilityShape.LINE, "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.6}},
 	
 	"Rallied Surge": {"name": "Rallied Surge", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 20, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Each adjacent ally gains +2 Strength and +2 Flux", "range": Vector2i.ZERO, "shape": AbilityShape.SQUARE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 2, "property": Attributes.STRENGTH, "dialog": "gained 2 power", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.OTHER, "duration": 0.9}},
@@ -205,7 +218,22 @@ var abilities: Dictionary = {
 	"Crush": {"name": "Crush", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "A melee attack that applies -1 strength", "range": Vector2i(4,0), "shape": AbilityShape.MELEE, "animation": {"name": "Crush", "origin": AnimOrigin.OTHER, "duration": 0.7}, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 1, "property":
 			Ailments.CONCUSSED, "dialog": "gained 1 concussed"}]},
+			
+	"Beam Slice": {"name": "Beam Slice", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 80}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "80 energy damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "BeamSlice", "origin": AnimOrigin.OTHER, "duration": 0.7}},
 	}
+	
+const sounds = {
+"Mage Death A1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_DeathA1.wav", "Mage Attack A1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA1.wav", "Mage Attack A2": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA2.wav", "Mage Start A1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA1.wav", "Mage Start A2": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA2.wav",
+
+"Mandrake Death A1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_DeathA1.wav", "Mandrake Attack A1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_AttackA1.wav", "Mandrake Attack A2": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_AttackA2.wav", "Mandrake Start A1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_StartA1.wav", "Mandrake Start A2": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_StartA2.wav",
+
+"Pilypile Death A1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_DeathA1.wav", "Pilypile Attack A1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_AttackA1.wav", "Pilypile Attack A2": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_AttackA2.wav", "Pilypile Start A1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_StartA1.wav", "Pilypile Start A2": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_StartA2.wav",
+
+"Gawkingstick Death A1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_DeathA1.wav", "Gawkingstick Attack A1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_AttackA1.wav", "Gawkingstick Attack A2": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_AttackA2.wav", "Gawkingstick Start A1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_StartA1.wav", "Gawkingstick Start A2": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_StartA2.wav",
+	
+"Runt Death A1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_DeathA1.wav", "Runt Attack A1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_AttackA1.wav", "Runt Attack A2": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_AttackA2.wav", "Runt Start A1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_StartA1.wav", "Runt Start A2": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_StartA2.wav",
+
+"Thumper Death A1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_DeathA1.wav", "Thumper Attack A1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA1.wav", "Thumper Attack A2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA2.wav", "Thumper Start A1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA1.wav", "Thumper Start A2": "res://Scenes/Battle/Characters/Thumper/Sounds/Mandrake_StartA2.wav"}
 	
 var items: Dictionary = {
 	"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3},
