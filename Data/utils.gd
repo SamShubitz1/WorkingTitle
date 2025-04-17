@@ -5,7 +5,7 @@ func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, alli
 	match shape:
 		GameData.AbilityShape.SINGLE:
 			return neighbor_coords
-		GameData.AbilityShape.TWOSQUAREH:
+		GameData.AbilityShape.DOUBLEH:
 			if alliance == Data.Alliance.HERO:
 				neighbor_coords.append(Vector2i(origin_coords.x + 1, origin_coords.y))
 			if alliance == Data.Alliance.ENEMY:

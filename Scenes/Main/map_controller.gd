@@ -1,8 +1,7 @@
 extends Node2D
 
-@onready var Current_Tile_Map_Layer: TileMapLayer = null
-
-@export var GRID_CELL_SIZE_PX: int = 16
+@onready var current_tile_map_layer: TileMapLayer = null
+@export var TILE_SIZE: int = 16
 
 func _ready():
 	GameData.GlobalMapControllerRef = self
@@ -29,21 +28,19 @@ func get_object_at_coords(grid_coords: Vector2i) -> Node:
 	return null
 
 # store object reference at grid coords
-func set_object_at_coords(object: Node, grid_coords: Vector2i) -> bool:
+func set_object_at_coords(object: Node, grid_coords: Vector2i):
 	world_map_array[grid_coords] = object
-	print_debug("MapController - Object added to grid: " + "pos:" + str(grid_coords) + " obj:" + str(object))
-	return true
 
 # translate from world coords to grid coords
 func point_to_grid(point_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0)) -> Vector2i:
-	var x = round((point_coords.x - img_offset.x) / GRID_CELL_SIZE_PX)
-	var y = round((point_coords.y - img_offset.y) / GRID_CELL_SIZE_PX)
+	var x = round((point_coords.x - img_offset.x) / TILE_SIZE)
+	var y = round((point_coords.y - img_offset.y) / TILE_SIZE)
 	return Vector2i(x,y)
 
 # translate from grid coords to world coords
 func grid_to_point(grid_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0)) -> Vector2:
-	var x = round((grid_coords.x * GRID_CELL_SIZE_PX) + img_offset.x)
-	var y = round((grid_coords.y * GRID_CELL_SIZE_PX) + img_offset.y)
+	var x = round((grid_coords.x * TILE_SIZE) + img_offset.x)
+	var y = round((grid_coords.y * TILE_SIZE) + img_offset.y)
 	return Vector2(x,y)
 
 # get collider count at grid coords
@@ -55,7 +52,7 @@ func check_grid_for_collider(grid_coords: Vector2i) -> bool:
 		return true # exit for bad value
 
 	# get tile at grid_coords
-	var tile_data = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
+	var tile_data = current_tile_map_layer.get_cell_tile_data(grid_coords)
 	if (tile_data == null):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
 		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
@@ -75,7 +72,7 @@ func add_grid_collider(grid_coords: Vector2i) -> void:
 		return # exit for bad value
 
 	# get tile at grid_coords
-	var tile_data = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
+	var tile_data = current_tile_map_layer.get_cell_tile_data(grid_coords)
 	if (tile_data == null):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
 		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
@@ -87,7 +84,7 @@ func add_grid_collider(grid_coords: Vector2i) -> void:
 
 # convert grid coords to TileData object, properties
 func get_tile_at_grid_coords(grid_coords: Vector2i) -> TileData:
-	var tile: TileData = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
+	var tile: TileData = current_tile_map_layer.get_cell_tile_data(grid_coords)
 	if (tile == null):
 		#TODO catch error
 		print("ERROR: Inspecting null tile at: " + str(grid_coords))
@@ -96,15 +93,15 @@ func get_tile_at_grid_coords(grid_coords: Vector2i) -> TileData:
 
 # convert grid coords to atlas/palette-tile-coords
 func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
-	var atlas_coords: Vector2i = Current_Tile_Map_Layer.get_cell_atlas_coords(grid_coords)
+	var atlas_coords: Vector2i = current_tile_map_layer.get_cell_atlas_coords(grid_coords)
 	if (atlas_coords == null): return Vector2i(0,0)
 	return atlas_coords
 
 # get dictionary/hashtable format report of various tile data at grid coords
 #TODO bounds check for error
 func get_world_tile_report(grid_coords: Vector2i) -> Dictionary:
-	var tile: TileData = Current_Tile_Map_Layer.get_cell_tile_data(grid_coords)
-	var atlas_coords: Vector2i = Current_Tile_Map_Layer.get_cell_atlas_coords(grid_coords)
+	var tile: TileData = current_tile_map_layer.get_cell_tile_data(grid_coords)
+	var atlas_coords: Vector2i = current_tile_map_layer.get_cell_atlas_coords(grid_coords)
 
 	# get tile info
 	var tile_report = {
@@ -144,10 +141,10 @@ func load_room(room_resource_path):
 	# adopt map object to MapContainer
 	map_container.add_child(imported_new_map)
 	# update TileMapLayer reference
-	Current_Tile_Map_Layer = imported_new_map.get_node("TileMapLayer")
+	current_tile_map_layer = imported_new_map.get_node("TileMapLayer")
 	return
 
 func enter_door(object):
 	destroy_room()
-	load_room(object.Door_Destination)
+	load_room(object.door_destination)
 	return

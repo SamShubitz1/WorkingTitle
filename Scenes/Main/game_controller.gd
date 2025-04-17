@@ -1,13 +1,13 @@
 extends Node2D
 
 #@onready var Map_Controller = self.get_node("/root/MainScene/Overworld/MapController")
-@onready var Map_Controller = get_tree().root.find_child("MapController", true)
-@onready var Player: PlayerClass = self.get_node("/root/MainScene/Overworld/PlayerController/MyPlayer")
+@onready var map_controller = get_tree().root.find_child("MapController", true)
+@onready var player: PlayerClass = self.get_node("/root/MainScene/Overworld/PlayerController/MyPlayer")
 #@onready var Player_Camera = Player.Player_Camera
 
 #TODO @onready var Title_Scene_File =
-const Overworld_Scene_File = "res://Scenes/Main/overworld.tscn"
-const Battle_Scene_File = "res://Scenes/Battle/Battle/battle_scene.tscn"
+const overworld_scene = "res://Scenes/Main/overworld.tscn"
+const battle_scene = "res://Scenes/Battle/Battle/battle_scene.tscn"
 
 var overworld_cam_obj
 var battle_cam_obj
@@ -16,21 +16,18 @@ var battle_cam_obj
 #@onready var Overworld_Scene_Node: Node = get_tree().get_root().find_node("Overworld")
 #@onready var Battle_Scene_Node: Node = get_tree().get_root().find_node("node_name")
 
-var preloaded_scene_battle
-var preloaded_scene_overworld
+var preloaded_scene_battle = preload(battle_scene)
+var preloaded_scene_overworld = preload(overworld_scene)
 var current_scene_node
 
 var imported_overworld_scene
 var imported_battle_scene
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	preloaded_scene_overworld = preload(Overworld_Scene_File)
 	imported_overworld_scene = preloaded_scene_overworld.instantiate()
 	get_node("/root/MainScene/").add_child(imported_overworld_scene)
 	overworld_cam_obj = imported_overworld_scene.get_node("PlayerController/MyPlayer/OverworldCamera")
 
-	preloaded_scene_battle = preload(Battle_Scene_File)
 	#var imported_battle_scene = preloaded_scene_battle.instantiate()
 	#get_node("/root/MainScene/").add_child(imported_battle_scene)
 	#battle_cam_obj = imported_battle_scene.get_node("BattleCamera")
@@ -41,31 +38,25 @@ func _ready() -> void:
 	var node = get_node("/root/MainScene/Overworld")
 	current_scene_node = node
 	
-	print("sanity check GameController has mapcontroller?: " + str(Map_Controller))
-	pass # Replace with function body.
+	print("sanity check GameController has mapcontroller?: " + str(map_controller))
 
-# load new scene
 func load_new_scene(scene, object: Node) -> void:
 	get_tree().change_scene_to_file(scene)
 	return
 
-# load new battle scene from file
 func load_battle_scene(object: Node) -> void:
 	#load_new_scene(Battle_Scene_File, object)
 	switch_to_battle_scene()
 	return
 
-# load new overworld scene from file
 func load_overworld_scene() -> void:
-	load_new_scene(Overworld_Scene_File, null)
+	load_new_scene(overworld_scene, null)
 	return
 
 func switch_to_battle_scene_file() -> void:
-	get_tree().change_scene_to_file(Battle_Scene_File)
+	get_tree().change_scene_to_file(battle_scene)
 	return
 
-# switch to battle scene node
-# Current used method
 func switch_to_battle_scene() -> void:
 	var current_scene_node = get_node("/root/MainScene/Overworld")
 	# check for existing battle scene node in tree
@@ -96,7 +87,7 @@ func switch_to_battle_scene() -> void:
 	return
 
 func switch_to_overworld_scene_file() -> void:
-	get_tree().change_scene_to_file(Overworld_Scene_File)
+	get_tree().change_scene_to_file(overworld_scene)
 	return
 
 # switch to overworld scene node
@@ -135,23 +126,8 @@ func set_pause_subtree(root: Node, pause: bool) -> void:
 
 func get_map_controller():
 	print_tree()
-	if(Map_Controller == null):
+	if map_controller == null:
 		print("map controller is null")
-	if(Player == null):
+	if player == null:
 		print("Player is null")
-	return Map_Controller
-
-func enter_door(object):
-	var Map_Controller = GameData.GlobalMapControllerRef
-	
-	# print door report
-	var door_info_report = {
-		"MapController reference": Map_Controller,
-		"Door object reference": object,
-		"Door destination reference": object.Door_Destination
-	}
-	print_debug("GameController - Door report: " + str(door_info_report))
-	
-	# replace map container
-	Map_Controller.enter_door(object)
-	return
+	return map_controller

@@ -25,6 +25,7 @@ func _process(delta: float) -> void:
 func process_player_movement(delta) -> void:
 	if !player.is_moving:
 		return
+		
 	player.position += player.speed * delta * player.current_direction
 	check_move_complete()
 	
@@ -33,7 +34,6 @@ func process_player_inputs() -> void:
 		return
 		
 	var input_direction: Vector2i
-	
 	if input_direction.y == 0:
 		input_direction.x = int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left"))
 	if input_direction.x == 0:
@@ -43,19 +43,20 @@ func process_player_inputs() -> void:
 		player_action_pressed()
 	
 	if input_direction != Vector2i.ZERO:
-		player.is_moving = true
 		player.current_direction = input_direction
+		player.is_moving = true
+		set_player_animation(player.current_direction, false)
 		check_collision()
+	else:
+		set_player_animation(player.current_direction, true)
 
 func check_collision() -> void:
-	var dest_coords = player.grid_position + player.current_direction
-	set_player_animation(player.current_direction, false)
+	var dest_coords = player.get_grid_position() + player.current_direction
 
 	var tile_collision_check = map_controller.check_grid_for_collider(dest_coords)
 	var object_collision_check = map_controller.get_object_at_coords(dest_coords)
 	
 	if tile_collision_check || object_collision_check:
-		set_player_animation(player.current_direction, true)
 		player.is_moving = false
 
 func check_move_complete():
@@ -104,8 +105,8 @@ func player_action_pressed() -> void:
 			if (object.battle_ready):
 				enter_battle_scene(object)
 		elif (object is BaseDoor):
-			print("playerController - Door_Destination: " + str(object.Door_Destination))
-			game_controller.enter_door(object)
+			print("playerController - Door_Destination: " + str(object.door_destination))
+			map_controller.enter_door(object)
 		else:
 			print("unknown object")
 

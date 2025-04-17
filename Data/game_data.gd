@@ -51,8 +51,8 @@ enum AbilityShape {
 	SQUARE,
 	DIAMOND,
 	MELEE,
-	TWOSQUAREH,
-	TWOSQUAREV,
+	DOUBLEH,
+	DOUBLEV,
 	MULTIPLE,
 	COLUMN,
 	ALL
@@ -201,7 +201,7 @@ var abilities: Dictionary = {
 		
 	"Trample": {"name": "Trample", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "+70 physical damage. If a move action was made, increase damage by 20.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Trample", "origin": AnimOrigin.OTHER, "duration": 0.7}},
 	
-	"Wave Beam": {"name": "Wave Beam", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 65}, "action_cost": 3, "energy_cost": 10, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "65 energy damage dealt to enemy and enemy behind", "range": Vector2i(4,0), "shape": AbilityShape.TWOSQUAREH, "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.6}},
+	"Wave Beam": {"name": "Wave Beam", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 65}, "action_cost": 3, "energy_cost": 10, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "65 energy damage dealt to enemy and enemy behind", "range": Vector2i(4,0), "shape": AbilityShape.DOUBLEH, "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.6}},
 	
 	"Burst Rifle": {"name": "Burst Rifle", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 90}, "action_cost": 3, "energy_cost": 5, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "90 physical damage. You gain +2 overheated.", "range": Vector2i(7,1), "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.SELF, "value": 2, "property":
@@ -223,17 +223,55 @@ var abilities: Dictionary = {
 	}
 	
 const sounds = {
-"Mage Death A1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_DeathA1.wav", "Mage Attack A1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA1.wav", "Mage Attack A2": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA2.wav", "Mage Start A1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA1.wav", "Mage Start A2": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA2.wav",
+	"MageDeathA1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_DeathA1.wav",
+	"MageAttackA1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA1.wav",
+	"MageAttackA2": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA2.wav",
+	"MageStartA1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA1.wav",
+	"MageStartA2": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA2.wav",
 
-"Mandrake Death A1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_DeathA1.wav", "Mandrake Attack A1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_AttackA1.wav", "Mandrake Attack A2": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_AttackA2.wav", "Mandrake Start A1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_StartA1.wav", "Mandrake Start A2": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_StartA2.wav",
+	"MandrakeDeathA1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_DeathA1.wav",
+	"MandrakeAttackA1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_AttackA1.wav",
+	"MandrakeAttackA2": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_AttackA2.wav",
+	"MandrakeStartA1": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_StartA1.wav",
+	"MandrakeStartA2": "res://Scenes/Battle/Characters/Mandrake/Sounds/Mandrake_StartA2.wav",
 
-"Pilypile Death A1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_DeathA1.wav", "Pilypile Attack A1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_AttackA1.wav", "Pilypile Attack A2": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_AttackA2.wav", "Pilypile Start A1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_StartA1.wav", "Pilypile Start A2": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_StartA2.wav",
+	"PilypileDeathA1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_DeathA1.wav",
+	"PilypileAttackA1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_AttackA1.wav",
+	"PilypileAttackA2": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_AttackA2.wav",
+	"PilypileStartA1": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_StartA1.wav",
+	"PilypileStartA2": "res://Scenes/Battle/Characters/Pilypile/Sounds/Pilypile_StartA2.wav",
 
-"Gawkingstick Death A1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_DeathA1.wav", "Gawkingstick Attack A1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_AttackA1.wav", "Gawkingstick Attack A2": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_AttackA2.wav", "Gawkingstick Start A1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_StartA1.wav", "Gawkingstick Start A2": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_StartA2.wav",
+	"GawkingstickDeathA1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_DeathA1.wav",
+	"GawkingstickAttackA1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_AttackA1.wav",
+	"GawkingstickAttackA2": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_AttackA2.wav",
+	"GawkingstickStartA1": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_StartA1.wav",
+	"GawkingstickStartA2": "res://Scenes/Battle/Characters/Gawkingstick/Sounds/Gawkingstick_StartA2.wav",
+		
+	"RuntDeathA1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_DeathA1.wav",
+	"RuntAttackA1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_AttackA1.wav",
+	"RuntAttackA2": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_AttackA2.wav",
+	"RuntStartA1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_StartA1.wav",
+	"RuntStartA2": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_StartA2.wav",
+
+	"ThumperDeathA1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_DeathA1.wav",
+	"ThumperAttackA1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA1.wav",
+	"ThumperAttackA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA2.wav",
+	"ThumperStartA1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA1.wav",
+	"ThumperStartA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Mandrake_StartA2.wav"}
+
+var characters = {
+	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Trample", "Screen Flash", "Wave Beam", "Zap", "Process Crunch", "Ignite"], "base energy": 100, "base health": 340, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
 	
-"Runt Death A1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_DeathA1.wav", "Runt Attack A1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_AttackA1.wav", "Runt Attack A2": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_AttackA2.wav", "Runt Start A1": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_StartA1.wav", "Runt Start A2": "res://Scenes/Battle/Characters/Runt/Sounds/Runt_StartA2.wav",
-
-"Thumper Death A1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_DeathA1.wav", "Thumper Attack A1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA1.wav", "Thumper Attack A2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA2.wav", "Thumper Start A1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA1.wav", "Thumper Start A2": "res://Scenes/Battle/Characters/Thumper/Sounds/Mandrake_StartA2.wav"}
+	"Runt": {"name": "Runt", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}, "abilities": ["Crush", "Zap"], "base energy": 100, "base health": 320, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Runt/runt.tscn"},
+	
+	"Pilypile": {"name": "Pilypile", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 2, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}, "abilities": ["Clobber", "Beam Slice"], "base energy": 100, "base health": 340, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Pilypile/pilypile.tscn"},
+	
+	"Gawkingstick": {"name": "Gawkingstick", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Clobber"], "base energy": 100, "base health": 320, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Norman/norman.tscn"},
+	
+	"Mandrake": {"name": "Mandrake", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 3, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 3, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Zap", "Process Crunch", "Ignite"], "base energy": 100, "base health": 300, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Mandrake/mandrake.tscn"},
+	
+	"Thumper": {"name": "Thumper", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}, "abilities": ["Clobber", "Heat Ray", "Bulk Inversion"], "base energy": 100, "base health": 300, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Thumper/thumper.tscn"},
+	}
 	
 var items: Dictionary = {
 	"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3},

@@ -174,7 +174,6 @@ tile_set = SubResource("TileSet_xbfrd")
 [node name="DoorToT2" type="Node2D" parent="Doodads/Doors"]
 position = Vector2(560, 96)
 script = ExtResource("2_bm738")
-Door_Destination = "res://Rooms/PalletTown/PalletTownRoom.tscn"
 
 [node name="Sprite2D" type="Sprite2D" parent="Doodads/Doors/DoorToT2"]
 position = Vector2(8, 8)

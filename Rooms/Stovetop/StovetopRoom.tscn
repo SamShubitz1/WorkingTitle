@@ -188,7 +188,7 @@ tile_set = SubResource("TileSet_mbo0l")
 [node name="DoorToPalletTown" type="Node2D" parent="Dodads/Doors"]
 position = Vector2(232, 56)
 script = ExtResource("2_oib52")
-Door_Destination = "res://Rooms/T1/T1Room.tscn"
+door_destination = "res://Rooms/T1/T1Room.tscn"
 
 [node name="Sprite2D" type="Sprite2D" parent="Dodads/Doors/DoorToPalletTown"]
 texture = ExtResource("3_4ur0x")

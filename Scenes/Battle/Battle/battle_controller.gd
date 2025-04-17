@@ -11,8 +11,9 @@ extends Node2D
 @onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
 @onready var items_node = $"../BattleMenu/ItemsMenu"
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
+
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
-var norman_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
+var gawkingstick_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
 var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
 var mage_scene = preload("res://Scenes/Battle/Characters/Mage/mage.tscn")
 var runt_scene = preload("res://Scenes/Battle/Characters/Runt/runt.tscn")
@@ -238,7 +239,7 @@ func build_attack_event(target: Character) -> void:
 
 func build_effect_event(target: Character, effect: Dictionary) -> void:
 	var effect_target: Character
-				#
+
 	if effect.target == Data.EffectTarget.OTHER:
 		effect_target = target
 	elif effect.target == Data.EffectTarget.SELF:
@@ -322,7 +323,7 @@ func perform_enemy_turn() -> void:
 				
 					for effect in selected_ability.effects:
 						build_effect_event(target, effect)
-							
+
 	end_turn()
 	
 func on_movement(next_coords: Vector2i) -> void:
@@ -423,11 +424,11 @@ func get_players() -> void:
 		var next_enemy = build_character(positions[pos], Data.Alliance.ENEMY, pos)
 		players.append(next_enemy)
 	
-	var mage = build_character("mage", Data.Alliance.HERO, Vector2i(3,1))
+	var mage = build_character("Mage", Data.Alliance.HERO, Vector2i(3,1))
 	players.append(mage)
-	var mandrake = build_character("mandrake", Data.Alliance.HERO, Vector2i(2,2))
+	var mandrake = build_character("Mandrake", Data.Alliance.HERO, Vector2i(2,2))
 	players.append(mandrake)
-	var pilypile = build_character("pilypile", Data.Alliance.HERO, Vector2i(2,0))
+	var pilypile = build_character("Pilypile", Data.Alliance.HERO, Vector2i(2,0))
 	players.append(pilypile)
 	
 func get_enemies_by_position():
@@ -443,7 +444,7 @@ func get_enemies_by_position():
 	return positions
 
 func select_enemies():
-	var enemy_pool = ["runt", "pilypile", "norman", "thumper", "mandrake"]
+	var enemy_pool = ["Runt", "Pilypile", "Gawkingstick", "Thumper", "Mandrake"]
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
@@ -542,9 +543,11 @@ func update_energy_display() -> void:
 	
 func initialize_battle() -> void:
 	dialog = dialog_box[0]
+	
 	get_players()
 	battle_grid.populate_grid(players)
 	increment_turn_queue()
+	
 	ap_display.initialize_ap_display()
 	update_ui()
 	
@@ -554,61 +557,11 @@ func get_kapow() -> Node:
 	return kapow
 	
 func build_character(name: String, char_alliance: Data.Alliance, position: Vector2i):
-	match name:
-		"mage":
-			var mage = mage_scene.instantiate()
-			var mage_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}
-			var mage_abilities = ["Trample", "Screen Flash", "Wave Beam", "Zap", "Process Crunch", "Ignite"]
-			var mage_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-			mage.init(battle_id, "Mage", mage_attributes, char_alliance, mage.get_node("CharSprite"),mage.get_node("CharSound"), mage.get_node("CharHealth"), 100, 340, mage_abilities, position, Data.MachineRole.NONE, mage_items) # init props will be accessed from somewhere
-			set_position_by_grid_coords(mage)
-			mage.is_player = true
-			add_child(mage)
-			battle_id += 1
-			return mage
-		"runt":
-			var runt = runt_scene.instantiate()
-			var runt_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}
-			var runt_abilities = ["Crush", "Zap"]
-			var runt_items = ["Extra Rock", "Extra Paper", "Sharpener"]
-			runt.init(battle_id, "Runt", runt_attributes, char_alliance, runt.get_node("CharSprite"),runt.get_node("CharSound"), runt.get_node("CharHealth"), 100, 320, runt_abilities, position, Data.MachineRole.NONE, runt_items) # init props will be accessed from somewhere
-			add_child(runt)
-			set_position_by_grid_coords(runt)
-			battle_id += 1
-			return runt
-		"pilypile":
-			var pilypile = pilypile_scene.instantiate()
-			var pilypile_abilities = ["Clobber", "Beam Slice"]
-			var pilypile_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 2, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}
-			pilypile.init(battle_id, "Pilypile", pilypile_attributes, char_alliance, pilypile.get_node("CharSprite"),pilypile.get_node("CharSound"), pilypile.get_node("CharHealth"), 100, 340, pilypile_abilities, position, Data.MachineRole.NONE, []) # init props will be accessed from somewhere
-			add_child(pilypile)
-			set_position_by_grid_coords(pilypile)
-			battle_id += 1
-			return pilypile
-		"norman":
-			var norman = norman_scene.instantiate()
-			var norman_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}
-			var norman_abilities = ["Clobber"]
-			norman.init(battle_id, "Norman", norman_attributes, char_alliance, norman.get_node("CharSprite"),norman.get_node("CharSound"), norman.get_node("CharHealth"), 100, 320, norman_abilities, position, Data.MachineRole.ETANK, []) # init props will be accessed from somewhere
-			add_child(norman)
-			set_position_by_grid_coords(norman)
-			battle_id += 1
-			return norman
-		"mandrake":
-			var mandrake = mandrake_scene.instantiate()
-			var mandrake_abilities = ["Process Crunch"]
-			var mandrake_attributes = {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 3, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 3, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}
-			mandrake.init(battle_id, "Mandrake", mandrake_attributes, char_alliance, mandrake.get_node("CharSprite"), mandrake.get_node("CharSound"), mandrake.get_node("CharHealth"), 100, 300, mandrake_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
-			add_child(mandrake)
-			set_position_by_grid_coords(mandrake)
-			battle_id += 1
-			return mandrake
-		"thumper":
-			var thumper = thumper_scene.instantiate()
-			var thumper_abilities = ["Clobber", "Heat Ray", "Bulk Inversion"]
-			var thumper_attributes = {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}
-			thumper.init(battle_id, "Thumper", thumper_attributes, char_alliance, thumper.get_node("CharSprite"),thumper.get_node("CharSound"), thumper.get_node("CharHealth"), 100, 300, thumper_abilities, position, Data.MachineRole.PASSAULTER, []) # init props will be accessed from somewhere
-			add_child(thumper)
-			set_position_by_grid_coords(thumper)
-			battle_id += 1
-			return thumper
+	var char_scene = load(GameData.characters[name].path)
+	var char_info = GameData.characters[name]
+	var char = char_scene.instantiate()
+	char.init(battle_id, name, char_info.attributes, char_alliance, char.get_node("CharSprite"), char.get_node("CharSound"), char.get_node("CharHealth"), char_info["base energy"], char_info["base health"], char_info.abilities, position, char_info.role)
+	add_child(char)
+	set_position_by_grid_coords(char)
+	battle_id += 1
+	return char
