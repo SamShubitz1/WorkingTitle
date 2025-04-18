@@ -99,8 +99,8 @@ func player_action_pressed() -> void:
 	if (object == null and actioned_tile == null):
 		return
 
-	if (object != null):
-		if (object is NPC_Class):
+	if object != null:
+		if object is NPC_Class:
 			if (DEBUG_PLAYER): print_action_object_report(object)
 			if (object.battle_ready):
 				enter_battle_scene(object)
@@ -112,7 +112,7 @@ func player_action_pressed() -> void:
 
 func enter_battle_scene(object: Node) -> void:
 	save_data()
-	game_controller.switch_to_battle_scene()
+	game_controller.load_battle_scene()
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	match player.current_direction:

@@ -1,114 +1,73 @@
 extends Node2D
 
-#@onready var Map_Controller = self.get_node("/root/MainScene/Overworld/MapController")
-@onready var map_controller = get_tree().root.find_child("MapController", true)
+@onready var map_controller = find_child("MapController", true)
 @onready var player: PlayerClass = self.get_node("/root/MainScene/Overworld/PlayerController/MyPlayer")
-#@onready var Player_Camera = Player.Player_Camera
 
-#TODO @onready var Title_Scene_File =
-const overworld_scene = "res://Scenes/Main/overworld.tscn"
-const battle_scene = "res://Scenes/Battle/Battle/battle_scene.tscn"
+var overworld_cam #not sure if needed
+var battle_cam #same
 
-var overworld_cam_obj
-var battle_cam_obj
+var battle_scene_preload = preload("res://Scenes/Battle/Battle/battle_scene.tscn")
+var overworld_scene_preload = preload("res://Scenes/Main/overworld.tscn")
+var current_scene
 
-#TODO @onready var Title_Scene_Node: Node =
-#@onready var Overworld_Scene_Node: Node = get_tree().get_root().find_node("Overworld")
-#@onready var Battle_Scene_Node: Node = get_tree().get_root().find_node("node_name")
-
-var preloaded_scene_battle = preload(battle_scene)
-var preloaded_scene_overworld = preload(overworld_scene)
-var current_scene_node
-
-var imported_overworld_scene
-var imported_battle_scene
+var overworld_scene
+var battle_scene
 
 func _ready() -> void:
-	imported_overworld_scene = preloaded_scene_overworld.instantiate()
-	get_node("/root/MainScene/").add_child(imported_overworld_scene)
-	overworld_cam_obj = imported_overworld_scene.get_node("PlayerController/MyPlayer/OverworldCamera")
+	overworld_scene = overworld_scene_preload.instantiate()
+	add_child(overworld_scene)
+	current_scene = overworld_scene
 
-	#var imported_battle_scene = preloaded_scene_battle.instantiate()
-	#get_node("/root/MainScene/").add_child(imported_battle_scene)
-	#battle_cam_obj = imported_battle_scene.get_node("BattleCamera")
-	#print("battlecam: " + str(battle_cam_obj))
+func load_next_scene(next_scene) -> void:
+	if current_scene != next_scene:
+		get_tree().change_scene_to_file(next_scene)
+		current_scene = next_scene
 
-	var tree = get_tree()
-	var rootNode = tree.root
-	var node = get_node("/root/MainScene/Overworld")
-	current_scene_node = node
-	
-	print("sanity check GameController has mapcontroller?: " + str(map_controller))
-
-func load_new_scene(scene, object: Node) -> void:
-	get_tree().change_scene_to_file(scene)
-	return
-
-func load_battle_scene(object: Node) -> void:
-	#load_new_scene(Battle_Scene_File, object)
-	switch_to_battle_scene()
-	return
+func load_battle_scene() -> void:
+	if battle_scene == null:
+		battle_scene = battle_scene_preload.instantiate()
+	load_next_scene(battle_scene)
 
 func load_overworld_scene() -> void:
-	load_new_scene(overworld_scene, null)
-	return
+	if overworld_scene == null:
+		overworld_scene = overworld_scene_preload.instantiate()
+	load_next_scene(overworld_scene)
 
-func switch_to_battle_scene_file() -> void:
-	get_tree().change_scene_to_file(battle_scene)
-	return
+#func switch_to_battle_scene_file() -> void:
+	#get_tree().change_scene_to_file(battle_scene)
 
-func switch_to_battle_scene() -> void:
-	var current_scene_node = get_node("/root/MainScene/Overworld")
-	# check for existing battle scene node in tree
+#func switch_to_battle_scene() -> void:
+	#if current_scene == battle_scene:
+		#return
+		#
+	#if battle_scene == null:
+		#battle_scene = battle_scene_preload.instantiate()
+		#add_child(battle_scene)
+		
+	#battle_cam = battle_scene.get_node("BattleCamera")
+	#battle_cam.make_current()
 
-	var rootNode = get_tree().root
-	var node = rootNode.find_child("battle")
-	if (node):
-		print_debug("found scene: " + str(node))
-	else:
-		# create new node if not found
-		imported_battle_scene = preloaded_scene_battle.instantiate()
-		get_node("/root/MainScene/").add_child(imported_battle_scene)
-		battle_cam_obj = imported_battle_scene.get_node("BattleCamera")
-		# hide overworld scene in tree
-		current_scene_node.hide()
-		# switch cameras
-		battle_cam_obj.make_current()
+	#overworld_scene.queue_free()
+	#overworld_scene = null
+	#current_scene = battle_scene
+#
+#func switch_to_overworld_scene_file() -> void:
+	#get_tree().change_scene_to_file(overworld_scene)
 
-	# pause / unload current scene (overworld)
-	imported_overworld_scene.get_parent().remove_child(imported_overworld_scene)
-	imported_overworld_scene.queue_free()
-	imported_overworld_scene = null
-	current_scene_node = null
-
-	# update GameController state for mode tracking
-	#TODO
-
-	return
-
-func switch_to_overworld_scene_file() -> void:
-	get_tree().change_scene_to_file(overworld_scene)
-	return
-
-# switch to overworld scene node
-# Current used method
-func switch_to_overworld_scene() -> void:
-	var current_scene_node = get_node("/root/MainScene/BattleScene")
-
-	imported_overworld_scene = preloaded_scene_overworld.instantiate()
-	get_node("/root/MainScene/").add_child(imported_overworld_scene)
-	overworld_cam_obj = imported_overworld_scene.get_node("PlayerController/MyPlayer/OverworldCamera")
-	print("overworldcam: " + str(overworld_cam_obj))
-
-	current_scene_node.hide()
-
-	overworld_cam_obj.make_current()
-
-	imported_battle_scene.get_parent().remove_child(imported_battle_scene)
-	imported_battle_scene.queue_free()
-	imported_battle_scene = null
-	current_scene_node = null
-	return
+#func switch_to_overworld_scene() -> void:
+	#if current_scene == overworld_scene:
+		#return
+		#
+	#if overworld_scene == null:
+		#overworld_scene = overworld_scene_preload.instantiate()
+		#add_child(overworld_scene)
+		#
+	#overworld_cam = overworld_scene.get_node("PlayerController/MyPlayer/OverworldCamera")
+	#overworld_cam.make_current()
+#
+	#battle_scene.queue_free()
+	#battle_scene = null
+	#current_scene = overworld_scene
 
 # pause target node / sub-scene
 func set_pause_subtree(root: Node, pause: bool) -> void:
@@ -121,8 +80,6 @@ func set_pause_subtree(root: Node, pause: bool) -> void:
 
 	for setter in process_setters:
 		root.propagate_call(setter, [!pause])
-
-	return
 
 func get_map_controller():
 	print_tree()

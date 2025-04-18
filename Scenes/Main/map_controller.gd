@@ -6,17 +6,16 @@ extends Node2D
 func _ready():
 	GameData.GlobalMapControllerRef = self
 	load_room("res://Rooms/Stovetop/StovetopRoom.tscn")
-	return
 
 # collection of map objects, keyed by grid-position vector
 var world_map_array: Dictionary = {}
 
 func get_current_tile_map_layer() -> TileMapLayer:
 	var map_container = $"MapContainer".name
-	var currentLayer = $"MapContainer".get_child(0).get_child(0)
-	var currentLayerName = currentLayer.name
-	print("MapController - GetCurrentTileMapLayer: " + str(currentLayer))
-	return currentLayer
+	var current_layer = $"MapContainer".get_child(0).get_child(0)
+	var current_layer_lame = current_layer.name
+	print("MapController - GetCurrentTileMapLayer: " + str(current_layer))
+	return current_layer
 
 # convert grid coords to stored-object
 func get_object_at_coords(grid_coords: Vector2i) -> Node:
@@ -120,9 +119,8 @@ func remove_object_from_map_collection(object: Node) -> void:
 	for item in world_map_array.keys():
 		if world_map_array[item] == object:
 			world_map_array.erase(item)
-			return
+			break
 	print("MapController - no object to remove")
-	return
 
 func destroy_room():
 	var map_container = self.get_child(0)
@@ -130,9 +128,10 @@ func destroy_room():
 	#remove_object_from_map_collection(door_grid_ref)
 	world_map_array = {}
 	map_container.get_child(0).queue_free()
-	return
 
 func load_room(room_resource_path):
+	if room_resource_path == null:
+		return
 	var map_container = self.get_child(0)
 	# load map file
 	var new_map_resource = load(room_resource_path)
@@ -142,9 +141,7 @@ func load_room(room_resource_path):
 	map_container.add_child(imported_new_map)
 	# update TileMapLayer reference
 	current_tile_map_layer = imported_new_map.get_node("TileMapLayer")
-	return
 
 func enter_door(object):
 	destroy_room()
 	load_room(object.door_destination)
-	return
