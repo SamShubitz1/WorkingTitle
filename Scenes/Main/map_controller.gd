@@ -11,10 +11,9 @@ func _ready():
 var world_map_array: Dictionary = {}
 
 func get_current_tile_map_layer() -> TileMapLayer:
-	var map_container = $"MapContainer".name
+	var map_container = get_child(0)
 	var current_layer = $"MapContainer".get_child(0).get_child(0)
 	var current_layer_lame = current_layer.name
-	print("MapController - GetCurrentTileMapLayer: " + str(current_layer))
 	return current_layer
 
 # convert grid coords to stored-object
@@ -42,51 +41,38 @@ func grid_to_point(grid_coords: Vector2i, img_offset: Vector2i = Vector2i(0,0)) 
 	var y = round((grid_coords.y * TILE_SIZE) + img_offset.y)
 	return Vector2(x,y)
 
-# get collider count at grid coords
 func check_grid_for_collider(grid_coords: Vector2i) -> bool:
-	# bounds error checking
 	if (grid_coords.x < 0 or grid_coords.y < 0):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
-		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
-		return true # exit for bad value
+		return true
 
 	# get tile at grid_coords
 	var tile_data = current_tile_map_layer.get_cell_tile_data(grid_coords)
 	if (tile_data == null):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
-		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
-		return true # exit for bad TileMap data
-	# check tile for collider
+		return true
+
 	var collider_count = tile_data.get_collision_polygons_count(0)
-	# return result: true = collider, false = no collider
+
 	return collider_count
 
 # add collider to specified tile
 func add_grid_collider(grid_coords: Vector2i) -> void:
-	print("Map_Controller: attempting to add collider at: " + str(grid_coords))
-	# bounds error checking
 	if (grid_coords.x < 0 or grid_coords.y < 0):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
-		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
-		return # exit for bad value
+		return
 
-	# get tile at grid_coords
 	var tile_data = current_tile_map_layer.get_cell_tile_data(grid_coords)
 	if (tile_data == null):
 		#TODO catch error for out-of-bounds array lookup for tilemap object
-		print("ERROR: bad TileMap lookup coords: " + str(grid_coords))
-		return # exit for bad TileMap data
+		return
 
 	tile_data.add_collision_polygon(0)
 
-	return
-
-# convert grid coords to TileData object, properties
 func get_tile_at_grid_coords(grid_coords: Vector2i) -> TileData:
 	var tile: TileData = current_tile_map_layer.get_cell_tile_data(grid_coords)
 	if (tile == null):
 		#TODO catch error
-		print("ERROR: Inspecting null tile at: " + str(grid_coords))
 		return null
 	return tile
 
@@ -96,7 +82,6 @@ func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
 	if (atlas_coords == null): return Vector2i(0,0)
 	return atlas_coords
 
-# get dictionary/hashtable format report of various tile data at grid coords
 #TODO bounds check for error
 func get_world_tile_report(grid_coords: Vector2i) -> Dictionary:
 	var tile: TileData = current_tile_map_layer.get_cell_tile_data(grid_coords)
@@ -114,13 +99,11 @@ func get_world_tile_report(grid_coords: Vector2i) -> Dictionary:
 
 	return tile_report
 
-# remove object reference from collection
 func remove_object_from_map_collection(object: Node) -> void:
 	for item in world_map_array.keys():
 		if world_map_array[item] == object:
 			world_map_array.erase(item)
 			break
-	print("MapController - no object to remove")
 
 func destroy_room():
 	var map_container = self.get_child(0)
@@ -145,3 +128,6 @@ func load_room(room_resource_path):
 func enter_door(object):
 	destroy_room()
 	load_room(object.door_destination)
+
+func init(data: Dictionary) -> void:
+	pass

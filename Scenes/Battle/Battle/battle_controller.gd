@@ -2,6 +2,8 @@ extends Node2D
 
 @onready var ai_controller = $AiController
 @onready var game_controller = get_tree().current_scene
+@onready var battle_scene = get_parent()
+
 @onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
 @onready var cursor = $"../BattleMenu/Cursor"
 @onready var health_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/Health"
@@ -13,12 +15,6 @@ extends Node2D
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
 
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
-var gawkingstick_scene = preload("res://Scenes/Battle/Characters/Norman/norman.tscn")
-var thumper_scene = preload("res://Scenes/Battle/Characters/Thumper/thumper.tscn")
-var mage_scene = preload("res://Scenes/Battle/Characters/Mage/mage.tscn")
-var runt_scene = preload("res://Scenes/Battle/Characters/Runt/runt.tscn")
-var mandrake_scene = preload("res://Scenes/Battle/Characters/Mandrake/mandrake.tscn")
-var pilypile_scene = preload("res://Scenes/Battle/Characters/Pilypile/pilypile.tscn")
 
 var players: Array[Character]
 var current_player: Character
@@ -49,6 +45,7 @@ enum EventType {
 }
 
 func _ready() -> void:
+	#var data = battle_scene.get_battle_data()
 	cursor.disable()
 	initialize_battle()
 	add_event({"type": EventType.DIALOG, "text": initial_dialog})
@@ -116,9 +113,8 @@ func handle_ability(event: Dictionary) -> void:
 				position = current_player.position
 			
 			current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
-				
 			kapow.start(position, event.target.z_index, event.animation.name, event.duration)
-	
+
 		current_player.sprite.attack(event.duration)
 		
 		if event.target.health_bar.value <= 0:
@@ -158,7 +154,7 @@ func handle_guard(event: Dictionary) -> void:
 
 func handle_death(event) -> void:
 	if event.target.is_player:
-		game_controller.switch_to_overworld_scene()
+		game_controller.switch_to_scene(Data.Scenes.OVERWORLD, {})
 	else:
 		event.target.visible = false
 		event.target.sound.play_sound(event.target.char_name, Data.SoundAction.DEATH)
@@ -179,7 +175,7 @@ func handle_end_turn() -> void:
 	update_ui()
 
 func handle_retreat() -> void:
-	game_controller.switch_to_overworld_scene()
+	game_controller.switch_to_scene(Data.Scenes.OVERWORLD)
 
 func play_dialog(text: String, should_log: bool) -> void:
 	dialog.text = text
@@ -382,6 +378,7 @@ func on_target_death(target: Character) -> void:
 	players = players.filter(func(p): return p.battle_id != target.battle_id)
 	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.battle_id != target.battle_id || e.has("target") && e.target.battle_id != target.battle_id) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.character.battle_id != target.battle_id)
+	
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
 	

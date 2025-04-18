@@ -80,21 +80,17 @@ func check_move_complete():
 		player.position = dest_pos # force player player.position to dest point
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset) # update reference to player grid
 
-# player action button, spacebar
 func player_action_pressed() -> void:
 	if player.is_moving:
 		return
-	# get action coords / tilespot in front of player in direction facing
+
 	var action_coords = player.grid_position + player.current_direction
-
-	print("player obj id: " + str(self))
 	var tile_report = map_controller.get_world_tile_report(action_coords)
-	print_debug("action_button: " + str(tile_report))
 
-	# get object from map-object-collection
 	var object = map_controller.get_object_at_coords(action_coords)
 	var actioned_tile = map_controller.get_tile_at_grid_coords(action_coords)
-	if (object == null and actioned_tile == null):
+	
+	if object == null && actioned_tile == null:
 		return
 
 	if object != null:
@@ -110,9 +106,12 @@ func player_action_pressed() -> void:
 
 func enter_battle_scene(object: Node) -> void:
 	save_data()
-	game_controller.switch_to_battle_scene()
+	game_controller.switch_to_scene(Data.Scenes.BATTLE)
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
+	if idle && player.animation_object.animation.contains("idle"):
+		return
+		
 	match player.current_direction:
 		Vector2i.UP when idle:
 			player.animation_object.play("idle_up")

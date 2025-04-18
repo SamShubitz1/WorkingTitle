@@ -4,6 +4,12 @@ class_name Data
 
 var GlobalMapControllerRef = 1
 
+	
+enum Scenes {
+	OVERWORLD,
+	BATTLE
+}
+
 enum MainMenuType {
 	MAIN,
 	POKEDEX
