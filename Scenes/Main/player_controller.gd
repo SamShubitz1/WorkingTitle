@@ -3,7 +3,6 @@ extends Node2D
 @onready var player: PlayerClass = $MyPlayer
 @onready var map_controller = $"../MapController"
 @onready var game_controller = get_tree().current_scene
-@onready var player_camera = player.player_camera
 
 @export var DEBUG_PLAYER: bool = true
 
@@ -78,7 +77,6 @@ func check_move_complete():
  
 	if move_finished:
 		player.is_moving = false
-		set_player_animation(player.current_direction, true)
 		player.position = dest_pos # force player player.position to dest point
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset) # update reference to player grid
 
@@ -112,7 +110,7 @@ func player_action_pressed() -> void:
 
 func enter_battle_scene(object: Node) -> void:
 	save_data()
-	game_controller.load_battle_scene()
+	game_controller.switch_to_battle_scene()
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	match player.current_direction:
