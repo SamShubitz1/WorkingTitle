@@ -18,8 +18,8 @@ func switch_to_scene(next_scene: Data.Scenes, data: Dictionary = {}):
 	if !data.is_empty():
 		scene.init(data)
 		
-	add_child(scene)
 	current_scene.queue_free()
+	add_child(scene)
 	current_scene = scene
 
 func get_scene_resource(scene: Data.Scenes) -> String:

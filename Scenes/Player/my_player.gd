@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-class_name Player_Char
+class_name PlayerChar
 
 @onready var sprite = $AnimatedSprite2D
 @onready var player_camera = $OverworldCamera

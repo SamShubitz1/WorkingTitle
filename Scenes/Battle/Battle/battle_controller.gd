@@ -415,19 +415,19 @@ func check_valid_targets(target_cells: Array, check_movement: bool = false) -> b
 			
 	return is_valid_target
 		
-func get_players() -> void:
+func add_players() -> void:
 	var positions = get_enemies_by_position()
 	for pos in positions:
 		var next_enemy = build_character(positions[pos], Data.Alliance.ENEMY, pos)
 		players.append(next_enemy)
 	
-	var mage = build_character("Mage", Data.Alliance.HERO, Vector2i(3,1))
+	var mage = build_character("Mage", Data.Alliance.HERO, Vector2i(2,1))
 	players.append(mage)
-	var mandrake = build_character("Mandrake", Data.Alliance.HERO, Vector2i(2,2))
-	players.append(mandrake)
-	var pilypile = build_character("Pilypile", Data.Alliance.HERO, Vector2i(2,0))
-	players.append(pilypile)
-	
+	var runt = build_character("Pilypile", Data.Alliance.HERO, Vector2i(2,2))
+	players.append(runt)
+	var thumper = build_character("Thumper", Data.Alliance.HERO, Vector2i(2,0))
+	players.append(thumper)
+
 func get_enemies_by_position():
 	var enemies = select_enemies()
 	var occupied_cells: Array
@@ -441,7 +441,7 @@ func get_enemies_by_position():
 	return positions
 
 func select_enemies():
-	var enemy_pool = ["Runt", "Pilypile", "Gawkingstick", "Thumper", "Mandrake"]
+	var enemy_pool = ["Runt", "Thumper", "Mage", "Pilypile", "Mandrake"]
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
@@ -449,6 +449,7 @@ func select_enemies():
 		selected_enemies.append(enemy_pool[enemy_index])
 	
 	return selected_enemies
+	
 	
 #func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
@@ -464,10 +465,18 @@ func get_current_player() -> Node:
 	#return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
 	
 func set_position_by_grid_coords(character: Character) -> void:
+	var y_offsets = {0: 405, 1: 340, 2: 283, 3: 233}
+	var x_offsets = {0: 50, 1: 80, 2: 100, 3: 120 }
+	var enemy_offset = 60
 	var coords = character.grid_position
-	var x_pos = 192 + (coords.x * 128) # const grid_span_x = 128, const grid_offset_x = 192
-	var y_pos = 390 + (coords.y * -100)
-	character.position = Vector2i(x_pos, y_pos)
+	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 128, const grid_offset_x = 192
+	var y_pos = 400 + (coords.y * -110)
+	if character.alliance == Data.Alliance.ENEMY:
+		x_pos += enemy_offset
+		x_offsets[0] += 120
+		x_offsets[1] += 70
+		x_offsets[2] += 30
+	character.position = Vector2i(x_pos + x_offsets[coords.y], y_offsets[coords.y])
 
 func set_turn_order() -> void:
 	var positions: Array
@@ -541,7 +550,7 @@ func update_energy_display() -> void:
 func initialize_battle() -> void:
 	dialog = dialog_box[0]
 	
-	get_players()
+	add_players()
 	battle_grid.populate_grid(players)
 	increment_turn_queue()
 	

@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var player: Player_Char = $MyPlayer
+@onready var player: PlayerChar = $MyPlayer
 @onready var map_controller = $"../MapController"
 @onready var game_controller = get_tree().current_scene
 
