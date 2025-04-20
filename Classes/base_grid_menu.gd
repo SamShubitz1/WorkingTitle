@@ -18,7 +18,7 @@ enum Direction {
 
 var targets_grid: Dictionary = {}
 var current_grid_type: GridType = GridType.GLOBAL
-var global_cells: Array[Panel]
+var global_cells: Array[Node]
 var range_of_movement: Vector2i
 var origin: Vector2i
 var wrap: bool
@@ -265,7 +265,7 @@ func get_cell_color() -> Color:
 	if current_grid_type == GridType.ENEMY || current_grid_type == GridType.CUSTOM:
 		return Color(1, 0, 0)
 	else:
-		return Color(0.5, 0.7, 1)
+		return Color(0.5, 0.2, 1)
 		
 func check_range(coords: Vector2i):
 	#if range_of_movement == null:

@@ -1,7 +1,5 @@
 extends Node2D
 
-@onready var player: PlayerClass = self.get_node("/root/MainScene/Overworld/PlayerController/MyPlayer")
-
 var battle_res = "res://Scenes/Battle/Battle/battle_scene.tscn"
 var overworld_res = "res://Scenes/Main/overworld.tscn"
 var current_scene

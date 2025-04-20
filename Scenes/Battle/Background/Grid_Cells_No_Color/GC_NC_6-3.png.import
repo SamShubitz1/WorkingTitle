@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmoapt7fd5rxa"
-path="res://.godot/imported/Norman_Combat_Attack1.png-36136039a4857992c533ecece6970f9a.ctex"
+uid="uid://dmlqjid04d2bu"
+path="res://.godot/imported/GC_NC_6-3.png-917fa823f777f3993eb51dc67d0e1a85.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Scenes/Battle/Characters/Norman/Norman_Combat_Attack1.png"
-dest_files=["res://.godot/imported/Norman_Combat_Attack1.png-36136039a4857992c533ecece6970f9a.ctex"]
+source_file="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_6-3.png"
+dest_files=["res://.godot/imported/GC_NC_6-3.png-917fa823f777f3993eb51dc67d0e1a85.ctex"]
 
 [params]
 

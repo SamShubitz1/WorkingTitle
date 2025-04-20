@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://clg4nd1ekycri"]
+[gd_scene load_steps=52 format=3 uid="uid://clg4nd1ekycri"]
 
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_controller.gd" id="1_jktho"]
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/battle_scene.gd" id="1_sglw3"]
@@ -8,6 +8,199 @@
 [ext_resource type="Texture2D" uid="uid://bluf07yks352c" path="res://Scenes/Battle/Battle/Current_Turn_Reticle.png" id="3_pviwv"]
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/action_point_display.gd" id="3_ywqhi"]
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/reticle.gd" id="4_yqpad"]
+[ext_resource type="Texture2D" uid="uid://ygdtu0dbbb7c" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_0-0.png" id="7_uw7sp"]
+[ext_resource type="Texture2D" uid="uid://ce3rm2cmrtsx6" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_0-1.png" id="8_t0bnn"]
+[ext_resource type="Texture2D" uid="uid://cge1dlcpx7jhj" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_0-2.png" id="9_pk467"]
+[ext_resource type="Texture2D" uid="uid://c31id5f2v28vc" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_0-3.png" id="10_ebd46"]
+[ext_resource type="Texture2D" uid="uid://br8u34bcq4xut" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_1-0.png" id="11_7l2i3"]
+[ext_resource type="Texture2D" uid="uid://ddvjdc4uq8krt" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_1-1.png" id="12_mohn7"]
+[ext_resource type="Texture2D" uid="uid://dfopdwepkkgdd" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_1-2.png" id="13_iun26"]
+[ext_resource type="Texture2D" uid="uid://ldumk1kuossx" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_1-3.png" id="14_fxda1"]
+[ext_resource type="Texture2D" uid="uid://bvf3g5ub23ykh" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_2-0.png" id="15_vdtop"]
+[ext_resource type="Texture2D" uid="uid://ci602fc6iffdt" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_2-1.png" id="16_3rycn"]
+[ext_resource type="Texture2D" uid="uid://y377ctidcwfm" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_2-2.png" id="17_ouvf5"]
+[ext_resource type="Texture2D" uid="uid://bylq2fylpo8a2" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_2-3.png" id="18_dag15"]
+[ext_resource type="Texture2D" uid="uid://cglsfcy0awtuw" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_3-0.png" id="19_ecv50"]
+[ext_resource type="Texture2D" uid="uid://bea8vo58ygwcp" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_3-1.png" id="20_7ibxn"]
+[ext_resource type="Texture2D" uid="uid://c5q36bi3g2hm4" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_3-2.png" id="21_mxltt"]
+[ext_resource type="Texture2D" uid="uid://dn6anxd00apvf" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/GC_NC_3-3.png" id="22_2mrbx"]
+[ext_resource type="Texture2D" uid="uid://0ptm0f8kufvd" path="res://Scenes/Battle/Background/Grid_Cells_No_Color/T_ArenaTest1.png" id="23_njfmf"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y0qsl"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_ebd46")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_56jfk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_fxda1")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nxbai"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_dag15")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p6eg5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_2mrbx")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_kbhi6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_pk467")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_furpx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_iun26")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5iowo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_ouvf5")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_i40lb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_mxltt")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_1ln5v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_t0bnn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uicv5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_mohn7")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f4dnu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_3rycn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sst25"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_7ibxn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xiloi"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_uw7sp")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_buu1v"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_7l2i3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8vduw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_vdtop")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_iy5ix"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_ecv50")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="Theme" id="Theme_y4e55"]
 
@@ -67,14 +260,155 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("2_tvtlk")
 
-[node name="TargetsGrid" type="GridContainer" parent="BattleMenu"]
-layout_mode = 0
-offset_left = 128.0
-offset_top = 64.0
-offset_right = 1152.0
-offset_bottom = 448.0
-theme_override_constants/h_separation = 10
-columns = 8
+[node name="TargetsGrid" type="Control" parent="BattleMenu"]
+anchors_preset = 0
+offset_left = 5.0
+offset_right = 45.0
+offset_bottom = 40.0
+
+[node name="GridCell25" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(191, 253)
+sprite_frames = SubResource("SpriteFrames_y0qsl")
+
+[node name="GridCell26" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(303, 252)
+sprite_frames = SubResource("SpriteFrames_56jfk")
+
+[node name="GridCell27" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(417, 252)
+sprite_frames = SubResource("SpriteFrames_nxbai")
+
+[node name="GridCell28" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(534, 252)
+sprite_frames = SubResource("SpriteFrames_p6eg5")
+
+[node name="GridCell29" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(735, 253)
+sprite_frames = SubResource("SpriteFrames_p6eg5")
+flip_h = true
+
+[node name="GridCell30" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(849, 253)
+sprite_frames = SubResource("SpriteFrames_nxbai")
+flip_h = true
+
+[node name="GridCell31" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(963, 253)
+sprite_frames = SubResource("SpriteFrames_56jfk")
+flip_h = true
+
+[node name="GridCell32" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(1074, 254)
+sprite_frames = SubResource("SpriteFrames_y0qsl")
+flip_h = true
+
+[node name="GridCell17" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(161, 305)
+sprite_frames = SubResource("SpriteFrames_kbhi6")
+
+[node name="GridCell18" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(283, 305)
+sprite_frames = SubResource("SpriteFrames_furpx")
+
+[node name="GridCell19" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(404, 305)
+sprite_frames = SubResource("SpriteFrames_5iowo")
+
+[node name="GridCell20" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(526, 305)
+sprite_frames = SubResource("SpriteFrames_i40lb")
+
+[node name="GridCell21" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(746, 305)
+sprite_frames = SubResource("SpriteFrames_i40lb")
+flip_h = true
+
+[node name="GridCell22" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(870, 305)
+sprite_frames = SubResource("SpriteFrames_5iowo")
+flip_h = true
+
+[node name="GridCell23" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(989, 305)
+sprite_frames = SubResource("SpriteFrames_furpx")
+flip_h = true
+
+[node name="GridCell24" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(1108, 305)
+sprite_frames = SubResource("SpriteFrames_kbhi6")
+flip_h = true
+
+[node name="GridCell9" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(126, 363)
+sprite_frames = SubResource("SpriteFrames_1ln5v")
+
+[node name="GridCell10" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(254, 364)
+sprite_frames = SubResource("SpriteFrames_uicv5")
+
+[node name="GridCell11" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(382, 363)
+sprite_frames = SubResource("SpriteFrames_f4dnu")
+
+[node name="GridCell12" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(512, 363)
+sprite_frames = SubResource("SpriteFrames_sst25")
+
+[node name="GridCell13" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(758, 363)
+sprite_frames = SubResource("SpriteFrames_sst25")
+flip_h = true
+
+[node name="GridCell14" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(888, 363)
+sprite_frames = SubResource("SpriteFrames_f4dnu")
+flip_h = true
+
+[node name="GridCell15" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(1017, 363)
+sprite_frames = SubResource("SpriteFrames_uicv5")
+flip_h = true
+
+[node name="GridCell16" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(1144, 363)
+sprite_frames = SubResource("SpriteFrames_1ln5v")
+flip_h = true
+
+[node name="GridCell" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(87, 432)
+sprite_frames = SubResource("SpriteFrames_xiloi")
+
+[node name="GridCell2" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(223, 431)
+sprite_frames = SubResource("SpriteFrames_buu1v")
+
+[node name="GridCell3" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(361, 431)
+sprite_frames = SubResource("SpriteFrames_8vduw")
+
+[node name="GridCell4" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(498, 431)
+sprite_frames = SubResource("SpriteFrames_iy5ix")
+
+[node name="GridCell5" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(772, 431)
+sprite_frames = SubResource("SpriteFrames_iy5ix")
+flip_h = true
+
+[node name="GridCell6" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(911, 431)
+sprite_frames = SubResource("SpriteFrames_8vduw")
+flip_h = true
+
+[node name="GridCell7" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(1048, 431)
+sprite_frames = SubResource("SpriteFrames_buu1v")
+flip_h = true
+
+[node name="GridCell8" type="AnimatedSprite2D" parent="BattleMenu/TargetsGrid"]
+position = Vector2(1184, 432)
+sprite_frames = SubResource("SpriteFrames_xiloi")
+flip_h = true
 
 [node name="BattleMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 1
@@ -111,12 +445,15 @@ offset_bottom = 40.0
 layout_mode = 2
 text = "Target Info"
 
-[node name="Background" type="ColorRect" parent="BattleMenu"]
+[node name="Background" type="TextureRect" parent="BattleMenu"]
 z_index = -2
 layout_mode = 0
-offset_right = 1280.0
-offset_bottom = 768.0
-color = Color(0.954062, 0.980702, 0.875619, 1)
+offset_left = -35.0
+offset_top = -203.0
+offset_right = 1315.0
+offset_bottom = 604.0
+texture = ExtResource("23_njfmf")
+expand_mode = 1
 
 [node name="DialogBox" type="Panel" parent="BattleMenu"]
 z_index = 1

@@ -263,21 +263,28 @@ const sounds = {
 	"ThumperAttackA1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA1.wav",
 	"ThumperAttackA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_AttackA2.wav",
 	"ThumperStartA1": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA1.wav",
-	"ThumperStartA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Mandrake_StartA2.wav"}
+	"ThumperStartA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA2.wav"}
 
 var characters = {
 	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Trample", "Screen Flash", "Wave Beam", "Zap", "Process Crunch", "Ignite"], "base energy": 100, "base health": 340, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
-	
 	"Runt": {"name": "Runt", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}, "abilities": ["Crush", "Zap"], "base energy": 100, "base health": 320, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Runt/runt.tscn"},
-	
 	"Pilypile": {"name": "Pilypile", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 2, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}, "abilities": ["Clobber", "Beam Slice"], "base energy": 100, "base health": 340, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Pilypile/pilypile.tscn"},
-	
-	"Gawkingstick": {"name": "Gawkingstick", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Clobber"], "base energy": 100, "base health": 320, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Norman/norman.tscn"},
-	
+	"Gawkingstick": {"name": "Gawkingstick", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 3, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Clobber"], "base energy": 100, "base health": 320, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Gawkingstick/norman.tscn"},
 	"Mandrake": {"name": "Mandrake", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 3, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 3, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Zap", "Process Crunch", "Ignite"], "base energy": 100, "base health": 300, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Mandrake/mandrake.tscn"},
-	
 	"Thumper": {"name": "Thumper", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}, "abilities": ["Clobber", "Heat Ray", "Bulk Inversion"], "base energy": 100, "base health": 300, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Thumper/thumper.tscn"},
 	}
+	
+var cell_offsets_y = [405, 340, 283, 233]
+var cell_offsets_x = [
+	63, 189, 315, 440,
+	735, 860, 990, 1117,
+	101, 220, 338, 458,
+	727, 847, 965, 1084,
+	135, 244, 356, 470,
+	716, 830, 941, 1056,
+	165, 268, 375, 480,
+	713, 819, 925, 1030
+	]
 	
 var items: Dictionary = {
 	"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3},

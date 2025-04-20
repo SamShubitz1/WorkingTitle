@@ -20,4 +20,4 @@ position = Vector2(8, 8)
 script = ExtResource("7_xincb")
 
 [node name="OverworldCamera" type="Camera2D" parent="PlayerController/MyPlayer"]
-zoom = Vector2(6, 6)
+zoom = Vector2(5, 5)

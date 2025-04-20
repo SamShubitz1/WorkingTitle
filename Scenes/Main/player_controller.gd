@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var player: PlayerClass = $MyPlayer
+@onready var player: Player_Char = $MyPlayer
 @onready var map_controller = $"../MapController"
 @onready var game_controller = get_tree().current_scene
 
@@ -8,7 +8,7 @@ extends Node2D
 
 func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
-	player.animation_object.play("idle_down")
+	player.sprite.play("idle_down")
 
 	var success = load_data()
 	if !success:
@@ -52,7 +52,7 @@ func process_player_inputs() -> void:
 func check_collision() -> void:
 	var dest_coords = player.get_grid_position() + player.current_direction
 
-	var tile_collision_check = map_controller.check_grid_for_collider(dest_coords)
+	var tile_collision_check = map_controller.check_for_collider(dest_coords)
 	var object_collision_check = map_controller.get_object_at_coords(dest_coords)
 	
 	if tile_collision_check || object_collision_check:
@@ -85,17 +85,16 @@ func player_action_pressed() -> void:
 		return
 
 	var action_coords = player.grid_position + player.current_direction
-	var tile_report = map_controller.get_world_tile_report(action_coords)
-
+	#var tile_report = map_controller.get_world_tile_report(action_coords)
 	var object = map_controller.get_object_at_coords(action_coords)
-	var actioned_tile = map_controller.get_tile_at_grid_coords(action_coords)
+	var actioned_tile = map_controller.get_tile_at_coords(action_coords)
 	
 	if object == null && actioned_tile == null:
 		return
 
 	if object != null:
 		if object is NPC_Class:
-			if (DEBUG_PLAYER): print_action_object_report(object)
+			#if DEBUG_PLAYER: print_action_object_report(object)
 			if (object.battle_ready):
 				enter_battle_scene(object)
 		elif (object is BaseDoor):
@@ -109,30 +108,30 @@ func enter_battle_scene(object: Node) -> void:
 	game_controller.switch_to_scene(Data.Scenes.BATTLE)
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
-	if idle && player.animation_object.animation.contains("idle"):
+	if idle && player.sprite.animation.contains("idle"):
 		return
 		
 	match player.current_direction:
 		Vector2i.UP when idle:
-			player.animation_object.play("idle_up")
+			player.sprite.play("idle_up")
 		Vector2i.DOWN when idle:
-			player.animation_object.play("idle_down")
+			player.sprite.play("idle_down")
 		Vector2i.LEFT when idle:
-			player.animation_object.play("idle_side")
-			player.animation_object.flip_h = true
+			player.sprite.play("idle_side")
+			player.sprite.flip_h = true
 		Vector2i.RIGHT when idle:
-			player.animation_object.play("idle_side")
-			player.animation_object.flip_h = false
+			player.sprite.play("idle_side")
+			player.sprite.flip_h = false
 		Vector2i.UP:
-			player.animation_object.play("walk_up")
+			player.sprite.play("walk_up")
 		Vector2i.DOWN:
-			player.animation_object.play("walk_down")
+			player.sprite.play("walk_down")
 		Vector2i.LEFT:
-			player.animation_object.play("walk_side")
-			player.animation_object.flip_h = true
+			player.sprite.play("walk_side")
+			player.sprite.flip_h = true
 		Vector2i.RIGHT:
-			player.animation_object.play("walk_side")
-			player.animation_object.flip_h = false
+			player.sprite.play("walk_side")
+			player.sprite.flip_h = false
 
 # set player player.position directly and update values
 func set_loaded_position(pos: Vector2i, scope: String) -> void:
@@ -141,7 +140,7 @@ func set_loaded_position(pos: Vector2i, scope: String) -> void:
 			var new_pos = map_controller.grid_to_point(pos, player.sprite_offset)
 			player.position = new_pos
 			player.grid_position = pos
-			map_controller.remove_object_from_map_collection(self)
+			map_controller.remove_from_world_map(self)
 			#map_controller.set_object_at_coords(self, pos)
 
 func _exit_tree() -> void:

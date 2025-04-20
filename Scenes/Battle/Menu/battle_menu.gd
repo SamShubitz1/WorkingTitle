@@ -237,7 +237,7 @@ func initialize_menus() -> void:
 	var items_buttons = items_node.get_child(0).get_children().slice(3)
 	items_menu.init(items_node, items_buttons, cursor, initial_cursor_pos)
 	
-	var targets_buttons = build_targets_cells()
+	var targets_buttons = targets_grid.get_children()
 	targets_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
 	movement_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
 	
@@ -252,19 +252,18 @@ func initialize_menus() -> void:
 	update_description()
 	selected_menu.activate()
 	
-func build_targets_cells() -> Array[Panel]:
-	var cells: Array[Panel]
-	for i in range(32): # battle_controller.get_grid_size() x * y
-		var cell = Panel.new()
-		cell.size_flags_horizontal = SIZE_EXPAND_FILL
-		cell.size_flags_vertical = SIZE_EXPAND_FILL
-		var style = StyleBoxFlat.new()
-		style.bg_color = Color(1, 1, 1)
-		cell.add_theme_stylebox_override("panel", style)
-		cell.z_index = -1
-		cells.append(cell)
-		get_node("TargetsGrid").add_child(cell)
-	return cells
+#func build_targets_cells() -> Array[Panel]:
+	#var cells: Array[Panel]
+	#for i in range(32): # battle_controller.get_grid_size() x * y
+		#var cell = Panel.new()
+		#cell.size_flags_horizontal = SIZE_EXPAND_FILL
+		#cell.size_flags_vertical = SIZE_EXPAND_FILL
+		#var style = StyleBoxFlat.new()
+		#style.bg_color = Color(1, 1, 1)
+		#cell.add_theme_stylebox_override("panel", style)
+		#cell.z_index = -1
+		#cells.append(cell)
+	#return cells
 	
 func update_scroll_size() -> void:
 	current_player = battle_controller.get_current_player()
