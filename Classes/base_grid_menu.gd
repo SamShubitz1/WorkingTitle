@@ -178,7 +178,7 @@ func move_down() -> void:
 	var is_in_range = check_range(next_coords)
 	if !is_in_range:
 		return
-	selected_button.modulate.a = 0
+
 	update_selected_cell(next_coords)
 
 func move_left() -> void:
@@ -194,7 +194,7 @@ func move_left() -> void:
 		var is_in_range = check_range(next_coords)
 		if !is_in_range:
 			return
-	selected_button.modulate.a = 0
+
 	update_selected_cell(next_coords)
 
 func move_right() -> void:
@@ -209,7 +209,7 @@ func move_right() -> void:
 	var is_in_range = check_range(next_coords)
 	if !is_in_range:
 		return
-	selected_button.modulate.a = 0
+
 	update_selected_cell(next_coords)
 
 func set_grid_type(type: GridType) -> void:

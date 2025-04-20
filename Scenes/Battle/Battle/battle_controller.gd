@@ -473,7 +473,7 @@ func set_position_by_grid_coords(character: Character) -> void:
 	var y_pos = 400 + (coords.y * -110)
 	if character.alliance == Data.Alliance.ENEMY:
 		x_pos += enemy_offset
-		x_offsets[0] += 120
+		x_offsets[0] += 130
 		x_offsets[1] += 70
 		x_offsets[2] += 30
 	character.position = Vector2i(x_pos + x_offsets[coords.y], y_offsets[coords.y])
