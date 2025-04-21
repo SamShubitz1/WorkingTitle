@@ -97,7 +97,7 @@ func player_action_pressed() -> void:
 			#if DEBUG_PLAYER: print_action_object_report(object)
 			if (object.battle_ready):
 				enter_battle_scene(object)
-		elif (object is BaseDoor):
+		elif object is BaseDoor:
 			print("playerController - Door_Destination: " + str(object.door_destination))
 			map_controller.enter_door(object)
 		else:

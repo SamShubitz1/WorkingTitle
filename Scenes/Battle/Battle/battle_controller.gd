@@ -465,14 +465,14 @@ func get_current_player() -> Node:
 	#return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
 	
 func set_position_by_grid_coords(character: Character) -> void:
-	var y_offsets = {0: 405, 1: 340, 2: 283, 3: 233}
+	var y_offsets = {0: 405, 1: 340, 2: 283, 3: 230}
 	var x_offsets = {0: 50, 1: 80, 2: 100, 3: 120 }
-	var enemy_offset = 60
+	var enemy_x_offset = 60
 	var coords = character.grid_position
 	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 128, const grid_offset_x = 192
 	var y_pos = 400 + (coords.y * -110)
 	if character.alliance == Data.Alliance.ENEMY:
-		x_pos += enemy_offset
+		x_pos += enemy_x_offset
 		x_offsets[0] += 130
 		x_offsets[1] += 70
 		x_offsets[2] += 30

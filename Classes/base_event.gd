@@ -24,9 +24,9 @@ class DamageEvent:
 	var effect: EffectEvent
 		
 class EffectEvent:
-	var effect_type: Data.EffectTypes
+	var effect_type: Data.EffectType
 	var effect_value: int
-	var effect_target: Data.EffectTypes
+	var effect_target: Data.TargetType
 
 func _init(event_params: Dictionary):
 	self.type = event_params.get("type", null)
