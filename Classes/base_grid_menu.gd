@@ -200,7 +200,7 @@ func move_left() -> void:
 func move_right() -> void:
 	var coords = targets_grid.find_key(selected_button)
 	var next_coords: Vector2i
-	if coords.x == 3 && wrap: # should be a dynamic value
+	if coords.x == 3 && wrap: # hard coded
 		next_coords = Vector2i(0, coords.y)
 	elif coords.x == 3 && !wrap:
 		next_coords = coords
@@ -268,8 +268,6 @@ func get_cell_color() -> Color:
 		return Color(0.5, 0.2, 1)
 		
 func check_range(coords: Vector2i):
-	#if range_of_movement == null:
-		#return true
 	if current_grid_type == GridType.ENEMY: 
 		coords.x += (initial_grid_size.x / 2)
 	if abs(coords.x - origin.x) > range_of_movement.x:
