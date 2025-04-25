@@ -638,7 +638,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_hwkm5")
 }],
-"loop": true,
+"loop": false,
 "name": &"ArmorInversionOther",
 "speed": 10.0
 }, {
@@ -670,7 +670,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_17lgb")
 }],
-"loop": true,
+"loop": false,
 "name": &"ArmorInversionSelf",
 "speed": 10.0
 }, {
@@ -699,7 +699,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wyluj")
 }],
-"loop": true,
+"loop": false,
 "name": &"BeamSlice",
 "speed": 10.0
 }, {
@@ -728,7 +728,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_0mo28")
 }],
-"loop": true,
+"loop": false,
 "name": &"Bite",
 "speed": 10.0
 }, {
@@ -760,7 +760,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_opjpb")
 }],
-"loop": true,
+"loop": false,
 "name": &"BurstRifle",
 "speed": 10.0
 }, {
@@ -789,7 +789,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_or5pk")
 }],
-"loop": true,
+"loop": false,
 "name": &"Clobber",
 "speed": 10.0
 }, {
@@ -818,7 +818,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_024su")
 }],
-"loop": true,
+"loop": false,
 "name": &"Contemplate",
 "speed": 8.0
 }, {
@@ -847,7 +847,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8nik8")
 }],
-"loop": true,
+"loop": false,
 "name": &"Crush",
 "speed": 10.0
 }, {
@@ -876,7 +876,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_n7ey8")
 }],
-"loop": true,
+"loop": false,
 "name": &"Ignite",
 "speed": 8.0
 }, {
@@ -905,7 +905,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gejq4")
 }],
-"loop": true,
+"loop": false,
 "name": &"Laser",
 "speed": 10.0
 }, {
@@ -937,7 +937,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kybka")
 }],
-"loop": true,
+"loop": false,
 "name": &"PowerStrike",
 "speed": 10.0
 }, {
@@ -966,7 +966,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fhpcf")
 }],
-"loop": true,
+"loop": false,
 "name": &"Reinforce",
 "speed": 10.0
 }, {
@@ -995,7 +995,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bj3wd")
 }],
-"loop": true,
+"loop": false,
 "name": &"ScreenFlash",
 "speed": 10.0
 }, {
@@ -1085,7 +1085,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_nieos")
 }],
-"loop": true,
+"loop": false,
 "name": &"Zap",
 "speed": 10.0
 }]
@@ -1093,5 +1093,5 @@ animations = [{
 [node name="KapowSprite" type="AnimatedSprite2D"]
 z_index = 4
 sprite_frames = SubResource("SpriteFrames_g16yy")
-animation = &"BeamSlice"
+animation = &"Wavebeam"
 script = ExtResource("8_eb3ju")

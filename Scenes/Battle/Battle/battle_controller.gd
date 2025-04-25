@@ -103,17 +103,10 @@ func handle_ability(event: Dictionary) -> void:
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		update_health_display()
+		
 		if event.has("animation"):
 			var kapow = get_kapow()
-			
-			var position: Vector2i
-			if event.animation.origin == Data.AnimOrigin.OTHER:
-				position = event.target.position
-			elif event.animation.origin == Data.AnimOrigin.SELF:
-				position = current_player.position
-			
-			current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
-			kapow.start(position, event.target.z_index, event.animation.name, event.duration)
+			kapow.start(event.animation, current_player, event.target, current_player.alliance)
 
 		current_player.sprite.attack(event.duration)
 		
@@ -125,17 +118,10 @@ func handle_ability(event: Dictionary) -> void:
 		play_dialog(event.target.char_name + " " + event.effect.dialog + "!", true)
 		
 		if event.has("effect_animation"):
-			var position: Vector2i
-			if event.effect_animation.origin == Data.AnimOrigin.OTHER:
-				position = event.target.position
-			elif event.effect_animation.origin == Data.AnimOrigin.SELF:
-				position = current_player.position
-			
 			var effect_kapow = get_kapow()
-			effect_kapow.start(position, event.target.z_index, event.effect_animation.name, event.duration)
+			effect_kapow.start(event.effect_animation, current_player, event.target, current_player.alliance)
 			
 			current_player.sprite.attack(event.duration)
-			current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
 		
 		if event.effect.property == Data.SpecialStat.AP:
 			ap_display.set_action_points(current_player.action_points)
