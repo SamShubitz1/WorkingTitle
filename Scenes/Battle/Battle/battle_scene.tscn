@@ -128,22 +128,22 @@ texture = ExtResource("22_2mrbx")
 
 [node name="GridCell5" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(735, 253)
+position = Vector2(727, 253)
 texture = ExtResource("11_b3vxe")
 
 [node name="GridCell6" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(849, 253)
+position = Vector2(841, 253)
 texture = ExtResource("12_twy4n")
 
 [node name="GridCell7" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(963, 253)
+position = Vector2(955, 253)
 texture = ExtResource("13_dm321")
 
 [node name="GridCell8" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(1074, 254)
+position = Vector2(1072, 254)
 texture = ExtResource("14_m6gox")
 
 [node name="GridCell9" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
@@ -168,17 +168,17 @@ texture = ExtResource("21_mxltt")
 
 [node name="GridCell13" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(746, 305)
+position = Vector2(738, 305)
 texture = ExtResource("19_chqft")
 
 [node name="GridCell14" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(870, 305)
+position = Vector2(862, 305)
 texture = ExtResource("20_jngcv")
 
 [node name="GridCell15" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(989, 305)
+position = Vector2(981, 305)
 texture = ExtResource("21_lliwc")
 
 [node name="GridCell16" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
@@ -193,7 +193,7 @@ texture = ExtResource("8_t0bnn")
 
 [node name="GridCell18" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(254, 364)
+position = Vector2(254, 363)
 texture = ExtResource("12_mohn7")
 
 [node name="GridCell19" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
@@ -208,22 +208,22 @@ texture = ExtResource("20_7ibxn")
 
 [node name="GridCell21" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(758, 363)
+position = Vector2(749, 363)
 texture = ExtResource("27_dxse2")
 
 [node name="GridCell22" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(888, 363)
+position = Vector2(880, 363)
 texture = ExtResource("28_5k48p")
 
 [node name="GridCell23" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(1017, 363)
+position = Vector2(1009, 363)
 texture = ExtResource("29_dgqng")
 
 [node name="GridCell24" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(1144, 363)
+position = Vector2(1139, 363)
 texture = ExtResource("30_63fwi")
 
 [node name="GridCell25" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
@@ -243,27 +243,27 @@ texture = ExtResource("15_vdtop")
 
 [node name="GridCell28" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(498, 431)
+position = Vector2(499, 431)
 texture = ExtResource("19_ecv50")
 
 [node name="GridCell29" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(772, 431)
+position = Vector2(765, 431)
 texture = ExtResource("35_ah6mv")
 
 [node name="GridCell30" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(911, 431)
+position = Vector2(906, 431)
 texture = ExtResource("36_i7v2g")
 
 [node name="GridCell31" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(1048, 431)
+position = Vector2(1044, 431)
 texture = ExtResource("37_wus1v")
 
 [node name="GridCell32" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
 z_index = -1
-position = Vector2(1184, 432)
+position = Vector2(1184, 431)
 texture = ExtResource("38_hyktr")
 
 [node name="BattleMenu" type="Panel" parent="BattleMenu"]
