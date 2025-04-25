@@ -13,10 +13,11 @@ extends Control
 @onready var description_label = $Descriptions/Labels/AbilityDescription
 @onready var energy_cost_label = $Descriptions/Labels/EnergyCost
 @onready var ap_cost_label = $Descriptions/Labels/ApCost
+@onready var range_label = $Descriptions/Labels/Range
 
 var current_player: Node
 #var grid_info: Dictionary
-var initial_cursor_position = Vector2(0, 40)
+var initial_cursor_position = Vector2(0, 55)
 var options_menu = BaseMenu.new()
 
 var abilities_menu = BaseMenu.new()
@@ -216,6 +217,8 @@ func update_description() -> void:
 		description_label.text = current_player.current_abilities[index].description
 		energy_cost_label.text = str("EP cost: ", current_player.current_abilities[index].energy_cost)
 		ap_cost_label.text = str("AP cost: ", current_player.current_abilities[index].action_cost)
+		var range = current_player.current_abilities[index].range
+		range_label.text = str("Range: (", range.x, ", ", range.y, ")")
 	elif selected_menu == items_menu:
 		if index < current_player.items.size():
 			description_label.text = current_player.items[index].menu_description
@@ -223,9 +226,10 @@ func update_description() -> void:
 		description_label.text = "Press Q to pass turn"
 		energy_cost_label.text = "Ep cost: "
 		ap_cost_label.text = "Ap cost: "
+		range_label.text =  "Range: "
 
 func initialize_menus() -> void:
-	var initial_cursor_pos = Vector2i(0, 65)
+	var initial_cursor_pos = Vector2i(0, 165)
 	cursor = battle_cursor
 	
 	var options_buttons = options_node.get_child(0).get_children().slice(1)

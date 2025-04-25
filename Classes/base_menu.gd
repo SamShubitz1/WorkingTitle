@@ -8,7 +8,6 @@ var buttons: Array # array of menu button nodes
 var selected_button_index: int = 0 # track current selected button
 var selected_button: Node # same as buttons[selected_button_index]
 
-var initial_cursor_position: int
 var scroll_size: int
 var is_active: bool = false
 
