@@ -1,6 +1,7 @@
 extends Node2D
 
 @onready var current_tile_map_layer: TileMapLayer = null
+@onready var map_container = self.get_child(0)
 @export var TILE_SIZE: int = 32
 
 func _ready():

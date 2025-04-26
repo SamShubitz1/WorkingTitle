@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjfmxpmaj5l1n"
-path="res://.godot/imported/simple_player_walkdown1.png-992e9a8a8d5fc37fe1c8acef39a38179.ctex"
+uid="uid://u6v0gleynqof"
+path="res://.godot/imported/Mage_Walk_Back.png-9570ad4349d9309c7ab0cdd4f11eb82d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Animations/simple_player_walkdown1.png"
-dest_files=["res://.godot/imported/simple_player_walkdown1.png-992e9a8a8d5fc37fe1c8acef39a38179.ctex"]
+source_file="res://Art/Animations/Mage_Walk_Back.png"
+dest_files=["res://.godot/imported/Mage_Walk_Back.png-9570ad4349d9309c7ab0cdd4f11eb82d.ctex"]
 
 [params]
 

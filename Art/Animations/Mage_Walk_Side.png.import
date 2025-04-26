@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd0cobx7dag10"
-path="res://.godot/imported/simple_player_idleside1.png-0f679e81c91966d58cf13b1e62372fb4.ctex"
+uid="uid://djdticlpuufeu"
+path="res://.godot/imported/Mage_Walk_Side.png-c7cbe9ae30dd4f8489578a6ba69523b0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Animations/simple_player_idleside1.png"
-dest_files=["res://.godot/imported/simple_player_idleside1.png-0f679e81c91966d58cf13b1e62372fb4.ctex"]
+source_file="res://Art/Animations/Mage_Walk_Side.png"
+dest_files=["res://.godot/imported/Mage_Walk_Side.png-c7cbe9ae30dd4f8489578a6ba69523b0.ctex"]
 
 [params]
 

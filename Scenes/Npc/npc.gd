@@ -4,6 +4,7 @@ class_name NPC_Class
 
 @onready var map_controller = $"/root/MainScene/Overworld/MapController"
 @onready var game_controller = get_tree().current_scene
+
 var grid_coords
 var battle_ready = true
 
@@ -19,3 +20,14 @@ func interact() -> void:
 func kill():
 	map_controller.set_object_at_coords(null, grid_coords)
 	queue_free()
+
+# overworld object class
+# grid coords
+# handle dialog
+
+# door class
+# change tile map
+
+# npc class
+# movement logic
+# battle logic

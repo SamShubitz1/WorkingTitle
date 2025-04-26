@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dbrxjmthbs0b0"
-path="res://.godot/imported/simple_player_walkside1.png-b6a95c342336f7263ab30bff2963d3bc.ctex"
+uid="uid://bx7wokiepbkh3"
+path="res://.godot/imported/Mage_Idle_Back.png-c1722f1e16ca3bc136610932ebe5b887.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/Animations/simple_player_walkside1.png"
-dest_files=["res://.godot/imported/simple_player_walkside1.png-b6a95c342336f7263ab30bff2963d3bc.ctex"]
+source_file="res://Art/Animations/Mage_Idle_Back.png"
+dest_files=["res://.godot/imported/Mage_Idle_Back.png-c1722f1e16ca3bc136610932ebe5b887.ctex"]
 
 [params]
 

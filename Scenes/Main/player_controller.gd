@@ -98,7 +98,6 @@ func player_action_pressed() -> void:
 			if (object.battle_ready):
 				enter_battle_scene(object)
 		elif object is BaseDoor:
-			print("playerController - Door_Destination: " + str(object.door_destination))
 			map_controller.enter_door(object)
 		else:
 			print("unknown object")
