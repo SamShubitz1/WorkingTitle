@@ -37,6 +37,7 @@ var selected_ability: Dictionary
 enum EventType {
 	DIALOG,
 	ABILITY,
+	ANIMATION,
 	GUARD,
 	MOVEMENT,
 	DEATH,
@@ -69,6 +70,8 @@ func increment_event_queue() -> void:
 		match event.type:
 			EventType.DIALOG:
 				handle_dialog(event)
+			EventType.ANIMATION:
+				handle_animation(event)
 			EventType.ABILITY:
 				handle_ability(event)
 			EventType.GUARD:
@@ -97,16 +100,19 @@ func increment_event_queue() -> void:
 func handle_dialog(event: Dictionary) -> void:
 	dialog.text = event.text
 	play_dialog(dialog.text, true)
+
+func handle_animation(event: Dictionary) -> void:
+	var kapow = get_kapow()
+	kapow.start(event.animation, current_player, event.target, current_player.alliance)
 	
-func handle_ability(event: Dictionary) -> void:	
+	if event.has("dialog"):
+		play_dialog(event.dialog, true)
+	
+func handle_ability(event: Dictionary) -> void:
 	if event.has("damage_event"):
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		update_health_display()
-		
-		if event.has("animation"):
-			var kapow = get_kapow()
-			kapow.start(event.animation, current_player, event.target, current_player.alliance)
 
 		current_player.sprite.attack(event.duration)
 		
@@ -116,12 +122,6 @@ func handle_ability(event: Dictionary) -> void:
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
 		play_dialog(event.target.char_name + " " + event.effect.dialog + "!", true)
-		
-		if event.has("effect_animation"):
-			var effect_kapow = get_kapow()
-			effect_kapow.start(event.effect_animation, current_player, event.target, current_player.alliance)
-			
-			current_player.sprite.attack(event.duration)
 		
 		if event.effect.property == Data.SpecialStat.AP:
 			ap_display.set_action_points(current_player.action_points)
@@ -217,9 +217,9 @@ func build_attack_event(target: Character, is_first_target: bool) -> void:
 	var damage_event = current_player.calculate_attack_dmg(selected_ability)
 	
 	if selected_ability.has("animation") && is_first_target:
-		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": selected_ability.animation.duration, "emitter": current_player, "animation": selected_ability.animation})
-	else:
-		add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": dialog_duration, "emitter": current_player})
+		add_event({"type": EventType.ANIMATION, "animation": selected_ability.animation, "target": target, "duration": selected_ability.animation.duration, "emitter": current_player})
+
+	add_event({"type": EventType.ABILITY, "target": target, "damage_event": damage_event, "duration": dialog_duration, "emitter": current_player})
 
 func build_effect_event(target: Character, effect: Dictionary, is_first_target: bool) -> void:
 	var effect_target: Character
@@ -230,9 +230,9 @@ func build_effect_event(target: Character, effect: Dictionary, is_first_target: 
 		effect_target = current_player
 
 	if effect.has("animation") && is_first_target:
-		add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": effect.animation.duration, "emitter": current_player, "effect_animation": effect.animation})
-	else:
-		add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": dialog_duration, "emitter": current_player})
+		add_event({"type": EventType.ANIMATION, "animation": effect.animation, "target": effect_target, "duration": effect.animation.duration, "emitter": current_player})
+
+	add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": dialog_duration, "emitter": current_player})
 
 func prompt_select_target(ability_name: String) -> Dictionary:
 	var target_cells = []

@@ -229,7 +229,7 @@ func update_description() -> void:
 		range_label.text =  "Range: "
 
 func initialize_menus() -> void:
-	var initial_cursor_pos = Vector2i(0, 165)
+	var initial_cursor_pos = Vector2i(0, 65)
 	cursor = battle_cursor
 	
 	var options_buttons = options_node.get_child(0).get_children().slice(1)
