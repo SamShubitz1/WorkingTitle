@@ -1,7 +1,7 @@
 extends Node2D
 
 @onready var current_tile_map_layer: TileMapLayer = null
-@export var TILE_SIZE: int = 16
+@export var TILE_SIZE: int = 32
 
 func _ready():
 	#GameData.GlobalMapControllerRef = self

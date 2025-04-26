@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://76b2brrckxfr"
-path="res://.godot/imported/T1_Egg_Charger.png-20a73ec20bfbd40b7f39fadb103237cf.ctex"
+uid="uid://bkumnpvslfel"
+path="res://.godot/imported/Reactor Wall.png-d1c024ff96bfa070fec9c55ab5e5204d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/WorldSprites/T1_Egg_Charger.png"
-dest_files=["res://.godot/imported/T1_Egg_Charger.png-20a73ec20bfbd40b7f39fadb103237cf.ctex"]
+source_file="res://Art/WorldSprites/Reactor Wall.png"
+dest_files=["res://.godot/imported/Reactor Wall.png-d1c024ff96bfa070fec9c55ab5e5204d.ctex"]
 
 [params]
 
