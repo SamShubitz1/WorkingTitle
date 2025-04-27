@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bn23gjblirfpr"]
 
-[ext_resource type="Texture2D" uid="uid://bulgojpq4w4gh" path="res://Art/Animations/simple_bot_idledown.png" id="1_6lqyu"]
+[ext_resource type="Texture2D" uid="uid://bge7gxqg5mhlw" path="res://Art/Animations/simple_bot_idledown.png" id="1_6lqyu"]
 [ext_resource type="Script" path="res://Scenes/Npc/npc.gd" id="1_608d2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mfmbs"]

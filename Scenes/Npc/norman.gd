@@ -1,0 +1,8 @@
+extends NPC_Class
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	super._ready()
+	battle_ready = true
+	pass # Replace with function body.

@@ -8,6 +8,7 @@ func _ready():
 	#GameData.GlobalMapControllerRef = self
 	load_room("res://Rooms/Stovetop/StovetopRoom.tscn")
 
+
 # collection of map objects, keyed by grid-position vector
 var world_map: Dictionary = {}
 

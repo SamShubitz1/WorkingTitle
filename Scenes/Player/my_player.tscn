@@ -222,3 +222,4 @@ position = Vector2(0, -8)
 sprite_frames = SubResource("SpriteFrames_t6eb3")
 animation = &"idle_side"
 frame_progress = 0.591551
+offset = Vector2(0, -8)

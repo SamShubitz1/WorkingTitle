@@ -1,17 +1,18 @@
-extends CharacterBody2D
+extends Node2D
 
 class_name NPC_Class
 
 @onready var map_controller = $"/root/MainScene/Overworld/MapController"
 @onready var game_controller = get_tree().current_scene
+@export var sprite_offset = Vector2(16,16)
 
 var grid_coords
-var battle_ready = true
+var battle_ready = false
 
 func _ready() -> void:
 	grid_coords = map_controller.point_to_grid(position)
 	map_controller.set_object_at_coords(self, grid_coords)
-
+	
 func interact() -> void:
 	#if battle_ready:
 		#map_controller
