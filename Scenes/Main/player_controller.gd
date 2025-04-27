@@ -89,8 +89,8 @@ func player_action_pressed() -> void:
 	var object = map_controller.get_object_at_coords(action_coords)
 	var actioned_tile = map_controller.get_tile_at_coords(action_coords)
 	
-	if object == null && actioned_tile == null:
-		return
+	#if object == null && actioned_tile == null:
+		#return
 
 	if object != null:
 		if object is NPC_Class:
@@ -101,6 +101,13 @@ func player_action_pressed() -> void:
 			map_controller.enter_door(object)
 		else:
 			print("unknown object")
+	else:
+		var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
+		var dialog_box = dialog_scene.instantiate()
+		var next_dialog = {"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.", "options": {"Leave": ""}}
+		get_parent().add_child(dialog_box)
+		dialog_box.set_dialog(next_dialog)
+		
 
 func enter_battle_scene(object: Node) -> void:
 	save_data()
