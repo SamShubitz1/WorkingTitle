@@ -31,3 +31,7 @@ func get_is_moving() -> bool:
 
 func set_is_moving(value: bool) -> void:
 	is_moving = value
+
+func update_direction(input_direction: Vector2i) -> void:
+	current_direction = input_direction
+	is_moving = true

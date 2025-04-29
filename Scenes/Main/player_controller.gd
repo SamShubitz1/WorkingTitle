@@ -1,10 +1,13 @@
 extends Node2D
 
+@export var DEBUG_PLAYER: bool = true
+
 @onready var player: PlayerChar = $MyPlayer
 @onready var map_controller = $"../MapController"
 @onready var game_controller = get_tree().current_scene
 
-@export var DEBUG_PLAYER: bool = true
+var dialog_mode: bool = false
+var dialog_box: DialogBox
 
 func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
@@ -24,30 +27,46 @@ func _process(delta: float) -> void:
 func process_player_movement(delta) -> void:
 	if !player.is_moving:
 		return
-		
 	player.position += player.speed * delta * player.current_direction
 	check_move_complete()
-	
+
+# used for movement
 func process_player_inputs() -> void:
 	if player.is_moving:
 		return
 		
+	if Input.is_action_just_pressed("ui_accept"):
+		player_action_pressed()
+		
+	if dialog_mode:
+		return
+		
+	var input_direction = get_direction()
+	
+	if input_direction != Vector2i.ZERO:
+		player.update_direction(input_direction)
+		set_player_animation(player.current_direction, false)
+		check_collision()
+	else:
+		set_player_animation(player.current_direction, true)
+
+# used for dialog
+func _input(_e) -> void:
+	if !dialog_mode:
+		return
+	var input_direction = get_direction()
+	if input_direction != Vector2i.ZERO:
+		dialog_box.update_selected_option(input_direction)
+	
+# used for dialog and movement
+func get_direction() -> Vector2i:
 	var input_direction: Vector2i
 	if input_direction.y == 0:
 		input_direction.x = int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left"))
 	if input_direction.x == 0:
 		input_direction.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
-
-	if Input.is_action_just_pressed("ui_accept"):
-		player_action_pressed()
-	
-	if input_direction != Vector2i.ZERO:
-		player.current_direction = input_direction
-		player.is_moving = true
-		set_player_animation(player.current_direction, false)
-		check_collision()
-	else:
-		set_player_animation(player.current_direction, true)
+		
+	return input_direction
 
 func check_collision() -> void:
 	var dest_coords = player.get_grid_position() + player.current_direction
@@ -81,16 +100,19 @@ func check_move_complete():
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset) # update reference to player grid
 
 func player_action_pressed() -> void:
-	if player.is_moving:
+	if dialog_mode:
+		var close_dialog = dialog_box.select_option()
+		if close_dialog:
+			dialog_mode = false
 		return
 
 	var action_coords = player.grid_position + player.current_direction
-	#var tile_report = map_controller.get_world_tile_report(action_coords)
 	var object = map_controller.get_object_at_coords(action_coords)
 	var actioned_tile = map_controller.get_tile_at_coords(action_coords)
+	#var tile_report = map_controller.get_world_tile_report(action_coords)
 	
-	#if object == null && actioned_tile == null:
-		#return
+	if object == null && actioned_tile == null:
+		return
 
 	if object != null:
 		if object is NPC_Class:
@@ -103,12 +125,26 @@ func player_action_pressed() -> void:
 			print("unknown object")
 	else:
 		var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
-		var dialog_box = dialog_scene.instantiate()
-		var next_dialog = {"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.", "options": {"Leave": ""}}
+		dialog_box = dialog_scene.instantiate()
+		var dialog_tree = {
+			"Default": {
+				"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.",
+				"options": ["Investigate", "Leave"]},
+			"Investigate": {
+				"text": "This egg is crazy.",
+				"options": ["Take egg", "Leave", "Interrogate"]},
+			"Take egg": {
+				"text": "You took the egg.",
+				"options": ["Leave"]},
+			"Interrogate": {
+				"text": "The egg is silent.",
+				"options": ["Leave", "Investigate"]
+			}
+			}
 		get_parent().add_child(dialog_box)
-		dialog_box.set_dialog(next_dialog)
-		
-
+		dialog_box.set_tree(dialog_tree)
+		dialog_mode = true
+	
 func enter_battle_scene(object: Node) -> void:
 	save_data()
 	game_controller.switch_to_scene(Data.Scenes.BATTLE)

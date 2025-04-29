@@ -104,6 +104,8 @@ func handle_dialog(event: Dictionary) -> void:
 func handle_animation(event: Dictionary) -> void:
 	var kapow = get_kapow()
 	kapow.start(event.animation, current_player, event.target, current_player.alliance)
+
+	current_player.sprite.attack(event.duration)
 	
 	if event.has("dialog"):
 		play_dialog(event.dialog, true)
@@ -113,8 +115,6 @@ func handle_ability(event: Dictionary) -> void:
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		update_health_display()
-
-		current_player.sprite.attack(event.duration)
 		
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
