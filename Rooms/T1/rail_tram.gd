@@ -1,1 +1,1 @@
-extends NPC_Class
+extends BaseNPC

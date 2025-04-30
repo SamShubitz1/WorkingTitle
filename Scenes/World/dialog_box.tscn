@@ -10,16 +10,21 @@ follow_viewport_enabled = true
 script = ExtResource("1_xa5un")
 
 [node name="DialogContainer" type="Panel" parent="."]
-offset_left = 97.0
-offset_top = 61.0
-offset_right = 397.0
-offset_bottom = 234.0
+anchors_preset = -1
+anchor_left = 0.076
+anchor_top = 0.079
+anchor_right = 0.37
+anchor_bottom = 0.37
+offset_left = -0.280006
+offset_top = 0.327995
+offset_right = -0.600006
+offset_bottom = -0.160004
 theme_override_styles/panel = SubResource("StyleBoxFlat_cbn7a")
 
 [node name="Dialog" type="RichTextLabel" parent="DialogContainer"]
 layout_mode = 0
-offset_top = 28.0
-offset_right = 300.0
+offset_top = 36.0
+offset_right = 376.0
 offset_bottom = 159.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -29,8 +34,8 @@ text = "[center]
 
 [node name="Options" type="HBoxContainer" parent="DialogContainer"]
 layout_mode = 0
-offset_right = 300.0
-offset_bottom = 173.0
+offset_right = 376.0
+offset_bottom = 223.0
 alignment = 2
 
 [node name="Option" type="Label" parent="DialogContainer/Options"]
@@ -38,7 +43,6 @@ custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
-text = "option 1"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -47,7 +51,6 @@ custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
-text = "option 2"
 horizontal_alignment = 1
 vertical_alignment = 1
 

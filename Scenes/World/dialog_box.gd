@@ -12,17 +12,17 @@ var current_tree: Dictionary
 # pass the NPC or object's dialog tree, display default dialog
 func set_tree(dialog_tree: Dictionary) -> void:
 	current_tree = dialog_tree
-	update_dialog("Default")
+	update_dialog("default")
 
 # takes a dialog_tree key, sets new screen of dialog (text + options)
 func update_dialog(next_dialog: String) -> void:
 	var current_dialog = current_tree[next_dialog]
-	dialog.text = current_dialog.text
+	dialog.text = "[center]" + current_dialog.text
 	current_options = current_dialog.options
 	for i in range(options.size()):
 		if i < current_options.size():
 			options[i].show()
-			options[i].text = current_options[i]
+			options[i].text = current_options[i].name
 			options[i].modulate = Color(1, 1, 1)
 		else:
 			options[i].hide()
@@ -50,5 +50,5 @@ func select_option() -> bool:
 		self.queue_free()
 		return true
 	else:
-		update_dialog(options[option_index].text)
+		update_dialog(current_options[option_index].next)
 		return false

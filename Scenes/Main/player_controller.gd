@@ -30,7 +30,7 @@ func process_player_movement(delta) -> void:
 	player.position += player.speed * delta * player.current_direction
 	check_move_complete()
 
-# used for movement
+# used for movement and dialog/menu accept
 func process_player_inputs() -> void:
 	if player.is_moving:
 		return
@@ -50,7 +50,7 @@ func process_player_inputs() -> void:
 	else:
 		set_player_animation(player.current_direction, true)
 
-# used for dialog
+# used for dialog/menu
 func _input(_e) -> void:
 	if !dialog_mode:
 		return
@@ -115,39 +115,26 @@ func player_action_pressed() -> void:
 		return
 
 	if object != null:
-		if object is NPC_Class:
-			#if DEBUG_PLAYER: print_action_object_report(object)
-			if (object.battle_ready):
+		if object is BaseNPC:
+			if object.battle_ready:
 				enter_battle_scene(object)
+			elif !object.dialog_tree.is_empty():
+				start_dialog(object.dialog_tree)
 		elif object is BaseDoor:
 			map_controller.enter_door(object)
 		else:
 			print("unknown object")
-	else:
-		var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
-		dialog_box = dialog_scene.instantiate()
-		var dialog_tree = {
-			"Default": {
-				"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.",
-				"options": ["Investigate", "Leave"]},
-			"Investigate": {
-				"text": "This egg is crazy.",
-				"options": ["Take egg", "Leave", "Interrogate"]},
-			"Take egg": {
-				"text": "You took the egg.",
-				"options": ["Leave"]},
-			"Interrogate": {
-				"text": "The egg is silent.",
-				"options": ["Leave", "Investigate"]
-			}
-			}
-		get_parent().add_child(dialog_box)
-		dialog_box.set_tree(dialog_tree)
-		dialog_mode = true
+			
+func start_dialog(dialog_tree: Dictionary) -> void:
+	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
+	dialog_box = dialog_scene.instantiate()
+	get_parent().add_child(dialog_box)
+	dialog_box.set_tree(dialog_tree)
+	dialog_mode = true
 	
 func enter_battle_scene(object: Node) -> void:
 	save_data()
-	game_controller.switch_to_scene(Data.Scenes.BATTLE)
+	game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	if idle && player.sprite.animation.contains("idle"):
