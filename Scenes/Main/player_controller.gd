@@ -130,6 +130,7 @@ func start_dialog(dialog_tree: Dictionary) -> void:
 	dialog_box = dialog_scene.instantiate()
 	get_parent().add_child(dialog_box)
 	dialog_box.set_tree(dialog_tree)
+	dialog_box.position = player.position
 	dialog_mode = true
 	
 func enter_battle_scene(object: Node) -> void:

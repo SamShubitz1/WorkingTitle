@@ -11,7 +11,7 @@ var dialog = {
 				"text": "This egg is crazy.",
 				"options": [
 					{"name": "Take egg", "next": "take egg"},
-					{"name": "Investigate (2)", "next": "investigate2"},
+					{"name": "Investigate", "next": "investigate2"},
 					{"name": "Interrogate", "next": "interrogate"},
 					{"name": "Leave", "next": null}]
 					},
@@ -26,7 +26,7 @@ var dialog = {
 				"text": "The egg is silent.",
 				"options": [
 					{"name": "Investigate", "next": "investigate"},
-					{"name": "Interrogate (2)", "next": "interrogate2"},
+					{"name": "Interrogate", "next": "interrogate2"},
 					{"name": "Leave", "next": null}]
 					},
 			"interrogate2": {

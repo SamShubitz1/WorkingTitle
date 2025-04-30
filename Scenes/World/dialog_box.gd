@@ -1,7 +1,8 @@
-extends CanvasLayer
+extends Control
 
 class_name DialogBox
 
+@onready var dialog_container = $DialogContainer
 @onready var dialog = $DialogContainer/Dialog
 @onready var options = $DialogContainer/Options.get_children()
 
@@ -11,6 +12,7 @@ var current_tree: Dictionary
 
 # pass the NPC or object's dialog tree, display default dialog
 func set_tree(dialog_tree: Dictionary) -> void:
+	dialog_container.position -= Vector2(180, 140)
 	current_tree = dialog_tree
 	update_dialog("default")
 
