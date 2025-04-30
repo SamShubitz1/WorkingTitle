@@ -119,7 +119,12 @@ func player_action_pressed() -> void:
 			if object.battle_ready:
 				enter_battle_scene(object)
 			elif !object.dialog_tree.is_empty():
+				object.resolve_options()
 				start_dialog(object.dialog_tree)
+			var object_flags = object.get_flags()
+			if !object_flags.is_empty():
+				for flag in object_flags:
+					PlayerFlags.flags[flag.name] = flag.value
 		elif object is BaseDoor:
 			map_controller.enter_door(object)
 		else:

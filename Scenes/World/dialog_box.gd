@@ -12,7 +12,7 @@ var current_tree: Dictionary
 
 # pass the NPC or object's dialog tree, display default dialog
 func set_tree(dialog_tree: Dictionary) -> void:
-	dialog_container.position -= Vector2(180, 140)
+	dialog_container.position -= Vector2(180, 100)
 	current_tree = dialog_tree
 	update_dialog("default")
 

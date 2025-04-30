@@ -9,10 +9,15 @@ class_name BaseNPC
 var grid_coords
 var battle_ready = false
 var dialog_tree: Dictionary = {}
+var leave_option = {"name": "Leave", "next": null}
+
 
 func _ready() -> void:
 	grid_coords = map_controller.point_to_grid(position)
 	map_controller.set_object_at_coords(self, grid_coords)
+	
+func resolve_options():
+	pass
 	
 func interact() -> void:
 	#if battle_ready:

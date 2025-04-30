@@ -1,5 +1,7 @@
 extends BaseNPC
 
+var flags = [{"name": "egg_charger_greeted", "value": true}]
+
 var dialog = {
 			"default": {
 				"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.",
@@ -49,6 +51,5 @@ func _ready():
 	var neighbor_coords = Vector2i(grid_coords.x - 1, grid_coords.y)
 	map_controller.set_object_at_coords(self, neighbor_coords)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+func get_flags() -> Array:
+	return flags
