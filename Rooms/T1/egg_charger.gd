@@ -1,8 +1,8 @@
 extends BaseNPC
 
-var egg_flags = [{"name": "egg_charger_greeted", "value": true}]
+var flag = {"name": "egg_charger_greeted"}
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	super._ready()
-	flags = egg_flags
+func update_tree() -> Dictionary:
+	PlayerFlags.flags[flag.name] = true
+	var tree = super.update_tree()
+	return tree

@@ -121,10 +121,6 @@ func interact(object: Node):
 		if object.battle_ready:
 			enter_battle_scene(object)
 		elif !object.dialog_tree.is_empty():
-			var object_flags = object.get_flags()
-			if !object_flags.is_empty():
-				for flag in object_flags:
-					PlayerFlags.flags[flag.name] = flag.value
 			var updated_tree = object.update_tree()
 			start_dialog(updated_tree)
 	elif object is BaseDoor:

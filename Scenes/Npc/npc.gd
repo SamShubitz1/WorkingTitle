@@ -12,8 +12,6 @@ var battle_ready: bool = false
 var dialog_tree: Dictionary
 var dialog_variants: Array
 
-var flags: Array
-
 func _ready() -> void:
 	var current_tree = GameData.dialog.get(char_name)
 	if current_tree:
@@ -25,9 +23,6 @@ func _ready() -> void:
 	for coords in neighbor_coords:
 		var neighbor = grid_coords + coords
 		map_controller.set_object_at_coords(self, neighbor)
-
-func get_flags() -> Array:
-	return flags
 			
 func resolve_options() -> void:
 	for variant in GameData.dialog[char_name].variants:
