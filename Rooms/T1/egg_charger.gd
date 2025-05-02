@@ -6,3 +6,4 @@ func update_tree() -> Dictionary:
 	PlayerFlags.flags[flag.name] = true
 	var tree = super.update_tree()
 	return tree
+ 

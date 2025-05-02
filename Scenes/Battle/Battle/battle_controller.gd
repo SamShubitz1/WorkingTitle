@@ -435,7 +435,7 @@ func select_enemies():
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
-		var enemy_index = randi() % (enemy_pool.size() - 1)
+		var enemy_index = randi() % (enemy_pool.size())
 		selected_enemies.append(enemy_pool[enemy_index])
 	
 	return selected_enemies
@@ -459,7 +459,7 @@ func set_position_by_grid_coords(character: Character) -> void:
 	var x_offsets = {0: 50, 1: 80, 2: 100, 3: 120 }
 	var enemy_x_offset = 60
 	var coords = character.grid_position
-	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 128, const grid_offset_x = 192
+	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 126, const grid_offset_y = -110
 	var y_pos = 400 + (coords.y * -110)
 	if character.alliance == Data.Alliance.ENEMY:
 		x_pos += enemy_x_offset
