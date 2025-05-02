@@ -278,6 +278,109 @@ var characters = {
 	"Thumper": {"name": "Thumper", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}, "abilities": ["Screen Flash", "Zap", "Power Strike", "Contemplate"], "base energy": 100, "base health": 300, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Thumper/thumper.tscn"},
 	}
 	
+var dialog = {
+"newsboy": {
+	"variants": [{
+		"flag": "egg_charger_greeted",
+		"branch": "newspaper2",
+		"options": [
+			{"name": "Egg Charger", "next": "eggcharger"},
+			{"name": "Tram", "next": "tram"},
+			{"name": "Leave", "next": null}]
+				}],
+	"default": {
+		"text": "(The Newsboy rests against a waste receptacle as he waves a scroll of printed paper. His walkers have been broken into a pile of twigs. There was an attempt to mend the hobbled legs back together but it looks as though he gave up halfway through.)",
+		"options": [
+			{"name": "Proceed", "next": "greeting"},
+			{"name": "Leave", "next": null}]
+			},
+	"greeting": {
+		"text": "Extra! Extra! Read all about it! Top Church hikes tithes! Dean of Denominations descends from Stovetop for tax collections!",
+		"options": [
+			{"name": "Proceed", "next": "stovetop"},
+			{"name": "Leave", "next": null}]
+			},
+	"stovetop": {
+		"text": "(The name 'Stovetop' exists in your dictionary. No defintion or contextual data available.)",
+		"options": [
+			{"name": "From where?", "next": "stovetop2"},
+			{"name": "Leave", "next": null}]
+			},
+	"stovetop2": {
+		"text": "What's the matter, mista? Don't'cha read the paper?",
+		"options": [
+			{"name": "Take the paper", "next": "newspaper"},
+			{"name": "Leave", "next": null}]
+			},
+	"newspaper": {
+		"text": "(The headline of the paper reads 'Stovetop Officials Grace the Lowland Districts' and the subject reads 'Historic First! Top Dean Comes to Strengthen the Faith'.)",
+		"options": [
+			{"name": "Proceed", "next": "newspaper2"},
+			{"name": "Leave", "next": null}]
+			},
+	"newspaper2": {
+		"text": "Hey! That costs a two-cell, pal!",
+		"options":[
+			{"name": "Tram", "next": "tram"},
+			{"name": "Leave", "next": null}]
+			},
+	"eggcharger": {
+		"text": "The Egg Charger over there? No idea, pal. Are you gonna buy a paper or not?",
+		"options": [
+			{"name": "Tram", "next": "tram"},
+			{"name": "Leave", "next": null}]
+			},
+	"tram": {
+		"text": "Tram!",
+		"options": [
+			{"name": "Tram", "next": "tram"},
+			{"name": "Leave", "next": null}]
+			},
+	},
+"eggcharger":
+	{
+		"variants": [],
+		"default": {
+			"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.",
+			"options": [
+				{"name": "Investigate", "next": "investigate"},
+				{"name": "Leave", "next": null}]
+				},
+		"investigate": {
+			"text": "This egg is crazy.",
+			"options": [
+				{"name": "Take egg", "next": "take egg"},
+				{"name": "Investigate", "next": "investigate2"},
+				{"name": "Interrogate", "next": "interrogate"},
+				{"name": "Leave", "next": null}]					},
+		"investigate2": {
+			"text": "It's not that crazy actually.",
+			"options": [
+				{"name": "Take egg", "next": "take egg"},
+				{"name": "Interrogate", "next": "interrogate"},
+				{"name": "Leave", "next": null}]
+				},
+		"interrogate": {
+			"text": "The egg is silent.",
+			"options": [
+				{"name": "Investigate", "next": "investigate"},
+				{"name": "Interrogate", "next": "interrogate2"},
+				{"name": "Leave", "next": null}]
+				},
+		"interrogate2": {
+			"text": "The egg remains stoic.",
+			"options": [
+				{"name": "Take egg", "next": "take egg"},
+				{"name": "Leave", "next": null}]
+				},
+		"take egg": {
+			"text": "You took the egg.",
+			"options": [
+				{"name": "Leave", "next": null}]
+				},
+		}
+}
+	
 var items: Dictionary = {
 	"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3},
 	

@@ -30,7 +30,7 @@ func process_player_movement(delta) -> void:
 	player.position += player.speed * delta * player.current_direction
 	check_move_complete()
 
-# used for movement and dialog/menu accept
+# used for overworld and dialog/menu accept
 func process_player_inputs() -> void:
 	if player.is_moving:
 		return
@@ -97,7 +97,7 @@ func check_move_complete():
 	if move_finished:
 		player.is_moving = false
 		player.position = dest_pos # force player player.position to dest point
-		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset) # update reference to player grid
+		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 
 func player_action_pressed() -> void:
 	if dialog_mode:
@@ -113,22 +113,22 @@ func player_action_pressed() -> void:
 	
 	if object == null && actioned_tile == null:
 		return
+		
+	interact(object)
 
-	if object != null:
-		if object is BaseNPC:
-			if object.battle_ready:
-				enter_battle_scene(object)
-			elif !object.dialog_tree.is_empty():
-				object.resolve_options()
-				start_dialog(object.dialog_tree)
+func interact(object: Node):
+	if object is BaseNPC:
+		if object.battle_ready:
+			enter_battle_scene(object)
+		elif !object.dialog_tree.is_empty():
 			var object_flags = object.get_flags()
 			if !object_flags.is_empty():
 				for flag in object_flags:
 					PlayerFlags.flags[flag.name] = flag.value
-		elif object is BaseDoor:
-			map_controller.enter_door(object)
-		else:
-			print("unknown object")
+			var updated_tree = object.update_tree()
+			start_dialog(updated_tree)
+	elif object is BaseDoor:
+		map_controller.enter_door(object)
 			
 func start_dialog(dialog_tree: Dictionary) -> void:
 	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
