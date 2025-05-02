@@ -378,6 +378,22 @@ var dialog = {
 			"options": [
 				{"name": "Leave", "next": null}]
 				},
+		},
+	"tram": {
+		"variants": [],
+		"default": {
+			"text": "This tram is trammin.",
+			"options": [
+				{"name": "Leave", "next": null}]
+				},
+		},
+	"accumulator": {
+		"variants": [],
+		"default": {
+			"text": "It seems to be accumulating.",
+			"options": [
+				{"name": "Leave", "next": null}]
+				},
 		}
 }
 	

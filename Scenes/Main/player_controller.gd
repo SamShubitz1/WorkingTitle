@@ -117,7 +117,7 @@ func player_action_pressed() -> void:
 	interact(object)
 
 func interact(object: Node):
-	if object is BaseNPC:
+	if object is BaseObject:
 		if object.battle_ready:
 			enter_battle_scene(object)
 		elif !object.dialog_tree.is_empty():

@@ -1,1 +1,1 @@
-extends BaseNPC
+extends BaseObject

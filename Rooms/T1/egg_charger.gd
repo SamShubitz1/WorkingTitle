@@ -1,4 +1,4 @@
-extends BaseNPC
+extends BaseObject
 
 var flag = {"name": "egg_charger_greeted"}
 

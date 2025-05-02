@@ -1,4 +1,4 @@
-extends BaseNPC
+extends BaseObject
 
 func _ready():
 	super._ready()
