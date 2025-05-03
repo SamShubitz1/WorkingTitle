@@ -27,7 +27,6 @@ var current_abilities: Array
 
 var items_equipped: Array
 var status_effects: Array
-#var buffs: Dictionary
 	
 var grid_position: Vector2i
 

@@ -173,10 +173,11 @@ func update_dialog_queue() -> void:
 	for i in range(dialog_box.size()):
 		if i < battle_log.size():
 			dialog_box[i].text = battle_log[(battle_log.size() - 1) - i]
-	dialog_box[0].modulate = Color(1, 1, 0)
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
-
+		
+	dialog_box[0].modulate = Color(1, 1, 0)
+		
 func on_use_ability(target_cells: Array) -> void:
 	var energy_success = current_player.use_energy(selected_ability.energy_cost)
 	if !energy_success:

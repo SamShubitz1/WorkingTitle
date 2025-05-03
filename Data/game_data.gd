@@ -14,11 +14,6 @@ enum MainMenuType {
 	POKEDEX
 }
 
-#1.	'character used X', - duration
-#2	player animation, player attack sound - duration
-#3. ability animation, ability sound - duration
-#4. 'character took x damage' / 'character gained x effect' - duration
-
 enum BattleMenuType {
 	OPTIONS,
 	ABILITIES,

@@ -99,6 +99,8 @@ func update_selected_menu(selected_menu_index: int) -> void:
 		update_description()
 	elif selected_menu == abilities_menu:
 		update_description()
+	elif selected_menu == log_menu:
+		log_menu.update_entries(battle_controller.battle_log)
 		
 func on_press_button() -> void:
 	match selected_menu:

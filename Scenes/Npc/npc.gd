@@ -6,10 +6,10 @@ class_name BaseObject
 @onready var game_controller = get_tree().current_scene
 
 @export var object_name: String
+@export var battle_ready: bool = false
 @export var neighbor_coords: Array[Vector2i]
 
 var grid_coords: Vector2i
-var battle_ready: bool = false
 var dialog_tree: Dictionary
 
 func _ready() -> void:
