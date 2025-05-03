@@ -109,7 +109,7 @@ func kill_room():
 	map_container.get_child(0).queue_free()
 
 func load_room(room_resource_path):
-	if room_resource_path == null:
+	if !room_resource_path:
 		return
 
 	var new_map_resource = load(room_resource_path)
