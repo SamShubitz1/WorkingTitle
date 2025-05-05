@@ -1,10 +1,12 @@
+############### EGG CHARGER ###############
+
 extends BaseNPC
 
 var flags = [{"name": "egg_charger_greeted", "value": true}]
 
 var dialog = {
 			"default": {
-				"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.",
+				"text": "(A broken egg charger machine. Though the shell is cracked open, its battery vault remains securely locked in place.)",
 				"options": [
 					{"name": "Investigate", "next": "investigate"},
 					{"name": "Leave", "next": null}]
