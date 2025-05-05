@@ -1281,6 +1281,7 @@ animation = &"RailTramTracks"
 [node name="RailTramConsole" type="Node2D" parent="Doodads"]
 position = Vector2(640, 352)
 script = ExtResource("10_qd7ui")
+object_name = "tram_console"
 
 [node name="RailTramConsole" type="AnimatedSprite2D" parent="Doodads/RailTramConsole"]
 position = Vector2(16, 16)
@@ -1312,6 +1313,7 @@ offset = Vector2(6, -12)
 [node name="Repository" type="Node2D" parent="Doodads"]
 position = Vector2(896, 480)
 script = ExtResource("16_nhmx1")
+object_name = "repository"
 
 [node name="Repository" type="AnimatedSprite2D" parent="Doodads/Repository"]
 position = Vector2(0, 14)

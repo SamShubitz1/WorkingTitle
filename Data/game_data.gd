@@ -285,60 +285,71 @@ var dialog = {
 			{"name": "Leave", "next": null}]
 				}],
 	"default": {
-		"text": "(The Newsboy rests against a waste receptacle as he waves a scroll of printed paper. His walkers have been broken into a pile of twigs. There was an attempt to mend the hobbled legs back together but it looks as though he gave up halfway through.)",
-		"options": [
-			{"name": "Proceed", "next": "greeting"},
-			{"name": "Leave", "next": null}]
+				"text": "(The Newsboy rests against a waste receptacle as he waves a scroll of printed paper. His walkers have been broken into a pile of twigs. There was an attempt to mend the hobbled legs back together but it looks as though he gave up halfway through.)",
+				"options": [
+					{"name": "Proceed", "next": "greeting"},
+					{"name": "Leave", "next": "leave01"}]
+					},
+			"greeting": {
+				"text": "Extra! Extra! Read all about it! Top Church hikes tithes! Dean of Denominations descends from Stovetop for tax collections!",
+				"options": [
+					{"name": "Proceed", "next": "stovetop"},
+					{"name": "Leave", "next": "leave01"}]
+					},
+			"stovetop": {
+				"text": "(The name 'Stovetop' exists in your dictionary. No defintion or contextual data available.)",
+				"options": [
+					{"name": "From where?", "next": "stovetop2"},
+					{"name": "Leave", "next": "leave01"}]
+					},
+			"stovetop2": {
+				"text": "What's the matter, mista? Don't'cha read the paper?",
+				"options": [
+					{"name": "Take the paper", "next": "newspaper"},
+					{"name": "Leave", "next": "leave01"}]
+					},
+			"newspaper": {
+				"text": "(The headline of the paper reads 'Stovetop Officials Grace the Lowland Districts' and the subject reads 'Historic First! Top Dean Comes to Strengthen the Faith'.)",
+				"options": [
+					{"name": "Proceed", "next": "newspaper2"},
+					{"name": "Leave", "next": "leave01"}]
+					},
+			"newspaper2": {
+				"text": "Hey! That costs a two-cell, pal!",
+				"options": [
+					{"name": "Tram", "next": "tram"},
+					{"name": "Leave", "next": null}]
+					},
+			"eggcharger": {
+				"text": "The Egg Charger over there? No idea, pal. Are you gonna buy a paper or not?",
+				"options": [
+					{"name": "Tram", "next": "tram"},
+					{"name": "Leave", "next": "leave01"}]
+					},
+			"tram": {
+				"text": "That? Couldn't help ya, pal. Hasn't budged in years. Figured it was one of Top's pointless architectural displays. The whole city's taken by round shapes.",
+				"options": [
+					{"name": "Tram", "next": "tram"},
+					{"name": "Leave", "next": "leave01"}]
+					},
+			"leave01": {
+				"text": "You'd take care not to head east, pal. The airfield's been run amok by a mad-wired bull!",
+				"options": [
+					{"name": "Broken Legs", "next": "leave02"},
+					{"name": "Leave", "next": null}]
+					},
+			"leave02": {
+				"text": "It was them miserable pilgrims that did me in like this. Said somethin’ about how buying my own batteries is blasphemy. I tell ya, everything’s blasphemy with those bolt-heads. A bot’s got a right to live, don’t he?",
+				"options": [
+					{"name": "Leave", "next": null}]
+					},
 			},
-	"greeting": {
-		"text": "Extra! Extra! Read all about it! Top Church hikes tithes! Dean of Denominations descends from Stovetop for tax collections!",
-		"options": [
-			{"name": "Proceed", "next": "stovetop"},
-			{"name": "Leave", "next": null}]
-			},
-	"stovetop": {
-		"text": "(The name 'Stovetop' exists in your dictionary. No defintion or contextual data available.)",
-		"options": [
-			{"name": "From where?", "next": "stovetop2"},
-			{"name": "Leave", "next": null}]
-			},
-	"stovetop2": {
-		"text": "What's the matter, mista? Don't'cha read the paper?",
-		"options": [
-			{"name": "Take the paper", "next": "newspaper"},
-			{"name": "Leave", "next": null}]
-			},
-	"newspaper": {
-		"text": "(The headline of the paper reads 'Stovetop Officials Grace the Lowland Districts' and the subject reads 'Historic First! Top Dean Comes to Strengthen the Faith'.)",
-		"options": [
-			{"name": "Proceed", "next": "newspaper2"},
-			{"name": "Leave", "next": null}]
-			},
-	"newspaper2": {
-		"text": "Hey! That costs a two-cell, pal!",
-		"options":[
-			{"name": "Tram", "next": "tram"},
-			{"name": "Leave", "next": null}]
-			},
-	"eggcharger": {
-		"text": "The Egg Charger over there? No idea, pal. Are you gonna buy a paper or not?",
-		"options": [
-			{"name": "Tram", "next": "tram"},
-			{"name": "Leave", "next": null}]
-			},
-	"tram": {
-		"text": "Tram!",
-		"options": [
-			{"name": "Tram", "next": "tram"},
-			{"name": "Leave", "next": null}]
-			},
-	},
 "eggcharger":
 	{
 		"name": "eggcharger",
 		"variants": [],
 		"default": {
-			"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.",
+			"text": "(A broken egg charger machine. Though the shell is cracked open, its battery vault remains securely locked in place.)",
 			"options": [
 				{"name": "Investigate", "next": "investigate"},
 				{"name": "Leave", "next": null}]
@@ -376,7 +387,8 @@ var dialog = {
 				{"name": "Leave", "next": null}]
 				},
 		},
-	"tram": {
+"tram": {
+		"name": "tram",
 		"variants": [],
 		"default": {
 			"text": "This tram is trammin.",
@@ -384,15 +396,73 @@ var dialog = {
 				{"name": "Leave", "next": null}]
 				},
 		},
-	"accumulator": {
+"accumulator": {
+		"name": "accumulator",
 		"variants": [],
 		"default": {
 			"text": "It seems to be accumulating.",
 			"options": [
 				{"name": "Leave", "next": null}]
 				},
+		},
+"tram_console": {
+		"name": "tram_console",
+		"variants": [{
+			"flag": "tram_console_button_pressed",
+			"branch": "default",
+			"options": [
+					{"name": "Call Button", "next": "trambutton02"},
+					{"name": "Open Panel", "next": "panel01"},
+					{"name": "Leave", "next": null}]}
+			],
+		"default": {
+				"text": "(The screen on the tram console is off. Below the screen is a call button. Along the base of the console, its panel is ajar.)",
+				"options": [
+					{"name": "Call Button", "next": "trambutton01"},
+					{"name": "Open Panel", "next": "panel01"},
+					{"name": "Leave", "next": null}]
+					},
+			"trambutton01": {
+				"text": "(No reaction. The railway station is unpowered.)",
+				"options": [
+					{"name": "Open Panel", "next": "panel01"},
+					{"name": "Leave", "next": null}]
+					},
+			"trambutton02": {
+				"text": "(The button clicks. Nothing happens. The railway station remains unpowered.)",
+				"options": [
+					{"name": "Open Panel", "next": "panel01"},
+					{"name": "Leave", "next": null}]
+					},
+			"panel01": {
+				"text": "(Inside is the housing for a battery stack but it's empty.)",
+				"options": [
+					{"name": "Insert Battery[500]", "next": "panel02"},
+					{"name": "Leave", "next": null}]
+					},
+			"panel02": {
+				"text": "You win!",
+				"options": [
+					{"name": "Insert Battery[500]", "next": "panel02"},
+					{"name": "Leave", "next": null}]
+					},
+			},
+"repository": {
+		"name": "repository",
+		"variants": [],
+		"default": {
+				"text": "(There is a slot where battery cells can be inserted. The call button will send your deposit through a tube that leads to the reactor.)",
+				"options": [
+					{"name": "Insert Batteries[10]", "next": "repository01"},
+					{"name": "Leave", "next": null}]
+					},
+			"repository01": {
+				"text": "(The machine prints out a ticket.)[p][center]Thank you for your contribution.",
+				"options": [
+					{"name": "Leave", "next": null}]
+					},
+			},
 		}
-}
 	
 var items: Dictionary = {
 	"Extra Rock": {"name": "Extra Rock", "effect_type": "Rock", "description": "Rock attack went up!", "menu_description": "Adds damage to rock attacks", "multiplier": .3},
