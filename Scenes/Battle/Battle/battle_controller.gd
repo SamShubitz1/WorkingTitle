@@ -116,6 +116,12 @@ func handle_ability(event: Dictionary) -> void:
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
 		update_health_display()
 		
+		var offset = event.target.position
+		for digit in str(damage_result):
+			var current_kapow = get_kapow()
+			current_kapow.display_digit(int(digit), offset)
+			offset.x += 20
+			
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
 #

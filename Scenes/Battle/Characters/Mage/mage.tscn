@@ -86,8 +86,7 @@ texture_filter = 1
 position = Vector2(0, -52)
 scale = Vector2(16, 16)
 sprite_frames = SubResource("SpriteFrames_p8hg8")
-animation = &"idle"
-frame_progress = 0.445983
+animation = &"attack"
 script = ExtResource("3_ne4sa")
 
 [node name="CharHealth" type="ProgressBar" parent="."]

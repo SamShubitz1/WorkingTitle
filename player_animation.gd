@@ -8,6 +8,6 @@ func attack(duration: float) -> void:
 	play("attack")
 	await get_tree().create_timer(duration).timeout
 	finish()
-
+	
 func finish() -> void:
 	play("idle")

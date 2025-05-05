@@ -28,3 +28,16 @@ func start(animation: Dictionary, current_player: Character, target: Character, 
 
 func finish() -> void:
 	self.queue_free()
+	
+func display_digit(digit: int, offset: Vector2i) -> void:
+	self.z_index = z_index + 1
+	self.animation = "Digits"
+	self.frame = digit
+	self.position = offset
+	
+	var duration = 10
+	for i in duration:
+		self.position.y -= 8
+		self.modulate.a -= .1
+		await get_tree().create_timer(0.1).timeout
+		
