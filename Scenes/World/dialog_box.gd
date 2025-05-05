@@ -17,8 +17,9 @@ func set_tree(dialog_tree: Dictionary) -> void:
 	update_dialog("default")
 
 # takes a dialog_tree key, sets new screen of dialog (text + options)
-func update_dialog(next_dialog: String) -> void:
-	var current_dialog = current_tree[next_dialog]
+func update_dialog(next_branch: String) -> void:
+	set_flags(next_branch)
+	var current_dialog = current_tree[next_branch]
 	dialog.text = "[center]" + current_dialog.text
 	current_options = current_dialog.options
 	for i in range(options.size()):
@@ -52,7 +53,6 @@ func select_option() -> bool:
 		self.queue_free()
 		return true
 	else:
-		set_flags(current_options[option_index].next)
 		update_dialog(current_options[option_index].next)
 		return false
 		
@@ -60,3 +60,5 @@ func set_flags(branch) -> void:
 	var object_name = current_tree.name
 	if object_name == "tram_console" && branch == "trambutton01":
 		PlayerFlags.flags["tram_console_button_pressed"] = true
+	if object_name == "eggcharger" && branch == "default":
+		PlayerFlags.flags["egg_charger_greeted"] = true
