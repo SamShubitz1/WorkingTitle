@@ -1,40 +1,39 @@
 extends Node2D
 
-class_name BaseNPC
+class_name BaseObject
 
 @onready var map_controller = $"/root/MainScene/Overworld/MapController"
 @onready var game_controller = get_tree().current_scene
-@export var sprite_offset = Vector2(16,16)
 
-var grid_coords
-var battle_ready = false
-var dialog_tree: Dictionary = {}
-var leave_option = {"name": "Leave", "next": null}
+@export var object_name: String
+@export var battle_ready: bool = false
+@export var neighbor_coords: Array[Vector2i]
 
+var grid_coords: Vector2i
+var dialog_tree: Dictionary
 
 func _ready() -> void:
+	var current_tree = GameData.dialog.get(object_name)
+	if current_tree:
+		dialog_tree = current_tree
+	
 	grid_coords = map_controller.point_to_grid(position)
 	map_controller.set_object_at_coords(self, grid_coords)
 	
-func resolve_options():
-	pass
-	
-func interact() -> void:
-	#if battle_ready:
-		#map_controller
-	pass
+	for coords in neighbor_coords:
+		var neighbor = grid_coords + coords
+		map_controller.set_object_at_coords(self, neighbor)
+			
+func resolve_options() -> void:
+	for variant in GameData.dialog[object_name].variants:
+		var flag = PlayerFlags.flags.get(variant.flag)
+		if flag:
+			dialog_tree[variant.branch].options = variant.options
+
+func update_tree() -> Dictionary:
+	resolve_options()
+	return dialog_tree
  
-func kill():
+func kill() -> void:
 	map_controller.set_object_at_coords(null, grid_coords)
 	queue_free()
-
-# overworld object class
-# grid coords
-# handle dialog
-
-# door class
-# change tile map
-
-# npc class
-# movement logic
-# battle logic

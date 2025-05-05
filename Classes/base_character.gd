@@ -27,7 +27,6 @@ var current_abilities: Array
 
 var items_equipped: Array
 var status_effects: Array
-#var buffs: Dictionary
 	
 var grid_position: Vector2i
 
@@ -127,6 +126,8 @@ func resolve_attribute_bonuses(selected_ability: Dictionary):
 func resolve_effect(effect: Dictionary):
 	if effect.has("duration"):
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value, "duration": effect.duration})
+	else:
+		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
 		
 	resolve_status_effects()
 	

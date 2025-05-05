@@ -173,10 +173,11 @@ func update_dialog_queue() -> void:
 	for i in range(dialog_box.size()):
 		if i < battle_log.size():
 			dialog_box[i].text = battle_log[(battle_log.size() - 1) - i]
-	dialog_box[0].modulate = Color(1, 1, 0)
 	if battle_log.size() > 20:
 		battle_log = battle_log.slice(1)
-
+		
+	dialog_box[0].modulate = Color(1, 1, 0)
+		
 func on_use_ability(target_cells: Array) -> void:
 	var energy_success = current_player.use_energy(selected_ability.energy_cost)
 	if !energy_success:
@@ -198,7 +199,9 @@ func on_use_ability(target_cells: Array) -> void:
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
 	
 	var ability_success = current_player.check_success(selected_ability)
-	if ability_success:
+	if !ability_success:
+		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+	else:
 		var is_first_target = true
 		for target_pos in selected_targets:
 			var target = battle_grid.current_grid[target_pos]
@@ -208,9 +211,7 @@ func on_use_ability(target_cells: Array) -> void:
 			for effect in selected_ability.effects:
 				build_effect_event(target, effect, is_first_target)
 			is_first_target = false
-	else:
-		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
-		
+			
 	end_turn()
 
 func build_attack_event(target: Character, is_first_target: bool) -> void:
@@ -435,7 +436,7 @@ func select_enemies():
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
-		var enemy_index = randi() % (enemy_pool.size() - 1)
+		var enemy_index = randi() % (enemy_pool.size())
 		selected_enemies.append(enemy_pool[enemy_index])
 	
 	return selected_enemies
@@ -459,7 +460,7 @@ func set_position_by_grid_coords(character: Character) -> void:
 	var x_offsets = {0: 50, 1: 80, 2: 100, 3: 120 }
 	var enemy_x_offset = 60
 	var coords = character.grid_position
-	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 128, const grid_offset_x = 192
+	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 126, const grid_offset_y = -110
 	var y_pos = 400 + (coords.y * -110)
 	if character.alliance == Data.Alliance.ENEMY:
 		x_pos += enemy_x_offset
@@ -552,11 +553,11 @@ func get_kapow() -> Node:
 	self.add_child(kapow)
 	return kapow
 	
-func build_character(name: String, char_alliance: Data.Alliance, position: Vector2i):
-	var char_scene = load(GameData.characters[name].path)
-	var char_info = GameData.characters[name]
+func build_character(char_name: String, char_alliance: Data.Alliance, char_position: Vector2i):
+	var char_scene = load(GameData.characters[char_name].path)
+	var char_info = GameData.characters[char_name]
 	var char = char_scene.instantiate()
-	char.init(battle_id, name, char_info.attributes, char_alliance, char.get_node("CharSprite"), char.get_node("CharSound"), char.get_node("CharHealth"), char_info["base energy"], char_info["base health"], char_info.abilities, position, char_info.role)
+	char.init(battle_id, char_name, char_info.attributes, char_alliance, char.get_node("CharSprite"), char.get_node("CharSound"), char.get_node("CharHealth"), char_info["base energy"], char_info["base health"], char_info.abilities, char_position, char_info.role)
 	add_child(char)
 	set_position_by_grid_coords(char)
 	battle_id += 1
