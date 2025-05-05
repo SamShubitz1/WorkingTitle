@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=4 uid="uid://cqyxox8y1kg00"]
+[gd_scene load_steps=62 format=4 uid="uid://cqyxox8y1kg00"]
 
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_n1ome"]
 [ext_resource type="Texture2D" uid="uid://dgai3sow7pw2g" path="res://Art/Tiles/T_E_Farmland_Props.png" id="1_qrrmh"]
@@ -1281,6 +1281,7 @@ animation = &"RailTramTracks"
 [node name="RailTramConsole" type="Node2D" parent="Doodads"]
 position = Vector2(640, 352)
 script = ExtResource("10_qd7ui")
+object_name = "tram_console"
 
 [node name="RailTramConsole" type="AnimatedSprite2D" parent="Doodads/RailTramConsole"]
 position = Vector2(16, 16)
@@ -1312,6 +1313,7 @@ offset = Vector2(6, -12)
 [node name="Repository" type="Node2D" parent="Doodads"]
 position = Vector2(896, 480)
 script = ExtResource("16_nhmx1")
+object_name = "repository"
 
 [node name="Repository" type="AnimatedSprite2D" parent="Doodads/Repository"]
 position = Vector2(0, 14)
