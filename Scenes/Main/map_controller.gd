@@ -13,9 +13,7 @@ var world_map: Dictionary = {}
 
 # convert grid coords to stored-object
 func get_object_at_coords(grid_coords: Vector2i) -> Node:
-	if !world_map.has(grid_coords):
-		return null
-	var object = world_map[grid_coords]
+	var object = world_map.get(grid_coords)
 	return object
 
 # store object reference at grid coords
@@ -72,6 +70,35 @@ func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
 	var atlas_coords: Vector2i = current_tile_map_layer.get_cell_atlas_coords(grid_coords)
 	if (atlas_coords == null): return Vector2i(0,0)
 	return atlas_coords
+
+func remove_from_world_map(object: Node) -> void:
+	for item in world_map.keys():
+		if world_map[item] == object:
+			world_map.erase(item)
+			break
+
+func kill_room():
+	world_map = {}
+	var map_container = self.get_child(0)
+	map_container.get_child(0).queue_free()
+
+func load_room(room_resource_path: String):
+	if !room_resource_path:
+		return
+
+	var new_map_resource = load(room_resource_path)
+	var imported_new_map = new_map_resource.instantiate()
+	
+	var map_container = self.get_child(0)
+	map_container.add_child(imported_new_map)
+	current_tile_map_layer = imported_new_map.get_node("TileMapLayer")
+
+func enter_door(object):
+	kill_room()
+	load_room(object.door_destination)
+
+func init(data: Dictionary) -> void:
+	pass
 	
 #func get_current_tile_map_layer() -> TileMapLayer:
 	#var map_container = get_child(0)
@@ -96,32 +123,3 @@ func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
 	#}
 #
 	#return tile_report
-
-func remove_from_world_map(object: Node) -> void:
-	for item in world_map.keys():
-		if world_map[item] == object:
-			world_map.erase(item)
-			break
-
-func kill_room():
-	world_map = {}
-	var map_container = self.get_child(0)
-	map_container.get_child(0).queue_free()
-
-func load_room(room_resource_path):
-	if !room_resource_path:
-		return
-
-	var new_map_resource = load(room_resource_path)
-	var imported_new_map = new_map_resource.instantiate()
-	
-	var map_container = self.get_child(0)
-	map_container.add_child(imported_new_map)
-	current_tile_map_layer = imported_new_map.get_node("TileMapLayer")
-
-func enter_door(object):
-	kill_room()
-	load_room(object.door_destination)
-
-func init(data: Dictionary) -> void:
-	pass

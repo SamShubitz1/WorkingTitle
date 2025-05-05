@@ -53,4 +53,11 @@ func select_option() -> bool:
 		return true
 	else:
 		update_dialog(current_options[option_index].next)
+		set_flags(current_options[option_index].next)
 		return false
+		
+func set_flags(branch: String) -> void:
+	var object_name = current_tree.name
+	if object_name == "rail_car_console" && branch == "tram_button01":
+		PlayerFlags.flags["tram_console_button_pressed"] = true
+			

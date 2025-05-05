@@ -199,7 +199,9 @@ func on_use_ability(target_cells: Array) -> void:
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
 	
 	var ability_success = current_player.check_success(selected_ability)
-	if ability_success:
+	if !ability_success:
+		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+	else:
 		var is_first_target = true
 		for target_pos in selected_targets:
 			var target = battle_grid.current_grid[target_pos]
@@ -209,9 +211,7 @@ func on_use_ability(target_cells: Array) -> void:
 			for effect in selected_ability.effects:
 				build_effect_event(target, effect, is_first_target)
 			is_first_target = false
-	else:
-		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
-		
+			
 	end_turn()
 
 func build_attack_event(target: Character, is_first_target: bool) -> void:

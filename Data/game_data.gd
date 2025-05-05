@@ -275,6 +275,7 @@ var characters = {
 	
 var dialog = {
 "newsboy": {
+	"name": "newsboy",
 	"variants": [{
 		"flag": "egg_charger_greeted",
 		"branch": "newspaper2",
@@ -334,6 +335,7 @@ var dialog = {
 	},
 "eggcharger":
 	{
+		"name": "eggcharger",
 		"variants": [],
 		"default": {
 			"text": "A broken egg charger machine. Someone has attempted to crack it for a free juice-up.",

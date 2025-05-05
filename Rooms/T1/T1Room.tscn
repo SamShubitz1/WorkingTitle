@@ -1,4 +1,4 @@
-[gd_scene load_steps=62 format=4 uid="uid://cqyxox8y1kg00"]
+[gd_scene load_steps=63 format=4 uid="uid://cqyxox8y1kg00"]
 
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_n1ome"]
 [ext_resource type="Texture2D" uid="uid://dgai3sow7pw2g" path="res://Art/Tiles/T_E_Farmland_Props.png" id="1_qrrmh"]
