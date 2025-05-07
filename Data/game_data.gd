@@ -195,7 +195,7 @@ var abilities: Dictionary = {
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 2, "property": Attributes.MEMORY, "dialog": "gained +2 memory", "animation": {"name": "Contemplate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 		
 	"Process Crunch": {"name": "Process Crunch", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 2, "energy_cost": 10, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Removes all ailments. Gain +4 memory and +4 flux during your next turn.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "effects": [
-		{"effect_type": EffectType.RESTORE, "target": EffectTarget.SELF, "value": 0, "property": SpecialStat.AILMENTS, "dialog": "removed all ailments", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.SELF, "duration": 0.8}},
+		{"effect_type": EffectType.RESTORE, "duration": 0, "target": EffectTarget.SELF, "value": 0, "property": SpecialStat.AILMENTS, "dialog": "removed all ailments", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.SELF, "duration": 0.8}},
 		{"effect_type": EffectType.ATTRIBUTE, "duration": 1, "target": EffectTarget.SELF, "value": 4, "property": Attributes.FLUX, "dialog": "gained +4 flux until end of next turn", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		{"effect_type": EffectType.ATTRIBUTE, "duration": 1, "target": EffectTarget.SELF, "value": 4, "property": Attributes.MEMORY, "dialog": "gained +4 memory end of until next turn", "animation": {"name": "ArmorInversionSelf", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 		
@@ -260,7 +260,7 @@ const sounds = {
 	"ThumperStartA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA2.wav"}
 
 var characters = {
-	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Burst Rifle", "Heat Ray", "Ripjaw", "Reinforce"], "base energy": 100, "base health": 340, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
+	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Burst Rifle", "Heat Ray", "Ripjaw", "Process Crunch"], "base energy": 100, "base health": 340, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
 	
 	"Runt": {"name": "Runt", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}, "abilities": ["Crush", "Zap"], "base energy": 100, "base health": 320, "role": Data.MachineRole.NONE, "path": "res://Scenes/Battle/Characters/Runt/runt.tscn"},
 	

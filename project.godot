@@ -25,7 +25,6 @@ PlayerFlags="*res://player_flags.gd"
 
 window/size/viewport_width=1280
 window/size/viewport_height=768
-window/size/mode=3
 window/size/resizable=false
 window/stretch/mode="viewport"
 window/stretch/scale_mode="integer"

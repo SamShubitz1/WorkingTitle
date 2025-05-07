@@ -49,11 +49,12 @@ func update_selected_option(direction: Vector2i) -> void:
 
 # updates dialog or quits scene based on option, called on player action press
 func select_option() -> bool:
-	if options[option_index].text == "Leave":
+	var next_dialog = current_options[option_index].get("next")
+	if !next_dialog:
 		self.queue_free()
 		return true
 	else:
-		update_dialog(current_options[option_index].next)
+		update_dialog(next_dialog)
 		return false
 		
 func set_flags(branch) -> void:
