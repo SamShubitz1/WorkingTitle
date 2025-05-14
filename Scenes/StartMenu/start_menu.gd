@@ -3,15 +3,15 @@ extends Control
 @onready var start_menu_cursor: BaseCursor = $Cursor
 @onready var pokemon_card = $PokemonCard
 @onready var pokemon_card_label = $PokemonCard/CardLabel
+@onready var main_menu = $MainMenu
 
 var menus: Array[BaseMenu] = []
 var selected_menu_index: int
 var selected_menu: BaseMenu
 var menu_history: Array
 
-var main_menu = BaseMenu.new()
 var pokedex_log = BaseLog.new()
-var current_selected_button: Button
+var current_selected_button: Node
 var cursor: BaseCursor
 
 func init(menu_cursor: BaseCursor, current_menus: Array) -> void:
@@ -38,19 +38,17 @@ func _ready() -> void:
 	initialize_menus()
 	self.init(start_menu_cursor, menus)
 
+
+
 func _input(_e) -> void:
 	if not cursor.disabled:
 		if Input.is_action_pressed("navigate_forward"):
-			color_off()
 			selected_menu.navigate_forward(_e)
 			update_pokedex_entry()
-			color_on()
 
 		elif Input.is_action_pressed("navigate_backward"):
-			color_off()
 			selected_menu.navigate_backward(_e)
 			update_pokedex_entry()
-			color_on()
 			
 		if Input.is_action_just_pressed("ui_accept"):
 			on_press_button()
@@ -62,16 +60,15 @@ func _input(_e) -> void:
 				pokemon_card.hide()
 				
 func on_press_button() -> void:
-	if selected_menu == main_menu:
-		var button_text = selected_menu.get_selected_button().text
-		color_off() 
-		match button_text:
-			"Pokédex":
-				update_selected_menu(GameData.MainMenuType.POKEDEX)
-				color_on()
-				update_pokedex_entry()
-	elif selected_menu == pokedex_log:
-		pokemon_card.visible = !pokemon_card.visible
+	return
+	#if selected_menu == main_menu:
+		#var button_text = selected_menu.get_selected_button().text
+		#match button_text:
+			#"Pokédex":
+				#update_selected_menu(GameData.MainMenuType.POKEDEX)
+				#update_pokedex_entry()
+	#elif selected_menu == pokedex_log:
+		#pokemon_card.visible = !pokemon_card.visible
 				
 func set_pokemon_card(entry) -> void:
 	var pokemon_info = GameData.pokedex[entry]
@@ -84,13 +81,6 @@ func list_types(types: Array) -> String:
 		type_string = str(type_string, " ", type)
 	return type_string
 	
-func color_on() -> void:
-	current_selected_button = selected_menu.get_selected_button()
-	current_selected_button.modulate = Color(1, 1, 0)
-	
-func color_off() -> void:
-	current_selected_button.modulate = Color(1, 1, 1)
-
 func update_pokedex_entry() -> void:
 	var entry = pokedex_log.get_current_entry()
 	set_pokemon_card(entry)
@@ -103,6 +93,5 @@ func initialize_menus():
 	pokedex_log.init(self.get_node("PokedexLog"), log_slots, start_menu_cursor, null, ["-","-","-"] + GameData.pokedex_entries)
 	pokedex_log.hide_menu()
 	current_selected_button = main_menu.get_selected_button()
-	current_selected_button.modulate = Color(1, 1, 0)
 	menus = [main_menu, pokedex_log]
 	pokemon_card.hide()

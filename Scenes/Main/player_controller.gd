@@ -9,10 +9,15 @@ extends Node2D
 var dialog_mode: bool = false
 var dialog_box: DialogBox
 
+var pause_menu: Control
+
 func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
 	player.sprite.play("idle_down")
-
+	var pause_menu_scene = load("res://Scenes/StartMenu/start_menu.tscn")
+	pause_menu = pause_menu_scene.instantiate()
+	add_child(pause_menu)
+	pause_menu.hide()
 	var success = load_data()
 	if !success:
 		return
@@ -38,6 +43,9 @@ func process_player_inputs() -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		player_action_pressed()
 		
+	if Input.is_action_just_pressed("pause_menu"):
+		open_pause_menu()
+		
 	if dialog_mode:
 		return
 		
@@ -55,7 +63,7 @@ func _input(_e) -> void:
 	if !dialog_mode:
 		return
 	var input_direction = get_direction()
-	if input_direction != Vector2i.ZERO:
+	if input_direction != Vector2i.ZERO && dialog_box != null:
 		dialog_box.update_selected_option(input_direction)
 	
 # used for dialog and movement
@@ -115,6 +123,11 @@ func player_action_pressed() -> void:
 		return
 		
 	interact(object)
+
+func open_pause_menu():
+	dialog_mode = true
+	pause_menu.position = player.position + Vector2(-235, -134)
+	pause_menu.show()
 
 func interact(object: Node):
 	if object is BaseObject:

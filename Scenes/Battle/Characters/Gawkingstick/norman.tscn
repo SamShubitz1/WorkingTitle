@@ -1,58 +1,63 @@
-[gd_scene load_steps=15 format=3 uid="uid://dk0vha0gj1182"]
+[gd_scene load_steps=17 format=3 uid="uid://dk0vha0gj1182"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_urc5j"]
-[ext_resource type="Texture2D" uid="uid://bmoapt7fd5rxa" path="res://Scenes/Battle/Characters/Norman/Norman_Combat_Attack1.png" id="2_0amh6"]
-[ext_resource type="Texture2D" uid="uid://qq7nfbn3rp2u" path="res://Scenes/Battle/Characters/Norman/Norman_Combat_Idle1.png" id="2_hcv4l"]
+[ext_resource type="Texture2D" uid="uid://bxtyclc3ef8og" path="res://Scenes/Battle/Characters/Gawkingstick/Eye_Catcher_Attack.png" id="2_d0lf0"]
+[ext_resource type="Texture2D" uid="uid://bh2odkiygdxsw" path="res://Scenes/Battle/Characters/Gawkingstick/Eye_Catcher_Idle.png" id="3_33cbb"]
 [ext_resource type="Script" path="res://player_animation.gd" id="3_ee120"]
 [ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="5_ys5pm"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_tf1n8"]
-atlas = ExtResource("2_0amh6")
-region = Rect2(0, 0, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_1g7h4"]
+atlas = ExtResource("2_d0lf0")
+region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_28ay2"]
-atlas = ExtResource("2_0amh6")
-region = Rect2(16, 0, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvh28"]
+atlas = ExtResource("2_d0lf0")
+region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_v8fjr"]
-atlas = ExtResource("2_0amh6")
-region = Rect2(32, 0, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_i0tfp"]
+atlas = ExtResource("2_d0lf0")
+region = Rect2(128, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_fe1bb"]
-atlas = ExtResource("2_0amh6")
-region = Rect2(48, 0, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_0q6c0"]
+atlas = ExtResource("2_d0lf0")
+region = Rect2(192, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kflfx"]
-atlas = ExtResource("2_hcv4l")
-region = Rect2(0, 0, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_piu7w"]
+atlas = ExtResource("3_33cbb")
+region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_mhtcn"]
-atlas = ExtResource("2_hcv4l")
-region = Rect2(16, 0, 16, 32)
+[sub_resource type="AtlasTexture" id="AtlasTexture_kho1p"]
+atlas = ExtResource("3_33cbb")
+region = Rect2(64, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y1rwj"]
+atlas = ExtResource("3_33cbb")
+region = Rect2(128, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vkp5a"]
+atlas = ExtResource("3_33cbb")
+region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_tf1n8")
+"texture": SubResource("AtlasTexture_1g7h4")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_28ay2")
+"texture": SubResource("AtlasTexture_dvh28")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_v8fjr")
+"texture": SubResource("AtlasTexture_i0tfp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_fe1bb")
+"texture": SubResource("AtlasTexture_0q6c0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_v8fjr")
+"texture": SubResource("AtlasTexture_i0tfp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_28ay2")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tf1n8")
+"texture": SubResource("AtlasTexture_dvh28")
 }],
 "loop": false,
 "name": &"attack",
@@ -60,14 +65,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_kflfx")
+"texture": SubResource("AtlasTexture_piu7w")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_mhtcn")
+"texture": SubResource("AtlasTexture_kho1p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y1rwj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vkp5a")
 }],
 "loop": true,
 "name": &"idle",
-"speed": 2.0
+"speed": 5.0
 }]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gsre"]
@@ -85,7 +96,9 @@ texture_filter = 1
 position = Vector2(0, -22)
 scale = Vector2(12, 12)
 sprite_frames = SubResource("SpriteFrames_fknt7")
-animation = &"idle"
+animation = &"attack"
+frame = 2
+frame_progress = 0.848813
 offset = Vector2(0, -3)
 script = ExtResource("3_ee120")
 
