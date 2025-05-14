@@ -57,9 +57,12 @@ func select_option() -> bool:
 		update_dialog(next_dialog)
 		return false
 		
-func set_flags(branch) -> void:
+# this will eventually be generalized to iterate through region-specific dictionaries of dialog flags
+func set_flags(branch: String) -> void:
 	var object_name = current_tree.name
 	if object_name == "tram_console" && branch == "trambutton01":
 		PlayerFlags.flags["tram_console_button_pressed"] = true
 	if object_name == "eggcharger" && branch == "default":
 		PlayerFlags.flags["egg_charger_greeted"] = true
+	if object_name == "newsboy" && branch == "leave01":
+		PlayerFlags.flags["newsboy_leave_attempted"] = true

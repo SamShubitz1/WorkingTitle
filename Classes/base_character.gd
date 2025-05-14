@@ -177,7 +177,7 @@ func use_energy(cost: int) -> bool:
 		return true
 
 func start_turn():
-	turn_count = (turn_count + 1 % 5) #move into enemy class?
+	turn_count = (turn_count + 1 % 6) #move into enemy class?
 	if turn_count == 0:
 		turn_count = 1
 	has_moved = false

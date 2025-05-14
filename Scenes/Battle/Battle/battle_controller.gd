@@ -426,15 +426,16 @@ func add_players() -> void:
 	players.append(thumper)
 
 func get_enemies_by_position():
-	var enemies = select_enemies()
-	var occupied_cells: Array
-	var positions: Dictionary
-	for i in range(enemies.size()):
-		while positions.size() < i + 1:
-			var next_position = Vector2i(randi_range(4,7), randi_range(0,3)) # hard coded
-			if next_position not in occupied_cells:
-				positions[next_position] = enemies[i]
-				occupied_cells.append(next_position)
+	#var enemies = select_enemies()
+	#var occupied_cells: Array
+	#var positions: Dictionary
+	#for i in range(enemies.size()):
+		#while positions.size() < i + 1:
+			#var next_position = Vector2i(randi_range(4,7), randi_range(0,3)) # hard coded
+			#if next_position not in occupied_cells:
+				#positions[next_position] = enemies[i]
+				#occupied_cells.append(next_position)
+	var positions = {Vector2i(4,0): "Pilypile", Vector2i(5,1): "Runt", Vector2i(6,2): "Mandrake", Vector2i(4,2): "Gawkingstick", Vector2i(5,3): "Thumper"}
 	return positions
 
 func select_enemies():

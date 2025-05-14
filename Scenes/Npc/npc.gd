@@ -27,8 +27,16 @@ func _ready() -> void:
 func resolve_options() -> void:
 	for variant in GameData.dialog[object_name].variants:
 		var flag = PlayerFlags.flags.get(variant.flag)
-		if flag:
+		if !flag:
+			continue
+			
+		if variant.type == "options_variant": #should be an enum
 			dialog_tree[variant.branch].options = variant.options
+		elif variant.type == "next_variant":
+			for branch in dialog_tree.keys().slice(2):
+				for option in dialog_tree[branch].options:
+					if option.name == variant.option_name:
+						option.next = variant.next
 
 func update_tree() -> Dictionary:
 	resolve_options()

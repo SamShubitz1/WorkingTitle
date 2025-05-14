@@ -46,21 +46,22 @@ func get_next_turn(enemy, players, ability) -> Array: #builds an enemy turn base
 	return next_turn
 	
 func select_by_priority(objects_with_priorities: Array): #takes an array of objects with the shape {"object": object, "priority": int} - object can be an ability, target, or survey (will probably add more) - and rolls dice to return a selected object
-	objects_with_priorities.sort_custom(func(objectA, objectB): return objectA.priority > objectB.priority)
+	objects_with_priorities.sort_custom(func(objectA, objectB): return objectA.priority > objectB.priority) 
 	var max = objects_with_priorities[0].priority
 	var selected_object: Dictionary
-	var difference: int
-	var result = roll_dice(3, max + 10) # should be padded?
-	
+	var difference = null
+	var result = roll_dice(2, max + int(max * .25)) # should be padded?
 	for object in objects_with_priorities:
 		var next_difference = abs(result - object.priority)
-		if !difference:
+		if difference == null:
 			difference = next_difference
 			selected_object = object
 		elif next_difference < difference:
 			difference = next_difference
 			selected_object = object
-			
+	if selected_object.has("targets"):
+		return selected_object.object
+	
 	return selected_object.object
 
 func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary: #select an ability based off calculated priorities
@@ -68,30 +69,176 @@ func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary: #se
 	
 	for ability in abilities: #builds priority objects {"object": object, "priority": int}
 		var ability_with_priority = {"object": ability, "priority": 10}
-	#match enemy.role:
-		#Data.MachineRole.ETANK:
-		if ability.damage.type == Data.DamageType.ENERGY:
-			ability_with_priority.priority += 10
-		if ability.target_type == Data.TargetType.ENEMY:
-			ability_with_priority.priority += 7
-			if enemy.turn_count > 2:
-				ability_with_priority.priority += 5
-		if ability.target_type == Data.TargetType.HERO:
-			ability_with_priority.priority += 4
-		if ability.attribute_bonus == Data.Attributes.FLUX:
-			ability_with_priority.priority += 7
+		var ability_tags = get_ability_tags(ability)
+		
+		var effect_turns: Array
+		var attack_turns: Array
+		
+		var effect_weight = 10
+		var attack_weight = 10
+		var offensive_weight = 0
+		var defensive_weight = 0
+		var energy_weight = 0
+		var physical_weight = 0
+		var target_self_weight = 0
+		var flux_bonus_weight = 0
+		var strength_bonus_weight = 0
+		var has_effect_weight = 0
+		var damage_divider = 0
+
+		match enemy.role:
+			Data.MachineRole.ETANK:
+				effect_turns = [1,2]
+				attack_turns = [3,4,5]
+				
+				defensive_weight = 10
+				target_self_weight = 10
+				
+				energy_weight = 10
+				flux_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 15
+						
+			Data.MachineRole.PTANK:
+				effect_turns = [1,2]
+				attack_turns = [3,4,5]
+				
+				defensive_weight = 10
+				target_self_weight = 10
+				
+				physical_weight = 10
+				strength_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 15
+						
+			Data.MachineRole.EASSAULTER:
+				effect_turns = [1,5]
+				attack_turns = [2,3,4]
+				
+				offensive_weight = 10
+				
+				energy_weight = 10
+				flux_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 8
+					
+			Data.MachineRole.PASSAULTER:
+				effect_turns = [1,5]
+				attack_turns = [2,3,4]
+				
+				offensive_weight = 10
+				
+				physical_weight = 10
+				strength_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 8
 			
-		var target_is_self = false
-		for effect in ability.effects:
-			if effect.target == Data.EffectTarget.SELF:
-				target_is_self = true
-		if target_is_self:
-			ability_with_priority.priority += 5
-			if enemy.turn_count < 3:
-				ability_with_priority.priority += 5
+			Data.MachineRole.ESNIPER:
+				effect_turns = [5]
+				attack_turns = [1,2,3,4]
+				
+				offensive_weight = 10
+				
+				energy_weight = 10
+				flux_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 5
+	
+			Data.MachineRole.PSNIPER:
+				effect_turns = [5]
+				attack_turns = [1,2,3,4]
+				
+				offensive_weight = 10
+				
+				physical_weight = 10
+				strength_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 5
+						
+			Data.MachineRole.EOSUPPORT:
+				effect_turns = [1,2,5]
+				attack_turns = [3,4]
+				
+				offensive_weight = 10
+				
+				energy_weight = 10
+				flux_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 20
+				
+			Data.MachineRole.POSUPPORT:
+				effect_turns = [1,2,5]
+				attack_turns = [3,4]
+				
+				offensive_weight = 10
+				
+				physical_weight = 10
+				strength_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 20
 			
-		if !ability.effects.is_empty():
-			ability_with_priority.priority += 10
+			Data.MachineRole.EDSUPPORT:
+				effect_turns = [1,2,4,5]
+				attack_turns = [3]
+				
+				defensive_weight = 10
+				
+				energy_weight = 10
+				flux_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 20
+			
+			Data.MachineRole.PDSUPPORT:
+				effect_turns = [1,2,4,5]
+				attack_turns = [3]
+				
+				defensive_weight = 10
+				
+				physical_weight = 10
+				strength_bonus_weight = 10
+				has_effect_weight = 5
+				
+				damage_divider = 20
+		
+		if enemy.turn_count in effect_turns:
+			if "effect" in ability_tags:
+				ability_with_priority.priority += effect_weight
+			if "offensive" in ability_tags:
+				ability_with_priority.priority += offensive_weight
+			if "defensive" in ability_tags:
+				ability_with_priority.priority += defensive_weight
+			if "target_self" in ability_tags:
+				ability_with_priority.priority += target_self_weight
+					
+		elif enemy.turn_count in attack_turns:
+			if "attack" in ability_tags:
+				ability_with_priority.priority += attack_weight
+			if "energy" in ability_tags:
+				ability_with_priority.priority += energy_weight
+			if "physical" in ability_tags:
+				ability_with_priority.priority += physical_weight
+			if "flux_bonus" in ability_tags:
+				ability_with_priority.priority += flux_bonus_weight
+			if "strength_bonus" in ability_tags:
+				ability_with_priority.priority += strength_bonus_weight
+			if "has_effect" in ability_tags:
+				ability_with_priority.priority += has_effect_weight
+						
+			var damage_bonus = int(ability.damage.value/damage_divider)
+			ability_with_priority.priority += damage_bonus
+			
+			print("damage bonus ", damage_bonus, " ability ", ability_with_priority.object.name)
+			
+		ability_with_priority.priority += randi_range(-2, 2)
 			
 		abilities_with_priorities.append(ability_with_priority)
 		
@@ -112,14 +259,14 @@ func get_priority_survey(surveys, targets_with_priorities) -> Dictionary: #selec
 		var survey_with_priority = {"object": survey, "priority": 0}
 		survey_with_priority.priority += survey.targets.size() * 10
 		
-		for pt in targets_with_priorities: #we find the target in the survey with the highest priority and add it to the survey's own priority
-			if pt.object in survey.targets:
+		for twp in targets_with_priorities: #we find the target in the survey with the highest priority and add it to the survey's own priority
+			if twp.object in survey.targets:
 				var max_priority
 				for survey_target in survey.targets:
 					if !max_priority:
-						max_priority = pt.priority
-					elif pt.priority > max_priority:
-						max_priority = pt.priority
+						max_priority = twp.priority
+					elif twp.priority > max_priority:
+						max_priority = twp.priority
 
 				survey_with_priority.priority += max_priority
 		
@@ -178,7 +325,46 @@ func get_next_position(players, enemy, selected_cell): #gets next position when 
 	
 	if move_is_valid(next_pos):
 		return next_pos
+
+func get_ability_tags(ability: Dictionary) -> Array:
+	var tags: Array
+	
+	var is_offensive = ability.target_type == Data.TargetType.ENEMY
+	var is_defensive = ability.target_type == Data.TargetType.HERO
+	var target_self = has_target_self(ability.effects)
+	
+	if ability.ability_type == Data.AbilityType.EFFECT:
+		tags.append("effect")
 		
+		if is_offensive:
+			tags.append("offensive")
+		elif is_defensive:
+			tags.append("defensive")
+		if target_self:
+			tags.append("target_self")
+	elif ability.ability_type == Data.AbilityType.ATTACK:
+		tags.append("attack")
+		
+		if ability.damage.type == Data.DamageType.PHYSICAL:
+			tags.append("physical")
+		elif ability.damage.type == Data.DamageType.ENERGY:
+			tags.append("energy")
+		if ability.attribute_bonus == Data.Attributes.STRENGTH:
+			tags.append("strength_bonus")
+		if ability.attribute_bonus == Data.Attributes.FLUX:
+			tags.append("flux_bonus")
+		if !ability.effects.is_empty():
+			tags.append("has_effect")
+	
+	return tags
+	
+func has_target_self(effects: Array) -> bool:
+	var target_self = false
+	for effect in effects:
+		if effect.target == Data.EffectTarget.SELF:
+			target_self = true
+	return target_self
+	
 func get_valid_cells(origin: Vector2i, ability: Dictionary, targets: Array) -> Array: #returns every cell the enemy could select if they moved once
 	var max_range = ability.range + Vector2i(1, 1)
 	var valid_cells: Array
