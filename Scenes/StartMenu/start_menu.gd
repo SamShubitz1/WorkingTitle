@@ -14,34 +14,28 @@ var pokedex_log = BaseLog.new()
 var current_selected_button: Node
 var cursor: BaseCursor
 
+var is_open: bool
+
 func init(menu_cursor: BaseCursor, current_menus: Array) -> void:
 	self.cursor = menu_cursor
 	self.menus = current_menus
 	selected_menu = menus[GameData.MainMenuType.MAIN]
 	selected_menu.activate()
 
-func update_selected_menu(index: int) -> void:
-	if index != selected_menu_index:
-		selected_menu_index = index
-		selected_menu.disactivate()
-		menu_history.append(menus.find(selected_menu))
-		selected_menu = menus[selected_menu_index]
-		cursor.set_menu_type(selected_menu_index)
-		selected_menu.activate()
-
-func go_back() -> void:
-	if not menu_history.is_empty():
-		var prev_menu_index = menu_history.pop_back()
-		update_selected_menu(prev_menu_index)
-
 func _ready() -> void:
 	initialize_menus()
 	self.init(start_menu_cursor, menus)
 
+func open() -> void:
+	self.show()
+	is_open = true
 
+func close() -> void:
+	self.hide()
+	is_open = false
 
 func _input(_e) -> void:
-	if not cursor.disabled:
+	if is_open:
 		if Input.is_action_pressed("navigate_forward"):
 			selected_menu.navigate_forward(_e)
 			update_pokedex_entry()
@@ -58,6 +52,20 @@ func _input(_e) -> void:
 				selected_menu.hide_menu()
 				go_back()
 				pokemon_card.hide()
+
+func update_selected_menu(index: int) -> void:
+	if index != selected_menu_index:
+		selected_menu_index = index
+		selected_menu.disactivate()
+		menu_history.append(menus.find(selected_menu))
+		selected_menu = menus[selected_menu_index]
+		cursor.set_menu_type(selected_menu_index)
+		selected_menu.activate()
+
+func go_back() -> void:
+	if not menu_history.is_empty():
+		var prev_menu_index = menu_history.pop_back()
+		update_selected_menu(prev_menu_index)
 				
 func on_press_button() -> void:
 	return

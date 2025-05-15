@@ -365,7 +365,8 @@ var dialog = {
 			{"name": "Take egg", "next": "take egg"},
 			{"name": "Investigate", "next": "investigate2"},
 			{"name": "Interrogate", "next": "interrogate"},
-			{"name": "Leave", "next": null}]					},
+			{"name": "Leave", "next": null}]	
+			},
 	"investigate2": {
 		"text": "It's not that crazy actually.",
 		"options": [

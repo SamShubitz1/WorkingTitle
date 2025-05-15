@@ -14,10 +14,8 @@ var pause_menu: Control
 func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
 	player.sprite.play("idle_down")
-	var pause_menu_scene = load("res://Scenes/StartMenu/start_menu.tscn")
-	pause_menu = pause_menu_scene.instantiate()
-	add_child(pause_menu)
-	pause_menu.hide()
+	add_pause_menu()
+	
 	var success = load_data()
 	if !success:
 		return
@@ -44,7 +42,11 @@ func process_player_inputs() -> void:
 		player_action_pressed()
 		
 	if Input.is_action_just_pressed("pause_menu"):
-		open_pause_menu()
+		if !dialog_mode:
+			open_pause_menu()
+		else:
+			close_pause_menu()
+		return
 		
 	if dialog_mode:
 		return
@@ -127,7 +129,11 @@ func player_action_pressed() -> void:
 func open_pause_menu():
 	dialog_mode = true
 	pause_menu.position = player.position + Vector2(-235, -134)
-	pause_menu.show()
+	pause_menu.open()
+
+func close_pause_menu():
+	dialog_mode = false
+	pause_menu.close()
 
 func interact(object: Node):
 	if object is BaseObject:
@@ -231,6 +237,12 @@ func save_data() -> bool:
 		result = config.save(PREFERENCE_FILE)
 
 	return result
+
+func add_pause_menu() -> void:
+	var pause_menu_scene = load("res://Scenes/StartMenu/start_menu.tscn")
+	pause_menu = pause_menu_scene.instantiate()
+	add_child(pause_menu)
+	pause_menu.close()
 
 # load player data from disk
 func load_data() -> bool:
