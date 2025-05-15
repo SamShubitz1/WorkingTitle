@@ -110,7 +110,7 @@ func check_move_complete():
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 
 func player_action_pressed() -> void:
-	if dialog_mode:
+	if dialog_mode && dialog_box != null:
 		var close_dialog = dialog_box.select_option()
 		if close_dialog:
 			dialog_mode = false

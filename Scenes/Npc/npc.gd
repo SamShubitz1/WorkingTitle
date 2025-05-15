@@ -30,7 +30,7 @@ func resolve_options() -> void:
 		if !flag:
 			continue
 			
-		if variant.type == "options_variant": #should be an enum
+		if variant.type == "options_variant": #should be an enum really
 			dialog_tree[variant.branch].options = variant.options
 		elif variant.type == "next_variant":
 			for branch in dialog_tree.keys().slice(2):
