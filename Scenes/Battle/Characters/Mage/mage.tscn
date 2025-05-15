@@ -84,7 +84,7 @@ script = ExtResource("1_ge1t4")
 [node name="CharSprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -52)
-scale = Vector2(16, 16)
+scale = Vector2(4.75, 4.75)
 sprite_frames = SubResource("SpriteFrames_p8hg8")
 animation = &"attack"
 script = ExtResource("3_ne4sa")
@@ -107,4 +107,5 @@ show_percentage = false
 
 [node name="CharSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_fi0nc")
+volume_db = -10.0
 script = ExtResource("6_2ec51")

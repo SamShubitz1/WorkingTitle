@@ -6,19 +6,19 @@
 [ext_resource type="Script" path="res://player_animation.gd" id="3_ee120"]
 [ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="5_ys5pm"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1g7h4"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_g82yd"]
 atlas = ExtResource("2_d0lf0")
 region = Rect2(0, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dvh28"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vm4mp"]
 atlas = ExtResource("2_d0lf0")
 region = Rect2(64, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_i0tfp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_jk26q"]
 atlas = ExtResource("2_d0lf0")
 region = Rect2(128, 0, 64, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0q6c0"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_kj4w2"]
 atlas = ExtResource("2_d0lf0")
 region = Rect2(192, 0, 64, 64)
 
@@ -42,22 +42,22 @@ region = Rect2(192, 0, 64, 64)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_1g7h4")
+"texture": SubResource("AtlasTexture_g82yd")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dvh28")
+"texture": SubResource("AtlasTexture_vm4mp")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i0tfp")
+"texture": SubResource("AtlasTexture_jk26q")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_0q6c0")
+"texture": SubResource("AtlasTexture_kj4w2")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_i0tfp")
+"texture": SubResource("AtlasTexture_jk26q")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_dvh28")
+"texture": SubResource("AtlasTexture_vm4mp")
 }],
 "loop": false,
 "name": &"attack",
@@ -93,13 +93,12 @@ script = ExtResource("1_urc5j")
 
 [node name="CharSprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(0, -22)
-scale = Vector2(12, 12)
+position = Vector2(0, -42)
+scale = Vector2(4.75, 4)
 sprite_frames = SubResource("SpriteFrames_fknt7")
-animation = &"attack"
-frame = 2
-frame_progress = 0.848813
-offset = Vector2(0, -3)
+animation = &"idle"
+frame = 3
+frame_progress = 0.275746
 script = ExtResource("3_ee120")
 
 [node name="CharHealth" type="ProgressBar" parent="."]
@@ -118,4 +117,5 @@ value = 80.0
 show_percentage = false
 
 [node name="CharSound" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
 script = ExtResource("5_ys5pm")

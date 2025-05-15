@@ -83,7 +83,7 @@ script = ExtResource("1_j8ld1")
 [node name="CharSprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -74)
-scale = Vector2(12, 12)
+scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_fknt7")
 animation = &"idle"
 script = ExtResource("3_krvcf")
@@ -105,4 +105,5 @@ show_percentage = false
 metadata/_edit_use_anchors_ = true
 
 [node name="CharSound" type="AudioStreamPlayer" parent="."]
+volume_db = -10.0
 script = ExtResource("5_lsajc")

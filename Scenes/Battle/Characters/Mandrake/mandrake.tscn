@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://bvd2jl6prp014"]
+[gd_scene load_steps=17 format=3 uid="uid://bvd2jl6prp014"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ejhso"]
 [ext_resource type="Texture2D" uid="uid://bn6mmtm2885pj" path="res://Scenes/Battle/Characters/Mandrake/Mandrake_Combat_Attack1.png" id="2_xwr3v"]
@@ -6,44 +6,58 @@
 [ext_resource type="Script" path="res://player_animation.gd" id="3_q8g1q"]
 [ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="5_47nuc"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_n0wnp"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_rvy01"]
 atlas = ExtResource("2_xwr3v")
-region = Rect2(0, 0, 32, 96)
+region = Rect2(0, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cveny"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ehp77"]
 atlas = ExtResource("2_xwr3v")
-region = Rect2(32, 0, 32, 96)
+region = Rect2(48, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ppbhq"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_vbfc3"]
 atlas = ExtResource("2_xwr3v")
-region = Rect2(64, 0, 32, 96)
+region = Rect2(96, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cs4pv"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_chn8v"]
 atlas = ExtResource("2_xwr3v")
-region = Rect2(96, 0, 32, 96)
+region = Rect2(144, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_glru8"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_k3c5b"]
 atlas = ExtResource("2_yao61")
-region = Rect2(0, 0, 32, 96)
+region = Rect2(0, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_gcsfy"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_85nte"]
 atlas = ExtResource("2_yao61")
-region = Rect2(32, 0, 32, 96)
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tuumu"]
+atlas = ExtResource("2_yao61")
+region = Rect2(96, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y10ol"]
+atlas = ExtResource("2_yao61")
+region = Rect2(144, 0, 48, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fknt7"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_n0wnp")
+"texture": SubResource("AtlasTexture_rvy01")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cveny")
+"texture": SubResource("AtlasTexture_ehp77")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ppbhq")
+"texture": SubResource("AtlasTexture_vbfc3")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cs4pv")
+"texture": SubResource("AtlasTexture_chn8v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vbfc3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ehp77")
 }],
 "loop": true,
 "name": &"attack",
@@ -51,14 +65,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_glru8")
+"texture": SubResource("AtlasTexture_k3c5b")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_gcsfy")
+"texture": SubResource("AtlasTexture_85nte")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tuumu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y10ol")
 }],
 "loop": true,
 "name": &"idle",
-"speed": 2.0
+"speed": 5.0
 }]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0gsre"]
@@ -73,9 +93,12 @@ script = ExtResource("1_ejhso")
 
 [node name="CharSprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-scale = Vector2(12, 12)
+scale = Vector2(3.75, 3.5)
 sprite_frames = SubResource("SpriteFrames_fknt7")
 animation = &"idle"
+frame = 3
+frame_progress = 0.217362
+offset = Vector2(-14, -10)
 script = ExtResource("3_q8g1q")
 
 [node name="CharHealth" type="ProgressBar" parent="."]
@@ -94,4 +117,5 @@ show_percentage = false
 metadata/_edit_use_anchors_ = true
 
 [node name="CharSound" type="AudioStreamPlayer" parent="."]
+volume_db = -12.5
 script = ExtResource("5_47nuc")
