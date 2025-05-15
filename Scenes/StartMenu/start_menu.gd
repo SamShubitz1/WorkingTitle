@@ -31,6 +31,7 @@ func open() -> void:
 	is_open = true
 
 func close() -> void:
+	main_menu.reset()
 	self.hide()
 	is_open = false
 
@@ -96,10 +97,13 @@ func update_pokedex_entry() -> void:
 func initialize_menus():
 	var menu_buttons = self.get_node("MainMenu/Menu").get_children()
 	var log_slots = self.get_node("PokedexLog/Menu").get_children()
+	
 	main_menu.init(self.get_node("MainMenu"), menu_buttons, start_menu_cursor)
 	main_menu.activate()
+	
 	pokedex_log.init(self.get_node("PokedexLog"), log_slots, start_menu_cursor, null, ["-","-","-"] + GameData.pokedex_entries)
 	pokedex_log.hide_menu()
+	
 	current_selected_button = main_menu.get_selected_button()
 	menus = [main_menu, pokedex_log]
 	pokemon_card.hide()
