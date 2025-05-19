@@ -115,6 +115,8 @@ func player_action_pressed() -> void:
 		if close_dialog:
 			dialog_mode = false
 		return
+	elif dialog_mode:
+		return
 
 	var action_coords = player.grid_position + player.current_direction
 	var object = map_controller.get_object_at_coords(action_coords)
