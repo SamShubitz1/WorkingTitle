@@ -4,6 +4,7 @@ class_name BaseDoor
 
 @export var door_destination: String
 #@export var collider: bool = false
+@export var spawn_position: Vector2
 @onready var map_controller = $"/root/MainScene/Overworld/MapController"
 
 var grid_coords: Vector2i

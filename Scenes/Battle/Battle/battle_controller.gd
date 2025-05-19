@@ -7,7 +7,8 @@ extends Node2D
 @onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
 @onready var cursor = $"../BattleMenu/Cursor"
 @onready var health_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/Health"
-@onready var energy_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/Energy"
+@onready var main_energy_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/MainEnergy"
+@onready var reserve_energy_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/ReserveEnergy"
 @onready var ap_display = $"../BattleMenu/Descriptions/Labels/ActionPointDisplay"
 @onready var reticle = $Reticle
 @onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
@@ -305,7 +306,7 @@ func perform_enemy_turn() -> void:
 					return
 				var is_first_target = true
 				for target in action.targets:
-					if target.guardian:
+					if target.guardian && !current_player.is_aiming:
 						add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
 						var next_target = target.guardian
 						target = next_target
@@ -362,6 +363,20 @@ func on_guard() -> void:
 
 	for target in guard_targets:
 		add_event({"type": EventType.GUARD, "target": target, "duration": 0.7, "animation": "Reinforce"})
+	
+	increment_event_queue()
+
+func on_aim() -> void:
+	cursor.disable()
+	var success = current_player.use_action(1)
+	if !success:
+		prompt_action_points_insufficient()
+		return
+		
+	ap_display.update_action_points(1)
+	current_player.set_is_aiming(true)
+	
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used aim!", "duration": dialog_duration})
 	
 	increment_event_queue()
 
@@ -543,7 +558,8 @@ func update_health_display() -> void:
 	health_display.value = current_player.health_bar.value
 
 func update_energy_display() -> void:
-	energy_display.value = current_player.current_energy
+	main_energy_display.value = current_player.current_main_energy
+	reserve_energy_display.value = current_player.current_reserve_energy
 	
 func initialize_battle() -> void:
 	dialog = dialog_box[0]

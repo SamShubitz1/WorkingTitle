@@ -6,7 +6,9 @@ var char_name: String
 var alliance: GameData.Alliance
 var max_health: int
 var max_energy: int
-var current_energy: int
+var current_main_energy: int
+var current_reserve_energy: int
+
 
 var is_player: bool = false
 var health_bar: ProgressBar
@@ -31,6 +33,7 @@ var status_effects: Array
 var grid_position: Vector2i
 
 var guardian: Character = null
+var is_aiming: bool
 var mobility_changed: bool
 var movement_range = Vector2i(1, 1)
 var has_moved: bool = false
@@ -50,7 +53,8 @@ func init(player_id: int, char_name: String, char_attributes: Dictionary, char_a
 	self.health_bar = char_health
 	self.max_health = max_health
 	self.max_energy = energy
-	self.current_energy = max_energy
+	self.current_main_energy = max_energy / 2
+	self.current_reserve_energy = max_energy / 2
 	self.role = role
 	set_health()
 	set_attributes(char_attributes)
@@ -133,6 +137,9 @@ func resolve_effect(effect: Dictionary):
 	
 func check_success(selected_ability: Dictionary) -> bool:
 	var success: bool
+	if is_aiming:
+		success = true
+		return success
 	var type = selected_ability.ability_type
 	match type:
 		Data.AbilityType.ATTACK:
@@ -150,6 +157,9 @@ func check_success(selected_ability: Dictionary) -> bool:
 				var range = randi_range(1, 100)
 				success = range < base_success
 	return success
+
+func set_is_aiming(is_currently_aiming: bool) -> void:
+	is_aiming = is_currently_aiming
 
 func set_guardian(guard: Character = null) -> void:
 	self.guardian = guard
@@ -169,11 +179,20 @@ func use_action(cost: int) -> bool:
 		return true
 
 func use_energy(cost: int) -> bool:
-	var next_points = current_energy - cost
-	if next_points < 0:
-		return false
+	print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
+	var next_points = current_main_energy - cost
+	if next_points <= 0:
+		current_main_energy = 0
+		current_reserve_energy += next_points
+		if current_reserve_energy <= 0:
+			print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
+			return false
+		else:
+			print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
+			return true
 	else:
-		current_energy = next_points
+		current_main_energy = next_points
+		print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
 		return true
 
 func start_turn():
@@ -188,6 +207,7 @@ func start_turn():
 
 func end_turn():
 	mobility_changed = false
+	is_aiming = false
 	var result = decrement_status_effects()
 	if result:
 		return result
@@ -262,17 +282,12 @@ func update_action_points() -> void:
 			action_points = next_points
 
 func update_energy() -> void:
-	var base_modifier = .25
-	var battery_modifier = float(current_attributes[Data.Attributes.BATTERY] * 5)/100 + base_modifier
-	var threshold = int(max_energy * battery_modifier)
-		
-	if current_energy < threshold:
-		var recharge = 2 + current_attributes[Data.Attributes.BATTERY]
-		current_energy += recharge
+	if current_main_energy == max_energy / 2:
+		return
+	var recharge = 2 + current_attributes[Data.Attributes.BATTERY]
+	current_main_energy += recharge
 	
-		if current_energy > threshold:
-			current_energy = threshold
-
+	
 func set_abilities_by_memory() -> void:
 	var memory = current_attributes[Data.Attributes.MEMORY]
 	current_abilities.clear()

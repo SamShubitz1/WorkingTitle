@@ -16,8 +16,8 @@ script = ExtResource("1_tkkut")
 script = ExtResource("5_l4qnv")
 
 [node name="MyPlayer" parent="PlayerController" instance=ExtResource("6_x832e")]
-position = Vector2(8, 8)
 script = ExtResource("7_xincb")
+sprite_offset = Vector2(0, 0)
 
 [node name="OverworldCamera" type="Camera2D" parent="PlayerController/MyPlayer"]
 zoom = Vector2(3, 3)
