@@ -9,12 +9,18 @@ extends Node2D
 var dialog_mode: bool = false
 var dialog_box: DialogBox
 
+var default_player_pos = null
+
 var pause_menu: Control
 
 func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
 	player.sprite.play("idle_down")
 	add_pause_menu()
+	if default_player_pos != null:
+		player.position = default_player_pos
+		player.grid_position = map_controller.point_to_grid(player.position)
+		return
 	
 	var success = load_data()
 	if !success:
@@ -145,6 +151,8 @@ func interact(object: Node):
 			var updated_tree = object.update_tree()
 			start_dialog(updated_tree)
 	elif object is BaseDoor:
+		player.position = object.spawn_position
+		player.grid_position = map_controller.point_to_grid(player.position)
 		map_controller.enter_door(object)
 			
 func start_dialog(dialog_tree: Dictionary) -> void:
@@ -267,3 +275,8 @@ func load_data() -> bool:
 		print_debug("loaded config: " + str(player.grid_position))
 
 	return true
+
+func set_default_player_pos(default_pos: Vector2) -> void:
+	if default_pos == null:
+		return
+	default_player_pos = default_pos

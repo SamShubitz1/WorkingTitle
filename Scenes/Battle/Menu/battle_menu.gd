@@ -130,7 +130,7 @@ func on_select_option() -> void:
 			log_menu.hide_menu()
 			update_selected_menu(Data.BattleMenuType.ITEMS)
 		" Aim":
-			pass
+			on_select_aim()
 		" Status":
 			pass
 		" Retreat":
@@ -173,6 +173,10 @@ func on_select_move() -> void:
 	movement_menu.set_current_shape(Data.AbilityShape.SINGLE)
 	movement_menu.set_range(current_player.grid_position, current_player.movement_range)
 	battle_controller.prompt_select_space()
+	
+func on_select_aim() -> void:
+	battle_controller.on_aim()
+	update_selected_menu(Data.BattleMenuType.OPTIONS)
 	
 func on_select_guard() -> void:
 	#var coords = current_player.grid_position

@@ -2,11 +2,13 @@ extends Node2D
 
 @onready var current_tile_map_layer: TileMapLayer = null
 @onready var map_container = self.get_child(0)
+@onready var player_controller = $"../PlayerController"
 @export var TILE_SIZE: int = 32
+
 
 func _ready():
 	#GameData.GlobalMapControllerRef = self
-	load_room("res://Rooms/Stovetop/StovetopRoom.tscn")
+	load_room("res://Rooms/T1/T1Room.tscn", true)
 
 # collection of map objects, keyed by grid-position vector
 var world_map: Dictionary = {}
@@ -82,20 +84,21 @@ func kill_room():
 	var map_container = self.get_child(0)
 	map_container.get_child(0).queue_free()
 
-func load_room(room_resource_path: String):
+func load_room(room_resource_path: String, use_default_pos: bool):
 	if !room_resource_path:
 		return
 
 	var new_map_resource = load(room_resource_path)
 	var imported_new_map = new_map_resource.instantiate()
-	
 	var map_container = self.get_child(0)
 	map_container.add_child(imported_new_map)
 	current_tile_map_layer = imported_new_map.get_node("TileMapLayer")
+	if use_default_pos:
+		player_controller.set_default_player_pos(imported_new_map.default_pos)
 
 func enter_door(object):
 	kill_room()
-	load_room(object.door_destination)
+	load_room(object.door_destination, false)
 
 func init(data: Dictionary) -> void:
 	pass
