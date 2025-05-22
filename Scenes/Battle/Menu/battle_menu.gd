@@ -17,7 +17,6 @@ extends Control
 
 var current_player: Node
 #var grid_info: Dictionary
-var initial_cursor_position = Vector2(0, 55)
 var options_menu = BaseMenu.new()
 
 var abilities_menu = BaseMenu.new()
@@ -34,6 +33,7 @@ var cursor: BaseCursor
 func _ready() -> void:
 	#grid_info = battle_controller.get_grid_info()
 	initialize_menus()
+	var initial_cursor_position = Vector2(0, 55)
 	cursor.move_cursor(initial_cursor_position)
 
 func _input(e) -> void:

@@ -17,10 +17,6 @@ func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
 	player.sprite.play("idle_down")
 	add_pause_menu()
-	if default_player_pos != null:
-		player.position = default_player_pos
-		player.grid_position = map_controller.point_to_grid(player.position)
-		return
 	
 	var success = load_data()
 	if !success:
@@ -275,8 +271,11 @@ func load_data() -> bool:
 		print_debug("loaded config: " + str(player.grid_position))
 
 	return true
-
-func set_default_player_pos(default_pos: Vector2) -> void:
+	
+func init(default_pos: Vector2) -> void:
 	if default_pos == null:
 		return
+		
 	default_player_pos = default_pos
+	player.position = default_player_pos
+	player.grid_position = map_controller.point_to_grid(player.position)
