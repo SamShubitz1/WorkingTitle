@@ -220,6 +220,6 @@ shape = SubResource("RectangleShape2D_5nu6t")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_t6eb3")
-animation = &"idle_side"
-frame_progress = 0.591551
+animation = &"idle_down"
+frame_progress = 0.342932
 offset = Vector2(16, 0)

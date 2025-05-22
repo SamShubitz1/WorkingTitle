@@ -17,10 +17,6 @@ func _ready() -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
 	player.sprite.play("idle_down")
 	add_pause_menu()
-	if default_player_pos != null:
-		player.position = default_player_pos
-		player.grid_position = map_controller.point_to_grid(player.position)
-		return
 	
 	var success = load_data()
 	if !success:
@@ -116,10 +112,12 @@ func check_move_complete():
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 
 func player_action_pressed() -> void:
-	if dialog_mode:
+	if dialog_mode && dialog_box != null:
 		var close_dialog = dialog_box.select_option()
 		if close_dialog:
 			dialog_mode = false
+		return
+	elif dialog_mode:
 		return
 
 	var action_coords = player.grid_position + player.current_direction
@@ -273,8 +271,11 @@ func load_data() -> bool:
 		print_debug("loaded config: " + str(player.grid_position))
 
 	return true
-
-func set_default_player_pos(default_pos: Vector2) -> void:
+	
+func init(default_pos: Vector2) -> void:
 	if default_pos == null:
 		return
+		
 	default_player_pos = default_pos
+	player.position = default_player_pos
+	player.grid_position = map_controller.point_to_grid(player.position)

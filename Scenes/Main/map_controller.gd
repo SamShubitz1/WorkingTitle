@@ -2,9 +2,9 @@ extends Node2D
 
 @onready var current_tile_map_layer: TileMapLayer = null
 @onready var map_container = self.get_child(0)
-@onready var player_controller = $"../PlayerController"
-@export var TILE_SIZE: int = 32
+@onready var overworld = get_parent()
 
+@export var TILE_SIZE: int = 32
 
 func _ready():
 	#GameData.GlobalMapControllerRef = self
@@ -89,12 +89,12 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 		return
 
 	var new_map_resource = load(room_resource_path)
-	var imported_new_map = new_map_resource.instantiate()
+	var new_map = new_map_resource.instantiate()
 	var map_container = self.get_child(0)
-	map_container.add_child(imported_new_map)
-	current_tile_map_layer = imported_new_map.get_node("TileMapLayer")
+	map_container.add_child(new_map)
+	current_tile_map_layer = new_map.get_node("TileMapLayer")
 	if use_default_pos:
-		player_controller.set_default_player_pos(imported_new_map.default_pos)
+		overworld.set_default_player_pos(new_map.default_pos)
 
 func enter_door(object):
 	kill_room()
