@@ -141,6 +141,9 @@ func on_select_ability() -> void:
 	
 	var ability_name = selected_menu.get_selected_button().text
 	var ability_info = battle_controller.prompt_select_target(ability_name)
+	if ability_info.is_empty():
+		update_selected_menu(Data.BattleMenuType.OPTIONS)
+		return
 	
 	match ability_info.target_type:
 		Data.TargetType.ENEMY:

@@ -90,10 +90,9 @@ enum Ailments {
 }
 
 enum EffectType {
-	STATUS,
+	STATS, #AP, HP, EP
 	ATTRIBUTE,
 	AILMENT,
-	RESTORE
 }
 
 enum EffectTarget {
@@ -180,9 +179,9 @@ var abilities: Dictionary = {
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 3, "property":
 			Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "AcidCloud", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 			
-	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 2 blanched to all enemies", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "effects": [
-		{"effect_type": EffectType.RESTORE, "duration": -1, "target": EffectTarget.OTHER, "value": -1, "property": SpecialStat.AP, "dialog": "lost 1 AP", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.SELF, "duration": 0.9}},
-		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": 2, "property": Attributes.MEMORY, "dialog": "lost 1 memory", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.OTHER, "duration": 0.1}}]},
+	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Enemies lose 1 AP and 1 memory", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "effects": [
+		{"effect_type": EffectType.STATS, "duration": 1, "target": EffectTarget.OTHER, "value": -1, "property": SpecialStat.AP, "dialog": "lost 1 AP", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.SELF, "duration": 0.9}},
+		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": 1, "property": Attributes.MEMORY, "dialog": "lost 1 memory", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.OTHER, "duration": 0.0}}]},
 		
 	"Zap": {"name": "Zap", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 45}, "action_cost": 1, "energy_cost": 2, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "45 energy damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Zap", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		
@@ -200,9 +199,9 @@ var abilities: Dictionary = {
 	"Accelerate": {"name": "Accelerate", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 1, "energy_cost": 1, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Gain 3 mobility.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.MOBILITY, "dialog": "gained +3 mobility", "animation": {"name": "Contemplate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 	
-	"Trample": {"name": "Trample", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 75}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "+75 physical damage. If a move action was made, +25 damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Trample", "origin": AnimOrigin.OTHER, "duration": 0.8}}, #NEEDS DAMAGE BONUS FIX, 75 > 100
+	"Trample": {"name": "Trample", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 75}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "+75 physical damage. If a move action was made, +25 damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Trample", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
-	"Charge Beam": {"name": "Charge Beam", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 75}, "action_cost": 3, "energy_cost": 8, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "+75 energy damage. If a move action was made, +25 damage.", "range": Vector2i(7,0), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Trample", "origin": AnimOrigin.OTHER, "duration": 0.8}}, #NEEDS DAMAGE BONUS FIX, 75 > 100
+	"Charge Beam": {"name": "Charge Beam", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 75}, "action_cost": 3, "energy_cost": 8, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "+75 energy damage. If an aim action was made, +25 damage.", "range": Vector2i(7,0), "shape": AbilityShape.SINGLE, "effects": [], "animation": {"name": "Trample", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
 	"Wave Beam": {"name": "Wave Beam", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 65}, "action_cost": 3, "energy_cost": 10, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "65 energy damage dealt to enemy and enemy behind", "range": Vector2i(4,0), "shape": AbilityShape.DOUBLEH, "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
@@ -267,13 +266,14 @@ const sounds = {
 	"ThumperStartA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA2.wav"}
 
 var characters = {
-	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Heat Ray", "Wave Beam", "Ignite", "Innervate", "Screen Flash", "Charge Beam"], "base energy": 100, "base health": 340, "role": Data.MachineRole.ESNIPER, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
+	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Self Repair", "Charge Beam", "Seeker Rockets", "Innervate", "Screen Flash", "Charge Beam"], "base energy": 100, "base health": 340, "role": Data.MachineRole.ESNIPER, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
 	
 	"Runt": {"name": "Runt", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}, "abilities": ["Ripjaw", "Power Strike", "Reinforce", "Acid Cloud", "Septic Injection", "Strenuate" ], "base energy": 100, "base health": 320, "role": Data.MachineRole.PTANK, "path": "res://Scenes/Battle/Characters/Runt/runt.tscn"},
 	
 	"Pilypile": {"name": "Pilypile", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 3, Data.Attributes.SHIELDING: 2, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 1}, "abilities": ["Crush", "Zap", "Bulk Inversion", "Self Repair", "Beam Slice", "Wave Beam"], "base energy": 100, "base health": 340, "role": Data.MachineRole.ETANK, "path": "res://Scenes/Battle/Characters/Pilypile/pilypile.tscn"},
 	
-	"Gawkingstick": {"name": "Gawkingstick", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 2, Data.Attributes.MEMORY: 4, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 1}, "abilities": ["Charge Beam", "Contemplate", "Screen Flash", "Seeker Rockets", "Beam Slice", "Heat Ray"], "base energy": 100, "base health": 320, "role": Data.MachineRole.EOSUPPORT, "path": "res://Scenes/Battle/Characters/Gawkingstick/norman.tscn"},
+	"Gawkingstick": {"name": "Gawkingstick", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 2, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 2, Data.Attributes.MEMORY: 4, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 1}, "abilities": ["Screen Flash"], "base energy": 100, "base health": 320, "role": Data.MachineRole.EOSUPPORT, "path": "res://Scenes/Battle/Characters/Gawkingstick/norman.tscn"},
+	#"Charge Beam", "Contemplate", "Screen Flash", "Seeker Rockets", "Beam Slice", "Heat Ray"
 	
 	"Mandrake": {"name": "Mandrake", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 3, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 3, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Sonic Pulse", "Zap", "Burst Rifle", "Wave Beam", "Acid Cloud", "Septic Injection"], "base energy": 100, "base health": 300, "role": Data.MachineRole.ESNIPER, "path": "res://Scenes/Battle/Characters/Mandrake/mandrake.tscn"},
 	

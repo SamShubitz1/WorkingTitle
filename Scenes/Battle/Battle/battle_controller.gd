@@ -243,6 +243,12 @@ func build_effect_event(target: Character, effect: Dictionary, is_first_target: 
 	add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": dialog_duration, "emitter": current_player})
 
 func prompt_select_target(ability_name: String) -> Dictionary:
+	if ability_name == "Seeker Rockets":
+		cursor.disable()
+		selected_ability = GameData.abilities["Seeker Rockets"]
+		select_random(2)
+		return {}
+		
 	var target_cells = []
 	var hero_ability = GameData.abilities[ability_name]
 	selected_ability = hero_ability
@@ -250,6 +256,8 @@ func prompt_select_target(ability_name: String) -> Dictionary:
 	if hero_ability.shape == Data.AbilityShape.MELEE: #for melee attacks, battle controller passes valid targets to battle menu
 		target_cells = battle_grid.get_melee_targets(Data.Alliance.HERO)
 	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range, "origin": current_player.grid_position, "target_cells": target_cells}
+
+
 
 func prompt_select_space() -> void:
 	play_dialog("Select a space!", false)
@@ -585,3 +593,20 @@ func build_character(char_name: String, char_alliance: Data.Alliance, char_posit
 	set_position_by_grid_coords(char)
 	battle_id += 1
 	return char
+
+func select_random(number_of_targets: int) -> void:
+	var enemies = []
+	for player in players:
+		if player.alliance == Data.Alliance.ENEMY:
+			enemies.append(player)
+	var target_cells = []
+	for i in range(number_of_targets):
+		var index = randi_range(0, enemies.size() - 1)
+		var selected_enemy = enemies[index]
+		target_cells.append(selected_enemy.grid_position)
+		enemies = enemies.filter(func(e): return e.battle_id != selected_enemy.battle_id)
+		#Get size of list, randi_range between 0 and list size -1 = index_selected1
+	on_use_ability(target_cells)
+		
+		
+	

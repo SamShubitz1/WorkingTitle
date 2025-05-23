@@ -113,7 +113,11 @@ func calculate_attack_dmg(selected_ability: Dictionary):
 	match selected_ability.name:
 		"Trample":
 			if has_moved:
-				damage += 20
+				damage += 25
+		"Charge Beam":
+			if is_aiming:
+				damage += 25
+		
 	var damage_with_range = int(damage * randf_range(.9, 1.1))
 	var attribute_multiplier = resolve_attribute_bonuses(selected_ability)
 	if attribute_multiplier:
@@ -133,6 +137,7 @@ func resolve_effect(effect: Dictionary):
 	else:
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
 		
+	resolve_stat_effects()
 	resolve_status_effects()
 	
 func check_success(selected_ability: Dictionary) -> bool:
@@ -179,20 +184,16 @@ func use_action(cost: int) -> bool:
 		return true
 
 func use_energy(cost: int) -> bool:
-	print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
 	var next_points = current_main_energy - cost
 	if next_points <= 0:
 		current_main_energy = 0
 		current_reserve_energy += next_points
 		if current_reserve_energy <= 0:
-			print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
 			return false
 		else:
-			print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
 			return true
 	else:
 		current_main_energy = next_points
-		print("Max Energy = ", max_energy, " Current Main Energy = ", current_main_energy, " Current Reserve Energy = ", current_reserve_energy)
 		return true
 
 func start_turn():
@@ -204,6 +205,7 @@ func start_turn():
 	set_abilities_by_memory()
 	update_action_points()
 	update_energy()
+	print("Status Effect List: ", status_effects, " Name ", char_name, " TURN START ")
 
 func end_turn():
 	mobility_changed = false
@@ -221,30 +223,35 @@ func resolve_status_effects() -> void:
 		elif status.type == Data.EffectType.AILMENT:
 			match status.property:
 				Data.Ailments.OVERHEATED:
-					current_attributes[Data.Attributes.BATTERY] -= status.value
 					current_attributes[Data.Attributes.SHIELDING] -= status.value
 				Data.Ailments.ACIDIZED:
 					current_attributes[Data.Attributes.ARMOR] -= status.value
-					current_attributes[Data.Attributes.MOBILITY] -= status.value
 					mobility_changed = true
 				Data.Ailments.BLANCHED:
 					current_attributes[Data.Attributes.MEMORY] -= status.value
-					current_attributes[Data.Attributes.OPTICS] -= status.value
 				Data.Ailments.CONCUSSED:
 					current_attributes[Data.Attributes.STRENGTH] -= status.value
-					current_attributes[Data.Attributes.FLUX] -= status.value
-		elif status.type == Data.EffectType.RESTORE:
-			match status.property:
-				Data.SpecialStat.AP:
-					action_points += status.value
-					if action_points > 5:
-						action_points = 5
-				Data.SpecialStat.AILMENTS:
-					status_effects = status_effects.filter(func(status): return status.type != Data.EffectType.AILMENT)
-					
+		#elif status.type == Data.EffectType.RESTORE:   #For removing all ailments
+			#match status.property:
+				#Data.SpecialStat.AP:
+					#action_points += status.value
+					#if action_points > 5:
+						#action_points = 5
+				#Data.SpecialStat.AILMENTS:
+					#status_effects = status_effects.filter(func(status): return status.type != Data.EffectType.AILMENT)
+		
 	for attribute in current_attributes.keys():
 		if current_attributes[attribute] < 0:
 			current_attributes[attribute] = 0;
+			
+func resolve_stat_effects():
+	for effect in status_effects:
+		if effect.type == Data.EffectType.STATS:
+			match effect.property:
+				Data.SpecialStat.AP:
+					action_points += effect.value
+			status_effects = status_effects.filter(func(e): return true)
+			print("Char name ", char_name, " Updated AP ", action_points)
 			
 func decrement_status_effects():
 	for status in status_effects:
