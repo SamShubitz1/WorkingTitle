@@ -9,7 +9,6 @@ var max_energy: int
 var current_main_energy: int
 var current_reserve_energy: int
 
-
 var is_player: bool = false
 var health_bar: ProgressBar
 
@@ -250,8 +249,9 @@ func resolve_stat_effects():
 			match effect.property:
 				Data.SpecialStat.AP:
 					action_points += effect.value
-			status_effects = status_effects.filter(func(e): return true)
-			print("Char name ", char_name, " Updated AP ", action_points)
+				Data.SpecialStat.HP:
+					health_bar.value += effect.value
+			status_effects = status_effects.filter(func(e): return false)
 			
 func decrement_status_effects():
 	for status in status_effects:
@@ -310,7 +310,3 @@ func update_status(next_effect: Dictionary) -> void:
 			status_exists = true
 	if !status_exists:
 		status_effects.append(next_effect)
-
-enum Status {
-	ATTRIBUTE
-}
