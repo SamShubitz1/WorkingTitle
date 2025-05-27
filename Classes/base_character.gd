@@ -9,7 +9,6 @@ var max_energy: int
 var current_main_energy: int
 var current_reserve_energy: int
 
-
 var is_player: bool = false
 var health_bar: ProgressBar
 
@@ -205,7 +204,6 @@ func start_turn():
 	set_abilities_by_memory()
 	update_action_points()
 	update_energy()
-	print("Status Effect List: ", status_effects, " Name ", char_name, " TURN START ")
 
 func end_turn():
 	mobility_changed = false
@@ -233,10 +231,6 @@ func resolve_status_effects() -> void:
 					current_attributes[Data.Attributes.STRENGTH] -= status.value
 		#elif status.type == Data.EffectType.RESTORE:   #For removing all ailments
 			#match status.property:
-				#Data.SpecialStat.AP:
-					#action_points += status.value
-					#if action_points > 5:
-						#action_points = 5
 				#Data.SpecialStat.AILMENTS:
 					#status_effects = status_effects.filter(func(status): return status.type != Data.EffectType.AILMENT)
 		
@@ -250,8 +244,9 @@ func resolve_stat_effects():
 			match effect.property:
 				Data.SpecialStat.AP:
 					action_points += effect.value
-			status_effects = status_effects.filter(func(e): return true)
-			print("Char name ", char_name, " Updated AP ", action_points)
+				Data.SpecialStat.HP:
+					health_bar.value += effect.value
+			status_effects = status_effects.filter(func(e): return e != effect)
 			
 func decrement_status_effects():
 	for status in status_effects:
@@ -310,7 +305,3 @@ func update_status(next_effect: Dictionary) -> void:
 			status_exists = true
 	if !status_exists:
 		status_effects.append(next_effect)
-
-enum Status {
-	ATTRIBUTE
-}

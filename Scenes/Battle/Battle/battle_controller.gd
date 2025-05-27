@@ -401,10 +401,6 @@ func on_target_death(target: Character) -> void:
 	
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
-	
-func resolve_item_effect() -> float:
-	var buff = current_player.buffs.get(selected_ability.damage.type, 0) + 1
-	return buff
 		
 func end_turn() -> void:
 	cursor.disable()
@@ -470,7 +466,6 @@ func select_enemies():
 		selected_enemies.append(enemy_pool[enemy_index])
 	
 	return selected_enemies
-	
 	
 #func set_grid_cells() -> Vector2i:
 	# will create grid shape for the batlle
@@ -607,6 +602,3 @@ func select_random(number_of_targets: int) -> void:
 		enemies = enemies.filter(func(e): return e.battle_id != selected_enemy.battle_id)
 		#Get size of list, randi_range between 0 and list size -1 = index_selected1
 	on_use_ability(target_cells)
-		
-		
-	

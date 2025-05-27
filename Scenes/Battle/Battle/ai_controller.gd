@@ -236,8 +236,6 @@ func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary: #se
 			var damage_bonus = int(ability.damage.value/damage_divider)
 			ability_with_priority.priority += damage_bonus
 			
-			print("damage bonus ", damage_bonus, " ability ", ability_with_priority.object.name)
-			
 		ability_with_priority.priority += randi_range(-2, 2)
 			
 		abilities_with_priorities.append(ability_with_priority)

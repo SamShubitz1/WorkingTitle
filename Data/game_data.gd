@@ -77,6 +77,7 @@ enum Attributes {
 
 enum SpecialStat {
 	AP,
+	HP,
 	ENERGY,
 	AILMENTS, # meaning all ailments
 	MOVE_RANGE,
@@ -209,7 +210,9 @@ var abilities: Dictionary = {
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.SELF, "value": 2, "property":
 			Ailments.OVERHEATED, "dialog": "gained 2 overheated",}], "animation": {"name": "BurstRifle", "origin": AnimOrigin.OTHER, "duration": 0.8, "offset": -40}},
 		
-	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.PHYSICAL, "value": -100}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 100 health to self.", "range": Vector2i(0,0), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
+	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 100 health to self.", "range": Vector2i(0,0), "shape": AbilityShape.SINGLE, "effects": [
+		{"effect_type": EffectType.STATS, "target": EffectTarget.SELF, "value": 100, "property":
+			SpecialStat.HP, "dialog": "restored 100 HP",}], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
 	"Rallied Surge": {"name": "Rallied Surge", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 24, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav",  "description": "Each adjacent ally gains +3 Shielding", "range": Vector2i.ZERO, "shape": AbilityShape.SQUARE, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 2, "property": Attributes.STRENGTH, "dialog": "gained 2 power", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.OTHER, "duration": 0.8}},
