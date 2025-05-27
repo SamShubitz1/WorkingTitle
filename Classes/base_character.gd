@@ -204,7 +204,6 @@ func start_turn():
 	set_abilities_by_memory()
 	update_action_points()
 	update_energy()
-	print("Status Effect List: ", status_effects, " Name ", char_name, " TURN START ")
 
 func end_turn():
 	mobility_changed = false
@@ -232,10 +231,6 @@ func resolve_status_effects() -> void:
 					current_attributes[Data.Attributes.STRENGTH] -= status.value
 		#elif status.type == Data.EffectType.RESTORE:   #For removing all ailments
 			#match status.property:
-				#Data.SpecialStat.AP:
-					#action_points += status.value
-					#if action_points > 5:
-						#action_points = 5
 				#Data.SpecialStat.AILMENTS:
 					#status_effects = status_effects.filter(func(status): return status.type != Data.EffectType.AILMENT)
 		
@@ -251,7 +246,7 @@ func resolve_stat_effects():
 					action_points += effect.value
 				Data.SpecialStat.HP:
 					health_bar.value += effect.value
-			status_effects = status_effects.filter(func(e): return false)
+			status_effects = status_effects.filter(func(e): return e != effect)
 			
 func decrement_status_effects():
 	for status in status_effects:
