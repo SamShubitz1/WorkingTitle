@@ -158,7 +158,7 @@ var abilities: Dictionary = {
 	"Clobber": {"name": "Clobber", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 90}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "90 physical damage.", "range": Vector2i(3,1), "shape": AbilityShape.MELEE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Clobber.wav", "effects": [], "animation": {"name": "Clobber", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
 	"Heat Ray": {"name": "Heat Ray", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 40}, "action_cost": 3, "energy_cost": 22, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "40 energy damage and 2 overheated to all enemies in a line.", "range": Vector2i.ZERO, "shape": AbilityShape.LINE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Heat_Ray.wav",  "effects": [
-		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property": Ailments.OVERHEATED, "dialog": "gained 2 overheated"}], "animation": {"name": "Laser", "origin": AnimOrigin.SELF, "duration": 0.8, "offset": 340}},
+		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 2, "property": Ailments.OVERHEATED, "dialog": "gained 2 overheated"}], "animation": {"name": "Laser", "origin": AnimOrigin.SELF, "duration": 0.8, "offset": 340}}, #####ANIMATION OFFSET EXAMPLE
 	
 	"Ripjaw": {"name": "Ripjaw", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 65}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "65 physical damage and loses 1 armor.", "range": Vector2i(3,1), "shape": AbilityShape.MELEE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Ripjaw.wav", "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.ARMOR, "dialog": "lost 1 armor"}], "animation": {"name": "Bite", "origin": AnimOrigin.OTHER, "duration": 0.8}},
@@ -210,7 +210,7 @@ var abilities: Dictionary = {
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.SELF, "value": 2, "property":
 			Ailments.OVERHEATED, "dialog": "gained 2 overheated",}], "animation": {"name": "BurstRifle", "origin": AnimOrigin.OTHER, "duration": 0.8, "offset": -40}},
 		
-	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 100 health to self.", "range": Vector2i(0,0), "shape": AbilityShape.SINGLE, "effects": [
+	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 100 health to self.", "range": Vector2i(0,0), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [
 		{"effect_type": EffectType.STATS, "target": EffectTarget.SELF, "value": 100, "property":
 			SpecialStat.HP, "dialog": "restored 100 HP",}], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	

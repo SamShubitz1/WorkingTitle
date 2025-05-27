@@ -99,7 +99,7 @@ script = ExtResource("2_8a0eq")
 texture = ExtResource("3_pviwv")
 script = ExtResource("4_yqpad")
 
-[node name="AnimationSounds" type="AudioStreamPlayer" parent="BattleController"]
+[node name="AbilitySound" type="AudioStreamPlayer" parent="BattleController"]
 
 [node name="BattleMenu" type="Control" parent="."]
 layout_mode = 3

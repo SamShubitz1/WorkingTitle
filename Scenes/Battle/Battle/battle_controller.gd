@@ -14,6 +14,7 @@ extends Node2D
 @onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
 @onready var items_node = $"../BattleMenu/ItemsMenu"
 @onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
+@onready var ability_sound = $AbilitySound
 
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
 
@@ -88,7 +89,7 @@ func increment_event_queue() -> void:
 
 		if event.has("duration"):
 			await wait(event.duration)
-			increment_event_queue() # can recursively call itself :O
+			increment_event_queue() # can recursively call itself :)
 		else:
 			manual_increment = true
 	else:
@@ -106,8 +107,9 @@ func handle_animation(event: Dictionary) -> void:
 	var kapow = get_kapow()
 	kapow.start(event.animation, current_player, event.target, current_player.alliance)
 
-	current_player.sprite.attack(event.duration)
-	
+	ability_sound.set_stream(load(selected_ability.sound))
+	ability_sound.play()
+
 	if event.has("dialog"):
 		play_dialog(event.dialog, true)
 	
@@ -203,7 +205,9 @@ func on_use_ability(target_cells: Array) -> void:
 		if battle_grid.current_grid.has(cell):
 			selected_targets.append(cell)
 	
-	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
+	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player, "sound": selected_ability.sound})
+	current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
+	current_player.sprite.attack(dialog_duration)
 	
 	var ability_success = current_player.check_success(selected_ability)
 	if !ability_success:
@@ -306,6 +310,8 @@ func perform_enemy_turn() -> void:
 			Data.EnemyAction.ABILITY:
 				selected_ability = action.ability
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
+				current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
+				current_player.sprite.attack(dialog_duration)
 				
 				var success = current_player.check_success(selected_ability)
 				if !success:

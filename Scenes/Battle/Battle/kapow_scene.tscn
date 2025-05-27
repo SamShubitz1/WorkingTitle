@@ -867,7 +867,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_024su")
 }],
-"loop": true,
+"loop": false,
 "name": &"Contemplate",
 "speed": 10.0
 }, {
@@ -997,7 +997,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"Laser",
-"speed": 10.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -1183,7 +1183,5 @@ animations = [{
 [node name="KapowSprite" type="AnimatedSprite2D"]
 z_index = 4
 sprite_frames = SubResource("SpriteFrames_g16yy")
-animation = &"Contemplate"
-frame = 5
-frame_progress = 0.292746
+animation = &"Crush"
 script = ExtResource("8_eb3ju")

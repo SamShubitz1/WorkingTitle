@@ -17,8 +17,6 @@ func start(animation: Dictionary, current_player: Character, target: Character, 
 	elif animation.has("offset") && alliance == Data.Alliance.HERO:
 		target_position.x += animation.offset
 			
-	current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
-			
 	self.position = target_position
 	self.z_index = z_index + 1
 	self.play(animation.name)
