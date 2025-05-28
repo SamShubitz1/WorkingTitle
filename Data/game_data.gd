@@ -110,6 +110,7 @@ enum EnemyAction {
 	ABILITY,
 	MOVE,
 	GUARD,
+	AIM
 }
 
 #enum AbilityRole {

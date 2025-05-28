@@ -7,6 +7,9 @@ func build_turn(enemy: Character, players: Array) -> Array: #selects an ability 
 	
 	for i in range(current_abilities.size()):
 		current_ability = get_priority_ability(current_abilities, enemy)
+		if current_ability.action_cost > enemy.action_points:
+			current_abilities = enemy.current_abilities.filter(func(a): return a.name != current_ability.name)
+			break
 		enemy_turn = get_next_turn(enemy, players, current_ability)
 		if !enemy_turn.is_empty():
 			break
@@ -19,12 +22,25 @@ func build_turn(enemy: Character, players: Array) -> Array: #selects an ability 
 		if next_pos:
 			enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
 	
+	var turn_cost = get_turn_cost(enemy_turn)
+	
+	var difference = enemy.action_points - turn_cost
+	if difference == 0:
+		return enemy_turn
+	elif difference == 1:
+		var result = roll_dice(1, 10)
+		if result > 7:
+			enemy_turn.push_front({"type": Data.EnemyAction.AIM })
+	elif difference > 1:
+		var result = roll_dice(1, 10)
+		if result > 5:
+			enemy_turn.push_front({"type": Data.EnemyAction.AIM })
+	
 	return enemy_turn
 
 func get_next_turn(enemy, players, ability) -> Array: #builds an enemy turn based off selected ability - an enemy_turn is a list of objects with a property "type": Data.EnemyAction (can be MOVE, ABILITY, GUARD, etc.) and other needed info like "position" or "ability"
 	var next_turn: Array
 
-	#var action = get_priority_action()
 	var targets: Array = get_targets(players, ability)
 	var surveys: Array = get_surveys(enemy, targets, ability)
 	
@@ -438,6 +454,16 @@ func roll_dice(attempts: int, sides: int) -> int:
 		if next_result > result:
 			result = next_result
 	return result
+	
+func get_turn_cost(turn: Array) -> int:
+	var cost: int
+	for action in turn:
+		match action.type:
+			Data.EnemyAction.MOVE:
+				cost += 1
+			Data.EnemyAction.ABILITY:
+				cost += action.ability.action_cost
+	return cost
 
 func calculate_next_pos(selected_cell: Vector2i, current_pos: Vector2i, occupied_cells: Array): #prioritizes moving diagonal if needed, then up or down, then left or right
 	var up = Vector2i(current_pos.x, current_pos.y + 1)

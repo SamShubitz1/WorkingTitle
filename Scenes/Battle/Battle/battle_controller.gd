@@ -303,6 +303,11 @@ func perform_enemy_turn() -> void:
 	
 	for action in enemy_turn:
 		match action.type:
+			Data.EnemyAction.AIM:
+				current_player.use_action(1)
+				current_player.set_is_aiming(true)
+				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used aim!", "duration": dialog_duration})
+			
 			Data.EnemyAction.MOVE:
 				add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": action.position, "duration": dialog_duration})
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
