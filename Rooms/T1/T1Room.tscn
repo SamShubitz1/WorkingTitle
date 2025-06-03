@@ -966,7 +966,7 @@ texture = ExtResource("5_prnhr")
 offset = Vector2(16, 16)
 
 [node name="PlayerSpawn" type="Node2D" parent="Doodads"]
-position = Vector2(640, 160)
+position = Vector2(160, 320)
 
 [node name="RailTramSlider" type="Node2D" parent="Doodads"]
 position = Vector2(512, 432)
@@ -1105,7 +1105,6 @@ position = Vector2(768, 320)
 battle_ready = true
 
 [node name="ScreenBoundGuide" type="Node2D" parent="."]
-visible = false
 
 [node name="SpriteHolder" type="Node2D" parent="ScreenBoundGuide"]
 position = Vector2(576, 416)
