@@ -74,21 +74,21 @@ region = Rect2(96, 0, 48, 64)
 atlas = ExtResource("4_j8irb")
 region = Rect2(144, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_c2bqw"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_s858j"]
 atlas = ExtResource("5_dgcou")
-region = Rect2(0, 0, 48, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_krsr1"]
-atlas = ExtResource("5_dgcou")
-region = Rect2(48, 0, 48, 64)
+region = Rect2(144, 0, 48, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cv5yc"]
 atlas = ExtResource("5_dgcou")
 region = Rect2(96, 0, 48, 64)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_s858j"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_krsr1"]
 atlas = ExtResource("5_dgcou")
-region = Rect2(144, 0, 48, 64)
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c2bqw"]
+atlas = ExtResource("5_dgcou")
+region = Rect2(0, 0, 48, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_0l83y"]
 atlas = ExtResource("6_40xa4")
@@ -178,16 +178,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c2bqw")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_krsr1")
+"texture": SubResource("AtlasTexture_s858j")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cv5yc")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_s858j")
+"texture": SubResource("AtlasTexture_krsr1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c2bqw")
 }],
 "loop": true,
 "name": &"walk_side",
@@ -220,6 +220,7 @@ shape = SubResource("RectangleShape2D_5nu6t")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_t6eb3")
-animation = &"idle_down"
-frame_progress = 0.342932
+animation = &"walk_side"
+frame = 1
+frame_progress = 0.187436
 offset = Vector2(16, 0)

@@ -182,8 +182,8 @@ var abilities: Dictionary = {
 			Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "AcidCloud", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 			
 	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Enemies lose 1 AP and 1 memory", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [
-		{"effect_type": EffectType.STATS, "duration": 1, "target": EffectTarget.OTHER, "value": -1, "property": SpecialStat.AP, "dialog": "lost 1 AP", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.SELF, "duration": 0.9}},
-		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": 1, "property": Attributes.MEMORY, "dialog": "lost 1 memory", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.OTHER, "duration": 0.0}}]},
+		{"effect_type": EffectType.STATS, "duration": 1, "target": EffectTarget.OTHER, "value": -1, "property": SpecialStat.AP, "dialog": "lost 1 AP", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.SELF, "duration": 0.9, "offset": 185}},
+		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.MEMORY, "dialog": "lost 1 memory", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.OTHER, "duration": 0.0}}]},
 		
 	"Zap": {"name": "Zap", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 45}, "action_cost": 1, "energy_cost": 2, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "45 energy damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [], "animation": {"name": "Zap", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		
@@ -222,8 +222,8 @@ var abilities: Dictionary = {
 	"Seeker Rockets": {"name": "Seeker Rockets", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 50}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Two random enemies are dealt 50 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Cluster_Rocket.wav", "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		
 	"Crush": {"name": "Crush", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage and -1 strength", "range": Vector2i(4,0), "shape": AbilityShape.MELEE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Crush.wav", "animation": {"name": "Crush", "origin": AnimOrigin.OTHER, "duration": 0.8}, "effects": [
-		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 1, "property":
-			Ailments.CONCUSSED, "dialog": "gained -1 strength"}]},
+		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property":
+			Attributes.STRENGTH, "dialog": "gained -1 strength"}]},
 			
 	"Beam Slice": {"name": "Beam Slice", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 95}, "action_cost": 3, "energy_cost": 4, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "95 energy damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [], "animation": {"name": "BeamSlice", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	

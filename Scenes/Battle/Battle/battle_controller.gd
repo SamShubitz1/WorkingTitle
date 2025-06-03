@@ -307,10 +307,12 @@ func perform_enemy_turn() -> void:
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used aim!", "duration": dialog_duration})
 			
 			Data.EnemyAction.MOVE:
+				current_player.use_action(1)
 				add_event({"type": EventType.MOVEMENT, "target": current_player, "next_position": action.position, "duration": dialog_duration})
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
 				
 			Data.EnemyAction.ABILITY:
+				current_player.use_action(selected_ability.action_cost)
 				selected_ability = action.ability
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
 				current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
@@ -379,7 +381,7 @@ func on_guard() -> void:
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used guard!", "duration": dialog_duration})
 
 	for target in guard_targets:
-		add_event({"type": EventType.GUARD, "target": target, "duration": 0.7, "animation": "Reinforce"})
+		add_event({"type": EventType.GUARD, "target": target, "duration": 0.7, "animation": GameData.abilities["Clobber"].animation})
 	
 	increment_event_queue()
 

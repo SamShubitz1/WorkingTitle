@@ -175,11 +175,14 @@ func flip_sprite() -> void:
 	sprite.flip_h = true
 		
 func use_action(cost: int) -> bool:
+	print(char_name, " AP before use action " , action_points )
 	var next_points = action_points - cost
 	if next_points < 0:
+		print(char_name, " AP after use action " , action_points )
 		return false
 	else:
 		action_points = next_points
+		print(char_name, " AP after use action " , action_points )
 		return true
 
 func use_energy(cost: int) -> bool:
@@ -239,6 +242,7 @@ func resolve_status_effects() -> void:
 			current_attributes[attribute] = 0;
 			
 func resolve_stat_effects():
+	print(char_name, " AP before stats effects " , action_points )
 	for effect in status_effects:
 		if effect.type == Data.EffectType.STATS:
 			match effect.property:
@@ -247,7 +251,8 @@ func resolve_stat_effects():
 				Data.SpecialStat.HP:
 					health_bar.value += effect.value
 			status_effects = status_effects.filter(func(e): return e != effect)
-			
+	print(char_name, " AP after resolve stat effects " , action_points )
+	
 func decrement_status_effects():
 	for status in status_effects:
 		if status.type == Data.EffectType.AILMENT:
@@ -276,12 +281,14 @@ func decrement_status_effects():
 				status_effects.erase(status)
 				
 func update_action_points() -> void:
+	print(char_name, " AP before update action points " , action_points )
 	if action_points < 5:
 		var next_points = action_points + 3
 		if next_points > 5:
 			action_points = 5
 		else: 
 			action_points = next_points
+	print(char_name, " AP after update action points " , action_points )
 
 func update_energy() -> void:
 	if current_main_energy == max_energy / 2:
