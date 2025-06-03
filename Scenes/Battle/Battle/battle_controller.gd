@@ -143,8 +143,8 @@ func handle_movement(event: Dictionary) -> void:
 	
 func handle_guard(event: Dictionary) -> void:
 	var target = event.target
-	var current_kapow = get_kapow()
-	current_kapow.start(event.animation, current_player, event.target, Data.Alliance.ENEMY)
+	#var current_kapow = get_kapow()
+	#current_kapow.start(event.animation, current_player, event.target, current_player.alliance)
 	play_dialog(target.char_name + " is protected!", true)
 
 func handle_death(event) -> void:
@@ -260,8 +260,6 @@ func prompt_select_target(ability_name: String) -> Dictionary:
 	if hero_ability.shape == Data.AbilityShape.MELEE: #for melee attacks, battle controller passes valid targets to battle menu
 		target_cells = battle_grid.get_melee_targets(Data.Alliance.HERO)
 	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range, "origin": current_player.grid_position, "target_cells": target_cells}
-
-
 
 func prompt_select_space() -> void:
 	play_dialog("Select a space!", false)
