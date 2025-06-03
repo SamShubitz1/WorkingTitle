@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends Area2D
 
 class_name PlayerChar
 
@@ -13,6 +13,16 @@ class_name PlayerChar
 var is_moving: bool = false
 var grid_position = Vector2i(0,0)
 var current_direction = Vector2i(0,1)
+var step_count: int = 0
+
+func increment_step_count() -> void:
+	step_count += 1
+
+func get_step_count() -> int:
+	return step_count
+
+func reset_step_count() -> void:
+	step_count = 0
 
 func get_grid_position() -> Vector2i:
 	return grid_position

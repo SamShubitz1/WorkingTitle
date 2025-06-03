@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=4 uid="uid://dwgjvlselmdr4"]
+[gd_scene load_steps=18 format=4 uid="uid://dwgjvlselmdr4"]
 
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_q2ld6"]
 [ext_resource type="Texture2D" uid="uid://dgai3sow7pw2g" path="res://Art/Tiles/T_E_Farmland_Props.png" id="2_7wef1"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dsuty0117lg3h" path="res://Art/EditorTools/Screen_Box_14x8.png" id="4_kko3w"]
 [ext_resource type="Script" path="res://Classes/base_door.gd" id="6_a7531"]
 [ext_resource type="Texture2D" uid="uid://bu5t8rnxtgdul" path="res://Dodads/Doors/Door_02.png" id="7_6hgfd"]
+[ext_resource type="Script" path="res://Rooms/T2/enemy_area.gd" id="8_1es84"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0acj1"]
 texture = ExtResource("1_q2ld6")
@@ -833,6 +834,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r64q4"]
+size = Vector2(1328.5, 1022)
+
 [node name="T2Room" type="Node2D"]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
@@ -945,3 +949,12 @@ scale = Vector2(1, 1.49625)
 texture = ExtResource("7_6hgfd")
 offset = Vector2(16, 16)
 flip_h = true
+
+[node name="EnemyAreaContainer" type="Node2D" parent="."]
+
+[node name="EnemyArea" type="Area2D" parent="EnemyAreaContainer"]
+script = ExtResource("8_1es84")
+
+[node name="EnemyCollisionArea" type="CollisionShape2D" parent="EnemyAreaContainer/EnemyArea"]
+position = Vector2(804.75, 670)
+shape = SubResource("RectangleShape2D_r64q4")

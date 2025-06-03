@@ -1,10 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4npjlduq7bda"]
+[gd_scene load_steps=5 format=3 uid="uid://d4npjlduq7bda"]
 
 [ext_resource type="Script" path="res://Scenes/Main/overworld_manager.gd" id="1_nad2e"]
 [ext_resource type="Script" path="res://Scenes/Main/map_controller.gd" id="1_tkkut"]
 [ext_resource type="Script" path="res://Scenes/Main/player_controller.gd" id="5_l4qnv"]
 [ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="6_x832e"]
-[ext_resource type="Script" path="res://Scenes/Player/my_player.gd" id="7_xincb"]
 
 [node name="Overworld" type="Node2D"]
 script = ExtResource("1_nad2e")
@@ -18,7 +17,6 @@ script = ExtResource("1_tkkut")
 script = ExtResource("5_l4qnv")
 
 [node name="MyPlayer" parent="PlayerController" instance=ExtResource("6_x832e")]
-script = ExtResource("7_xincb")
 sprite_offset = Vector2(0, 0)
 
 [node name="OverworldCamera" type="Camera2D" parent="PlayerController/MyPlayer"]

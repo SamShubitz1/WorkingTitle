@@ -110,6 +110,7 @@ func check_move_complete():
 		player.is_moving = false
 		player.position = dest_pos # force player player.position to dest point
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
+		check_for_battle()
 
 func player_action_pressed() -> void:
 	if dialog_mode && dialog_box != null:
@@ -150,14 +151,25 @@ func interact(object: Node):
 		player.position = object.spawn_position
 		player.grid_position = map_controller.point_to_grid(player.position)
 		map_controller.enter_door(object)
-			
+		
+func check_for_battle() -> void:
+	var enemy_areas = map_controller.get_updated_enemy_areas()
+	for area in enemy_areas:
+		if area.overlaps_area(player):
+			player.increment_step_count()
+			var random = randi_range(12, 28)
+			if player.get_step_count() >= random:
+				game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": area.enemy_pool})
+		else:
+			player.reset_step_count()
+		
 func start_dialog(dialog_tree: Dictionary) -> void:
 	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
 	dialog_box = dialog_scene.instantiate()
 	get_parent().add_child(dialog_box)
 	dialog_box.set_tree(dialog_tree)
 	dialog_box.position = player.position
-	dialog_mode = true
+	dialog_mode = true 
 	
 func enter_battle_scene(object: Node) -> void:
 	save_data()

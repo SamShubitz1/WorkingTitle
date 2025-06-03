@@ -6,6 +6,8 @@ extends Node2D
 
 @export var TILE_SIZE: int = 32
 
+var current_map: Node
+
 func _ready():
 	#GameData.GlobalMapControllerRef = self
 	load_room("res://Rooms/T1/T1Room.tscn", true)
@@ -89,19 +91,24 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 		return
 
 	var new_map_resource = load(room_resource_path)
-	var new_map = new_map_resource.instantiate()
+	current_map = new_map_resource.instantiate()
+	get_updated_enemy_areas()
 	var map_container = self.get_child(0)
-	map_container.add_child(new_map)
-	current_tile_map_layer = new_map.get_node("TileMapLayer")
+	map_container.add_child(current_map)
+	current_tile_map_layer = current_map.get_node("TileMapLayer")
 	if use_default_pos:
-		overworld.set_default_player_pos(new_map.default_pos)
+		overworld.set_default_player_pos(current_map.default_pos)
 
 func enter_door(object):
 	kill_room()
 	load_room(object.door_destination, false)
 
-func init(data: Dictionary) -> void:
-	pass
+func get_updated_enemy_areas() -> Array[Node]:
+	var areas_list = current_map.get_node_or_null("EnemyAreaContainer")
+	if areas_list == null:
+		return []
+	else:
+		return areas_list.get_children()
 	
 #func get_current_tile_map_layer() -> TileMapLayer:
 	#var map_container = get_child(0)

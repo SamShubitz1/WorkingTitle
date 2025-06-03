@@ -48,7 +48,6 @@ enum EventType {
 }
 
 func _ready() -> void:
-	#var data = battle_scene.get_battle_data()
 	cursor.disable()
 	initialize_battle()
 	add_event({"type": EventType.DIALOG, "text": initial_dialog})
@@ -312,6 +311,7 @@ func perform_enemy_turn() -> void:
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " changed places!", "duration": dialog_duration})
 				
 			Data.EnemyAction.ABILITY:
+				selected_ability = action.ability
 				current_player.use_action(selected_ability.action_cost)
 				selected_ability = action.ability
 				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
@@ -456,20 +456,25 @@ func add_players() -> void:
 	players.append(thumper)
 
 func get_enemies_by_position():
-	#var enemies = select_enemies()
-	#var occupied_cells: Array
-	#var positions: Dictionary
-	#for i in range(enemies.size()):
-		#while positions.size() < i + 1:
-			#var next_position = Vector2i(randi_range(4,7), randi_range(0,3)) # hard coded
-			#if next_position not in occupied_cells:
-				#positions[next_position] = enemies[i]
-				#occupied_cells.append(next_position)
-	var positions = {Vector2i(4,0): "Pilypile", Vector2i(5,1): "Runt", Vector2i(6,2): "Mandrake", Vector2i(4,2): "Gawkingstick", Vector2i(5,3): "Thumper"}
+	var enemies = select_enemies()
+	var occupied_cells: Array
+	var positions: Dictionary
+	for i in range(enemies.size()):
+		while positions.size() < i + 1:
+			var next_position = Vector2i(randi_range(4,7), randi_range(0,3)) # hard coded
+			if next_position not in occupied_cells:
+				positions[next_position] = enemies[i]
+				occupied_cells.append(next_position)
 	return positions
 
 func select_enemies():
-	var enemy_pool = ["Runt", "Thumper", "Mage", "Pilypile", "Mandrake"]
+	var enemy_pool = []
+	var data = battle_scene.get_battle_data().data #fix this
+	if data is Node:
+		enemy_pool.append_array(["Thumper", "Runt", "Mandrake"])
+	else:
+		enemy_pool = data
+	
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
