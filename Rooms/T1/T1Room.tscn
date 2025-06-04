@@ -1,4 +1,4 @@
-[gd_scene load_steps=68 format=4 uid="uid://cqyxox8y1kg00"]
+[gd_scene load_steps=70 format=4 uid="uid://cqyxox8y1kg00"]
 
 [ext_resource type="Script" path="res://Classes/base_room.gd" id="1_rwnty"]
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="2_8178x"]
@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="23_km8gv"]
 [ext_resource type="Texture2D" uid="uid://dsuty0117lg3h" path="res://Art/EditorTools/Screen_Box_14x8.png" id="24_vgua0"]
 [ext_resource type="Shader" path="res://Rooms/T1/T1Room.gdshader" id="25_po1e3"]
+[ext_resource type="Script" path="res://Rooms/T1/camera_bound.gd" id="28_7e48e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e1egu"]
 texture = ExtResource("2_8178x")
@@ -925,6 +926,9 @@ shader_parameter/line_strength = 0.01
 
 [sub_resource type="Theme" id="Theme_5ki5m"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ps43k"]
+size = Vector2(896, 512)
+
 [node name="T1Room" type="Node2D"]
 script = ExtResource("1_rwnty")
 default_pos = Vector2(832, 416)
@@ -1104,40 +1108,40 @@ sprite_frames = SubResource("SpriteFrames_xs5ka")
 position = Vector2(768, 320)
 battle_ready = true
 
-[node name="ScreenBoundGuide" type="Node2D" parent="."]
+[node name="ScreenBound" type="Node2D" parent="."]
 
-[node name="SpriteHolder" type="Node2D" parent="ScreenBoundGuide"]
-position = Vector2(576, 416)
-scale = Vector2(2, 2)
-
-[node name="Sprite2D" type="AnimatedSprite2D" parent="ScreenBoundGuide/SpriteHolder"]
-position = Vector2(112, 64)
-sprite_frames = SubResource("SpriteFrames_gecyf")
-animation = &"Screenbox"
-
-[node name="SpriteHolder2" type="Node2D" parent="ScreenBoundGuide"]
-position = Vector2(128, 416)
-scale = Vector2(2, 2)
-
-[node name="Sprite2D" type="AnimatedSprite2D" parent="ScreenBoundGuide/SpriteHolder2"]
-position = Vector2(112, 64)
-sprite_frames = SubResource("SpriteFrames_gecyf")
-animation = &"Screenbox"
-
-[node name="SpriteHolder3" type="Node2D" parent="ScreenBoundGuide"]
+[node name="ScreenBoundNode1" type="Node2D" parent="ScreenBound"]
 position = Vector2(128, 160)
 scale = Vector2(2, 2)
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="ScreenBoundGuide/SpriteHolder3"]
+[node name="ScreenBound1" type="AnimatedSprite2D" parent="ScreenBound/ScreenBoundNode1"]
 position = Vector2(112, 64)
 sprite_frames = SubResource("SpriteFrames_gecyf")
 animation = &"Screenbox"
 
-[node name="SpriteHolder4" type="Node2D" parent="ScreenBoundGuide"]
+[node name="ScreenBoundNode2" type="Node2D" parent="ScreenBound"]
 position = Vector2(576, 160)
 scale = Vector2(2, 2)
 
-[node name="Sprite2D" type="AnimatedSprite2D" parent="ScreenBoundGuide/SpriteHolder4"]
+[node name="ScreenBound2" type="AnimatedSprite2D" parent="ScreenBound/ScreenBoundNode2"]
+position = Vector2(112, 64)
+sprite_frames = SubResource("SpriteFrames_gecyf")
+animation = &"Screenbox"
+
+[node name="ScreenBoundNode3" type="Node2D" parent="ScreenBound"]
+position = Vector2(128, 416)
+scale = Vector2(2, 2)
+
+[node name="ScreenBound3" type="AnimatedSprite2D" parent="ScreenBound/ScreenBoundNode3"]
+position = Vector2(112, 64)
+sprite_frames = SubResource("SpriteFrames_gecyf")
+animation = &"Screenbox"
+
+[node name="ScreenBoundNode4" type="Node2D" parent="ScreenBound"]
+position = Vector2(576, 416)
+scale = Vector2(2, 2)
+
+[node name="ScreenBound4" type="AnimatedSprite2D" parent="ScreenBound/ScreenBoundNode4"]
 position = Vector2(112, 64)
 sprite_frames = SubResource("SpriteFrames_gecyf")
 animation = &"Screenbox"
@@ -1153,7 +1157,19 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.31351, 1.43816)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource("Theme_5ki5m")
 color = Color(1, 1, 1, 0.133333)
+
+[node name="CameraBoundContainer" type="Node2D" parent="."]
+position = Vector2(128, 160)
+
+[node name="CameraBound" type="Area2D" parent="CameraBoundContainer"]
+script = ExtResource("28_7e48e")
+
+[node name="CameraCollisionArea" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound"]
+position = Vector2(448, 256)
+shape = SubResource("RectangleShape2D_ps43k")
+debug_color = Color(0, 0.6, 0.701961, 0)

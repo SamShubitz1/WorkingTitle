@@ -111,6 +111,7 @@ func check_move_complete():
 		player.position = dest_pos # force player player.position to dest point
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 		check_for_battle()
+		check_for_camera_bounds()
 
 func player_action_pressed() -> void:
 	if dialog_mode && dialog_box != null:
@@ -163,6 +164,12 @@ func check_for_battle() -> void:
 		else:
 			player.reset_step_count()
 		
+func check_for_camera_bounds():
+	var bounds = map_controller.get_updated_camera_bounds()
+	for bound in bounds:
+		if bound.overlaps_area(player):
+			player.set_camera_bounds(bound.get_updated_camera_bounds())
+	
 func start_dialog(dialog_tree: Dictionary) -> void:
 	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
 	dialog_box = dialog_scene.instantiate()

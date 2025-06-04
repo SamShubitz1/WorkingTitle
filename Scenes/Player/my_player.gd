@@ -45,3 +45,10 @@ func set_is_moving(value: bool) -> void:
 func update_direction(input_direction: Vector2i) -> void:
 	current_direction = input_direction
 	is_moving = true
+
+func set_camera_bounds(bounds: Dictionary):
+	player_camera.limit_left = bounds["left"]
+	player_camera.limit_right = bounds["right"]
+	player_camera.limit_top = bounds["top"]
+	player_camera.limit_bottom = bounds["bottom"]
+	
