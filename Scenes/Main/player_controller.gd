@@ -159,8 +159,8 @@ func check_for_battle() -> void:
 		if area.overlaps_area(player):
 			player.increment_step_count()
 			var random = randi_range(12, 28)
-			if player.get_step_count() >= random:
-				game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": area.enemy_pool})
+			#if player.get_step_count() >= random:
+				#game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": area.enemy_pool})########################
 		else:
 			player.reset_step_count()
 		
@@ -180,7 +180,7 @@ func start_dialog(dialog_tree: Dictionary) -> void:
 	
 func enter_battle_scene(object: Node) -> void:
 	save_data()
-	game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
+	#game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object}) ########################################
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	if idle && player.sprite.animation.contains("idle"):
