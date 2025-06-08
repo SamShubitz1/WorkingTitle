@@ -222,8 +222,8 @@ var abilities: Dictionary = {
 	"Seeker Rockets": {"name": "Seeker Rockets", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 50}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Two random enemies are dealt 50 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Cluster_Rocket.wav", "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		
 	"Crush": {"name": "Crush", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage and -1 strength", "range": Vector2i(4,0), "shape": AbilityShape.MELEE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Crush.wav", "animation": {"name": "Crush", "origin": AnimOrigin.OTHER, "duration": 0.8}, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "target": EffectTarget.OTHER, "value": -1, "property":
-			Attributes.STRENGTH, "dialog": "gained -1 strength"}]},
+		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": -1, "property":
+			Attributes.STRENGTH, "dialog": "lost 1 strength"}]},
 			
 	"Beam Slice": {"name": "Beam Slice", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.ENERGY, "value": 95}, "action_cost": 3, "energy_cost": 4, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "95 energy damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [], "animation": {"name": "BeamSlice", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
