@@ -1,3 +1,7 @@
+################BASE CHARACTER################
+#Battle Init
+
+
 extends Node
 
 class_name Character
@@ -39,6 +43,7 @@ var has_moved: bool = false
 
 var turn_count: int
 var battle_id: int
+
 
 func init(player_id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_sound: AudioStreamPlayer, char_health: ProgressBar, energy: int, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
 	self.battle_id = player_id
@@ -147,14 +152,14 @@ func check_success(selected_ability: Dictionary) -> bool:
 	var type = selected_ability.ability_type
 	match type:
 		Data.AbilityType.ATTACK:
-			var base_success = 90
+			var base_success = 85
 			var optics = current_attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 2
 				var range = randi_range(1, 100)
 				success = range < base_success
 		Data.AbilityType.EFFECT:
-			var base_success = 75
+			var base_success = 65
 			var optics = current_attributes[Data.Attributes.OPTICS]
 			for optic in range(optics):
 				base_success += 4
@@ -175,7 +180,7 @@ func flip_sprite() -> void:
 	sprite.flip_h = true
 		
 func use_action(cost: int) -> bool:
-	print(char_name, " AP before use action " , action_points )
+	print(char_name, " AP before use action " , action_points )        ###########Can get rid of these prints
 	var next_points = action_points - cost
 	if next_points < 0:
 		print(char_name, " AP after use action " , action_points )
