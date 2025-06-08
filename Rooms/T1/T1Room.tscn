@@ -961,7 +961,7 @@ modulate = Color(1, 1, 1, 0.435294)
 position = Vector2(128, 320)
 script = ExtResource("3_ify6l")
 door_destination = "res://Rooms/T2/T2Room.tscn"
-spawn_position = Vector2(960, 576)
+spawn_position = Vector2(960, 544)
 
 [node name="Sprite2D" type="Sprite2D" parent="Doodads/Doors/DoorToT2"]
 position = Vector2(0, -4)

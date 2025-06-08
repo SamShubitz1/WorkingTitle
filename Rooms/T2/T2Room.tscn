@@ -844,7 +844,7 @@ size = Vector2(1328.5, 1022)
 size = Vector2(1344, 256)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ostmw"]
-size = Vector2(896, 768)
+size = Vector2(896, 992)
 
 [node name="T2Room" type="Node2D"]
 script = ExtResource("1_rb3v6")
@@ -858,6 +858,7 @@ z_index = 2
 tile_set = SubResource("TileSet_6e2gj")
 
 [node name="ScreenBoundGuide" type="Node2D" parent="."]
+visible = false
 position = Vector2(0, -32)
 
 [node name="SpriteHolder" type="Node2D" parent="ScreenBoundGuide"]
@@ -942,7 +943,7 @@ sprite_frames = SubResource("SpriteFrames_skgyo")
 animation = &"Screenbox"
 
 [node name="PlayerSpawn" type="Node2D" parent="."]
-position = Vector2(960, 576)
+position = Vector2(960, 544)
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerSpawn"]
 
@@ -950,13 +951,12 @@ position = Vector2(960, 576)
 
 [node name="DoorToT1" type="Node2D" parent="Doors"]
 modulate = Color(1, 1, 1, 0.435294)
-position = Vector2(992, 576)
+position = Vector2(992, 544)
 script = ExtResource("6_a7531")
 door_destination = "res://Rooms/T1/T1Room.tscn"
 spawn_position = Vector2(160, 320)
 
 [node name="Sprite2D" type="Sprite2D" parent="Doors/DoorToT1"]
-position = Vector2(0, -32)
 scale = Vector2(1, 1.49625)
 texture = ExtResource("7_6hgfd")
 offset = Vector2(16, 16)
@@ -965,6 +965,7 @@ flip_h = true
 [node name="EnemyAreaContainer" type="Node2D" parent="."]
 
 [node name="EnemyArea" type="Area2D" parent="EnemyAreaContainer"]
+visible = false
 script = ExtResource("8_1es84")
 
 [node name="EnemyCollisionArea" type="CollisionShape2D" parent="EnemyAreaContainer/EnemyArea"]
@@ -979,7 +980,7 @@ position = Vector2(128, 160)
 script = ExtResource("9_thpic")
 
 [node name="CameraCollisionArea" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound"]
-position = Vector2(672, 96)
+position = Vector2(671, 96)
 shape = SubResource("RectangleShape2D_ltfq0")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
@@ -987,6 +988,6 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 script = ExtResource("10_6p6cm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound2"]
-position = Vector2(448, 608)
+position = Vector2(448, 480)
 shape = SubResource("RectangleShape2D_ostmw")
 debug_color = Color(0, 0.6, 0.701961, 0)

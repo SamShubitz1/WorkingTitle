@@ -47,8 +47,49 @@ func update_direction(input_direction: Vector2i) -> void:
 	is_moving = true
 
 func set_camera_bounds(bounds: Dictionary):
+	var smooth_speed = 1
+	
+	if player_camera.limit_top > bounds["top"]:
+		while player_camera.limit_top > bounds["top"]:
+			player_camera.limit_top -= smooth_speed
+			await get_tree().create_timer(10).timeout
+	if player_camera.limit_top < bounds["top"]:
+		while player_camera.limit_top < bounds["top"]:
+			player_camera.limit_top += smooth_speed
+			await get_tree().create_timer(10).timeout 
+		
+	if player_camera.limit_left > bounds["left"]:
+		while player_camera.limit_left > bounds["left"]:
+			player_camera.limit_left -= smooth_speed
+			await get_tree().create_timer(10).timeout
+	if player_camera.limit_left < bounds["left"]:
+		while player_camera.limit_left < bounds["left"]:
+			player_camera.limit_left += smooth_speed
+			await get_tree().create_timer(10).timeout 
+			
+	if player_camera.limit_bottom > bounds["bottom"]:
+		while player_camera.limit_bottom > bounds["bottom"]:
+			player_camera.limit_bottom -= smooth_speed
+			await get_tree().create_timer(10).timeout
+	if player_camera.limit_bottom < bounds["bottom"]:
+		while player_camera.limit_bottom < bounds["bottom"]:
+			player_camera.limit_bottom += smooth_speed
+			await get_tree().create_timer(10).timeout 
+	
+	if player_camera.limit_right > bounds["right"]:
+		while player_camera.limit_right > bounds["right"]:
+			player_camera.limit_right -= smooth_speed
+			await get_tree().create_timer(10).timeout
+	if player_camera.limit_right < bounds["right"]:
+		while player_camera.limit_right < bounds["right"]:
+			player_camera.limit_right += smooth_speed
+			await get_tree().create_timer(10).timeout 
+		
 	player_camera.limit_left = bounds["left"]
 	player_camera.limit_right = bounds["right"]
 	player_camera.limit_top = bounds["top"]
 	player_camera.limit_bottom = bounds["bottom"]
+	
+
+func smooth_camera_bound(): pass
 	
