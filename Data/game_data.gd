@@ -193,13 +193,13 @@ var abilities: Dictionary = {
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.MEMORY, "dialog": "gained +3 memory", "animation": {"name": "Contemplate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 		
 	"Innervate": {"name": "Innervate", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 1, "energy_cost": 1, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Gain 3 flux.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Innervate.wav", "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.FLUX, "dialog": "gained +3 flux", "animation": {"name": "Contemplate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
+		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.FLUX, "dialog": "gained +3 flux", "animation": {"name": "Innervate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 		
 	"Strenuate": {"name": "Strenuate", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 1, "energy_cost": 1, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Gain 3 strength.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Strenuate.wav", "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.STRENGTH, "dialog": "gained +3 strength", "animation": {"name": "Contemplate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
+		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.STRENGTH, "dialog": "gained +3 strength", "animation": {"name": "Strenuate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 		
 	"Accelerate": {"name": "Accelerate", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 1, "energy_cost": 1, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Gain 3 mobility.", "range": Vector2i.ZERO, "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Accelerate.wav", "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.MOBILITY, "dialog": "gained +3 mobility", "animation": {"name": "Contemplate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
+		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 3, "property": Attributes.MOBILITY, "dialog": "gained +3 mobility", "animation": {"name": "Accelerate", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 	
 	"Trample": {"name": "Trample", "ability_type": AbilityType.ATTACK, "damage": { "type": DamageType.PHYSICAL, "value": 75}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "+75 physical damage. If a move action was made, +25 damage.", "range": Vector2i(3,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [], "animation": {"name": "Trample", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
@@ -213,13 +213,13 @@ var abilities: Dictionary = {
 		
 	"Self Repair": {"name": "Self Repair", "ability_type": AbilityType.EFFECT, "damage":{ "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "description": "Restore 100 health to self.", "range": Vector2i(0,0), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [
 		{"effect_type": EffectType.STATS, "target": EffectTarget.SELF, "value": 100, "property":
-			SpecialStat.HP, "dialog": "restored 100 HP",}], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
+			SpecialStat.HP, "dialog": "restored 100 HP",}], "animation": {"name": "SelfRepair", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 	
 	"Rallied Surge": {"name": "Rallied Surge", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 24, "target_type": TargetType.HERO, "attribute_bonus": Attributes.NONE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav",  "description": "Each adjacent ally gains +3 Shielding", "range": Vector2i.ZERO, "shape": AbilityShape.SQUARE, "effects": [
-		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 2, "property": Attributes.STRENGTH, "dialog": "gained 2 power", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.OTHER, "duration": 0.8}},
+		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 2, "property": Attributes.STRENGTH, "dialog": "gained 2 power", "animation": {"name": "RalliedSurge", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.SELF, "value": 2, "property": Attributes.MEMORY, "dialog": "gained 2 flux", "animation": {"name": "ArmorInversionSelf", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 		
-	"Seeker Rockets": {"name": "Seeker Rockets", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 50}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Two random enemies are dealt 50 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Cluster_Rocket.wav", "effects": [], "animation": {"name": "Wavebeam", "origin": AnimOrigin.OTHER, "duration": 0.8}},
+	"Seeker Rockets": {"name": "Seeker Rockets", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 50}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Two random enemies are dealt 50 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Cluster_Rocket.wav", "effects": [], "animation": {"name": "ClusterRocket", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		
 	"Crush": {"name": "Crush", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage and -1 strength", "range": Vector2i(4,0), "shape": AbilityShape.MELEE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Crush.wav", "animation": {"name": "Crush", "origin": AnimOrigin.OTHER, "duration": 0.8}, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": -1, "property":
@@ -229,7 +229,7 @@ var abilities: Dictionary = {
 	
 	"Septic Injection": {"name": "Septic Injection", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Target loses 40 health and gains 3 acidized.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [
 		#{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": -2, "property": Attributes.ARMOR, "dialog": "lost 2 armor", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.OTHER, "duration": 0.8}}, ##Target loses 40 health
-		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 3, "property": Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "ArmorInversionSelf", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
+		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 3, "property": Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "SepticInjection", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 	}
 	
 const sounds = {
