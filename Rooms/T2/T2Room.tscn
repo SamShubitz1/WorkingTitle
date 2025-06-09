@@ -12,7 +12,7 @@
 [ext_resource type="Script" path="res://Rooms/T1/camera_bound.gd" id="9_thpic"]
 [ext_resource type="Script" path="res://Rooms/T2/camera_bound_2.gd" id="10_6p6cm"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0acj1"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1vrua"]
 texture = ExtResource("1_q2ld6")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -225,7 +225,7 @@ texture_region_size = Vector2i(32, 32)
 13:9/0 = 0
 14:9/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fr6ju"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_62ttn"]
 texture = ExtResource("2_7wef1")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -400,7 +400,7 @@ texture_region_size = Vector2i(32, 32)
 14:9/0 = 0
 15:9/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_efwvw"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0h34s"]
 texture = ExtResource("3_4a6vt")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -567,11 +567,11 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_uik0s"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_0acj1")
-sources/2 = SubResource("TileSetAtlasSource_fr6ju")
-sources/3 = SubResource("TileSetAtlasSource_efwvw")
+sources/0 = SubResource("TileSetAtlasSource_1vrua")
+sources/2 = SubResource("TileSetAtlasSource_62ttn")
+sources/3 = SubResource("TileSetAtlasSource_0h34s")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iqy6n"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_18eku"]
 texture = ExtResource("3_7om2w")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
@@ -820,7 +820,7 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_6e2gj"]
 tile_size = Vector2i(32, 32)
 physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_iqy6n")
+sources/0 = SubResource("TileSetAtlasSource_18eku")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qtoq5"]
 atlas = ExtResource("4_kko3w")
@@ -844,7 +844,7 @@ size = Vector2(1328.5, 1022)
 size = Vector2(1344, 256)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ostmw"]
-size = Vector2(896, 992)
+size = Vector2(896, 1024)
 
 [node name="T2Room" type="Node2D"]
 script = ExtResource("1_rb3v6")
@@ -858,7 +858,6 @@ z_index = 2
 tile_set = SubResource("TileSet_6e2gj")
 
 [node name="ScreenBoundGuide" type="Node2D" parent="."]
-visible = false
 position = Vector2(0, -32)
 
 [node name="SpriteHolder" type="Node2D" parent="ScreenBoundGuide"]
@@ -974,13 +973,13 @@ shape = SubResource("RectangleShape2D_r64q4")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="CameraBoundContainer" type="Node2D" parent="."]
-position = Vector2(128, 160)
+position = Vector2(128, 128)
 
 [node name="CameraBound" type="Area2D" parent="CameraBoundContainer"]
 script = ExtResource("9_thpic")
 
 [node name="CameraCollisionArea" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound"]
-position = Vector2(671, 96)
+position = Vector2(672, 128)
 shape = SubResource("RectangleShape2D_ltfq0")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
@@ -988,6 +987,6 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 script = ExtResource("10_6p6cm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound2"]
-position = Vector2(448, 480)
+position = Vector2(448, 512)
 shape = SubResource("RectangleShape2D_ostmw")
 debug_color = Color(0, 0.6, 0.701961, 0)
