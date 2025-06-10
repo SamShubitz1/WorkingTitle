@@ -179,6 +179,7 @@ func get_bounds_with_overlap(bounds: Array[Node]) -> Dictionary:
 	var camera_bounds: Array
 	for bound in bounds:
 		if bound.overlaps_area(player) || initialized == false:
+			print(bound.name, " ", bound.get_updated_camera_bounds())
 			camera_bounds.append(bound.get_updated_camera_bounds())
 	if camera_bounds.size() == 1:
 		return camera_bounds[0]
@@ -208,7 +209,7 @@ func get_bounds_with_overlap(bounds: Array[Node]) -> Dictionary:
 				right_limit = camera_bound.right
 			else:
 				right_limit = max(right_limit, camera_bound.right)
-
+		print({"top": top_limit, "left": left_limit, "bottom": bottom_limit, "right": right_limit})
 		return {"top": top_limit, "left": left_limit, "bottom": bottom_limit, "right": right_limit}
 	return {}
 	

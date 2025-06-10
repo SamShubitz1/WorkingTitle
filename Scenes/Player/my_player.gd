@@ -58,11 +58,51 @@ func set_camera_bounds(bounds: Dictionary, smooth: bool):
 	if smooth:
 		duration = 1
 		
-	smooth_set_bound("limit_top", bounds["top"], duration)
-	smooth_set_bound("limit_left", bounds["left"], duration)
-	smooth_set_bound("limit_bottom", bounds["bottom"], duration)
-	smooth_set_bound("limit_right", bounds["right"], duration)
+	smooth_set_bound(bounds)
 	
-func smooth_set_bound(limit: String, value: int, duration: int) -> void:
-	var tween = create_tween()
-	tween.tween_property(player_camera, limit, value, duration)
+
+	#smooth_set_bound("limit_top", bounds["top"], duration)
+	#smooth_set_bound("limit_left", bounds["left"], duration)
+	#smooth_set_bound("limit_bottom", bounds["bottom"], duration)
+	#smooth_set_bound("limit_right", bounds["right"], duration)
+	
+func smooth_set_bound(bounds: Dictionary):
+	if player_camera.limit_top > bounds["top"]:
+		while player_camera.limit_top > bounds["top"]:
+			player_camera.limit_top += 1
+			await wait()
+	if player_camera.limit_top < bounds["top"]:
+		while player_camera.limit_top < bounds["top"]:
+			player_camera.limit_top -= 1
+			await wait()
+	if player_camera.limit_bottom > bounds["bottom"]:
+		while player_camera.limit_bottom > bounds["bottom"]:
+			player_camera.limit_bottom += 1
+			await wait()
+	if player_camera.limit_bottom > bounds["bottom"]:
+		while player_camera.limit_bottom > bounds["bottom"]:
+			player_camera.limit_bottom -= 1
+			await wait()
+	if player_camera.limit_left > bounds["left"]:
+		while player_camera.limit_left > bounds["left"]:
+			player_camera.limit_left += 1
+			await wait()
+	if player_camera.limit_left > bounds["left"]:
+		while player_camera.limit_left > bounds["left"]:
+			player_camera.limit_left -= 1
+			await wait()
+	if player_camera.limit_right > bounds["right"]:
+		while player_camera.limit_right > bounds["right"]:
+			player_camera.limit_right += 1
+			await wait()
+	if player_camera.limit_right > bounds["right"]:
+		while player_camera.limit_right > bounds["right"]:
+			player_camera.limit_right -= 1
+			await wait()
+
+func wait():
+	await get_tree().create_timer(0.1).timeout
+
+#func smooth_set_bound(limit: String, value: int, duration: int) -> void:
+	#var tween = create_tween()
+	#tween.tween_property(player_camera, limit, value, duration)

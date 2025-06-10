@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://u6v0gleynqof" path="res://Art/Animations/Mage_Walk_Back.png" id="6_40xa4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5nu6t"]
-size = Vector2(32, 32)
+size = Vector2(29, 30)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wd4jb"]
 atlas = ExtResource("1_1kc6g")
@@ -216,7 +216,7 @@ animations = [{
 script = ExtResource("1_jn3dj")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(16, 16)
+position = Vector2(15.5, 16)
 shape = SubResource("RectangleShape2D_5nu6t")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
