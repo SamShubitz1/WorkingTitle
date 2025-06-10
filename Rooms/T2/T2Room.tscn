@@ -841,10 +841,10 @@ animations = [{
 size = Vector2(1328.5, 1022)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ltfq0"]
-size = Vector2(1344, 256)
+size = Vector2(1344, 255)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ostmw"]
-size = Vector2(896, 1024)
+size = Vector2(893, 1024)
 
 [node name="T2Room" type="Node2D"]
 script = ExtResource("1_rb3v6")
@@ -979,7 +979,7 @@ position = Vector2(128, 128)
 script = ExtResource("9_thpic")
 
 [node name="CameraCollisionArea" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound"]
-position = Vector2(672, 128)
+position = Vector2(672, 127.5)
 shape = SubResource("RectangleShape2D_ltfq0")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
@@ -987,6 +987,6 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 script = ExtResource("10_6p6cm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound2"]
-position = Vector2(448, 512)
+position = Vector2(447, 512)
 shape = SubResource("RectangleShape2D_ostmw")
 debug_color = Color(0, 0.6, 0.701961, 0)

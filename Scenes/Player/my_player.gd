@@ -46,50 +46,23 @@ func update_direction(input_direction: Vector2i) -> void:
 	current_direction = input_direction
 	is_moving = true
 
-func set_camera_bounds(bounds: Dictionary):
-	var smooth_speed = 1
-	
-	if player_camera.limit_top > bounds["top"]:
-		while player_camera.limit_top > bounds["top"]:
-			player_camera.limit_top -= smooth_speed
-			await get_tree().create_timer(10).timeout
-	if player_camera.limit_top < bounds["top"]:
-		while player_camera.limit_top < bounds["top"]:
-			player_camera.limit_top += smooth_speed
-			await get_tree().create_timer(10).timeout 
+func set_camera_bounds(bounds: Dictionary, smooth: bool):
+	if bounds.is_empty():
+		return
 		
-	if player_camera.limit_left > bounds["left"]:
-		while player_camera.limit_left > bounds["left"]:
-			player_camera.limit_left -= smooth_speed
-			await get_tree().create_timer(10).timeout
-	if player_camera.limit_left < bounds["left"]:
-		while player_camera.limit_left < bounds["left"]:
-			player_camera.limit_left += smooth_speed
-			await get_tree().create_timer(10).timeout 
-			
-	if player_camera.limit_bottom > bounds["bottom"]:
-		while player_camera.limit_bottom > bounds["bottom"]:
-			player_camera.limit_bottom -= smooth_speed
-			await get_tree().create_timer(10).timeout
-	if player_camera.limit_bottom < bounds["bottom"]:
-		while player_camera.limit_bottom < bounds["bottom"]:
-			player_camera.limit_bottom += smooth_speed
-			await get_tree().create_timer(10).timeout 
-	
-	if player_camera.limit_right > bounds["right"]:
-		while player_camera.limit_right > bounds["right"]:
-			player_camera.limit_right -= smooth_speed
-			await get_tree().create_timer(10).timeout
-	if player_camera.limit_right < bounds["right"]:
-		while player_camera.limit_right < bounds["right"]:
-			player_camera.limit_right += smooth_speed
-			await get_tree().create_timer(10).timeout 
+	if bounds["top"] == player_camera.limit_top && bounds["left"] == player_camera.limit_left && bounds["bottom"] == player_camera.limit_bottom && bounds["right"] == player_camera.limit_right:
+		return
 		
-	player_camera.limit_left = bounds["left"]
-	player_camera.limit_right = bounds["right"]
-	player_camera.limit_top = bounds["top"]
-	player_camera.limit_bottom = bounds["bottom"]
+	var duration = 0
+		
+	if smooth:
+		duration = 1
+		
+	smooth_set_bound("limit_top", bounds["top"], duration)
+	smooth_set_bound("limit_left", bounds["left"], duration)
+	smooth_set_bound("limit_bottom", bounds["bottom"], duration)
+	smooth_set_bound("limit_right", bounds["right"], duration)
 	
-
-func smooth_camera_bound(): pass
-	
+func smooth_set_bound(limit: String, value: int, duration: int) -> void:
+	var tween = create_tween()
+	tween.tween_property(player_camera, limit, value, duration)
