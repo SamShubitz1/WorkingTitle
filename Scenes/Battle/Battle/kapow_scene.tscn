@@ -1742,4 +1742,6 @@ animations = [{
 z_index = 4
 sprite_frames = SubResource("SpriteFrames_g16yy")
 animation = &"Accelerate"
+frame = 7
+frame_progress = 1.0
 script = ExtResource("8_eb3ju")
