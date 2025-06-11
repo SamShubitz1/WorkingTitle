@@ -62,7 +62,8 @@ func get_next_turn(enemy, players, ability) -> Array: #builds an enemy turn base
 	return next_turn
 	
 func select_by_priority(objects_with_priorities: Array): #takes an array of objects with the shape {"object": object, "priority": int} - object can be an ability, target, or survey (will probably add more) - and rolls dice to return a selected object
-	objects_with_priorities.sort_custom(func(objectA, objectB): return objectA.priority > objectB.priority) 
+	objects_with_priorities.sort_custom(func(objectA, objectB): return objectA.priority > objectB.priority)
+	print(objects_with_priorities)
 	var max = objects_with_priorities[0].priority
 	var selected_object: Dictionary
 	var difference = null
@@ -293,7 +294,7 @@ func get_targets_with_priorities(targets) -> Array: #returns a list of targets w
 	var targets_with_priorities: Array
 	targets.sort_custom(func(targetA, targetB): targetA.health_bar.value < targetB.health_bar.value) # placeholder logic
 	for i in range(targets.size()):
-		var priority = i * 10
+		var priority = i + 1 * 10
 		targets_with_priorities.append({"object": targets[i], "priority": priority})
 		
 	return targets_with_priorities

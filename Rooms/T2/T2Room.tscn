@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://Classes/base_door.gd" id="6_a7531"]
 [ext_resource type="Texture2D" uid="uid://bu5t8rnxtgdul" path="res://Dodads/Doors/Door_02.png" id="7_6hgfd"]
 [ext_resource type="Script" path="res://Rooms/T2/enemy_area.gd" id="8_1es84"]
-[ext_resource type="Script" path="res://Rooms/T1/camera_bound.gd" id="9_thpic"]
+[ext_resource type="Script" path="res://Rooms/T2/camera_bound.gd" id="9_dlbsn"]
 [ext_resource type="Script" path="res://Rooms/T2/camera_bound_2.gd" id="10_6p6cm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1vrua"]
@@ -976,7 +976,7 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 position = Vector2(128, 128)
 
 [node name="CameraBound" type="Area2D" parent="CameraBoundContainer"]
-script = ExtResource("9_thpic")
+script = ExtResource("9_dlbsn")
 
 [node name="CameraCollisionArea" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound"]
 position = Vector2(672, 127.5)

@@ -31,11 +31,6 @@ func _process(delta: float) -> void:
 	process_player_inputs() # gets input direction, checks for collision
 	process_player_movement(delta) # moves player, checks for complete move
 
-func _physics_process(delta) -> void:
-	if player.is_moving:
-		return
-	check_for_camera_bounds()
-
 func process_player_movement(delta) -> void:
 	if !player.is_moving:
 		return
@@ -118,6 +113,7 @@ func check_move_complete():
 		player.position = dest_pos # force player player.position to dest point
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 		#check_for_battle() ########################################################
+		check_for_camera_bounds()
 
 func player_action_pressed() -> void:
 	if dialog_mode && dialog_box != null:
@@ -172,45 +168,51 @@ func check_for_battle() -> void:
 		
 func check_for_camera_bounds():
 	var bounds = map_controller.get_updated_camera_bounds()
-	var overlapped_bounds = get_bounds_with_overlap(bounds)
-	player.set_camera_bounds(overlapped_bounds, true)
+	var limits = get_limits_with_overlap(bounds)
+	player.set_camera_bounds(limits, true)
 
-func get_bounds_with_overlap(bounds: Array[Node]) -> Dictionary:
-	var camera_bounds: Array
+func get_limits_with_overlap(bounds: Array[Node]) -> Dictionary:
+	var current_limits: Array
 	for bound in bounds:
-		if bound.overlaps_area(player) || initialized == false:
-			camera_bounds.append(bound.get_updated_camera_bounds())
-	if camera_bounds.size() == 1:
-		return camera_bounds[0]
-	elif camera_bounds.size() > 1:
+		var limits = bound.get_updated_limits()
+		if overlaps(limits, player) || initialized == false:
+			current_limits.append(limits)
+	if current_limits.size() == 1:
+		return current_limits[0]
+	elif current_limits.size() > 1:
 		var top_limit = null
 		var left_limit = null
 		var bottom_limit = null
 		var right_limit = null
 		
-		for camera_bound in camera_bounds:
+		for limit in current_limits:
 			if top_limit == null:
-				top_limit = camera_bound.top
+				top_limit = limit.top
 			else:
-				top_limit = min(top_limit, camera_bound.top)
+				top_limit = min(top_limit, limit.top)
 
 			if left_limit == null:
-				left_limit = camera_bound.left
+				left_limit = limit.left
 			else:
-				left_limit = min(left_limit, camera_bound.left)
+				left_limit = min(left_limit, limit.left)
 
 			if bottom_limit == null:
-				bottom_limit = camera_bound.bottom
+				bottom_limit = limit.bottom
 			else:
-				bottom_limit = max(bottom_limit, camera_bound.bottom)
+				bottom_limit = max(bottom_limit, limit.bottom)
 
 			if right_limit == null:
-				right_limit = camera_bound.right
+				right_limit = limit.right
 			else:
-				right_limit = max(right_limit, camera_bound.right)
+				right_limit = max(right_limit, limit.right)
 
 		return {"top": top_limit, "left": left_limit, "bottom": bottom_limit, "right": right_limit}
 	return {}
+
+func overlaps(limits: Dictionary, player: Node) -> bool:
+	if player.position.x > limits["left"] && player.position.x < limits["right"] && player.position.y > limits["top"] && player.position.y < limits["bottom"]:
+		return true
+	return false
 	
 func start_dialog(dialog_tree: Dictionary) -> void:
 	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
@@ -341,6 +343,6 @@ func init(default_pos: Vector2) -> void:
 	player.position = default_player_pos
 	player.grid_position = map_controller.point_to_grid(player.position)
 	var bounds = map_controller.get_updated_camera_bounds()
-	var camera_bounds = get_bounds_with_overlap(bounds)
+	var camera_bounds = get_limits_with_overlap(bounds)
 	player.set_camera_bounds(camera_bounds, false)
 	initialized = true

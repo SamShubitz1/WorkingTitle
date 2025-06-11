@@ -607,14 +607,20 @@ func build_character(char_name: String, char_alliance: Data.Alliance, char_posit
 
 func select_random(number_of_targets: int) -> void:
 	var enemies = []
+	
 	for player in players:
 		if player.alliance == Data.Alliance.ENEMY:
 			enemies.append(player)
+			
+	if enemies.size() < number_of_targets:
+		number_of_targets = enemies.size()
+		
 	var target_cells = []
+	
 	for i in range(number_of_targets):
 		var index = randi_range(0, enemies.size() - 1)
 		var selected_enemy = enemies[index]
 		target_cells.append(selected_enemy.grid_position)
 		enemies = enemies.filter(func(e): return e.battle_id != selected_enemy.battle_id)
-		#Get size of list, randi_range between 0 and list size -1 = index_selected1
+		# get size of list, randi_range between 0 and list size -1 = index_selected1
 	on_use_ability(target_cells)
