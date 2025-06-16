@@ -46,28 +46,22 @@ func update_direction(input_direction: Vector2i) -> void:
 	current_direction = input_direction
 	is_moving = true
 
-func set_camera_bounds(limits: Dictionary, smooth: bool):
+func disable_camera_smoothing() -> void:
+	player_camera.limit_smoothed = false
+	player_camera.position_smoothing_enabled = false
+
+func enable_camera_smoothing() -> void:
+	player_camera.limit_smoothed = true
+	player_camera.position_smoothing_enabled = true
+
+func set_camera_bounds(limits: Dictionary):
 	if limits.is_empty():
 		return
-		
-	#if bounds["top"] == player_camera.limit_top && bounds["left"] == player_camera.limit_left && bounds["bottom"] == player_camera.limit_bottom && bounds["right"] == player_camera.limit_right:
-		#return
-		
-	var duration = 0
-	if smooth:
-		duration = 1.4
-		
-	smooth_set_limits(limits, duration)
+
+	if limits["top"] == player_camera.limit_top && limits["left"] == player_camera.limit_left && limits["bottom"] == player_camera.limit_bottom && limits["right"] == player_camera.limit_right:
+		return
 	
-#func smooth_set_limits(limit: String, value: int, duration: int) -> void:
-	#var diff = player_camera.limit_top - value
-	#if diff > 0:
-		#for i in range(diff):
-			#player_camera.limit_top
-	
-func smooth_set_limits(limits: Dictionary, duration: int) -> void:
-	var tween = create_tween().set_parallel(true)
-	tween.tween_property(player_camera, "limit_bottom", limits["bottom"], duration)
-	tween.tween_property(player_camera, "limit_top", limits["top"], duration)
-	tween.tween_property(player_camera, "limit_left", limits["left"], duration)
-	tween.tween_property(player_camera, "limit_right", limits["right"], duration)
+	player_camera.limit_top = limits["top"]
+	player_camera.limit_bottom = limits["bottom"]
+	player_camera.limit_left = limits["left"]
+	player_camera.limit_right = limits["right"]

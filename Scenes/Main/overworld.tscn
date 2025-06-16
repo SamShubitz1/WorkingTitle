@@ -21,3 +21,4 @@ sprite_offset = Vector2(0, 0)
 
 [node name="OverworldCamera" type="Camera2D" parent="PlayerController/MyPlayer"]
 zoom = Vector2(3, 3)
+position_smoothing_speed = 8.0
