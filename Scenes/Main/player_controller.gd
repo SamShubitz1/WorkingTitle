@@ -153,7 +153,9 @@ func interact(object: Node):
 	elif object is BaseDoor:
 		player.position = object.spawn_position
 		player.grid_position = map_controller.point_to_grid(player.position)
+		player.disable_camera_smoothing()
 		map_controller.enter_door(object)
+		check_for_camera_bounds()
 		
 func check_for_battle() -> void:
 	var enemy_areas = map_controller.get_updated_enemy_areas()
@@ -169,7 +171,9 @@ func check_for_battle() -> void:
 func check_for_camera_bounds():
 	var bounds = map_controller.get_updated_camera_bounds()
 	var limits = get_limits_with_overlap(bounds)
-	player.set_camera_bounds(limits, true)
+	
+	player.set_camera_bounds(limits)
+	player.enable_camera_smoothing()
 
 func get_limits_with_overlap(bounds: Array[Node]) -> Dictionary:
 	var current_limits: Array
@@ -263,7 +267,7 @@ func set_loaded_position(pos: Vector2i, scope: String) -> void:
 			#map_controller.set_object_at_coords(self, pos)
 
 func _exit_tree() -> void:
-	print("player_controller is about to die")
+	print("calling _exit_tree()")
 
 #DEBUG player debug print to console
 func print_player_info() -> void:
@@ -344,5 +348,5 @@ func init(default_pos: Vector2) -> void:
 	player.grid_position = map_controller.point_to_grid(player.position)
 	var bounds = map_controller.get_updated_camera_bounds()
 	var camera_bounds = get_limits_with_overlap(bounds)
-	player.set_camera_bounds(camera_bounds, false)
+	player.set_camera_bounds(camera_bounds)
 	initialized = true
