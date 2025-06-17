@@ -9,7 +9,7 @@ func start(animation: Dictionary, current_player: Character, target: Character, 
 	
 	var target_position: Vector2i
 	if animation.origin == Data.AnimOrigin.OTHER:
-		target_position = target.position
+		target_position = target.positiona
 	elif animation.origin == Data.AnimOrigin.SELF:
 		target_position = current_player.position
 	if animation.has("offset") && alliance == Data.Alliance.ENEMY:

@@ -950,7 +950,7 @@ sprite_frames = SubResource("SpriteFrames_skgyo")
 animation = &"Screenbox"
 
 [node name="PlayerSpawn" type="Node2D" parent="."]
-position = Vector2(960, 544)
+position = Vector2(352, 160)
 
 [node name="Sprite2D" type="Sprite2D" parent="PlayerSpawn"]
 
@@ -965,6 +965,21 @@ spawn_position = Vector2(160, 288)
 
 [node name="Sprite2D" type="Sprite2D" parent="Doors/DoorToT1"]
 scale = Vector2(1, 1.49625)
+texture = ExtResource("7_6hgfd")
+offset = Vector2(16, 16)
+flip_h = true
+
+[node name="DoorToT3" type="Node2D" parent="Doors"]
+modulate = Color(1, 1, 1, 0.435294)
+position = Vector2(352, 128)
+script = ExtResource("6_a7531")
+door_destination = "res://Rooms/T1/T1Room.tscn"
+spawn_position = Vector2(160, 288)
+
+[node name="Sprite2D" type="Sprite2D" parent="Doors/DoorToT3"]
+position = Vector2(-16.0595, 32)
+rotation = 4.71239
+scale = Vector2(1, 5.00108)
 texture = ExtResource("7_6hgfd")
 offset = Vector2(16, 16)
 flip_h = true

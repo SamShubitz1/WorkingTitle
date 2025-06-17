@@ -246,9 +246,9 @@ func build_effect_event(target: Character, effect: Dictionary, is_first_target: 
 	add_event({"type": EventType.ABILITY, "effect": effect, "target": effect_target, "duration": dialog_duration, "emitter": current_player})
 
 func prompt_select_target(ability_name: String) -> Dictionary:
-	if ability_name == "Seeker Rockets":
+	if ability_name == "Cluster Rockets":
 		cursor.disable()
-		selected_ability = GameData.abilities["Seeker Rockets"]
+		selected_ability = GameData.abilities["Cluster Rockets"]
 		select_random(2)
 		return {}
 		
