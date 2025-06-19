@@ -186,12 +186,13 @@ func update_dialog_queue() -> void:
 		
 	dialog_box[0].modulate = Color(1, 1, 0)
 		
-func on_use_ability(target_cells: Array) -> void:
+func on_use_ability(selected_targets: Array[Character]) -> void:
 	var energy_success = current_player.use_energy(selected_ability.energy_cost)
 	if !energy_success:
 		prompt_action_energy_insufficient()
 		return
 	update_energy_display()
+	
 	var cost = selected_ability.action_cost
 	var ap_success = current_player.use_action(cost)
 	if !ap_success:
@@ -199,10 +200,6 @@ func on_use_ability(target_cells: Array) -> void:
 		return
 
 	ap_display.update_action_points(cost)
-	var selected_targets: Array
-	for cell in target_cells: # move to base grid
-		if battle_grid.current_grid.has(cell):
-			selected_targets.append(cell)
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player, "sound": selected_ability.sound})
 	current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
@@ -213,8 +210,7 @@ func on_use_ability(target_cells: Array) -> void:
 		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
 	else:
 		var is_first_target = true
-		for target_pos in selected_targets:
-			var target = battle_grid.current_grid[target_pos]
+		for target in selected_targets:
 			if !selected_ability.damage.type == Data.DamageType.NONE:
 				build_attack_event(target, is_first_target)
 				
@@ -336,7 +332,6 @@ func perform_enemy_turn() -> void:
 						build_effect_event(target, effect, is_first_target)
 					
 					is_first_target = false
-
 	end_turn()
 	
 func on_movement(next_coords: Vector2i) -> void:
@@ -418,30 +413,13 @@ func end_turn() -> void:
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 
-func check_valid_targets(target_cells: Array, check_movement: bool = false) -> bool:
-	var valid_targets: Array[Vector2i]
-	var occupied_cells = battle_grid.current_grid.keys()
+func get_targets(target_cells: Array, check_movement: bool = false) -> Array[Character]:
+	var selected_targets: Array[Character]
+	for cell in target_cells: # move to base grids
+		if battle_grid.current_grid.has(cell):
+			selected_targets.append(battle_grid.current_grid[cell])
+	return selected_targets
 	
-	if check_movement && occupied_cells.has(target_cells[0]):
-		return false
-	elif check_movement:
-		return true
-		
-	for cell in occupied_cells:
-		if selected_ability.target_type == GameData.TargetType.ENEMY:
-			if cell.x > 3: # (# of columns / 2) - 1
-				valid_targets.append(cell)
-		elif selected_ability.target_type == GameData.TargetType.HERO:
-			if cell.x < 4:
-				valid_targets.append(cell)
-				
-	var is_valid_target: bool = false
-	for cell in target_cells:
-		if valid_targets.has(cell):
-			is_valid_target = true
-			
-	return is_valid_target
-		
 func add_players() -> void:
 	var positions = get_enemies_by_position()
 	for pos in positions:
@@ -623,4 +601,4 @@ func select_random(number_of_targets: int) -> void:
 		target_cells.append(selected_enemy.grid_position)
 		enemies = enemies.filter(func(e): return e.battle_id != selected_enemy.battle_id)
 		# get size of list, randi_range between 0 and list size -1 = index_selected1
-	on_use_ability(target_cells)
+	on_use_ability(get_targets(target_cells))

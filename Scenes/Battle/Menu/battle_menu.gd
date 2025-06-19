@@ -190,9 +190,9 @@ func on_select_guard() -> void:
 func on_select_target():
 	log_menu.show_menu()
 	var target_cells = targets_menu.get_target_cells()
-	var is_valid_target = battle_controller.check_valid_targets(target_cells)
-	if is_valid_target:
-		battle_controller.on_use_ability(target_cells)
+	var valid_targets = battle_controller.get_targets(target_cells)
+	if !valid_targets.is_empty():
+		battle_controller.on_use_ability(valid_targets)
 		abilities_menu.set_scroll_size(current_player.current_abilities.size()) # will be called on end turn
 		update_selected_menu(Data.BattleMenuType.OPTIONS)
 	else:
@@ -206,8 +206,8 @@ func on_select_retreat() -> void:
 	
 func on_select_movement() -> void:
 	var cell_coords: Array = movement_menu.get_target_cells()
-	var is_valid_target = battle_controller.check_valid_targets(cell_coords, true)
-	if is_valid_target:
+	var targets = battle_controller.get_targets(cell_coords, true)
+	if targets.is_empty():
 		battle_controller.on_movement(cell_coords[0])
 		go_back()
 		

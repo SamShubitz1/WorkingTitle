@@ -153,7 +153,6 @@ func interact(object: Node):
 	elif object is BaseDoor:
 		player.position = object.spawn_position
 		player.grid_position = map_controller.point_to_grid(player.position)
-		player.disable_camera_smoothing()
 		map_controller.enter_door(object)
 		check_for_camera_bounds()
 		
@@ -173,7 +172,6 @@ func check_for_camera_bounds():
 	var limits = get_limits_with_overlap(bounds)
 	
 	player.set_camera_bounds(limits)
-	player.enable_camera_smoothing()
 
 func get_limits_with_overlap(bounds: Array[Node]) -> Dictionary:
 	var current_limits: Array

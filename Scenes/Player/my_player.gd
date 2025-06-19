@@ -46,14 +46,6 @@ func update_direction(input_direction: Vector2i) -> void:
 	current_direction = input_direction
 	is_moving = true
 
-func disable_camera_smoothing() -> void:
-	player_camera.limit_smoothed = false
-	player_camera.position_smoothing_enabled = false
-
-func enable_camera_smoothing() -> void:
-	player_camera.limit_smoothed = true
-	player_camera.position_smoothing_enabled = true
-
 func set_camera_bounds(limits: Dictionary):
 	if limits.is_empty():
 		return
