@@ -186,27 +186,29 @@ func update_dialog_queue() -> void:
 		
 	dialog_box[0].modulate = Color(1, 1, 0)
 		
-func on_use_ability(selected_targets: Array[Character]) -> void:
+func on_use_ability(selected_targets: Array) -> void:
 	var energy_success = current_player.use_energy(selected_ability.energy_cost)
 	if !energy_success:
 		prompt_action_energy_insufficient()
 		return
-	update_energy_display()
 	
 	var cost = selected_ability.action_cost
 	var ap_success = current_player.use_action(cost)
 	if !ap_success:
 		prompt_action_points_insufficient()
 		return
-
-	ap_display.update_action_points(cost)
+		
+	if current_player.alliance == Data.Alliance.HERO:
+		update_energy_display()
+		ap_display.update_action_points(cost)
 	
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player, "sound": selected_ability.sound})
 	current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
 	current_player.sprite.attack(dialog_duration)
 	
-	var ability_success = current_player.check_success(selected_ability)
-	if !ability_success:
+	var hit_success = current_player.check_success(selected_ability)
+
+	if !hit_success:
 		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
 	else:
 		var is_first_target = true
@@ -217,7 +219,8 @@ func on_use_ability(selected_targets: Array[Character]) -> void:
 			for effect in selected_ability.effects:
 				build_effect_event(target, effect, is_first_target)
 			is_first_target = false
-			
+		current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
+		current_player.sprite.attack(dialog_duration)
 	end_turn()
 
 func build_attack_event(target: Character, is_first_target: bool) -> void:
@@ -253,7 +256,7 @@ func prompt_select_target(ability_name: String) -> Dictionary:
 	selected_ability = hero_ability
 	play_dialog("Select a target!", false)
 	if hero_ability.shape == Data.AbilityShape.MELEE: #for melee attacks, battle controller passes valid targets to battle menu
-		target_cells = battle_grid.get_melee_targets(Data.Alliance.HERO)
+		target_cells = battle_grid.get_melee_targets(Data.Alliance.HERO, hero_ability, current_player)
 	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range, "origin": current_player.grid_position, "target_cells": target_cells}
 
 func prompt_select_space() -> void:
@@ -308,30 +311,8 @@ func perform_enemy_turn() -> void:
 				
 			Data.EnemyAction.ABILITY:
 				selected_ability = action.ability
-				current_player.use_action(selected_ability.action_cost)
-				selected_ability = action.ability
-				add_event({"type": EventType.DIALOG, "text": current_player.char_name + " used " + selected_ability.name + "!", "duration": dialog_duration, "emitter": current_player})
-				current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
-				current_player.sprite.attack(dialog_duration)
-				
-				var success = current_player.check_success(selected_ability)
-				if !success:
-					add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
-					end_turn()
-					return
-				var is_first_target = true
-				for target in action.targets:
-					if target.guardian && !current_player.is_aiming:
-						add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
-						var next_target = target.guardian
-						target = next_target
-					if !selected_ability.damage.type == Data.DamageType.NONE:
-						build_attack_event(target, is_first_target)
-				
-					for effect in selected_ability.effects:
-						build_effect_event(target, effect, is_first_target)
-					
-					is_first_target = false
+				on_use_ability(action.targets)
+				return
 	end_turn()
 	
 func on_movement(next_coords: Vector2i) -> void:
@@ -524,6 +505,10 @@ func prompt_action_points_insufficient() -> void:
 
 func prompt_action_energy_insufficient() -> void:
 	play_dialog("Energy is too low!", false)
+	cursor.enable()
+
+func prompt_out_of_range() -> void:
+	play_dialog("Out of range!", false)
 	cursor.enable()
 	
 func update_ui() -> void:

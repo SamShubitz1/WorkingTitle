@@ -151,6 +151,13 @@ func on_select_ability() -> void:
 		Data.TargetType.HERO:
 			targets_menu.activate_hero_grid()
 	
+	var is_out_of_range = current_player.grid_position.x + ability_info.range.x < 4 && ability_info.range != Vector2i.ZERO # hard coded 4
+	
+	if is_out_of_range:
+		battle_controller.prompt_out_of_range()
+		update_selected_menu(Data.BattleMenuType.OPTIONS)
+		return
+	
 	if ability_info.shape == Data.AbilityShape.MELEE:
 		targets_menu.set_custom_cells(ability_info.target_cells)
 	else:

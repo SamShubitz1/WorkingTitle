@@ -45,16 +45,18 @@ func check_valid_targets(target_cells: Array, target_type: Data.TargetType, chec
 			
 	return is_valid_target
 
-func get_melee_targets(alliance) -> Array:
-	var x_range
+func get_melee_targets(alliance: Data.Alliance, ability: Dictionary, player: Character) -> Array:
+	var x_range: Vector2i
 	if alliance == Data.Alliance.HERO:
-		x_range = Vector2i(4,8)
+		x_range = Vector2i(4,8) # hard coded
 	elif alliance == Data.Alliance.ENEMY:
 		x_range = Vector2i(0,4)
+	
+	var y_range = Vector2i(clamp(player.grid_position.y - ability.range.y, 0, 3), clamp(player.grid_position.y + ability.range.y, 0, 3))
 		
 	var occupied_cells = current_grid.keys()
 	var target_cells: Array
-	for y in range(4): #hard coded for now
+	for y in range(y_range.x, y_range.y + 1):
 		for x in range(x_range.x, x_range.y):
 			var current_cell = Vector2i(x, y)
 			if current_cell in occupied_cells:

@@ -22,23 +22,13 @@ func build_turn(enemy: Character, players: Array) -> Array: #selects an ability 
 		if next_pos:
 			enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
 	
-	var turn_cost = get_turn_cost(enemy_turn)
-	
-	var difference = enemy.action_points - turn_cost
-	if difference == 0:
-		return enemy_turn
-	elif difference == 1:
-		var result = roll_dice(1, 10)
-		if result > 7:
-			enemy_turn.push_front({"type": Data.EnemyAction.AIM })
-	elif difference > 1:
-		var result = roll_dice(1, 10)
-		if result > 5:
-			enemy_turn.push_front({"type": Data.EnemyAction.AIM })
+	var should_aim = check_should_aim(enemy_turn, enemy.action_points)
+	if should_aim:
+		enemy_turn.push_front({"type": Data.EnemyAction.AIM })
 	
 	return enemy_turn
 
-func get_next_turn(enemy, players, ability) -> Array: #builds an enemy turn based off selected ability - an enemy_turn is a list of objects with a property "type": Data.EnemyAction (can be MOVE, ABILITY, GUARD, etc.) and other needed info like "position" or "ability"
+func get_next_turn(enemy, players, ability) -> Array: # builds an enemy turn based off selected ability - an enemy_turn is a list of objects with a property "type": Data.EnemyAction (can be MOVE, ABILITY, GUARD, etc.) and other needed info like "position" or "ability"
 	var next_turn: Array
 
 	var targets: Array = get_targets(players, ability)
@@ -63,7 +53,6 @@ func get_next_turn(enemy, players, ability) -> Array: #builds an enemy turn base
 	
 func select_by_priority(objects_with_priorities: Array): #takes an array of objects with the shape {"object": object, "priority": int} - object can be an ability, target, or survey (will probably add more) - and rolls dice to return a selected object
 	objects_with_priorities.sort_custom(func(objectA, objectB): return objectA.priority > objectB.priority)
-	print(objects_with_priorities)
 	var max = objects_with_priorities[0].priority
 	var selected_object: Dictionary
 	var difference = null
@@ -340,6 +329,28 @@ func get_next_position(players, enemy, selected_cell): #gets next position when 
 	
 	if move_is_valid(next_pos):
 		return next_pos
+
+func check_should_aim(enemy_turn: Array, action_points: int) -> bool:
+	for action in enemy_turn:
+		if action.type == Data.EnemyAction.ABILITY:
+			if action.ability.damage.type == Data.DamageType.NONE:
+				return false
+	
+	var turn_cost = get_turn_cost(enemy_turn)
+	
+	var difference = action_points - turn_cost
+	if difference == 0:
+		return false
+	elif difference == 1:
+		var result = roll_dice(1, 10)
+		if result > 7:
+			return true
+	elif difference > 1:
+		var result = roll_dice(1, 10)
+		if result > 5:
+			return true
+
+	return false
 
 func get_ability_tags(ability: Dictionary) -> Array:
 	var tags: Array
