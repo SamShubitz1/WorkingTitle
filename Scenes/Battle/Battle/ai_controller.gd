@@ -40,7 +40,11 @@ func get_next_turn(enemy, players, ability) -> Array: # builds an enemy turn bas
 	var targets_with_priorities = get_targets_with_priorities(targets)
 	var selected_survey = get_priority_survey(surveys, targets_with_priorities)
 	
-	if selected_survey.should_move:
+	var can_move = enemy.action_points - selected_survey.ability.action_cost >= 0
+	
+	if selected_survey.should_move && !can_move:
+		return []
+	elif selected_survey.should_move:
 		var next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
 		if next_pos:
 			next_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
