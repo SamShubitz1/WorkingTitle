@@ -20,6 +20,7 @@ config/icon="res://Art/Animations/simple_bot_idledown.png"
 GameData="*res://Data/game_data.gd"
 Utils="*res://Data/utils.gd"
 PlayerFlags="*res://player_flags.gd"
+GameState="*res://game_state.gd"
 
 [display]
 
