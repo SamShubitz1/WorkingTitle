@@ -112,8 +112,15 @@ func check_move_complete():
 		player.is_moving = false
 		player.position = dest_pos # force player player.position to dest point
 		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
+		increment_time_count()
+		print("time count " , GameState.current_time)
 		#check_for_battle() ########################################################
 		check_for_camera_bounds()
+
+func increment_time_count() -> void:
+	GameState.current_time += 1
+	
+
 
 func player_action_pressed() -> void:
 	if dialog_mode && dialog_box != null:

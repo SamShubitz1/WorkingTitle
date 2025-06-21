@@ -1,3 +1,9 @@
+#
+#Children: 
+#
+
+
+
 extends Node2D
 
 @onready var current_tile_map_layer: TileMapLayer = null
@@ -98,8 +104,11 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 	get_updated_enemy_areas()
 	get_updated_camera_bounds()
 	current_tile_map_layer = current_map.get_node("TilemapGround")
+	
 	if use_default_pos:
 		overworld.set_default_player_pos(current_map.default_pos)
+	
+	GameState.set_current_weather()
 
 func enter_door(object):
 	kill_room()

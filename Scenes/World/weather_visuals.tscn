@@ -1,0 +1,63 @@
+[gd_scene load_steps=11 format=3 uid="uid://c81tj6cgl0jy4"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fuyn2"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_8hflj"]
+max_value = 0.75
+_data = [Vector2(0.468085, 0.75), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveTexture" id="CurveTexture_wogah"]
+curve = SubResource("Curve_8hflj")
+
+[sub_resource type="Gradient" id="Gradient_e7a8l"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 0.27451)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_sy8by"]
+gradient = SubResource("Gradient_e7a8l")
+
+[sub_resource type="Curve" id="Curve_hqmjq"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_c746u"]
+max_value = 30.0
+_data = [Vector2(0, 30), 0.0, 0.0, 0, 0, Vector2(1, 30), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_dkos2"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_xno77"]
+curve_x = SubResource("Curve_hqmjq")
+curve_y = SubResource("Curve_c746u")
+curve_z = SubResource("Curve_dkos2")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ctsxt"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(1280, -200, 0)
+emission_shape = 3
+emission_box_extents = Vector3(1280, 1, 1)
+inherit_velocity_ratio = 1.0
+gravity = Vector3(0, 3000, 0)
+linear_accel_min = -2.23517e-06
+linear_accel_max = -2.23517e-06
+scale_min = 0.2
+scale_over_velocity_curve = SubResource("CurveXYZTexture_xno77")
+color_initial_ramp = SubResource("GradientTexture1D_sy8by")
+alpha_curve = SubResource("CurveTexture_wogah")
+
+[node name="ParticalContainer" type="Node2D"]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_fuyn2")
+amount = 1000
+process_material = SubResource("ParticleProcessMaterial_ctsxt")
+lifetime = 5.0
+preprocess = 0.5
+visibility_rect = Rect2(0, 0, 2560, 2560)
