@@ -1,9 +1,8 @@
 extends Node2D
 
-@onready var current_tile_map_layer: TileMapLayer = null
+@onready var current_tile_map_layers: Array[Node] = []
 @onready var map_container = self.get_child(0)
 @onready var overworld = get_parent()
-
 
 @export var TILE_SIZE: int = 32
 
@@ -42,39 +41,48 @@ func check_for_collider(grid_coords: Vector2i) -> bool:
 		return true
 
 	# get tile at grid_coords
-	var tile_data = current_tile_map_layer.get_cell_tile_data(grid_coords)
-	if tile_data == null:
+	var tile_data: Array
+	for layer in current_tile_map_layers:
+		var data = layer.get_cell_tile_data(grid_coords)
+		if data:
+			tile_data.append(data)
+	if tile_data.is_empty():
 		return true
 		
-	var collider_count = tile_data.get_collision_polygons_count(0)
-	return collider_count
-	return false
+	var collider = false
+	for layer in tile_data:
+		var collider_count = layer.get_collision_polygons_count(0)
+		if collider_count:
+			collider = true
+			
+	return collider
 
 # add collider to specified tile
-func add_collider(grid_coords: Vector2i) -> void:
-	if grid_coords.x < 0 or grid_coords.y < 0:
+#func add_collider(grid_coords: Vector2i) -> void:
+	#if grid_coords.x < 0 or grid_coords.y < 0:
 		#TODO catch error for out-of-bounds array lookup for tilemap object
-		return
-
-	var tile_data = current_tile_map_layer.get_cell_tile_data(grid_coords)
-	if tile_data == null:
+		#return
+#
+	#var tile_data = current_tile_map_layer.get_cell_tile_data(grid_coords)
+	#if tile_data == null:
 		#TODO catch error for out-of-bounds array lookup for tilemap object
-		return
+		#return
+#
+	#tile_data.add_collision_polygon(0)
 
-	tile_data.add_collision_polygon(0)
-
-func get_tile_at_coords(grid_coords: Vector2i) -> TileData:
-	var tile: TileData = current_tile_map_layer.get_cell_tile_data(grid_coords)
-	if tile == null:
-		#TODO catch error
-		return null
-	return tile
-
+func get_tile_at_coords(grid_coords: Vector2i) -> Array[TileData]:
+	var tiles: Array[TileData]
+	for layer in current_tile_map_layers:
+		var tile: TileData = layer.get_cell_tile_data(grid_coords)
+		if tile != null:
+			tiles.append(tile)
+	return tiles
+#
 # convert grid coords to atlas/palette-tile-coords
-func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
-	var atlas_coords: Vector2i = current_tile_map_layer.get_cell_atlas_coords(grid_coords)
-	if (atlas_coords == null): return Vector2i(0,0)
-	return atlas_coords
+#func get_tile_atlas_coords(grid_coords: Vector2i) -> Vector2i:
+	#var atlas_coords: Vector2i = current_tile_map_layer.get_cell_atlas_coords(grid_coords)
+	#if (atlas_coords == null): return Vector2i(0,0)
+	#return atlas_coords
 
 func remove_from_world_map(object: Node) -> void:
 	for item in world_map.keys():
@@ -97,7 +105,7 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 	map_container.add_child(current_map)
 	get_updated_enemy_areas()
 	get_updated_camera_bounds()
-	current_tile_map_layer = current_map.get_node("TileMapLayer")
+	current_tile_map_layers = current_map.get_children().filter(func(n): return n is TileMapLayer)
 	if use_default_pos:
 		overworld.set_default_player_pos(current_map.default_pos)
 

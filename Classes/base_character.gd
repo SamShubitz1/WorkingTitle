@@ -180,14 +180,11 @@ func flip_sprite() -> void:
 	sprite.flip_h = true
 		
 func use_action(cost: int) -> bool:
-	print(char_name, " AP before use action " , action_points )        ###########Can get rid of these prints
 	var next_points = action_points - cost
 	if next_points < 0:
-		print(char_name, " AP after use action " , action_points )
 		return false
 	else:
 		action_points = next_points
-		print(char_name, " AP after use action " , action_points )
 		return true
 
 func use_energy(cost: int) -> bool:
@@ -204,7 +201,7 @@ func use_energy(cost: int) -> bool:
 		return true
 
 func start_turn():
-	turn_count = (turn_count + 1 % 6) #move into enemy class?
+	turn_count = (turn_count + 1 % 6)
 	if turn_count == 0:
 		turn_count = 1
 	has_moved = false
