@@ -17,6 +17,9 @@ func switch_to_scene(next_scene: Data.Scenes, data: Dictionary = {}):
 	
 	if !data.is_empty():
 		scene.init(data)
+	
+	#this prevents inputs firing between scene transition
+	await get_tree().create_timer(0.1).timeout
 		
 	current_scene.queue_free()
 	add_child(scene)

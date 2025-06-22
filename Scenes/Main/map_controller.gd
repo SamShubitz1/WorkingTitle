@@ -2,8 +2,6 @@
 #Children: 
 #
 
-
-
 extends Node2D
 
 @onready var current_tile_map_layers: Array[Node] = []
@@ -107,10 +105,13 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 
 	var new_map_resource = load(room_resource_path)
 	current_map = new_map_resource.instantiate()
+	
 	var map_container = self.get_child(0)
 	map_container.add_child(current_map)
+	
 	get_updated_enemy_areas()
 	get_updated_camera_bounds()
+	
 	current_tile_map_layers = current_map.get_children().filter(func(n): return n is TileMapLayer)
 	if use_default_pos:
 		overworld.set_default_player_pos(current_map.default_pos)

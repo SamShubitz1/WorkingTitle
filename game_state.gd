@@ -1,5 +1,8 @@
 extends Node
 
+var player_position: Vector2
+var player_direction: Vector2i
+
 var current_time: int = 0
 var current_weather: Weather = Weather.CLEAR
 var weather_change = current_time + 50

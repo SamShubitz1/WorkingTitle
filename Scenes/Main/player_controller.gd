@@ -20,12 +20,16 @@ func _ready() -> void:
 	player.sprite.play("idle_down")
 	add_pause_menu()
 	
-	var success = load_data()
-	if !success:
-		return
-		
-	player.position = map_controller.grid_to_point(player.initial_position_override) + player.sprite_offset
-	player.set_grid_position(player.initial_position_override)
+	#var state_success = load_state()
+	#if state_success:
+		#return
+	#
+	#var success = load_data()
+	#if !success:
+		#return
+		#
+	#player.position = map_controller.grid_to_point(player.initial_position_override) + player.sprite_offset
+	#player.set_grid_position(player.initial_position_override)
 	
 func _process(delta: float) -> void:
 	process_player_inputs() # gets input direction, checks for collision
@@ -116,7 +120,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 	player.position = dest_pos # force player player.position to dest point
 	player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 	GameState.current_time += 1
-	check_for_battle()
+	#check_for_battle() ###*** <<< RANDOM ENCOUNTERS >>> ***###
 	check_for_camera_bounds()
 	
 func player_action_pressed() -> void:
@@ -133,7 +137,7 @@ func player_action_pressed() -> void:
 	var actioned_tile = map_controller.get_tile_at_coords(action_coords)
 	#var tile_report = map_controller.get_world_tile_report(action_coords)
 	
-	if object == null && actioned_tile == null:
+	if object == null && actioned_tile.is_empty(): #may want to check actioned_tile list members individually
 		return
 		
 	interact(object)
@@ -167,7 +171,7 @@ func check_for_battle() -> void:
 			player.increment_step_count()
 			var random = randi_range(12, 28)
 			if player.get_step_count() >= random:
-				game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": area.enemy_pool})
+				enter_battle_scene(area.enemy_pool)
 		else:
 			player.reset_step_count()
 		
@@ -229,13 +233,11 @@ func start_dialog(dialog_tree: Dictionary) -> void:
 	dialog_mode = true 
 	
 func enter_battle_scene(object: Node) -> void:
+	save_state()
 	save_data()
 	game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
-	if idle && player.sprite.animation.contains("idle"):
-		return
-		
 	match player.current_direction:
 		Vector2i.UP when idle:
 			player.sprite.play("idle_up")
@@ -313,6 +315,19 @@ func save_data() -> bool:
 
 	return result
 
+func save_state() -> void:
+	GameState.player_direction = player.current_direction
+	GameState.player_position = player.position
+
+func load_state() -> bool:
+	if GameState.player_position == Vector2.ZERO || GameState.player_direction == Vector2i.ZERO:
+		return false
+	player.position = GameState.player_position
+	player.grid_position = map_controller.point_to_grid(player.position)
+	player.current_direction = GameState.player_direction
+	set_player_animation(player.current_direction, true)
+	return true
+	
 func add_pause_menu() -> void:
 	var pause_menu_scene = load("res://Scenes/StartMenu/start_menu.tscn")
 	pause_menu = pause_menu_scene.instantiate()
@@ -342,13 +357,18 @@ func load_data() -> bool:
 	return true
 	
 func init(default_pos: Vector2) -> void:
-	if default_pos == null:
-		return
-		
-	default_player_pos = default_pos
-	player.position = default_player_pos
-	player.grid_position = map_controller.point_to_grid(player.position)
 	var bounds = map_controller.get_updated_camera_bounds()
 	var camera_bounds = get_limits_with_overlap(bounds)
 	player.set_camera_bounds(camera_bounds)
 	initialized = true
+	
+	var success = load_state()
+	if success:
+		return
+	
+	if default_pos:
+		player.position = default_pos
+	else:
+		player.position = player.initial_position_override
+		
+	player.grid_position = map_controller.point_to_grid(player.position)
