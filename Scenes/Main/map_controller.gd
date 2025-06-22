@@ -1,3 +1,9 @@
+#
+#Children: 
+#
+
+
+
 extends Node2D
 
 @onready var current_tile_map_layers: Array[Node] = []
@@ -108,6 +114,8 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 	current_tile_map_layers = current_map.get_children().filter(func(n): return n is TileMapLayer)
 	if use_default_pos:
 		overworld.set_default_player_pos(current_map.default_pos)
+	
+	GameState.set_current_weather()
 
 func enter_door(object):
 	kill_room()

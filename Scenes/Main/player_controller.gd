@@ -109,12 +109,16 @@ func check_move_complete():
 			print("Invalid input direction in player controller")
  
 	if move_finished:
-		player.is_moving = false
-		player.position = dest_pos # force player player.position to dest point
-		player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
-		#check_for_battle() ########################################################
-		check_for_camera_bounds()
+		finish_move(dest_pos)
 
+func finish_move(dest_pos: Vector2i) -> void:
+	player.is_moving = false
+	player.position = dest_pos # force player player.position to dest point
+	player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
+	GameState.current_time += 1
+	check_for_battle()
+	check_for_camera_bounds()
+	
 func player_action_pressed() -> void:
 	if dialog_mode && dialog_box != null:
 		var close_dialog = dialog_box.select_option()

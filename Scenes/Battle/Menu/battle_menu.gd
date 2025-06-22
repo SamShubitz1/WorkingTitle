@@ -153,7 +153,9 @@ func on_select_ability() -> void:
 	
 	var is_out_of_range = current_player.grid_position.x + ability_info.range.x < 4 && ability_info.range != Vector2i.ZERO # hard coded 4
 	
-	if is_out_of_range:
+	var no_melee_targets = ability_info.shape == Data.AbilityShape.MELEE && ability_info.target_cells.is_empty()
+	
+	if is_out_of_range || no_melee_targets:
 		battle_controller.prompt_out_of_range()
 		update_selected_menu(Data.BattleMenuType.OPTIONS)
 		return

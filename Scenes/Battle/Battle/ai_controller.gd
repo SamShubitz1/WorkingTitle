@@ -23,6 +23,7 @@ func build_turn(enemy: Character, players: Array) -> Array: #selects an ability 
 			enemy_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
 	
 	var should_aim = check_should_aim(enemy_turn, enemy.action_points)
+	print(enemy.char_name , "Is aiming " , should_aim)
 	if should_aim:
 		enemy_turn.push_front({"type": Data.EnemyAction.AIM })
 	
@@ -40,7 +41,11 @@ func get_next_turn(enemy, players, ability) -> Array: # builds an enemy turn bas
 	var targets_with_priorities = get_targets_with_priorities(targets)
 	var selected_survey = get_priority_survey(surveys, targets_with_priorities)
 	
-	if selected_survey.should_move:
+	var can_move = enemy.action_points - selected_survey.ability.action_cost >= 0
+	
+	if selected_survey.should_move && !can_move:
+		return []
+	elif selected_survey.should_move:
 		var next_pos = get_next_position(players, enemy, selected_survey.selected_cell)
 		if next_pos:
 			next_turn.append({"type": Data.EnemyAction.MOVE, "position": next_pos})
@@ -475,6 +480,7 @@ func get_turn_cost(turn: Array) -> int:
 				cost += 1
 			Data.EnemyAction.ABILITY:
 				cost += action.ability.action_cost
+	print("Cost before aim ", cost)
 	return cost
 
 func calculate_next_pos(selected_cell: Vector2i, current_pos: Vector2i, occupied_cells: Array): #prioritizes moving diagonal if needed, then up or down, then left or right

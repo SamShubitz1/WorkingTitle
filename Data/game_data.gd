@@ -220,7 +220,7 @@ var abilities: Dictionary = {
 		
 	"Cluster Rockets": {"name": "Cluster Rockets", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.PHYSICAL, "value": 100}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Two random enemies are dealt 50 physical damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Cluster_Rocket.wav", "effects": [], "animation": {"name": "ClusterRocket", "origin": AnimOrigin.OTHER, "duration": 0.8}},
 		
-	"Crush": {"name": "Crush", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage and -1 strength", "range": Vector2i(4,0), "shape": AbilityShape.MELEE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Crush.wav", "animation": {"name": "Crush", "origin": AnimOrigin.OTHER, "duration": 0.8}, "effects": [
+	"Crush": {"name": "Crush", "ability_type": AbilityType.ATTACK, "damage": {"type": DamageType.PHYSICAL, "value": 70}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.STRENGTH, "description": "70 physical damage and -1 strength", "range": Vector2i(7,0), "shape": AbilityShape.MELEE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Crush.wav", "animation": {"name": "Crush", "origin": AnimOrigin.OTHER, "duration": 0.8}, "effects": [
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": -1, "property":
 			Attributes.STRENGTH, "dialog": "lost 1 strength"}]},
 			
@@ -269,7 +269,7 @@ const sounds = {
 	"ThumperStartA2": "res://Scenes/Battle/Characters/Thumper/Sounds/Thumper_StartA2.wav"}
 
 var characters = {
-	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Self Repair", "Heat Ray", "Cluster Rockets", "Innervate", "Screen Flash", "Charge Beam"], "base energy": 100, "base health": 340, "role": Data.MachineRole.ESNIPER, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
+	"Mage": {"name": "Mage", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 5, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 4, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 3, Data.Attributes.OPTICS: 3, Data.Attributes.MOBILITY: 2}, "abilities": ["Self Repair", "Heat Ray", "Charge Beam", "Innervate", "Screen Flash", "Charge Beam"], "base energy": 100, "base health": 340, "role": Data.MachineRole.ESNIPER, "path": "res://Scenes/Battle/Characters/Mage/mage.tscn"},
 	
 	"Runt": {"name": "Runt", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 4, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 1, Data.Attributes.BATTERY: 1, Data.Attributes.OPTICS: 1, Data.Attributes.MOBILITY: 2}, "abilities": ["Ripjaw", "Power Strike", "Reinforce", "Acid Cloud", "Septic Injection", "Strenuate" ], "base energy": 100, "base health": 320, "role": Data.MachineRole.PTANK, "path": "res://Scenes/Battle/Characters/Runt/runt.tscn"},
 	
