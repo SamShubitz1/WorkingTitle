@@ -120,7 +120,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 	player.position = dest_pos # force player player.position to dest point
 	player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 	GameState.current_time += 1
-	#check_for_battle() ###*** <<< RANDOM ENCOUNTERS >>> ***###
+	check_for_battle()
 	check_for_camera_bounds()
 	
 func player_action_pressed() -> void:
@@ -232,7 +232,7 @@ func start_dialog(dialog_tree: Dictionary) -> void:
 	dialog_box.position = player.position
 	dialog_mode = true 
 	
-func enter_battle_scene(object: Node) -> void:
+func enter_battle_scene(object) -> void:
 	save_state()
 	save_data()
 	game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
@@ -296,28 +296,30 @@ func print_action_object_report(object) -> void:
 
 # save player data to disk
 func save_data() -> bool:
-	var result = 0
-	var PREFERENCE_FILE: String = "user://preferences.cfg"
-	var config = ConfigFile.new()
-	var err = config.load(PREFERENCE_FILE)
-	if err != OK:
-		# file not found, creating new
-		print_debug("Creating user preference file...")
-		config.set_value("player", "grid_position", player.grid_position)
-		config.set_value("player", "direction", player.current_direction)
-		result = config.save(PREFERENCE_FILE)
-	else:
-		# existing file found, updating
-		print_debug("Updating user preference file: " + str(player.grid_position))
-		config.set_value("player", "grid_position", player.grid_position)
-		config.set_value("player", "direction", player.current_direction)
-		result = config.save(PREFERENCE_FILE)
-
+	#var result = 0
+	#var PREFERENCE_FILE: String = "user://preferences.cfg"
+	#var config = ConfigFile.new()
+	#var err = config.load(PREFERENCE_FILE)
+	#if err != OK:
+		## file not found, creating new
+		#print_debug("Creating user preference file...")
+		#config.set_value("player", "grid_position", player.grid_position)
+		#config.set_value("player", "direction", player.current_direction)
+		#result = config.save(PREFERENCE_FILE)
+	#else:
+		## existing file found, updating
+		#print_debug("Updating user preference file: " + str(player.grid_position))
+		#config.set_value("player", "grid_position", player.grid_position)
+		#config.set_value("player", "direction", player.current_direction)
+		#result = config.save(PREFERENCE_FILE)
+	var result = false
 	return result
 
 func save_state() -> void:
 	GameState.player_direction = player.current_direction
 	GameState.player_position = player.position
+	GameState.current_map = map_controller.current_map.get_scene_file_path()
+	var x = 7
 
 func load_state() -> bool:
 	if GameState.player_position == Vector2.ZERO || GameState.player_direction == Vector2i.ZERO:

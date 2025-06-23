@@ -1,5 +1,7 @@
 extends Node
 
+var current_map: String = ""
+
 var player_position: Vector2
 var player_direction: Vector2i
 

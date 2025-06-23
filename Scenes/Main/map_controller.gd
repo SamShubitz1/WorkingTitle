@@ -14,7 +14,11 @@ var current_map: Node
 
 func _ready():
 	#GameData.GlobalMapControllerRef = self
-	load_room("res://Rooms/T1/T1Room.tscn", true)
+	if GameState.current_map != "":
+		load_room(GameState.current_map, true)
+	else:
+		var default = "res://Rooms/T1/T1Room.tscn"
+		load_room(default, true)
 
 # collection of map objects, keyed by grid-position vector
 var world_map: Dictionary = {}
