@@ -1,4 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://c81tj6cgl0jy4"]
+[gd_scene load_steps=12 format=3 uid="uid://c81tj6cgl0jy4"]
+
+[ext_resource type="Script" path="res://Scenes/World/weather_visuals.gd" id="1_r1msg"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fuyn2"]
 blend_mode = 1
@@ -40,7 +42,7 @@ curve_z = SubResource("Curve_dkos2")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ctsxt"]
 particle_flag_disable_z = true
-emission_shape_offset = Vector3(1280, -200, 0)
+emission_shape_offset = Vector3(0, -1800, 0)
 emission_shape = 3
 emission_box_extents = Vector3(1280, 1, 1)
 inherit_velocity_ratio = 1.0
@@ -53,6 +55,7 @@ color_initial_ramp = SubResource("GradientTexture1D_sy8by")
 alpha_curve = SubResource("CurveTexture_wogah")
 
 [node name="ParticalContainer" type="Node2D"]
+script = ExtResource("1_r1msg")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_fuyn2")
@@ -60,4 +63,4 @@ amount = 1000
 process_material = SubResource("ParticleProcessMaterial_ctsxt")
 lifetime = 5.0
 preprocess = 0.5
-visibility_rect = Rect2(0, 0, 2560, 2560)
+visibility_rect = Rect2(-1280, -1280, 2560, 2560)
