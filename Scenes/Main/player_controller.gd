@@ -9,6 +9,8 @@ extends Node2D
 var dialog_mode: bool = false
 var dialog_box: DialogBox
 
+var weather = null
+
 var default_player_pos = null
 
 var pause_menu: Control
@@ -120,6 +122,8 @@ func finish_move(dest_pos: Vector2i) -> void:
 	player.position = dest_pos # force player player.position to dest point
 	player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
 	GameState.current_time += 1
+	if weather != null:
+		weather.position = player.position
 	check_for_battle()
 	check_for_camera_bounds()
 	
@@ -163,7 +167,22 @@ func interact(object: Node):
 		player.grid_position = map_controller.point_to_grid(player.position)
 		map_controller.enter_door(object)
 		check_for_camera_bounds()
+		update_weather()
+
 		
+func update_weather() -> void:
+	GameState.set_current_weather()
+	if GameState.current_weather == GameState.Weather.RAINING:
+		var weather_scene = load("res://Scenes/World/weather_visuals.tscn")
+		weather = weather_scene.instantiate()
+		get_parent().add_child(weather)
+		weather.position = player.position
+		
+	elif GameState.current_weather == GameState.Weather.CLEAR:
+		if weather != null:
+			weather.queue_free()
+			weather = null
+
 func check_for_battle() -> void:
 	var enemy_areas = map_controller.get_updated_enemy_areas()
 	for area in enemy_areas:
@@ -362,6 +381,7 @@ func init(default_pos: Vector2) -> void:
 	var bounds = map_controller.get_updated_camera_bounds()
 	var camera_bounds = get_limits_with_overlap(bounds)
 	player.set_camera_bounds(camera_bounds)
+	update_weather()
 	initialized = true
 	
 	var success = load_state()

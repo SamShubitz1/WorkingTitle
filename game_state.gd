@@ -7,7 +7,7 @@ var player_direction: Vector2i
 
 var current_time: int = 0
 var current_weather: Weather = Weather.CLEAR
-var weather_change = current_time + 50
+var weather_change = current_time + 20 #50
 
 func set_current_weather() -> void:
 	if current_time < weather_change:
@@ -18,7 +18,10 @@ func set_current_weather() -> void:
 	elif current_weather == Weather.RAINING:
 		current_weather = Weather.CLEAR
 		print("DAMN NO MORE BITCHES" , current_weather)
-	weather_change = current_time + 50
+	weather_change = current_time + 20 #50
+
+func get_current_weather() -> Weather:
+	return current_weather
 
 enum Weather {
 	CLEAR, 
