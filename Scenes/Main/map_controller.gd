@@ -120,7 +120,6 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 	if use_default_pos:
 		overworld.set_default_player_pos(current_map.default_pos)
 	
-	GameState.set_current_weather()
 
 func enter_door(object):
 	kill_room()

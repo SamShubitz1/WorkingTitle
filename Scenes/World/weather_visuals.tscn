@@ -1,6 +1,7 @@
-[gd_scene load_steps=12 format=3 uid="uid://c81tj6cgl0jy4"]
+[gd_scene load_steps=18 format=3 uid="uid://c81tj6cgl0jy4"]
 
 [ext_resource type="Script" path="res://Scenes/World/weather_visuals.gd" id="1_r1msg"]
+[ext_resource type="Texture2D" uid="uid://bevq7ntc5dmct" path="res://Art/WorldSprites/Rain_Splash.png" id="2_ls6ms"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_fuyn2"]
 blend_mode = 1
@@ -54,7 +55,43 @@ scale_over_velocity_curve = SubResource("CurveXYZTexture_xno77")
 color_initial_ramp = SubResource("GradientTexture1D_sy8by")
 alpha_curve = SubResource("CurveTexture_wogah")
 
-[node name="ParticalContainer" type="Node2D"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ksh1c"]
+atlas = ExtResource("2_ls6ms")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t51ik"]
+atlas = ExtResource("2_ls6ms")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_om5lt"]
+atlas = ExtResource("2_ls6ms")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vuqym"]
+atlas = ExtResource("2_ls6ms")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_q25ys"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ksh1c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t51ik")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_om5lt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vuqym")
+}],
+"loop": true,
+"name": &"RainSplash",
+"speed": 10.0
+}]
+
+[node name="WeatherVisuals" type="Node2D"]
 script = ExtResource("1_r1msg")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
@@ -64,3 +101,9 @@ process_material = SubResource("ParticleProcessMaterial_ctsxt")
 lifetime = 5.0
 preprocess = 0.5
 visibility_rect = Rect2(-1280, -1280, 2560, 2560)
+
+[node name="RainSplash" type="AnimatedSprite2D" parent="GPUParticles2D"]
+sprite_frames = SubResource("SpriteFrames_q25ys")
+animation = &"RainSplash"
+frame = 3
+frame_progress = 0.373917
