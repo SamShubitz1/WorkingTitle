@@ -92,11 +92,9 @@ func get_tile_at_coords(grid_coords: Vector2i) -> Array[TileData]:
 	#if (atlas_coords == null): return Vector2i(0,0)
 	#return atlas_coords
 
-func remove_from_world_map(object: Node) -> void:
-	for item in world_map.keys():
-		if world_map[item] == object:
-			world_map.erase(item)
-			break
+func remove_from_world_map(keys: Array) -> void:
+	for key in keys:
+		world_map.erase(key)
 
 func kill_room():
 	world_map = {}
@@ -120,7 +118,6 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 	if use_default_pos:
 		overworld.set_default_player_pos(current_map.default_pos)
 	
-
 func enter_door(object):
 	kill_room()
 	load_room(object.door_destination, false)

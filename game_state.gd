@@ -14,14 +14,9 @@ func set_current_weather() -> void:
 		return
 	if current_weather == Weather.CLEAR:
 		current_weather = Weather.RAINING
-		print("YAY ITS RAININ BITCHES" , current_weather)
 	elif current_weather == Weather.RAINING:
 		current_weather = Weather.CLEAR
-		print("DAMN NO MORE BITCHES" , current_weather)
 	weather_change = current_time + 20 #50
-
-func get_current_weather() -> Weather:
-	return current_weather
 
 enum Weather {
 	CLEAR, 

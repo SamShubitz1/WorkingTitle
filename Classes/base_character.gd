@@ -1,7 +1,6 @@
 ################BASE CHARACTER################
 #Battle Init
 
-
 extends Node
 
 class_name Character
@@ -283,21 +282,18 @@ func decrement_status_effects():
 				status_effects.erase(status)
 				
 func update_action_points() -> void:
-	print(char_name, " AP before update action points " , action_points )
 	if action_points < 5:
 		var next_points = action_points + 3
 		if next_points > 5:
 			action_points = 5
 		else: 
 			action_points = next_points
-	print(char_name, " AP after update action points " , action_points )
 
 func update_energy() -> void:
 	if current_main_energy == max_energy / 2:
 		return
 	var recharge = 2 + current_attributes[Data.Attributes.BATTERY]
 	current_main_energy += recharge
-	
 	
 func set_abilities_by_memory() -> void:
 	var memory = current_attributes[Data.Attributes.MEMORY]

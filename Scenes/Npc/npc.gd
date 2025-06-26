@@ -10,7 +10,6 @@ class_name BaseObject
 @export var neighbor_coords: Array[Vector2i]
 
 var grid_coords: Vector2i
-
 var dialog_tree: Dictionary
 
 func _ready() -> void:
