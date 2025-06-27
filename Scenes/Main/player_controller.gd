@@ -119,8 +119,11 @@ func check_move_complete():
 
 func finish_move(dest_pos: Vector2i) -> void:
 	player.is_moving = false
+	map_controller.remove_from_world_map([player.grid_position])
 	player.position = dest_pos # force player player.position to dest point
 	player.grid_position = map_controller.point_to_grid(player.position, player.sprite_offset)
+	map_controller.set_object_at_coords(player, player.grid_position)
+	
 	GameState.current_time += 1
 	if weather != null:
 		weather.position = player.position
@@ -168,7 +171,6 @@ func interact(object: Node):
 		map_controller.enter_door(object)
 		check_for_camera_bounds()
 		update_weather()
-
 		
 func update_weather() -> void:
 	GameState.set_current_weather()

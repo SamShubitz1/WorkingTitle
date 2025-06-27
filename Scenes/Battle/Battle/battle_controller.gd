@@ -191,7 +191,7 @@ func on_use_ability(selected_targets: Array) -> void:
 	if !energy_success:
 		prompt_action_energy_insufficient()
 		return
-	print(current_player.char_name , " current AP " , current_player.action_points)
+		
 	var cost = selected_ability.action_cost
 	var ap_success = current_player.use_action(cost)
 	if !ap_success:
