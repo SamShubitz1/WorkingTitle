@@ -950,12 +950,12 @@ tile_set = ExtResource("5_kuyv6")
 
 [node name="Doors" type="Node2D" parent="Doodads"]
 
-[node name="DoorToStovetop" type="Node2D" parent="Doodads/Doors"]
+[node name="DoorToUnderground" type="Node2D" parent="Doodads/Doors"]
 z_index = 2
 position = Vector2(512, 192)
 script = ExtResource("3_ify6l")
 
-[node name="Sprite2D" type="Sprite2D" parent="Doodads/Doors/DoorToStovetop"]
+[node name="Sprite2D" type="Sprite2D" parent="Doodads/Doors/DoorToUnderground"]
 scale = Vector2(1, 0.8)
 texture = ExtResource("4_xtyhp")
 offset = Vector2(16, 18)

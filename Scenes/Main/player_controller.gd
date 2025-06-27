@@ -124,7 +124,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 	GameState.current_time += 1
 	if weather != null:
 		weather.position = player.position
-	check_for_battle()
+	#check_for_battle()  #
 	check_for_camera_bounds()
 	
 func player_action_pressed() -> void:
