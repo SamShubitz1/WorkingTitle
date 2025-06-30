@@ -47,11 +47,16 @@ emission_shape_offset = Vector3(0, -1800, 0)
 emission_shape = 3
 emission_box_extents = Vector3(1280, 1, 1)
 inherit_velocity_ratio = 1.0
-gravity = Vector3(0, 3000, 0)
-linear_accel_min = -2.23517e-06
-linear_accel_max = -2.23517e-06
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_min = 885.6
+initial_velocity_max = 1000.0
+gravity = Vector3(0, 1000, 0)
+linear_accel_min = 13.65
+linear_accel_max = 27.67
 scale_min = 0.2
 scale_over_velocity_curve = SubResource("CurveXYZTexture_xno77")
+color = Color(0, 0.803922, 0.882353, 0.717647)
 color_initial_ramp = SubResource("GradientTexture1D_sy8by")
 alpha_curve = SubResource("CurveTexture_wogah")
 
@@ -96,7 +101,7 @@ script = ExtResource("1_r1msg")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_fuyn2")
-amount = 1000
+amount = 1500
 process_material = SubResource("ParticleProcessMaterial_ctsxt")
 lifetime = 5.0
 preprocess = 0.5
