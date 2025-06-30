@@ -988,7 +988,7 @@ animation = &"RailTramSlider"
 position = Vector2(352, 384)
 script = ExtResource("7_w5ah3")
 object_name = "accumulator"
-neighbor_coords = Array[Vector2i]([Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)])
+neighbor_coords = [Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)]
 
 [node name="Accumulator_Top" type="AnimatedSprite2D" parent="Doodads/Accumulator"]
 z_index = 2
@@ -1014,7 +1014,7 @@ z_index = 2
 position = Vector2(576, 384)
 script = ExtResource("11_fe8by")
 object_name = "tram"
-neighbor_coords = Array[Vector2i]([Vector2i(0, -1), Vector2i(0, 1), Vector2i(-1, -1), Vector2i(-1, 0), Vector2i(-1, 1)])
+neighbor_coords = [Vector2i(0, -1), Vector2i(0, 1), Vector2i(-1, -1), Vector2i(-1, 0), Vector2i(-1, 1)]
 
 [node name="RailTram" type="AnimatedSprite2D" parent="Doodads/RailTram"]
 position = Vector2(0, 32)
@@ -1068,7 +1068,7 @@ animation = &"RailTramConsole"
 position = Vector2(672, 544)
 script = ExtResource("16_05hfr")
 object_name = "eggcharger"
-neighbor_coords = Array[Vector2i]([Vector2i(-1, 0)])
+neighbor_coords = [Vector2i(-1, 0)]
 
 [node name="EggCharger" type="AnimatedSprite2D" parent="Doodads/EggCharger"]
 position = Vector2(0, 14)
@@ -1091,7 +1091,7 @@ offset = Vector2(16, -24)
 position = Vector2(896, 480)
 script = ExtResource("20_6jj18")
 object_name = "repository"
-neighbor_coords = Array[Vector2i]([Vector2i(-2, 0)])
+neighbor_coords = [Vector2i(-2, 0)]
 
 [node name="Repository" type="AnimatedSprite2D" parent="Doodads/Repository"]
 position = Vector2(0, 14)

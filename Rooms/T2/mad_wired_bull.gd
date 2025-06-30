@@ -3,38 +3,43 @@ extends BaseObject
 class_name BaseNPC
 
 @export var speed := 150
-@export var move_cooldown := 3
+@export var move_cooldown := 5
 @export var move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 
 @onready var sprite := $MadWiredBullSprite
 
-var current_move_index := 0
-var move_complete := true
+var current_move_index = 0
+var move_complete := false
 var timer := 0.0
 
 func _process(delta: float) -> void:
-	if move_complete:
+	if move_complete: 
+		set_npc_animation()
 		timer += delta
 		if timer >= move_cooldown:
 			move_complete = false
 			timer = 0
-	else:
+			var last_coords = [grid_coords] + get_neighbor_coords()
+			map_controller.remove_from_world_map(last_coords)
+			current_move_index = (current_move_index + 1) % move_list.size()
+	else: 
 		move_character(delta)
 
 func move_character(delta: float) -> void:
+	set_npc_animation()
 	var direction = move_list[current_move_index]
 	var target_offset = direction * 2
-	var dest_coords = grid_coords + target_offset
+	var dest_coords = self.grid_coords + target_offset
 
 	if check_collision(dest_coords):
 		return
 	
-	var dest_pos = map_controller.grid_to_point(dest_coords) + Vector2(16, 16)  #temp? sprite offset
+	var dest_pos = map_controller.grid_to_point(dest_coords)
 
-	position += direction * speed * delta
+	self.position += direction * speed * delta
 
 	if move_is_complete(dest_pos, direction):
-		complete_move(dest_pos, direction)
+		complete_move(dest_pos)
 
 func move_is_complete(dest_pos: Vector2, direction: Vector2i) -> bool:
 	var diff := dest_pos - position
@@ -50,19 +55,14 @@ func move_is_complete(dest_pos: Vector2, direction: Vector2i) -> bool:
 		_:
 			return false
 
-func complete_move(dest_pos: Vector2, direction: Vector2i) -> void:
-	var last_coords := [grid_coords] + neighbor_coords.map(func(c): return grid_coords + c)
-	map_controller.remove_from_world_map(last_coords)
-	
+func complete_move(dest_pos: Vector2) -> void:
 	self.position = dest_pos
 	self.grid_coords = map_controller.point_to_grid(position)
 	
-	neighbor_coords = neighbor_coords.map(func(c): return grid_coords + get_neighbor_coords(c, direction))
-	var next_coords := [grid_coords] + neighbor_coords
+	var next_coords = [grid_coords] + get_neighbor_coords()
 	for coords in next_coords:
 		map_controller.set_object_at_coords(self, coords)
-	
-	current_move_index = (current_move_index + 1) % move_list.size()
+
 	move_complete = true
 	
 func check_collision(dest_coords: Vector2i) -> bool:
@@ -72,12 +72,44 @@ func check_collision(dest_coords: Vector2i) -> bool:
 			return true
 	return false
 
-func get_neighbor_coords(coords: Vector2i, direction: Vector2i) -> Vector2i:
+func get_neighbor_coords() -> Array:
+	var direction = move_list[current_move_index]
 	match direction:
 		Vector2i.DOWN:
-			var new_coords = Vector2i(-coords.y, coords.x)
+			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, -c.x))
 			return new_coords
 		Vector2i.UP:
-			var new_coords = Vector2i(-coords.y, coords.x)
+			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, c.x))
 			return new_coords
-		_: return coords
+		Vector2i.LEFT:
+			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + Vector2i(-c.x, c.y))
+			return new_coords
+		Vector2i.RIGHT:
+			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + c)
+			return new_coords
+		_:
+			return neighbor_coords
+		
+func set_npc_animation() -> void:
+	var direction: Vector2 = move_list[current_move_index]
+	var prefix: String
+	if move_complete:
+		prefix = "idle"
+	else:
+		prefix = "walk"
+	
+	var suffix: String
+	match direction:
+		Vector2.UP:
+			suffix = "back"
+		Vector2.DOWN:
+			suffix = "front"
+		Vector2.LEFT:
+			sprite.flip_h = true
+			suffix = "side"
+		Vector2.RIGHT:
+			sprite.flip_h = false
+			suffix = "side"
+	
+	var name = prefix + "_" + suffix
+	sprite.play(name)
