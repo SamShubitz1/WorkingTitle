@@ -1618,6 +1618,11 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 [node name="MadWiredBull" type="Node2D" parent="."]
 position = Vector2(592, 912)
 script = ExtResource("13_egomq")
+speed = null
+move_cooldown = null
+move_list = null
+object_name = null
+battle_ready = null
 neighbor_coords = Array[Vector2i]([Vector2i(-1, 0)])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="MadWiredBull"]

@@ -34,7 +34,7 @@ func move_character(delta: float) -> void:
 	position += direction * speed * delta
 
 	if move_is_complete(dest_pos, direction):
-		complete_move(dest_pos)
+		complete_move(dest_pos, direction)
 
 func move_is_complete(dest_pos: Vector2, direction: Vector2i) -> bool:
 	var diff := dest_pos - position
@@ -50,14 +50,15 @@ func move_is_complete(dest_pos: Vector2, direction: Vector2i) -> bool:
 		_:
 			return false
 
-func complete_move(dest_pos: Vector2) -> void:
+func complete_move(dest_pos: Vector2, direction: Vector2i) -> void:
 	var last_coords := [grid_coords] + neighbor_coords.map(func(c): return grid_coords + c)
 	map_controller.remove_from_world_map(last_coords)
 	
 	self.position = dest_pos
 	self.grid_coords = map_controller.point_to_grid(position)
 	
-	var next_coords := [grid_coords] + neighbor_coords.map(func(c): return grid_coords + c)
+	neighbor_coords = neighbor_coords.map(func(c): return grid_coords + get_neighbor_coords(c, direction))
+	var next_coords := [grid_coords] + neighbor_coords
 	for coords in next_coords:
 		map_controller.set_object_at_coords(self, coords)
 	
@@ -70,3 +71,13 @@ func check_collision(dest_coords: Vector2i) -> bool:
 		if map_controller.world_map.has(coords):
 			return true
 	return false
+
+func get_neighbor_coords(coords: Vector2i, direction: Vector2i) -> Vector2i:
+	match direction:
+		Vector2i.DOWN:
+			var new_coords = Vector2i(-coords.y, coords.x)
+			return new_coords
+		Vector2i.UP:
+			var new_coords = Vector2i(-coords.y, coords.x)
+			return new_coords
+		_: return coords
