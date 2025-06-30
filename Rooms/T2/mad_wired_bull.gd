@@ -6,7 +6,7 @@ class_name BaseNPC
 @export var move_cooldown := 3
 @export var move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 
-@onready var sprite := $AnimatedSprite2D
+@onready var sprite := $MadWiredBullSprite
 
 var current_move_index := 0
 var move_complete := true

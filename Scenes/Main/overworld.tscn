@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://d4npjlduq7bda"]
+[gd_scene load_steps=6 format=3 uid="uid://d4npjlduq7bda"]
 
 [ext_resource type="Script" path="res://Scenes/Main/overworld_manager.gd" id="1_nad2e"]
 [ext_resource type="Script" path="res://Scenes/Main/map_controller.gd" id="1_tkkut"]
 [ext_resource type="Script" path="res://Scenes/Main/player_controller.gd" id="5_l4qnv"]
+[ext_resource type="Script" path="res://Scenes/Main/fps_label.gd" id="6_4075n"]
 [ext_resource type="PackedScene" uid="uid://btmvg0l8jgj85" path="res://Scenes/Player/my_player.tscn" id="6_x832e"]
 
 [node name="Overworld" type="Node2D"]
@@ -22,3 +23,13 @@ sprite_offset = Vector2(0, 0)
 [node name="OverworldCamera" type="Camera2D" parent="PlayerController/MyPlayer"]
 zoom = Vector2(3, 3)
 position_smoothing_speed = 8.0
+
+[node name="FPSLabel" type="Label" parent="PlayerController/MyPlayer"]
+visible = false
+z_index = 5
+offset_left = -64.0
+offset_top = -64.0
+offset_right = -24.0
+offset_bottom = -41.0
+text = "Test"
+script = ExtResource("6_4075n")
