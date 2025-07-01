@@ -1849,16 +1849,13 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 [node name="MadWiredBull" type="Node2D" parent="."]
 position = Vector2(544, 896)
 script = ExtResource("13_egomq")
-neighbor_coords = Array[Vector2i]([Vector2i(-1, 0)])
+speed = 80
+neighbor_coords = [Vector2i(-1, 0)]
 
 [node name="MadWiredBullSprite" type="AnimatedSprite2D" parent="MadWiredBull"]
 sprite_frames = SubResource("SpriteFrames_8awu8")
-animation = &"walk_front"
-frame = 3
-frame_progress = 0.437253
-offset = Vector2(16, 0)
-
-[node name="Timer" type="Timer" parent="MadWiredBull"]
+animation = &"idle_side"
+offset = Vector2(8, 8)
 
 [node name="Runt" type="Node2D" parent="."]
 position = Vector2(992, 224)

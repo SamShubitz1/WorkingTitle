@@ -7,7 +7,7 @@ class_name BaseObject
 
 @export var object_name: String
 @export var battle_ready: bool = false
-@export var neighbor_coords: Array[Vector2i]
+@export var neighbor_coords: Array
 
 var grid_coords: Vector2i
 var dialog_tree: Dictionary
