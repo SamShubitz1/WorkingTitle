@@ -695,3 +695,5 @@ script = ExtResource("7_70e55")
 position = Vector2(448.25, 384)
 shape = SubResource("RectangleShape2D_o2x0i")
 debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Area2D" type="Area2D" parent="."]

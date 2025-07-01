@@ -1852,12 +1852,11 @@ script = ExtResource("13_egomq")
 neighbor_coords = Array[Vector2i]([Vector2i(-1, 0)])
 
 [node name="MadWiredBullSprite" type="AnimatedSprite2D" parent="MadWiredBull"]
-position = Vector2(48, 48)
 sprite_frames = SubResource("SpriteFrames_8awu8")
 animation = &"walk_front"
 frame = 3
 frame_progress = 0.437253
-offset = Vector2(-8, -16)
+offset = Vector2(16, 0)
 
 [node name="Timer" type="Timer" parent="MadWiredBull"]
 
