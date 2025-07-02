@@ -6,6 +6,8 @@ extends Node2D
 @onready var map_controller = $"../MapController"
 @onready var game_controller = get_tree().current_scene
 
+signal player_position_updated(grid_position: Vector2i)
+
 var dialog_mode: bool = false
 var dialog_box: DialogBox
 
@@ -129,6 +131,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 		weather.position = player.position
 	#check_for_battle()  #
 	check_for_camera_bounds()
+	emit_signal("player_position_updated", player.grid_position)
 	
 func player_action_pressed() -> void:
 	if dialog_mode && dialog_box != null:

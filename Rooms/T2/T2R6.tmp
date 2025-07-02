@@ -1854,10 +1854,6 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 position = Vector2(544, 896)
 script = ExtResource("13_egomq")
 speed = 80
-move_cooldown = null
-move_list = null
-object_name = null
-battle_ready = null
 neighbor_coords = [Vector2i(-1, 0)]
 
 [node name="MadWiredBullSprite" type="AnimatedSprite2D" parent="MadWiredBull"]
@@ -1870,7 +1866,6 @@ script = ExtResource("21_anuap")
 
 [node name="BullCollision2d" type="CollisionShape2D" parent="MadWiredBull/BullArea2d"]
 shape = SubResource("CircleShape2D_s8fft")
-debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="Runt" type="Node2D" parent="."]
 position = Vector2(992, 224)
