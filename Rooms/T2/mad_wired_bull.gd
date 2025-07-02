@@ -17,11 +17,7 @@ func _process(delta: float) -> void:
 		set_npc_animation()
 		timer += delta
 		if timer >= move_cooldown:
-			move_complete = false
-			timer = 0
-			var last_coords = [grid_coords] + get_neighbor_coords()
-			map_controller.remove_from_world_map(last_coords)
-			current_move_index = (current_move_index + 1) % move_list.size()
+			set_next_move()
 	else: 
 		move_character(delta)
 
@@ -37,6 +33,12 @@ func move_character(delta: float) -> void:
 	var dest_pos = map_controller.grid_to_point(dest_coords)
 
 	self.position += direction * speed * delta
+	
+	map_controller.remove_from_world_map([self.grid_coords] + get_neighbor_coords())
+	self.grid_coords = map_controller.point_to_grid(self.position)
+	var next_coords = [grid_coords] + get_neighbor_coords()
+	for coords in next_coords:
+		map_controller.set_object_at_coords(self, coords)
 
 	if move_is_complete(dest_pos, direction):
 		complete_move(dest_pos)
@@ -64,6 +66,13 @@ func complete_move(dest_pos: Vector2) -> void:
 		map_controller.set_object_at_coords(self, coords)
 
 	move_complete = true
+
+func set_next_move() -> void:
+	move_complete = false
+	timer = 0
+	var last_coords = [grid_coords] + get_neighbor_coords()
+	map_controller.remove_from_world_map(last_coords)
+	current_move_index = (current_move_index + 1) % move_list.size()
 	
 func check_collision(dest_coords: Vector2i) -> bool:
 	var object_coords = neighbor_coords.map(func(c): return dest_coords + c)
