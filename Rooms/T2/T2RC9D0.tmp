@@ -1870,7 +1870,6 @@ script = ExtResource("21_anuap")
 
 [node name="BullCollision2d" type="CollisionShape2D" parent="MadWiredBull/BullArea2d"]
 shape = SubResource("CircleShape2D_s8fft")
-debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="Runt" type="Node2D" parent="."]
 position = Vector2(992, 224)

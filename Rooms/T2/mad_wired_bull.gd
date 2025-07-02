@@ -7,12 +7,24 @@ class_name BaseNPC
 @export var move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 
 @onready var sprite := $MadWiredBullSprite
+@onready var player := get_node("/root/MainScene/Overworld/PlayerController")
 
+var aggro_mode = false
 var current_move_index = 0
 var move_complete := false
 var timer := 0.0
 
+func _ready() -> void:
+	super._ready()
+	player.player_position_updated.connect(chase_player)
+
 func _process(delta: float) -> void:
+	if aggro_mode == false:
+		patrol_character(delta)
+	else:
+		chase_player()
+	
+func patrol_character(delta) -> void:
 	if move_complete: 
 		set_npc_animation()
 		timer += delta
@@ -24,6 +36,12 @@ func _process(delta: float) -> void:
 			current_move_index = (current_move_index + 1) % move_list.size()
 	else: 
 		move_character(delta)
+
+	#if aggro_mode == true:
+		#chase_player()
+		
+func chase_player() -> void:
+	print(player_coords) ####NEEDS TO BE FIXED
 
 func move_character(delta: float) -> void:
 	set_npc_animation()
@@ -113,3 +131,6 @@ func set_npc_animation() -> void:
 	
 	var name = prefix + "_" + suffix
 	sprite.play(name)
+
+func set_aggro_mode(should_set: bool) -> void:
+	aggro_mode = should_set
