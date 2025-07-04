@@ -6,23 +6,24 @@ class_name BaseNPC
 @export var move_cooldown := 5
 @export var move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 
-@onready var sprite := $MadWiredBullSprite
-@onready var player := get_node("/root/MainScene/Overworld/PlayerController")
+@onready var sprite := $NPCSprite
 
 var aggro_mode = false
 var current_move_index = 0
-var move_complete := false
+var move_complete := true
 var timer := 0.0
+var current_direction: Vector2i
+
+var player_coords: Vector2i
 
 func _ready() -> void:
 	super._ready()
-	player.player_position_updated.connect(chase_player)
 
 func _process(delta: float) -> void:
-	if aggro_mode == false:
+	if !aggro_mode:
 		patrol_character(delta)
 	else:
-		chase_player()
+		chase_character(delta)
 	
 func patrol_character(delta) -> void:
 	if move_complete: 
@@ -32,34 +33,46 @@ func patrol_character(delta) -> void:
 			set_next_move()
 	else: 
 		move_character(delta)
-
-	#if aggro_mode == true:
-		#chase_player()
+	
+func chase_character(delta) -> void:
+	if move_complete:
+		set_direction()
+		move_complete = false
+	else:
+		move_character(delta, true)
 		
-func chase_player() -> void:
-	print(player_coords) ####NEEDS TO BE FIXED
+func set_direction() -> void:
+	var npc_grid_pos = map_controller.point_to_grid(self.position)
+	var delta: Vector2i = player_coords - npc_grid_pos
+	var x_diff = abs(delta.x)
+	var y_diff = abs(delta.y)
 
-func move_character(delta: float) -> void:
+	if x_diff > y_diff:
+		current_direction = Vector2i.RIGHT if delta.x > 0 else Vector2i.LEFT
+	elif y_diff > x_diff:
+		current_direction = Vector2i.DOWN if delta.y > 0 else Vector2i.UP
+	else:
+		current_direction = Vector2i.DOWN if delta.y > 0 else Vector2i.UP
+
+func move_character(delta: float, aggro = false) -> void:
 	set_npc_animation()
-	var direction = move_list[current_move_index]
-	var target_offset = direction * 2
+	
+	if !aggro:
+		current_direction = move_list[current_move_index]
+	
+	var target_offset = current_direction * 2
 	var dest_coords = self.grid_coords + target_offset
 
-	if check_collision(dest_coords):
-		return
+	#if check_collision(dest_coords):
+		#return
 	
 	var dest_pos = map_controller.grid_to_point(dest_coords)
+	self.position += current_direction * speed * delta
 
-	self.position += direction * speed * delta
-	
-	map_controller.remove_from_world_map([self.grid_coords] + get_neighbor_coords())
-	self.grid_coords = map_controller.point_to_grid(self.position)
-	var next_coords = [grid_coords] + get_neighbor_coords()
-	for coords in next_coords:
-		map_controller.set_object_at_coords(self, coords)
-
-	if move_is_complete(dest_pos, direction):
+	if move_is_complete(dest_pos, current_direction):
 		complete_move(dest_pos)
+		if aggro:
+			move_complete = true
 
 func move_is_complete(dest_pos: Vector2, direction: Vector2i) -> bool:
 	var diff := dest_pos - position
@@ -103,22 +116,20 @@ func get_neighbor_coords() -> Array:
 	var direction = move_list[current_move_index]
 	match direction:
 		Vector2i.DOWN:
-			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, -c.x))
-			return new_coords
+			return neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, -c.x))
 		Vector2i.UP:
-			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, c.x))
-			return new_coords
+			return neighbor_coords.map(func(c): return self.grid_coords + Vector2i(-c.y, c.x))
 		Vector2i.LEFT:
-			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + Vector2i(-c.x, c.y))
-			return new_coords
+			return neighbor_coords.map(func(c): return self.grid_coords + Vector2i(-c.x, -c.y))
 		Vector2i.RIGHT:
-			var new_coords = neighbor_coords.map(func(c): return self.grid_coords + c)
-			return new_coords
+			return neighbor_coords.map(func(c): return self.grid_coords + c)
 		_:
-			return neighbor_coords
+			return neighbor_coords.map(func(c): return self.grid_coords + c)
 		
 func set_npc_animation() -> void:
-	var direction: Vector2 = move_list[current_move_index]
+	if current_direction == Vector2i.ZERO:
+		return
+		
 	var prefix: String
 	if move_complete:
 		prefix = "idle"
@@ -126,20 +137,23 @@ func set_npc_animation() -> void:
 		prefix = "walk"
 	
 	var suffix: String
-	match direction:
-		Vector2.UP:
+	match current_direction:
+		Vector2i.UP:
 			suffix = "back"
-		Vector2.DOWN:
+		Vector2i.DOWN:
 			suffix = "front"
-		Vector2.LEFT:
+		Vector2i.LEFT:
 			sprite.flip_h = true
 			suffix = "side"
-		Vector2.RIGHT:
+		Vector2i.RIGHT:
 			sprite.flip_h = false
 			suffix = "side"
 	
 	var name = prefix + "_" + suffix
 	sprite.play(name)
 
-func set_aggro_mode(should_set: bool) -> void:
-	aggro_mode = should_set
+func set_aggro_mode(is_aggro: bool) -> void:
+	aggro_mode = is_aggro
+
+func set_player_coords(coords: Vector2i):
+	player_coords = coords
