@@ -1,20 +1,15 @@
 extends Area2D
 
 @onready var npc = get_parent()
-@onready var npc_collision = $NPCCollision
-@onready var game_controller = get_tree().current_scene
+@onready var patrol_collision = $PatrolCollision
 
 var player_is_connected = false
 
 func _ready():
 	self.area_entered.connect(_on_area_entered)
 	self.area_exited.connect(_on_area_exited)
-	npc_collision.get_parent().area_entered.connect(_on_area_entered)
 	
 func _on_area_entered(area: Area2D):
-	if area.name == "NPCCollision":
-		game_controller.switch_to_scene(Data.Scenes.BATTLE, self)
-	
 	if area.name != "MyPlayer":
 		return
 	

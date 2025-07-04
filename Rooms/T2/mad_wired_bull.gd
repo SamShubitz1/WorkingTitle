@@ -69,14 +69,12 @@ func move_character(delta: float, aggro = false) -> void:
 	var dest_pos = map_controller.grid_to_point(dest_coords)
 	self.position += current_direction * speed * delta
 
-	if move_is_complete(dest_pos, current_direction):
+	if move_is_complete(dest_pos):
 		complete_move(dest_pos)
-		if aggro:
-			move_complete = true
 
-func move_is_complete(dest_pos: Vector2, direction: Vector2i) -> bool:
+func move_is_complete(dest_pos: Vector2) -> bool:
 	var diff := dest_pos - position
-	match direction:
+	match current_direction:
 		Vector2i.DOWN:
 			return diff.y <= 0
 		Vector2i.UP:
@@ -89,6 +87,7 @@ func move_is_complete(dest_pos: Vector2, direction: Vector2i) -> bool:
 			return false
 
 func complete_move(dest_pos: Vector2) -> void:
+	map_controller.remove_from_world_map([self.grid_coords] + get_neighbor_coords())
 	self.position = dest_pos
 	self.grid_coords = map_controller.point_to_grid(position)
 	
