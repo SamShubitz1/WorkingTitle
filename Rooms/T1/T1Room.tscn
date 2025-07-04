@@ -1114,6 +1114,7 @@ position = Vector2(768, 320)
 battle_ready = true
 
 [node name="ScreenBound" type="Node2D" parent="."]
+visible = false
 position = Vector2(128, 128)
 
 [node name="ScreenBoundNode1" type="Node2D" parent="ScreenBound"]
@@ -1178,5 +1179,3 @@ script = ExtResource("28_7e48e")
 position = Vector2(448, 256)
 shape = SubResource("RectangleShape2D_ps43k")
 debug_color = Color(0, 0.6, 0.701961, 0)
-
-[node name="Node2D" type="Node2D" parent="."]

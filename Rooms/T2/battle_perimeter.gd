@@ -7,4 +7,5 @@ func _ready():
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.name == "MyPlayer" && get_parent().battle_ready == true:
-		game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": get_parent()})
+		var player_controller = area.get_parent()
+		player_controller.enter_battle_scene(self)

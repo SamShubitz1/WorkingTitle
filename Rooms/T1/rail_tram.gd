@@ -1,7 +1,7 @@
 extends BaseObject
 
 func _ready() -> void:
-	{
+	dialog_tree = {
 	"name": "tram",
 	"variants": [],
 	"default": {
