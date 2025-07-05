@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=4 uid="uid://dwgjvlselmdr4"]
+[gd_scene load_steps=76 format=4 uid="uid://dwgjvlselmdr4"]
 
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_q2ld6"]
 [ext_resource type="Script" path="res://Rooms/T2/T2Room.gd" id="1_rb3v6"]
@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://dqvlyyjo7cyb7" path="res://Art/WorldSprites/T2_Runt_Idle_Side.png" id="21_eboix"]
 [ext_resource type="Texture2D" uid="uid://b6ieq5cq8fujc" path="res://Art/WorldSprites/T2_Runt_Walk_Side.png" id="22_k32r7"]
 [ext_resource type="Script" path="res://Rooms/T2/battle_perimeter.gd" id="22_yuob7"]
+[ext_resource type="Script" path="res://Rooms/T2/runt.gd" id="23_1fmvm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1vrua"]
 texture = ExtResource("1_q2ld6")
@@ -1572,10 +1573,10 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_s8fft"]
-radius = 160.0
+radius = 128.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fssqt"]
-size = Vector2(64, 42)
+size = Vector2(32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pewnl"]
 atlas = ExtResource("21_eboix")
@@ -1665,6 +1666,9 @@ animations = [{
 "name": &"walk_side",
 "speed": 5.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3h2d4"]
+size = Vector2(160, 32)
 
 [node name="T2Room" type="Node2D"]
 script = ExtResource("1_rb3v6")
@@ -1879,9 +1883,29 @@ position = Vector2(0, 11)
 shape = SubResource("RectangleShape2D_fssqt")
 
 [node name="Runt" type="Node2D" parent="."]
+z_index = 20
 position = Vector2(992, 224)
+script = ExtResource("23_1fmvm")
+behavior_mode = 2
+chase_speed = 90
+battle_ready = true
 
-[node name="RuntSprite" type="AnimatedSprite2D" parent="Runt"]
+[node name="NPCSprite" type="AnimatedSprite2D" parent="Runt"]
 sprite_frames = SubResource("SpriteFrames_3omjk")
 animation = &"walk_side"
 offset = Vector2(16, 0)
+
+[node name="PatrolPerimeter" type="Area2D" parent="Runt"]
+script = ExtResource("21_anuap")
+
+[node name="PatrolCollision" type="CollisionShape2D" parent="Runt/PatrolPerimeter"]
+position = Vector2(-48, 16)
+shape = SubResource("RectangleShape2D_3h2d4")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="BattlePerimeter" type="Area2D" parent="Runt"]
+script = ExtResource("22_yuob7")
+
+[node name="BattleCollision" type="CollisionShape2D" parent="Runt/BattlePerimeter"]
+position = Vector2(16, 16)
+shape = SubResource("RectangleShape2D_fssqt")

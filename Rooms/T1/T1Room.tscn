@@ -1,4 +1,4 @@
-[gd_scene load_steps=71 format=4 uid="uid://cqyxox8y1kg00"]
+[gd_scene load_steps=72 format=4 uid="uid://cqyxox8y1kg00"]
 
 [ext_resource type="Script" path="res://Classes/base_room.gd" id="1_rwnty"]
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="2_8178x"]
@@ -28,6 +28,7 @@
 [ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="23_km8gv"]
 [ext_resource type="Texture2D" uid="uid://dsuty0117lg3h" path="res://Art/EditorTools/Screen_Box_14x8.png" id="24_vgua0"]
 [ext_resource type="Shader" path="res://Rooms/T1/T1Room.gdshader" id="25_po1e3"]
+[ext_resource type="Script" path="res://Scenes/Npc/norm.gd" id="27_pl6wk"]
 [ext_resource type="Script" path="res://Rooms/T1/camera_bound.gd" id="28_7e48e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e1egu"]
@@ -1111,7 +1112,8 @@ sprite_frames = SubResource("SpriteFrames_xs5ka")
 
 [node name="Norm" parent="." instance=ExtResource("23_km8gv")]
 position = Vector2(768, 320)
-battle_ready = true
+script = ExtResource("27_pl6wk")
+object_name = "norm"
 
 [node name="ScreenBound" type="Node2D" parent="."]
 visible = false

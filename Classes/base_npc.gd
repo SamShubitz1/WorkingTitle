@@ -2,14 +2,22 @@ extends BaseObject
 
 class_name BaseNPC
 
-@export var aggro_speed := 170
+enum BehaviorMode
+{
+	BOTH,
+	PATROL,
+	CHASE
+}
+
+@export var behavior_mode := BehaviorMode.BOTH
+@export var chase_speed := 170
 @export var patrol_speed := 90
 @export var move_cooldown := 5
 @export var move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 
 @onready var sprite := $NPCSprite
 
-var aggro_mode = false
+var aggro = false
 var current_move_index = 0
 var move_complete := true
 var timer := 0.0
@@ -22,9 +30,9 @@ func _ready() -> void:
 	set_npc_animation()
 
 func _process(delta: float) -> void:
-	if !aggro_mode:
+	if !aggro && behavior_mode != BehaviorMode.CHASE:
 		patrol_character(delta)
-	else:
+	elif aggro && behavior_mode != BehaviorMode.PATROL:
 		chase_character(delta)
 	
 func patrol_character(delta) -> void:
@@ -59,7 +67,7 @@ func set_direction() -> void:
 func move_character(delta: float, aggro = false) -> void:
 	set_npc_animation()
 	
-	var speed = aggro_speed
+	var speed = chase_speed
 	
 	if !aggro:
 		current_direction = move_list[current_move_index]
@@ -159,7 +167,8 @@ func set_npc_animation() -> void:
 	sprite.play(name)
 
 func set_aggro_mode(is_aggro: bool) -> void:
-	aggro_mode = is_aggro
+	if behavior_mode != BehaviorMode.PATROL:
+		aggro = is_aggro
 
 func set_player_coords(coords: Vector2i):
 	player_coords = coords
