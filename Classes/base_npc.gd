@@ -12,7 +12,7 @@ enum BehaviorMode
 @export var behavior_mode := BehaviorMode.BOTH
 @export var chase_speed := 170
 @export var patrol_speed := 90
-@export var move_cooldown := 5
+@export var patrol_cooldown := 5
 @export var move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 
 @onready var sprite := $NPCSprite
@@ -39,7 +39,7 @@ func patrol_character(delta) -> void:
 	if move_complete: 
 		set_npc_animation()
 		timer += delta
-		if timer >= move_cooldown:
+		if timer >= patrol_cooldown:
 			set_next_move()
 	else: 
 		move_character(delta)

@@ -1576,7 +1576,7 @@ animations = [{
 radius = 128.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fssqt"]
-size = Vector2(32, 32)
+size = Vector2(64, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pewnl"]
 atlas = ExtResource("21_eboix")
@@ -1859,7 +1859,7 @@ shape = SubResource("RectangleShape2D_ostmw")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="MadWiredBull" type="Node2D" parent="."]
-position = Vector2(544, 896)
+position = Vector2(544, 864)
 script = ExtResource("13_egomq")
 battle_ready = true
 

@@ -1,6 +1,6 @@
 extends Area2D
 
-@onready var npc = get_parent()
+@onready var npc: BaseNPC = get_parent()
 @onready var patrol_collision = $PatrolCollision
 
 var player_is_connected = false
