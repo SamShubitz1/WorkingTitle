@@ -31,17 +31,16 @@ func _ready() -> void:
 	set_npc_animation()
 	origin_coords = self.grid_coords
 	
-
 func _process(delta: float) -> void:
 	if behavior_mode == BehaviorMode.PATROL:
 		patrol_character(delta)
 	else:
 		chase_character(delta)
-	print("Behavior is " , behavior_mode)
 	
 func patrol_character(delta) -> void:
 	if move_list.is_empty():
 		return
+		
 	if move_complete: 
 		set_npc_animation()
 		timer += delta
@@ -59,15 +58,19 @@ func chase_character(delta) -> void:
 		
 func set_direction() -> void:
 	var npc_grid_pos = map_controller.point_to_grid(self.position)
-	var target_destination: Vector2i
+	
 	if npc_grid_pos == origin_coords:
 		behavior_mode = BehaviorMode.PATROL
+		return
+	
+	var target_destination: Vector2i
+		
 	if behavior_mode == BehaviorMode.CHASE:
 		target_destination = player_coords
 	elif behavior_mode == BehaviorMode.RETURN:
 		target_destination = origin_coords
 	
-	var delta: Vector2i = player_coords - npc_grid_pos
+	var delta: Vector2i = target_destination - npc_grid_pos
 	var x_diff = abs(delta.x)
 	var y_diff = abs(delta.y)
 
@@ -81,23 +84,17 @@ func set_direction() -> void:
 func move_character(delta: float) -> void:
 	set_npc_animation()
 	
-	var speed = chase_speed
+	var speed: int
 	
 	if behavior_mode == BehaviorMode.PATROL:
 		current_direction = move_list[current_move_index]
 		speed = patrol_speed
+	else:
+		speed = chase_speed
 		
 	var target_offset = current_direction * 2
 	var dest_coords = self.grid_coords + target_offset
-	if !range_limits.is_empty():
-		var x_range = Vector2i(range_limits["left"], range_limits["right"])
-		var y_range = Vector2i(range_limits["top"], range_limits["bottom"])
-		var converted_x_range = map_controller.point_to_grid(x_range)
-		var converted_y_range = map_controller.point_to_grid(y_range)
-		if dest_coords.x < converted_x_range.x || dest_coords.x > converted_x_range.y:
-			behavior_mode = BehaviorMode.RETURN
-		elif dest_coords.y < converted_y_range.x || dest_coords.y > converted_y_range.y:
-			behavior_mode = BehaviorMode.RETURN
+			
 	#if check_collision(dest_coords):
 		#return
 	
@@ -123,14 +120,30 @@ func move_is_complete(dest_pos: Vector2) -> bool:
 
 func complete_move(dest_pos: Vector2) -> void:
 	map_controller.remove_from_world_map([self.grid_coords] + get_neighbor_coords())
+	
 	self.position = dest_pos
 	self.grid_coords = map_controller.point_to_grid(position)
 	
 	var next_coords = [grid_coords] + get_neighbor_coords()
 	for coords in next_coords:
 		map_controller.set_object_at_coords(self, coords)
-
+	
+	check_range_limits()
 	move_complete = true
+	
+func check_range_limits() -> void:
+	if range_limits.is_empty():
+		return
+		
+	var converted_x_range = map_controller.point_to_grid(Vector2i(range_limits["left"], range_limits["right"]))
+	var converted_y_range = map_controller.point_to_grid(Vector2i(range_limits["top"], range_limits["bottom"]))
+	
+	print("SELF COORDS ", self.grid_coords, " X LIMITS ", converted_x_range, " Y LIMITS ", converted_y_range)
+		
+	if self.grid_coords.x < converted_x_range.x || self.grid_coords.x > converted_x_range.y:
+		behavior_mode = BehaviorMode.RETURN
+	elif self.grid_coords.y < converted_y_range.x || self.grid_coords.y > converted_y_range.y:
+		behavior_mode = BehaviorMode.RETURN
 
 func set_next_move() -> void:
 	move_complete = false
@@ -193,7 +206,6 @@ func set_npc_animation() -> void:
 func set_aggro_mode(is_aggro: bool) -> void:
 	if is_aggro: 
 		behavior_mode = BehaviorMode.CHASE
-		await get_tree().create_timer(0.1).timeout
 	else:
 		behavior_mode = BehaviorMode.PATROL
 
@@ -202,4 +214,3 @@ func set_player_coords(coords: Vector2i):
 
 func set_range_limits(limits: Dictionary):
 	range_limits = limits
-	print("range_limits" , range_limits)
