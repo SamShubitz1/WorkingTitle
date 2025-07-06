@@ -2,14 +2,12 @@ extends BaseObject
 
 class_name BaseNPC
 
-enum BehaviorMode
-{
-	BOTH,
-	PATROL,
-	CHASE
+enum BehaviorMode {
+	CHASE, 
+	PATROL, 
+	RETURN
 }
 
-@export var behavior_mode := BehaviorMode.BOTH
 @export var chase_speed := 170
 @export var patrol_speed := 90
 @export var move_cooldown := 5
@@ -17,25 +15,33 @@ enum BehaviorMode
 
 @onready var sprite := $NPCSprite
 
-var aggro = false
+var range_limits: Dictionary
+
+var behavior_mode: BehaviorMode = BehaviorMode.PATROL
 var current_move_index = 0
 var move_complete := true
 var timer := 0.0
 var current_direction: Vector2i
+var origin_coords: Vector2i
 
 var player_coords: Vector2i
 
 func _ready() -> void:
 	super._ready()
 	set_npc_animation()
+	origin_coords = self.grid_coords
+	
 
 func _process(delta: float) -> void:
-	if !aggro && behavior_mode != BehaviorMode.CHASE:
+	if behavior_mode == BehaviorMode.PATROL:
 		patrol_character(delta)
-	elif aggro && behavior_mode != BehaviorMode.PATROL:
+	else:
 		chase_character(delta)
+	print("Behavior is " , behavior_mode)
 	
 func patrol_character(delta) -> void:
+	if move_list.is_empty():
+		return
 	if move_complete: 
 		set_npc_animation()
 		timer += delta
@@ -49,10 +55,18 @@ func chase_character(delta) -> void:
 		set_direction()
 		move_complete = false
 	else:
-		move_character(delta, true)
+		move_character(delta)
 		
 func set_direction() -> void:
 	var npc_grid_pos = map_controller.point_to_grid(self.position)
+	var target_destination: Vector2i
+	if npc_grid_pos == origin_coords:
+		behavior_mode = BehaviorMode.PATROL
+	if behavior_mode == BehaviorMode.CHASE:
+		target_destination = player_coords
+	elif behavior_mode == BehaviorMode.RETURN:
+		target_destination = origin_coords
+	
 	var delta: Vector2i = player_coords - npc_grid_pos
 	var x_diff = abs(delta.x)
 	var y_diff = abs(delta.y)
@@ -64,19 +78,26 @@ func set_direction() -> void:
 	else:
 		current_direction = Vector2i.DOWN if delta.y > 0 else Vector2i.UP
 
-func move_character(delta: float, aggro = false) -> void:
+func move_character(delta: float) -> void:
 	set_npc_animation()
 	
 	var speed = chase_speed
 	
-	if !aggro:
+	if behavior_mode == BehaviorMode.PATROL:
 		current_direction = move_list[current_move_index]
 		speed = patrol_speed
 		
-	
 	var target_offset = current_direction * 2
 	var dest_coords = self.grid_coords + target_offset
-
+	if !range_limits.is_empty():
+		var x_range = Vector2i(range_limits["left"], range_limits["right"])
+		var y_range = Vector2i(range_limits["top"], range_limits["bottom"])
+		var converted_x_range = map_controller.point_to_grid(x_range)
+		var converted_y_range = map_controller.point_to_grid(y_range)
+		if dest_coords.x < converted_x_range.x || dest_coords.x > converted_x_range.y:
+			behavior_mode = BehaviorMode.RETURN
+		elif dest_coords.y < converted_y_range.x || dest_coords.y > converted_y_range.y:
+			behavior_mode = BehaviorMode.RETURN
 	#if check_collision(dest_coords):
 		#return
 	
@@ -126,7 +147,10 @@ func check_collision(dest_coords: Vector2i) -> bool:
 	return false
 
 func get_neighbor_coords() -> Array:
-	var direction = move_list[current_move_index]
+	var direction = Vector2i.ZERO
+	if !move_list.is_empty():
+		direction = move_list[current_move_index]
+	
 	match direction:
 		Vector2i.DOWN:
 			return neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, -c.x))
@@ -167,8 +191,15 @@ func set_npc_animation() -> void:
 	sprite.play(name)
 
 func set_aggro_mode(is_aggro: bool) -> void:
-	if behavior_mode != BehaviorMode.PATROL:
-		aggro = is_aggro
+	if is_aggro: 
+		behavior_mode = BehaviorMode.CHASE
+		await get_tree().create_timer(0.1).timeout
+	else:
+		behavior_mode = BehaviorMode.PATROL
 
 func set_player_coords(coords: Vector2i):
 	player_coords = coords
+
+func set_range_limits(limits: Dictionary):
+	range_limits = limits
+	print("range_limits" , range_limits)
