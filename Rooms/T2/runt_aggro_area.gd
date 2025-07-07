@@ -1,1 +1,2 @@
-extends BaseAggroArea
+#extends BaseAggroArea
+extends Area2D

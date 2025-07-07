@@ -1,1 +1,2 @@
-extends ReturnArea
+#extends ReturnArea
+extends Area2D

@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=4 uid="uid://dwgjvlselmdr4"]
+[gd_scene load_steps=82 format=4 uid="uid://dwgjvlselmdr4"]
 
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_q2ld6"]
 [ext_resource type="Script" path="res://Rooms/T2/T2Room.gd" id="1_rb3v6"]
@@ -25,6 +25,7 @@
 [ext_resource type="Texture2D" uid="uid://b6ieq5cq8fujc" path="res://Art/WorldSprites/T2_Runt_Walk_Side.png" id="22_k32r7"]
 [ext_resource type="Script" path="res://Rooms/T2/bull_battle_perimeter.gd" id="22_qvb0r"]
 [ext_resource type="Script" path="res://Rooms/T2/runt.gd" id="23_1fmvm"]
+[ext_resource type="Script" path="res://Rooms/T2/return_perimeter.gd" id="23_y3vs8"]
 [ext_resource type="Script" path="res://Rooms/T2/runt_aggro_area.gd" id="26_4lxkb"]
 [ext_resource type="Script" path="res://Rooms/T2/runt_battle_perimeter.gd" id="27_cqxqb"]
 [ext_resource type="Script" path="res://Rooms/T2/runt_return_area.gd" id="28_pvbfa"]
@@ -1579,7 +1580,10 @@ animations = [{
 radius = 128.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fssqt"]
-size = Vector2(32, 32)
+size = Vector2(39, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_17bax"]
+size = Vector2(704, 288)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pewnl"]
 atlas = ExtResource("21_eboix")
@@ -1860,7 +1864,6 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 script = ExtResource("10_6p6cm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound2"]
-visible = false
 position = Vector2(448, 512)
 shape = SubResource("RectangleShape2D_ostmw")
 debug_color = Color(0, 0.6, 0.701961, 0)
@@ -1868,11 +1871,14 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 [node name="MadWiredBull" type="Node2D" parent="."]
 position = Vector2(544, 864)
 script = ExtResource("13_egomq")
+move_list = [Vector2i(0, 1), Vector2i(0, -1)]
+number_of_tiles = 2
+battle_ready = true
 
 [node name="NPCSprite" type="AnimatedSprite2D" parent="MadWiredBull"]
 sprite_frames = SubResource("SpriteFrames_8awu8")
-animation = &"idle_side"
-offset = Vector2(0, 8)
+animation = &"idle_front"
+offset = Vector2(16, 10)
 
 [node name="AggroArea" type="Area2D" parent="MadWiredBull"]
 script = ExtResource("21_ko47s")
@@ -1885,16 +1891,21 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 script = ExtResource("22_qvb0r")
 
 [node name="BattleCollision" type="CollisionShape2D" parent="MadWiredBull/BattlePerimeter"]
-position = Vector2(0, 11)
+position = Vector2(16.5, 16)
 shape = SubResource("RectangleShape2D_fssqt")
+
+[node name="ReturnPerimeter" type="Area2D" parent="MadWiredBull"]
+position = Vector2(-384, -64)
+script = ExtResource("23_y3vs8")
+
+[node name="ReturnCollision" type="CollisionShape2D" parent="MadWiredBull/ReturnPerimeter"]
+position = Vector2(352, 144)
+shape = SubResource("RectangleShape2D_17bax")
 
 [node name="Runt" type="Node2D" parent="."]
 z_index = 20
 position = Vector2(992, 224)
 script = ExtResource("23_1fmvm")
-chase_speed = 90
-move_list = []
-battle_ready = true
 
 [node name="NPCSprite" type="AnimatedSprite2D" parent="Runt"]
 sprite_frames = SubResource("SpriteFrames_3omjk")
@@ -1920,6 +1931,6 @@ shape = SubResource("RectangleShape2D_fssqt")
 position = Vector2(-192, 0)
 script = ExtResource("28_pvbfa")
 
-[node name="RetrunCollision" type="CollisionShape2D" parent="Runt/ReturnPerimeter"]
+[node name="ReturnCollision" type="CollisionShape2D" parent="Runt/ReturnPerimeter"]
 position = Vector2(112, 16)
 shape = SubResource("RectangleShape2D_ueh38")

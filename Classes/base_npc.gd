@@ -32,7 +32,6 @@ func _ready() -> void:
 	super._ready()
 	origin_coords = self.grid_coords
 	set_npc_animation()
-	origin_coords = self.grid_coords
 	
 func _process(delta: float) -> void:
 	if behavior_mode == BehaviorMode.PATROL:
@@ -215,6 +214,7 @@ func set_aggro_mode(is_aggro: bool) -> void:
 
 func set_player_coords(coords: Vector2i):
 	player_coords = coords
+	print(" coords are " , coords)
 
 func set_range_limits(limits: Dictionary):
 	range_limits = limits

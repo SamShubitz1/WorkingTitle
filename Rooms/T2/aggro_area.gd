@@ -8,7 +8,7 @@ var player_is_connected = false
 
 func _ready():
 	self.area_entered.connect(_on_area_entered)
-	self.area_entered.connect(_on_area_exited)
+	self.area_exited.connect(_on_area_exited)
 
 func _on_area_entered(area: Area2D) -> void:
 	if area.name != "MyPlayer":
@@ -24,4 +24,4 @@ func _on_area_entered(area: Area2D) -> void:
 func _on_area_exited(area: Area2D) -> void:
 	if area.name != "MyPlayer":
 		return
-	npc.set_aggro_mode(true)
+	npc.set_aggro_mode(false)
