@@ -1,5 +1,7 @@
 extends Area2D
 
+class_name ReturnArea
+
 @onready var npc: BaseNPC = get_parent()
 
 func _ready() -> void:

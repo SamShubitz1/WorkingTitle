@@ -1,5 +1,7 @@
 extends Area2D
 
+class_name BaseAggroArea
+
 @onready var npc: BaseNPC = get_parent()
 
 var player_is_connected = false

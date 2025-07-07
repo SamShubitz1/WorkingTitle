@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=4 uid="uid://dwgjvlselmdr4"]
+[gd_scene load_steps=80 format=4 uid="uid://dwgjvlselmdr4"]
 
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_q2ld6"]
 [ext_resource type="Script" path="res://Rooms/T2/T2Room.gd" id="1_rb3v6"]
@@ -20,12 +20,14 @@
 [ext_resource type="Texture2D" uid="uid://bwiyq8rrrw0vo" path="res://Art/WorldSprites/T2_Mad_Wired_Bull_Walk_Back.png" id="18_oke0e"]
 [ext_resource type="Texture2D" uid="uid://d3hje4vu3i6xd" path="res://Art/WorldSprites/T2_Mad_Wired_Bull_Walk_Front.png" id="19_b00b2"]
 [ext_resource type="Texture2D" uid="uid://c7k832tvxywd" path="res://Art/WorldSprites/T2_Mad_Wired_Bull_Walk_Side.png" id="20_mwnqr"]
-[ext_resource type="Script" path="res://Rooms/T2/aggro_area.gd" id="21_anuap"]
 [ext_resource type="Texture2D" uid="uid://dqvlyyjo7cyb7" path="res://Art/WorldSprites/T2_Runt_Idle_Side.png" id="21_eboix"]
+[ext_resource type="Script" path="res://Rooms/T2/bull_aggro_area.gd" id="21_ko47s"]
 [ext_resource type="Texture2D" uid="uid://b6ieq5cq8fujc" path="res://Art/WorldSprites/T2_Runt_Walk_Side.png" id="22_k32r7"]
-[ext_resource type="Script" path="res://Rooms/T2/battle_perimeter.gd" id="22_yuob7"]
+[ext_resource type="Script" path="res://Rooms/T2/bull_battle_perimeter.gd" id="22_qvb0r"]
 [ext_resource type="Script" path="res://Rooms/T2/runt.gd" id="23_1fmvm"]
-[ext_resource type="Script" path="res://Rooms/T2/range_perimeter.gd" id="26_2vjfn"]
+[ext_resource type="Script" path="res://Rooms/T2/runt_aggro_area.gd" id="26_4lxkb"]
+[ext_resource type="Script" path="res://Rooms/T2/runt_battle_perimeter.gd" id="27_cqxqb"]
+[ext_resource type="Script" path="res://Rooms/T2/runt_return_area.gd" id="28_pvbfa"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1vrua"]
 texture = ExtResource("1_q2ld6")
@@ -1672,7 +1674,7 @@ animations = [{
 size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ueh38"]
-size = Vector2(256, 32)
+size = Vector2(224, 32)
 
 [node name="T2Room" type="Node2D"]
 script = ExtResource("1_rb3v6")
@@ -1858,29 +1860,29 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 script = ExtResource("10_6p6cm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound2"]
+visible = false
 position = Vector2(448, 512)
 shape = SubResource("RectangleShape2D_ostmw")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="MadWiredBull" type="Node2D" parent="."]
-position = Vector2(544, 896)
+position = Vector2(544, 864)
 script = ExtResource("13_egomq")
-battle_ready = true
 
 [node name="NPCSprite" type="AnimatedSprite2D" parent="MadWiredBull"]
 sprite_frames = SubResource("SpriteFrames_8awu8")
 animation = &"idle_side"
 offset = Vector2(0, 8)
 
-[node name="AggroPerimeter" type="Area2D" parent="MadWiredBull"]
-script = ExtResource("21_anuap")
+[node name="AggroArea" type="Area2D" parent="MadWiredBull"]
+script = ExtResource("21_ko47s")
 
-[node name="AggroCollision" type="CollisionShape2D" parent="MadWiredBull/AggroPerimeter"]
+[node name="AggroCollision" type="CollisionShape2D" parent="MadWiredBull/AggroArea"]
 shape = SubResource("CircleShape2D_s8fft")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="BattlePerimeter" type="Area2D" parent="MadWiredBull"]
-script = ExtResource("22_yuob7")
+script = ExtResource("22_qvb0r")
 
 [node name="BattleCollision" type="CollisionShape2D" parent="MadWiredBull/BattlePerimeter"]
 position = Vector2(0, 11)
@@ -1899,24 +1901,25 @@ sprite_frames = SubResource("SpriteFrames_3omjk")
 animation = &"walk_side"
 offset = Vector2(16, 0)
 
-[node name="AggroPerimeter" type="Area2D" parent="Runt"]
-script = ExtResource("21_anuap")
+[node name="AggroArea" type="Area2D" parent="Runt"]
+script = ExtResource("26_4lxkb")
 
-[node name="AggroCollision" type="CollisionShape2D" parent="Runt/AggroPerimeter"]
+[node name="AggroCollision" type="CollisionShape2D" parent="Runt/AggroArea"]
 position = Vector2(-48, 16)
 shape = SubResource("RectangleShape2D_3h2d4")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="BattlePerimeter" type="Area2D" parent="Runt"]
-script = ExtResource("22_yuob7")
+script = ExtResource("27_cqxqb")
 
 [node name="BattleCollision" type="CollisionShape2D" parent="Runt/BattlePerimeter"]
-position = Vector2(16, 16)
+position = Vector2(15, 16)
 shape = SubResource("RectangleShape2D_fssqt")
 
-[node name="RangePerimeter" type="Area2D" parent="Runt"]
-script = ExtResource("26_2vjfn")
+[node name="ReturnPerimeter" type="Area2D" parent="Runt"]
+position = Vector2(-192, 0)
+script = ExtResource("28_pvbfa")
 
-[node name="RangeCollision" type="CollisionShape2D" parent="Runt/RangePerimeter"]
-position = Vector2(-96, 16)
+[node name="RetrunCollision" type="CollisionShape2D" parent="Runt/ReturnPerimeter"]
+position = Vector2(112, 16)
 shape = SubResource("RectangleShape2D_ueh38")

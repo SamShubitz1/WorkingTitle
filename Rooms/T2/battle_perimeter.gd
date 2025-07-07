@@ -1,5 +1,7 @@
 extends Area2D
 
+class_name BaseBattleArea
+
 @onready var game_controller = get_tree().current_scene
 
 func _ready():

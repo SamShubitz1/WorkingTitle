@@ -1,1 +1,2 @@
-extends BaseNPC
+extends Node2D
+#extends BaseNPC
