@@ -1,7 +1,8 @@
 extends Area2D
 
+class_name BaseAggroArea
+
 @onready var npc: BaseNPC = get_parent()
-@onready var patrol_collision = $PatrolCollision
 
 var player_is_connected = false
 
