@@ -129,7 +129,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 	GameState.current_time += 1
 	if weather != null:
 		weather.position = player.position
-	#check_for_battle()  #
+	#check_for_battle()
 	check_for_camera_bounds()
 	emit_signal("player_position_updated", player.grid_position)
 	
@@ -341,9 +341,8 @@ func save_data() -> bool:
 
 func save_state() -> void:
 	GameState.player_direction = player.current_direction
-	GameState.player_position = player.position
+	GameState.player_position = map_controller.grid_to_point(player.grid_position)
 	GameState.current_map = map_controller.current_map.get_scene_file_path()
-	var x = 7
 
 func load_state() -> bool:
 	if GameState.player_position == Vector2.ZERO || GameState.player_direction == Vector2i.ZERO:

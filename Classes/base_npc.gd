@@ -6,7 +6,8 @@ enum BehaviorMode
 {
 	CHASE,
 	PATROL,
-	RETURN
+	RETURN,
+	STAY
 }
 
 @export var chase_speed := 170
@@ -19,7 +20,7 @@ enum BehaviorMode
 
 var range_limits: Dictionary
 
-var behavior_mode: BehaviorMode = BehaviorMode.PATROL
+var behavior_mode: BehaviorMode = BehaviorMode.PATROL 
 var current_move_index = 0
 var move_complete := true
 var timer := 0.0
@@ -34,10 +35,18 @@ func _ready() -> void:
 	set_npc_animation()
 	
 func _process(delta: float) -> void:
+	match behavior_mode:
+		BehaviorMode.STAY:
+			return
+		BehaviorMode.PATROL:
+			patrol_character(delta)
+		BehaviorMode.CHASE || BehaviorMode.RETURN:
+			chase_target(delta)
+		
 	if behavior_mode == BehaviorMode.PATROL:
 		patrol_character(delta)
 	elif behavior_mode == BehaviorMode.CHASE || behavior_mode == BehaviorMode.RETURN:
-		chase_character(delta)
+		chase_target(delta)
 	
 func patrol_character(delta) -> void:
 	if move_list.is_empty():
@@ -51,7 +60,7 @@ func patrol_character(delta) -> void:
 	else: 
 		move_character(delta)
 	
-func chase_character(delta) -> void:
+func chase_target(delta) -> void:
 	if move_complete:
 		set_chase_direction()
 		move_complete = false
@@ -61,13 +70,13 @@ func chase_character(delta) -> void:
 func set_chase_direction() -> void:
 	var npc_grid_pos = map_controller.point_to_grid(self.position)
 	
-	var destination_coords: Vector2i
+	var target_coords: Vector2i
 	if behavior_mode == BehaviorMode.CHASE:
-		destination_coords = player_coords
+		target_coords = player_coords
 	elif behavior_mode == BehaviorMode.RETURN:
-		destination_coords = origin_coords
+		target_coords = origin_coords
 		
-	var delta: Vector2i = destination_coords - npc_grid_pos
+	var delta: Vector2i = target_coords - npc_grid_pos
 	var x_diff = abs(delta.x)
 	var y_diff = abs(delta.y)
 
@@ -136,14 +145,14 @@ func check_range_limits() -> void:
 	var converted_x_range = map_controller.point_to_grid(Vector2i(range_limits["left"], range_limits["right"]))
 	var converted_y_range = map_controller.point_to_grid(Vector2i(range_limits["top"], range_limits["bottom"]))
 	
-	if self.grid_coords == origin_coords:
+	if self.grid_coords == origin_coords && behavior_mode == BehaviorMode.RETURN:
 		behavior_mode = BehaviorMode.PATROL
 		return
 		
 	if self.grid_coords.x < converted_x_range.x || self.grid_coords.x > converted_x_range.y:
-		behavior_mode = BehaviorMode.RETURN
+		behavior_mode = BehaviorMode.STAY
 	elif self.grid_coords.y < converted_y_range.x || self.grid_coords.y > converted_y_range.y:
-		behavior_mode = BehaviorMode.RETURN
+		behavior_mode = BehaviorMode.STAY
 
 func set_next_move() -> void:
 	move_complete = false
@@ -208,9 +217,14 @@ func set_npc_animation() -> void:
 func set_aggro_mode(is_aggro: bool) -> void:
 	if is_aggro:
 		behavior_mode = BehaviorMode.CHASE
-		set_chase_direction()
 	else:
-		behavior_mode = BehaviorMode.PATROL
+		behavior_mode = BehaviorMode.RETURN
+		
+		#if area entered, go aggro
+		#if limit passed, stay
+		#if area exited, go return
+		#if returned go patrol
+		#
 
 func set_player_coords(coords: Vector2i):
 	player_coords = coords

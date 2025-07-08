@@ -1841,7 +1841,6 @@ offset = Vector2(32, 16)
 [node name="EnemyAreaContainer" type="Node2D" parent="."]
 
 [node name="EnemyArea" type="Area2D" parent="EnemyAreaContainer"]
-visible = false
 script = ExtResource("8_1es84")
 
 [node name="EnemyCollisionArea" type="CollisionShape2D" parent="EnemyAreaContainer/EnemyArea"]
@@ -1871,8 +1870,6 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 [node name="MadWiredBull" type="Node2D" parent="."]
 position = Vector2(544, 864)
 script = ExtResource("13_egomq")
-move_list = [Vector2i(0, 1), Vector2i(0, -1)]
-number_of_tiles = 2
 battle_ready = true
 
 [node name="NPCSprite" type="AnimatedSprite2D" parent="MadWiredBull"]
@@ -1906,6 +1903,9 @@ shape = SubResource("RectangleShape2D_17bax")
 z_index = 20
 position = Vector2(992, 224)
 script = ExtResource("23_1fmvm")
+chase_speed = 90
+move_list = []
+battle_ready = true
 
 [node name="NPCSprite" type="AnimatedSprite2D" parent="Runt"]
 sprite_frames = SubResource("SpriteFrames_3omjk")
