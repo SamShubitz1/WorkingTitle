@@ -219,12 +219,6 @@ func set_aggro_mode(is_aggro: bool) -> void:
 		behavior_mode = BehaviorMode.CHASE
 	else:
 		behavior_mode = BehaviorMode.RETURN
-		
-		#if area entered, go aggro
-		#if limit passed, stay
-		#if area exited, go return
-		#if returned go patrol
-		#
 
 func set_player_coords(coords: Vector2i):
 	player_coords = coords
