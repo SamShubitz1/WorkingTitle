@@ -1,5 +1,6 @@
 extends Control
 
+@onready var battle_controller = $"../BattleController"
 @onready var battle_cursor = $Cursor
 @onready var options_node = $MainMenu
 @onready var abilities_node = $AbilitiesMenu
@@ -9,7 +10,6 @@ extends Control
 @onready var targets_grid = $TargetsGrid
 @onready var log_node = $DialogBox
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
-@onready var battle_controller = $"../BattleController"
 @onready var description_label = $Descriptions/Labels/AbilityDescription
 @onready var energy_cost_label = $Descriptions/Labels/AbilityStats/EnergyCost
 @onready var ap_cost_label = $Descriptions/Labels/AbilityStats/ApCost
