@@ -1870,6 +1870,8 @@ debug_color = Color(0, 0.6, 0.701961, 0)
 [node name="MadWiredBull" type="Node2D" parent="."]
 position = Vector2(544, 864)
 script = ExtResource("13_egomq")
+chase_speed = 160
+number_of_tiles = 2
 battle_ready = true
 
 [node name="NPCSprite" type="AnimatedSprite2D" parent="MadWiredBull"]

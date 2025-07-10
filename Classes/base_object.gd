@@ -5,7 +5,6 @@ class_name BaseObject
 @onready var map_controller = $"/root/MainScene/Overworld/MapController"
 @onready var game_controller = get_tree().current_scene
 
-@export var object_name: String
 @export var battle_ready: bool = false
 @export var neighbor_coords: Array
 
@@ -13,10 +12,6 @@ var grid_coords: Vector2i
 var dialog_tree: Dictionary
 
 func _ready() -> void:
-	#var current_tree = GameData.dialog.get(object_name)
-	#if current_tree:
-		#dialog_tree = current_tree
-	
 	grid_coords = map_controller.point_to_grid(position)
 	map_controller.set_object_at_coords(self, grid_coords)
 	

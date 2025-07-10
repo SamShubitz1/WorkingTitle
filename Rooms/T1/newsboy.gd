@@ -61,7 +61,6 @@ func _ready() -> void:
 	"tram": {
 		"text": "That? Couldn't help ya, pal. Hasn't budged in years. Figured it was one of Top's pointless architectural displays. The whole city's taken by round shapes.",
 		"options": [
-			{"name": "Tram", "next": "tram"},
 			{"name": "Leave", "next": "leave01"}]
 			},
 	"leave01": {

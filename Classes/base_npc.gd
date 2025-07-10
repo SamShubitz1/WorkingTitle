@@ -40,13 +40,10 @@ func _process(delta: float) -> void:
 			return
 		BehaviorMode.PATROL:
 			patrol_character(delta)
-		BehaviorMode.CHASE || BehaviorMode.RETURN:
+		BehaviorMode.CHASE:
 			chase_target(delta)
-		
-	if behavior_mode == BehaviorMode.PATROL:
-		patrol_character(delta)
-	elif behavior_mode == BehaviorMode.CHASE || behavior_mode == BehaviorMode.RETURN:
-		chase_target(delta)
+		BehaviorMode.RETURN:
+			chase_target(delta)
 	
 func patrol_character(delta) -> void:
 	if move_list.is_empty():
@@ -99,8 +96,14 @@ func move_character(delta: float) -> void:
 	else:
 		speed = chase_speed
 	
-	var target_offset = current_direction * number_of_tiles
+	var target_offset = current_direction * number_of_tiles if behavior_mode == BehaviorMode.PATROL else current_direction
 	var dest_coords = self.grid_coords + target_offset
+	
+	var is_out_of_range = check_range_limits(dest_coords)
+	if is_out_of_range:
+		move_complete = true
+		behavior_mode = BehaviorMode.STAY
+		return
 			
 	#if check_collision(dest_coords):
 		#return
@@ -131,28 +134,28 @@ func complete_move(dest_pos: Vector2) -> void:
 	self.position = dest_pos
 	self.grid_coords = map_controller.point_to_grid(position)
 	
+	if self.grid_coords == origin_coords && behavior_mode == BehaviorMode.RETURN:
+		behavior_mode = BehaviorMode.PATROL
+	
 	var next_coords = [grid_coords] + get_neighbor_coords()
 	for coords in next_coords:
 		map_controller.set_object_at_coords(self, coords)
 	
-	check_range_limits()
 	move_complete = true
 	
-func check_range_limits() -> void:
+func check_range_limits(dest_coords: Vector2i) -> bool:
 	if range_limits.is_empty():
-		return
+		return false
 		
 	var converted_x_range = map_controller.point_to_grid(Vector2i(range_limits["left"], range_limits["right"]))
 	var converted_y_range = map_controller.point_to_grid(Vector2i(range_limits["top"], range_limits["bottom"]))
-	
-	if self.grid_coords == origin_coords && behavior_mode == BehaviorMode.RETURN:
-		behavior_mode = BehaviorMode.PATROL
-		return
-		
-	if self.grid_coords.x < converted_x_range.x || self.grid_coords.x > converted_x_range.y:
-		behavior_mode = BehaviorMode.STAY
-	elif self.grid_coords.y < converted_y_range.x || self.grid_coords.y > converted_y_range.y:
-		behavior_mode = BehaviorMode.STAY
+
+	if dest_coords.x < converted_x_range.x || dest_coords.x > converted_x_range.y:
+		return true
+	elif dest_coords.y < converted_y_range.x || dest_coords.y > converted_y_range.y:
+		return true
+	else:
+		return false
 
 func set_next_move() -> void:
 	move_complete = false
@@ -222,7 +225,6 @@ func set_aggro_mode(is_aggro: bool) -> void:
 
 func set_player_coords(coords: Vector2i):
 	player_coords = coords
-	print(" coords are " , coords)
 
 func set_range_limits(limits: Dictionary):
 	range_limits = limits

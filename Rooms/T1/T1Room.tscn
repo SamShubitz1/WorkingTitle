@@ -988,7 +988,6 @@ animation = &"RailTramSlider"
 [node name="Accumulator" type="Node2D" parent="Doodads"]
 position = Vector2(352, 384)
 script = ExtResource("7_w5ah3")
-object_name = "accumulator"
 neighbor_coords = [Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)]
 
 [node name="Accumulator_Top" type="AnimatedSprite2D" parent="Doodads/Accumulator"]
@@ -1014,7 +1013,6 @@ frame_progress = 0.0133983
 z_index = 2
 position = Vector2(576, 384)
 script = ExtResource("11_fe8by")
-object_name = "tram"
 neighbor_coords = [Vector2i(0, -1), Vector2i(0, 1), Vector2i(-1, -1), Vector2i(-1, 0), Vector2i(-1, 1)]
 
 [node name="RailTram" type="AnimatedSprite2D" parent="Doodads/RailTram"]
@@ -1058,7 +1056,6 @@ animation = &"RailTramTracks"
 [node name="RailTramConsole" type="Node2D" parent="Doodads"]
 position = Vector2(640, 320)
 script = ExtResource("14_wjx62")
-object_name = "tram_console"
 
 [node name="RailTramConsole" type="AnimatedSprite2D" parent="Doodads/RailTramConsole"]
 position = Vector2(16, 16)
@@ -1068,7 +1065,6 @@ animation = &"RailTramConsole"
 [node name="EggCharger" type="Node2D" parent="Doodads"]
 position = Vector2(672, 544)
 script = ExtResource("16_05hfr")
-object_name = "eggcharger"
 neighbor_coords = [Vector2i(-1, 0)]
 
 [node name="EggCharger" type="AnimatedSprite2D" parent="Doodads/EggCharger"]
@@ -1080,7 +1076,6 @@ animation = &"EggCharger"
 [node name="Newsboy" type="Node2D" parent="Doodads"]
 position = Vector2(352, 448)
 script = ExtResource("18_krwbj")
-object_name = "newsboy"
 
 [node name="Newsboy" type="AnimatedSprite2D" parent="Doodads/Newsboy"]
 position = Vector2(0, 32)
@@ -1091,7 +1086,6 @@ offset = Vector2(16, -24)
 [node name="Repository" type="Node2D" parent="Doodads"]
 position = Vector2(896, 480)
 script = ExtResource("20_6jj18")
-object_name = "repository"
 neighbor_coords = [Vector2i(-2, 0)]
 
 [node name="Repository" type="AnimatedSprite2D" parent="Doodads/Repository"]
@@ -1113,7 +1107,6 @@ sprite_frames = SubResource("SpriteFrames_xs5ka")
 [node name="Norm" parent="." instance=ExtResource("23_km8gv")]
 position = Vector2(768, 320)
 script = ExtResource("27_pl6wk")
-object_name = "norm"
 
 [node name="ScreenBound" type="Node2D" parent="."]
 visible = false

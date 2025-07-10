@@ -1,7 +1,3 @@
-#
-#Children: 
-#
-
 extends Node2D
 
 @onready var current_tile_map_layers: Array[Node] = []
