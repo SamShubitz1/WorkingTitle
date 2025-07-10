@@ -672,25 +672,33 @@ vertical_alignment = 2
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="EnergyCost" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="AbilityStats" type="VBoxContainer" parent="BattleMenu/Descriptions/Labels"]
+layout_mode = 2
+
+[node name="EnergyCost" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ApCost" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="ApCost" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Range" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="Range" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
 
-[node name="Label6" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="Label6" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
+
+[node name="Padding" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
+layout_mode = 2
 
 [node name="PassTurnMenu" type="Panel" parent="BattleMenu"]
 layout_mode = 0

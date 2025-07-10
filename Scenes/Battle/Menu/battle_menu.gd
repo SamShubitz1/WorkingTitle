@@ -11,9 +11,9 @@ extends Control
 @onready var char_name_label = $MainMenu/Menu/CharPanel/NameLabel
 @onready var battle_controller = $"../BattleController"
 @onready var description_label = $Descriptions/Labels/AbilityDescription
-@onready var energy_cost_label = $Descriptions/Labels/EnergyCost
-@onready var ap_cost_label = $Descriptions/Labels/ApCost
-@onready var range_label = $Descriptions/Labels/Range
+@onready var energy_cost_label = $Descriptions/Labels/AbilityStats/EnergyCost
+@onready var ap_cost_label = $Descriptions/Labels/AbilityStats/ApCost
+@onready var range_label = $Descriptions/Labels/AbilityStats/Range
 
 var current_player: Node
 #var grid_info: Dictionary

@@ -6,7 +6,7 @@ class_name BaseAggroArea
 
 var player_is_connected = false
 
-func _ready():
+func _ready(): 
 	self.area_entered.connect(_on_area_entered)
 	self.area_exited.connect(_on_area_exited)
 
