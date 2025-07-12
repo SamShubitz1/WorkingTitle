@@ -1678,7 +1678,7 @@ animations = [{
 size = Vector2(160, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ueh38"]
-size = Vector2(224, 32)
+size = Vector2(288, 32)
 
 [node name="T2Room" type="Node2D"]
 script = ExtResource("1_rb3v6")
@@ -1906,7 +1906,7 @@ z_index = 20
 position = Vector2(992, 224)
 script = ExtResource("23_1fmvm")
 chase_speed = 90
-move_list = []
+patrol_move_list = []
 battle_ready = true
 
 [node name="NPCSprite" type="AnimatedSprite2D" parent="Runt"]
@@ -1934,5 +1934,5 @@ position = Vector2(-192, 0)
 script = ExtResource("28_pvbfa")
 
 [node name="ReturnCollision" type="CollisionShape2D" parent="Runt/ReturnPerimeter"]
-position = Vector2(112, 16)
+position = Vector2(80, 16)
 shape = SubResource("RectangleShape2D_ueh38")

@@ -13,7 +13,7 @@ enum BehaviorMode
 @export var chase_speed := 170
 @export var patrol_speed := 90
 @export var patrol_cooldown := 5
-@export var move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
+@export var patrol_move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 @export var number_of_tiles: int = 1
 
 @onready var sprite := $NPCSprite
@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 			chase_target(delta)
 	
 func patrol_character(delta) -> void:
-	if move_list.is_empty():
+	if patrol_move_list.is_empty():
 		return
 		
 	if move_complete: 
@@ -61,6 +61,7 @@ func chase_target(delta) -> void:
 	if move_complete:
 		set_chase_direction()
 		move_complete = false
+		set_npc_animation()
 	else:
 		move_character(delta)
 		
@@ -82,24 +83,24 @@ func set_chase_direction() -> void:
 	elif y_diff > x_diff:
 		current_direction = Vector2i.DOWN if delta.y > 0 else Vector2i.UP
 	else:
-		current_direction = Vector2i.DOWN if delta.y > 0 else Vector2i.UP
+		current_direction = Vector2i.DOWN if delta.y > 0 else current_direction
 
 func move_character(delta: float) -> void:
-	set_npc_animation()
+	if behavior_mode == BehaviorMode.PATROL && patrol_move_list.is_empty():
+		return
 	
 	var speed: int
-	if behavior_mode == BehaviorMode.PATROL && move_list.is_empty():
-		return
-	elif behavior_mode == BehaviorMode.PATROL:
+	var dest_coords: Vector2i
+	
+	if behavior_mode == BehaviorMode.PATROL:
 		speed = patrol_speed
-		current_direction = move_list[current_move_index]
+		dest_coords = self.grid_coords + (current_direction * number_of_tiles)
 	else:
 		speed = chase_speed
-	
-	var target_offset = current_direction * number_of_tiles if behavior_mode == BehaviorMode.PATROL else current_direction
-	var dest_coords = self.grid_coords + target_offset
+		dest_coords = self.grid_coords + current_direction
 	
 	var is_out_of_range = check_range_limits(dest_coords)
+	
 	if is_out_of_range:
 		move_complete = true
 		behavior_mode = BehaviorMode.STAY
@@ -135,6 +136,7 @@ func complete_move(dest_pos: Vector2) -> void:
 	self.grid_coords = map_controller.point_to_grid(position)
 	
 	if self.grid_coords == origin_coords && behavior_mode == BehaviorMode.RETURN:
+		current_move_index = 0
 		behavior_mode = BehaviorMode.PATROL
 	
 	var next_coords = [grid_coords] + get_neighbor_coords()
@@ -161,10 +163,12 @@ func set_next_move() -> void:
 	move_complete = false
 	timer = 0
 	
-	if move_list.is_empty():
+	if patrol_move_list.is_empty():
 		return
 		
-	current_move_index = (current_move_index + 1) % move_list.size()
+	current_move_index = (current_move_index + 1) % patrol_move_list.size()
+	current_direction = patrol_move_list[current_move_index]
+	set_npc_animation()
 	
 func check_collision(dest_coords: Vector2i) -> bool:
 	var object_coords = neighbor_coords.map(func(c): return dest_coords + c)
@@ -174,10 +178,10 @@ func check_collision(dest_coords: Vector2i) -> bool:
 	return false
 
 func get_neighbor_coords() -> Array:
-	if move_list.is_empty():
+	if patrol_move_list.is_empty():
 		return []
 		
-	var direction = move_list[current_move_index]
+	var direction = patrol_move_list[current_move_index]
 	match direction:
 		Vector2i.DOWN:
 			return neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, -c.x))

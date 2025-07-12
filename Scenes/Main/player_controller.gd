@@ -45,7 +45,7 @@ func process_player_movement(delta) -> void:
 	player.position += player.speed * delta * player.current_direction
 	check_move_complete()
 
-# used for overworld and dialog/menu accept
+# used for overworld movement and dialog/menu accept
 func process_player_inputs() -> void:
 	if player.is_moving:
 		return
@@ -72,7 +72,7 @@ func process_player_inputs() -> void:
 	else:
 		set_player_animation(player.current_direction, true)
 
-# used for dialog/menu
+# used for dialog/menu navigation
 func _input(_e) -> void:
 	if !dialog_mode:
 		return
@@ -154,7 +154,7 @@ func player_action_pressed() -> void:
 
 func open_pause_menu():
 	dialog_mode = true
-	pause_menu.position = player.position + Vector2(-235, -134)
+	#pause_menu.position = player.position + Vector2(-235, -134)
 	pause_menu.open()
 
 func close_pause_menu():

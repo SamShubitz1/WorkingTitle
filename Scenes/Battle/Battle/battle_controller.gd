@@ -27,7 +27,7 @@ var battle_grid: BaseGrid = BaseGrid.new()
 var event_queue: Array
 var turn_queue: Array
 
-var initial_dialog: String = "Three lil' guys appeared!"
+var initial_dialog: String
 var battle_log: Array
 var dialog: Label
 var manual_increment: bool = false
@@ -439,6 +439,8 @@ func select_enemies():
 	for i in range(number_of_enemies):
 		var enemy_index = randi() % (enemy_pool.size())
 		selected_enemies.append(enemy_pool[enemy_index])
+		
+	initial_dialog = str(number_of_enemies) + " enemies appeared!"
 	
 	return selected_enemies
 	
@@ -512,7 +514,7 @@ func prompt_out_of_range() -> void:
 	cursor.enable()
 	
 func update_ui() -> void:
-	if current_player.alliance == GameData.Alliance.HERO:	
+	if current_player.alliance == GameData.Alliance.HERO:
 		char_name_label.text = current_player.char_name
 		update_health_display()
 		update_energy_display()
