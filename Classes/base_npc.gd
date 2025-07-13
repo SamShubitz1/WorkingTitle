@@ -130,8 +130,8 @@ func move_is_complete(dest_pos: Vector2) -> bool:
 func complete_move(dest_pos: Vector2) -> void:
 	map_controller.remove_from_world_map([self.grid_coords] + get_neighbor_coords())
 	
-	self.position = dest_pos
-	self.grid_coords = map_controller.point_to_grid(position)
+	self.position = dest_pos 
+	self.grid_coords = map_controller.point_to_grid(self.position)
 	
 	if self.grid_coords == origin_coords && behavior_mode == BehaviorMode.RETURN:
 		patrol_move_index = 0
