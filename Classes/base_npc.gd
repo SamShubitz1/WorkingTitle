@@ -21,7 +21,7 @@ enum BehaviorMode
 var range_limits: Dictionary
 
 var behavior_mode: BehaviorMode = BehaviorMode.PATROL 
-var current_move_index = 0
+var patrol_move_index = 0
 var move_complete := true
 var timer := 0.0
 var current_direction: Vector2i
@@ -100,14 +100,12 @@ func move_character(delta: float) -> void:
 		dest_coords = self.grid_coords + current_direction
 	
 	var is_out_of_range = check_range_limits(dest_coords)
+	var dest_has_collision = check_collision(dest_coords)
 	
-	if is_out_of_range:
+	if is_out_of_range || dest_has_collision:
 		move_complete = true
 		behavior_mode = BehaviorMode.STAY
 		return
-			
-	#if check_collision(dest_coords):
-		#return
 	
 	var dest_pos = map_controller.grid_to_point(dest_coords)
 	self.position += current_direction * speed * delta
@@ -136,7 +134,7 @@ func complete_move(dest_pos: Vector2) -> void:
 	self.grid_coords = map_controller.point_to_grid(position)
 	
 	if self.grid_coords == origin_coords && behavior_mode == BehaviorMode.RETURN:
-		current_move_index = 0
+		patrol_move_index = 0
 		behavior_mode = BehaviorMode.PATROL
 	
 	var next_coords = [grid_coords] + get_neighbor_coords()
@@ -166,22 +164,24 @@ func set_next_move() -> void:
 	if patrol_move_list.is_empty():
 		return
 		
-	current_move_index = (current_move_index + 1) % patrol_move_list.size()
-	current_direction = patrol_move_list[current_move_index]
+	patrol_move_index = (patrol_move_index + 1) % patrol_move_list.size()
+	current_direction = patrol_move_list[patrol_move_index]
 	set_npc_animation()
 	
 func check_collision(dest_coords: Vector2i) -> bool:
-	var object_coords = neighbor_coords.map(func(c): return dest_coords + c)
-	for coords in object_coords:
-		if map_controller.world_map.has(coords):
-			return true
-	return false
+	var tile_collision_check = map_controller.check_for_collider(dest_coords)
+	var object_collision_check = map_controller.get_object_at_coords(dest_coords)
+	
+	if tile_collision_check || object_collision_check:
+		return true
+	else:
+		return false
 
 func get_neighbor_coords() -> Array:
 	if patrol_move_list.is_empty():
 		return []
 		
-	var direction = patrol_move_list[current_move_index]
+	var direction = patrol_move_list[patrol_move_index]
 	match direction:
 		Vector2i.DOWN:
 			return neighbor_coords.map(func(c): return self.grid_coords + Vector2i(c.y, -c.x))
@@ -226,6 +226,7 @@ func set_aggro_mode(is_aggro: bool) -> void:
 		behavior_mode = BehaviorMode.CHASE
 	else:
 		behavior_mode = BehaviorMode.RETURN
+		move_complete = true
 
 func set_player_coords(coords: Vector2i):
 	player_coords = coords
