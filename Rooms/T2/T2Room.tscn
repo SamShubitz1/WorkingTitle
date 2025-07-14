@@ -1868,7 +1868,7 @@ shape = SubResource("RectangleShape2D_ostmw")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="MadWiredBull" type="Node2D" parent="."]
-position = Vector2(544, 864)
+position = Vector2(512, 864)
 script = ExtResource("13_egomq")
 chase_speed = 160
 number_of_tiles = 2
@@ -1894,12 +1894,13 @@ position = Vector2(16.5, 16)
 shape = SubResource("RectangleShape2D_fssqt")
 
 [node name="ReturnPerimeter" type="Area2D" parent="MadWiredBull"]
-position = Vector2(-384, -64)
+position = Vector2(-352, -64)
 script = ExtResource("23_y3vs8")
 
 [node name="ReturnCollision" type="CollisionShape2D" parent="MadWiredBull/ReturnPerimeter"]
 position = Vector2(352, 144)
 shape = SubResource("RectangleShape2D_17bax")
+debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="Runt" type="Node2D" parent="."]
 z_index = 20
@@ -1936,3 +1937,4 @@ script = ExtResource("28_pvbfa")
 [node name="ReturnCollision" type="CollisionShape2D" parent="Runt/ReturnPerimeter"]
 position = Vector2(80, 16)
 shape = SubResource("RectangleShape2D_ueh38")
+debug_color = Color(0, 0.6, 0.701961, 0)

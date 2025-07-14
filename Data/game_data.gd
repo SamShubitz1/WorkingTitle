@@ -94,6 +94,7 @@ enum EffectType {
 	STATS, #AP, HP, EP
 	ATTRIBUTE,
 	AILMENT,
+	PASSIVE
 }
 
 enum EffectTarget {
@@ -231,6 +232,12 @@ var abilities: Dictionary = {
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 3, "property": Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "SepticInjection", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 	}
 	
+var passives = {
+	"Mage": {"passive_name": "Cascade", "property": Attributes.FLUX, "effect_type": EffectType.PASSIVE}, 
+	"Runt": {"passive_name": "Harden", "property": Attributes.ARMOR, "effect_type": EffectType.PASSIVE}, 
+	}
+
+
 const sounds = {
 	"MageDeathA1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_DeathA1.wav",
 	"MageAttackA1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA1.wav",

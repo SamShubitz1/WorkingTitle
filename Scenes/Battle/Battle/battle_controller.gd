@@ -1,5 +1,6 @@
 extends Node2D
 
+@onready var passive_manager = $PassiveManager
 @onready var ai_controller = $AiController
 @onready var game_controller = get_tree().current_scene
 @onready var battle_scene = get_parent()
@@ -126,6 +127,8 @@ func handle_ability(event: Dictionary) -> void:
 			
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
+			
+		passive_manager.resolve_passive(event.target, "Harden")
 #
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
@@ -221,6 +224,9 @@ func on_use_ability(selected_targets: Array) -> void:
 			is_first_target = false
 		current_player.sound.play_sound(current_player.char_name, Data.SoundAction.ATTACK)
 		current_player.sprite.attack(dialog_duration)
+		
+	passive_manager.resolve_passive(current_player, "Cascade", selected_ability)
+	
 	end_turn()
 
 func build_attack_event(target: Character, is_first_target: bool) -> void:
@@ -385,6 +391,7 @@ func on_target_death(target: Character) -> void:
 	players = players.filter(func(p): return p.battle_id != target.battle_id)
 	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.battle_id != target.battle_id || e.has("target") && e.target.battle_id != target.battle_id) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.character.battle_id != target.battle_id)
+	passive_manager.remove_player(target)
 	
 	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
 	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
@@ -550,6 +557,7 @@ func initialize_battle() -> void:
 	
 	add_players()
 	battle_grid.populate_grid(players)
+	passive_manager.register_players(players)
 	increment_turn_queue()
 	
 	ap_display.initialize_ap_display()

@@ -1107,6 +1107,7 @@ sprite_frames = SubResource("SpriteFrames_xs5ka")
 [node name="Norm" parent="." instance=ExtResource("23_km8gv")]
 position = Vector2(768, 320)
 script = ExtResource("27_pl6wk")
+battle_ready = true
 
 [node name="ScreenBound" type="Node2D" parent="."]
 visible = false
