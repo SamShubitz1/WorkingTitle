@@ -137,12 +137,12 @@ func resolve_attribute_bonuses(selected_ability: Dictionary):
 		return multiplier
 
 func resolve_effect(effect: Dictionary):
-	if effect.effect_type == Data.EffectType.ATTRIBUTE:
+	if effect.effect_type.has("duration"):
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value, "duration": effect.duration})
 	else:
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
 		
-	resolve_stat_effects()
+	resolve_special_stats()
 	resolve_status_effects()
 	
 func check_success(selected_ability: Dictionary) -> bool:
@@ -244,7 +244,7 @@ func resolve_status_effects() -> void:
 		if current_attributes[attribute] < 0:
 			current_attributes[attribute] = 0;
 			
-func resolve_stat_effects():
+func resolve_special_stats():
 	for effect in status_effects:
 		if effect.type == Data.EffectType.STATS:
 			match effect.property:
@@ -254,7 +254,6 @@ func resolve_stat_effects():
 					health_bar.value += effect.value
 				Data.SpecialStat.MOVE_RANGE:
 					move_range *= effect.value
-					
 			status_effects = status_effects.filter(func(e): return e != effect)
 	
 func decrement_status_effects():
