@@ -38,4 +38,3 @@ func display_digit(digit: int, offset: Vector2i) -> void:
 		self.position.y -= 8
 		self.modulate.a -= .1
 		await get_tree().create_timer(0.1).timeout
-		

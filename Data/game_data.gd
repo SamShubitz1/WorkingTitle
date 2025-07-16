@@ -81,6 +81,7 @@ enum SpecialStat {
 	ENERGY,
 	AILMENTS, # meaning all ailments
 	MOVE_RANGE,
+	GUARD_RANGE
 }
 
 enum Ailments {
@@ -93,8 +94,7 @@ enum Ailments {
 enum EffectType {
 	STATS, #AP, HP, EP
 	ATTRIBUTE,
-	AILMENT,
-	PASSIVE
+	AILMENT
 }
 
 enum EffectTarget {
@@ -183,7 +183,7 @@ var abilities: Dictionary = {
 			Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "AcidCloud", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 			
 	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Enemies lose 1 AP and 1 memory", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [
-		{"effect_type": EffectType.STATS, "duration": 1, "target": EffectTarget.OTHER, "value": -1, "property": SpecialStat.AP, "dialog": "lost 1 AP", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.SELF, "duration": 0.9, "offset": 185}},
+		{"effect_type": EffectType.STATS, "target": EffectTarget.OTHER, "value": -1, "property": SpecialStat.AP, "dialog": "lost 1 AP", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.SELF, "duration": 0.9, "offset": 185}},
 		{"effect_type": EffectType.ATTRIBUTE, "duration": -1, "target": EffectTarget.OTHER, "value": -1, "property": Attributes.MEMORY, "dialog": "lost 1 memory", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.OTHER, "duration": 0.0}}]},
 		
 	"Zap": {"name": "Zap", "ability_type": AbilityType.ATTACK, "damage":{ "type": DamageType.ENERGY, "value": 45}, "action_cost": 1, "energy_cost": 2, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.FLUX, "description": "45 energy damage.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [], "animation": {"name": "Zap", "origin": AnimOrigin.OTHER, "duration": 0.8}},
@@ -233,11 +233,19 @@ var abilities: Dictionary = {
 	}
 	
 var passives = {
-	"Mage": {"passive_name": "Cascade", "property": Attributes.FLUX, "effect_type": EffectType.PASSIVE}, 
-	"Runt": {"passive_name": "Harden", "property": Attributes.ARMOR, "effect_type": EffectType.PASSIVE}, 
+	"Mage": {"name": "Cascade", "property": Attributes.FLUX, "value": 1, "duration": -1, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF},
+	
+	"Runt": {"name": "Thorns", "property": Attributes.ARMOR, "value": 1, "duration": -1, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF},
+	
+	"Thumper": {"name": "Hop", "property": SpecialStat.MOVE_RANGE, "value": 2, "duration": -1, "effect_type": EffectType.STATS, "effect_target": EffectTarget.SELF},
+	
+	"Pilypile": {"name": "Taunt", "property": SpecialStat.GUARD_RANGE, "value": 1, "duration": -1, "effect_type": EffectType.STATS, "effect_target": EffectTarget.SELF},
+	
+	"Mandrake": {"name": "Meditate", "property": Attributes.BATTERY, "value": 2, "duration": -1, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF},
+	
+	"Eyecatcher": {"name": "Hex", "property": Attributes.BATTERY, "value": -2, "duration": -1, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER}
 	}
-
-
+	
 const sounds = {
 	"MageDeathA1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_DeathA1.wav",
 	"MageAttackA1": "res://Scenes/Battle/Characters/Mage/Sounds/Mage_AttackA1.wav",
