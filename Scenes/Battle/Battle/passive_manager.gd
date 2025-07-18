@@ -16,6 +16,8 @@ func resolve_passive(player: Character, active_passive: String, ability: Diction
 			player.resolve_effect(player.passive)
 		"Meditate":
 			player.resolve_effect(player.passive)
+		"Hex":
+			resolve_hex(player)
 			
 func resolve_cascade(player: Character, ability: Dictionary):
 	var ability_list = move_history[player.battle_id]
@@ -24,6 +26,14 @@ func resolve_cascade(player: Character, ability: Dictionary):
 	else:
 		ability_list.append(ability)
 		player.resolve_effect(player.passive)
+
+func resolve_hex(caster: Character) -> void:
+	var hexed_players: Array
+	for player in current_players:
+		if player.alliance == Data.Alliance.HERO && player.grid_position.y == caster.grid_position.y:
+			hexed_players.append(player)
+	for hexed_player in hexed_players:
+		hexed_player.resolve_effect(caster.passive)
 
 func remove_player(target: Character) -> void:
 	current_players = current_players.filter(func(p): return p.battle_id != target.battle_id)

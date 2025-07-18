@@ -586,6 +586,7 @@ func build_character(char_name: String, char_alliance: Data.Alliance, char_posit
 	set_position_by_grid_coords(char)
 	battle_id += 1
 	passive_manager.resolve_passive(char, "Hop")
+	passive_manager.resolve_passive(char, "Hex")
 	return char
 
 func select_random(number_of_targets: int) -> void:

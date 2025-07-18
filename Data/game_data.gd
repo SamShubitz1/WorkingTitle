@@ -235,17 +235,17 @@ var abilities: Dictionary = {
 	}
 	
 var passives = {
-	"Mage": {"name": "Cascade", "property": Attributes.FLUX, "value": 1, "duration": permanent, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF},
+	"Mage": {"name": "Cascade", "property": Attributes.FLUX, "value": 1, "duration": permanent, "effect_type": EffectType.ATTRIBUTE},
 	
-	"Runt": {"name": "Thorns", "property": Attributes.ARMOR, "value": 1, "duration": permanent, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF},
+	"Runt": {"name": "Thorns", "property": Attributes.ARMOR, "value": 1, "duration": 1, "effect_type": EffectType.ATTRIBUTE},
 	
-	"Thumper": {"name": "Hop", "property": SpecialStat.MOVE_RANGE, "value": 2, "duration": permanent, "effect_type": EffectType.STATS, "effect_target": EffectTarget.SELF},
+	"Thumper": {"name": "Hop", "property": SpecialStat.MOVE_RANGE, "value": 2, "duration": permanent, "effect_type": EffectType.STATS},
 	
-	"Pilypile": {"name": "Taunt", "property": SpecialStat.GUARD_RANGE, "value": 1, "duration": permanent, "effect_type": EffectType.STATS, "effect_target": EffectTarget.SELF},
+	"Pilypile": {"name": "Taunt", "property": SpecialStat.GUARD_RANGE, "value": 1, "duration": permanent, "effect_type": EffectType.STATS},
 	
-	"Mandrake": {"name": "Meditate", "property": Attributes.BATTERY, "value": 2, "duration": permanent, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.SELF},
+	"Mandrake": {"name": "Meditate", "property": Attributes.BATTERY, "value": 2, "duration": permanent, "effect_type": EffectType.ATTRIBUTE},
 	
-	"Eyecatcher": {"name": "Hex", "property": Attributes.BATTERY, "value": -2, "duration": permanent, "effect_type": EffectType.ATTRIBUTE, "effect_target": EffectTarget.OTHER}
+	"Eyecatcher": {"name": "Hex", "property": Attributes.BATTERY, "value": -2, "duration": permanent, "effect_type": EffectType.ATTRIBUTE}
 	}
 	
 const sounds = {
