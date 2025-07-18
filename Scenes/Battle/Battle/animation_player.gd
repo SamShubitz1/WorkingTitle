@@ -18,7 +18,7 @@ func start(animation: Dictionary, current_player: Character, target: Character, 
 		target_position.x += animation.offset
 			
 	self.position = target_position
-	self.z_index = z_index + 1
+	self.z_index = current_player.z_index + 1
 	self.play(animation.name)
 
 	await get_tree().create_timer(animation.duration).timeout
