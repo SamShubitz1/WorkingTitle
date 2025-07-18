@@ -27,11 +27,13 @@ func resolve_options() -> void:
 			
 		if variant.type == "options_variant": #should be an enum really
 			dialog_tree[variant.branch].options = variant.options
-		elif variant.type == "next_variant":
+		elif variant.type == "next_variant": #for replacing a tree option
 			for branch in dialog_tree.keys().slice(2):
 				for option in dialog_tree[branch].options:
 					if option.name == variant.option_name:
 						option.next = variant.next
+		elif variant.type == "default_variant": #for replacing default
+			dialog_tree["default"] = dialog_tree[variant.branch]
 
 func update_tree() -> Dictionary:
 	resolve_options()

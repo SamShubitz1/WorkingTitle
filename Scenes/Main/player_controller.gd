@@ -259,7 +259,7 @@ func start_dialog(dialog_tree: Dictionary) -> void:
 func enter_battle_scene(object) -> void:
 	save_state()
 	save_data()
-	game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
+	await game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	match player.current_direction:

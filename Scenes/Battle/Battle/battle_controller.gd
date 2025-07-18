@@ -436,7 +436,7 @@ func get_enemies_by_position():
 func select_enemies():
 	var enemy_pool = []
 	var data = battle_scene.get_battle_data().data #fix this
-	if data is Node:
+	if data is Node: #CHECK LATER
 		enemy_pool.append_array(["Thumper", "Runt", "Mandrake"])
 	else:
 		enemy_pool = data

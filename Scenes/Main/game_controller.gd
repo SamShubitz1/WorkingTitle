@@ -1,8 +1,11 @@
 extends Node2D
 
+@onready var fade_to_black = $FadeToBlack
+
 var battle_res = "res://Scenes/Battle/Battle/battle_scene.tscn"
 var overworld_res = "res://Scenes/Main/overworld.tscn"
 var current_scene
+var is_loading = false
 
 func _ready() -> void:
 	var overworld_scene = load(overworld_res)
@@ -11,19 +14,32 @@ func _ready() -> void:
 	current_scene = overworld
 
 func switch_to_scene(next_scene: Data.Scenes, data: Dictionary = {}):
+	if is_loading:
+		return
+	else:
+		is_loading = true
+
 	var resource = get_scene_resource(next_scene)
 	var loaded_scene = load(resource)
 	var scene = loaded_scene.instantiate()
 	
 	if !data.is_empty():
 		scene.init(data)
-	
-	#this prevents inputs firing between scene transition
-	await get_tree().create_timer(0.1).timeout
+		
+	await play_transition()
 		
 	current_scene.queue_free()
 	add_child(scene)
+	fade_to_black.stop()
+	fade_to_black.visible = false
 	current_scene = scene
+	is_loading = false
+	
+func play_transition():
+	fade_to_black.visible = true
+	fade_to_black.play()
+	await get_tree().create_timer(1).timeout
+
 
 func get_scene_resource(scene: Data.Scenes) -> String:
 	var resource: String
