@@ -120,10 +120,7 @@ func handle_ability(event: Dictionary) -> void:
 		update_health_display()
 		
 		var offset = event.target.position
-		for digit in str(damage_result):
-			var current_kapow = get_kapow()
-			current_kapow.display_digit(int(digit), offset)
-			offset.x += 20
+		play_damage_animation(offset, damage_result)
 			
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
@@ -161,6 +158,12 @@ func handle_end_turn() -> void:
 	if effect_name:
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " is no longer " + effect_name + "!", "duration": dialog_duration, "emitter": current_player})
 		
+	if selected_ability.is_empty():
+		passive_manager.resolve_passive(current_player, "Meditate")
+	elif selected_ability.damage.type == Data.DamageType.NONE:
+		selected_ability = {}
+		passive_manager.resolve_passive(current_player, "Meditate")
+		
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
@@ -173,6 +176,12 @@ func handle_end_turn() -> void:
 
 func handle_retreat() -> void:
 	game_controller.switch_to_scene(Data.Scenes.OVERWORLD)
+
+func play_damage_animation(offset: Vector2, damage_result: int) -> void:
+	for digit in str(damage_result):
+		var current_kapow = get_kapow()
+		current_kapow.display_digit(int(digit), offset)
+		offset.x += 20
 
 func play_dialog(text: String, should_log: bool) -> void:
 	dialog.text = text
@@ -400,7 +409,7 @@ func end_turn() -> void:
 	cursor.disable()
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
-
+	
 func get_targets(target_cells: Array, check_movement: bool = false) -> Array[Character]:
 	var selected_targets: Array[Character]
 	for cell in target_cells: # move to base grids
@@ -416,8 +425,8 @@ func add_players() -> void:
 	
 	var mage = build_character("Mage", Data.Alliance.HERO, Vector2i(2,1))
 	players.append(mage)
-	var runt = build_character("Pilypile", Data.Alliance.HERO, Vector2i(2,2))
-	players.append(runt)
+	var pilypile = build_character("Pilypile", Data.Alliance.HERO, Vector2i(2,2))
+	players.append(pilypile)
 	var thumper = build_character("Thumper", Data.Alliance.HERO, Vector2i(2,0))
 	players.append(thumper)
 
@@ -576,6 +585,8 @@ func build_character(char_name: String, char_alliance: Data.Alliance, char_posit
 	add_child(char)
 	set_position_by_grid_coords(char)
 	battle_id += 1
+	passive_manager.resolve_passive(char, "Hop")
+	passive_manager.resolve_passive(char, "Hex")
 	return char
 
 func select_random(number_of_targets: int) -> void:

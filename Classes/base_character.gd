@@ -23,6 +23,7 @@ var role: Data.MachineRole
 
 var base_attributes = {}
 var current_attributes = {}
+var passive = {}
 
 var items: Array
 
@@ -37,12 +38,11 @@ var grid_position: Vector2i
 var guardian: Character = null
 var is_aiming: bool
 var mobility_changed: bool
-var movement_range = Vector2i(1, 1)
+var move_range = Vector2i(1, 1)
 var has_moved: bool = false
 
 var turn_count: int
 var battle_id: int
-
 
 func init(player_id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_sound: AudioStreamPlayer, char_health: ProgressBar, energy: int, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
 	self.battle_id = player_id
@@ -50,6 +50,8 @@ func init(player_id: int, char_name: String, char_attributes: Dictionary, char_a
 	self.alliance = char_alliance
 	self.sprite = char_sprite
 	self.sound = char_sound
+	
+	passive = GameData.passives[char_name]
 	
 	if alliance == Data.Alliance.ENEMY:
 		flip_sprite()
@@ -68,7 +70,7 @@ func init(player_id: int, char_name: String, char_attributes: Dictionary, char_a
 
 func set_grid_position(next_position: Vector2i):
 	self.grid_position = next_position
-	self.z_index = 3 - grid_position.y
+	self.z_index = (3 - grid_position.y) * 2
 	
 func set_health() -> void:
 	health_bar.max_value = max_health
@@ -140,7 +142,7 @@ func resolve_effect(effect: Dictionary):
 	else:
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})
 		
-	resolve_stat_effects()
+	resolve_special_stats()
 	resolve_status_effects()
 	
 func check_success(selected_ability: Dictionary) -> bool:
@@ -242,8 +244,7 @@ func resolve_status_effects() -> void:
 		if current_attributes[attribute] < 0:
 			current_attributes[attribute] = 0;
 			
-func resolve_stat_effects():
-	print(char_name, " AP before stats effects " , action_points )
+func resolve_special_stats():
 	for effect in status_effects:
 		if effect.type == Data.EffectType.STATS:
 			match effect.property:
@@ -251,8 +252,9 @@ func resolve_stat_effects():
 					action_points += effect.value
 				Data.SpecialStat.HP:
 					health_bar.value += effect.value
+				Data.SpecialStat.MOVE_RANGE:
+					move_range *= effect.value
 			status_effects = status_effects.filter(func(e): return e != effect)
-	print(char_name, " AP after resolve stat effects " , action_points )
 	
 func decrement_status_effects():
 	for status in status_effects:
@@ -263,6 +265,8 @@ func decrement_status_effects():
 	resolve_status_effects()
 	
 	for status in status_effects:
+		if status.value == -1:
+			continue
 		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)
 			var effect_name: String

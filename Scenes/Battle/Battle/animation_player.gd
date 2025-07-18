@@ -18,7 +18,7 @@ func start(animation: Dictionary, current_player: Character, target: Character, 
 		target_position.x += animation.offset
 			
 	self.position = target_position
-	self.z_index = z_index + 1
+	self.z_index = current_player.z_index + 1
 	self.play(animation.name)
 
 	await get_tree().create_timer(animation.duration).timeout
@@ -38,4 +38,3 @@ func display_digit(digit: int, offset: Vector2i) -> void:
 		self.position.y -= 8
 		self.modulate.a -= .1
 		await get_tree().create_timer(0.1).timeout
-		
