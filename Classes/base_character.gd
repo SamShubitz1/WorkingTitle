@@ -137,7 +137,7 @@ func resolve_attribute_bonuses(selected_ability: Dictionary):
 		return multiplier
 
 func resolve_effect(effect: Dictionary):
-	if effect.effect_type.has("duration"):
+	if effect.has("duration"):
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value, "duration": effect.duration})
 	else:
 		update_status({"type": effect.effect_type, "property": effect.property, "value": effect.value})

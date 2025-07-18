@@ -14,6 +14,8 @@ func resolve_passive(player: Character, active_passive: String, ability: Diction
 			resolve_cascade(player, ability)
 		"Thorn":
 			player.resolve_effect(player.passive)
+		"Meditate":
+			player.resolve_effect(player.passive)
 			
 func resolve_cascade(player: Character, ability: Dictionary):
 	var ability_list = move_history[player.battle_id]

@@ -158,6 +158,12 @@ func handle_end_turn() -> void:
 	if effect_name:
 		add_event({"type": EventType.DIALOG, "text": current_player.char_name + " is no longer " + effect_name + "!", "duration": dialog_duration, "emitter": current_player})
 		
+	if selected_ability.is_empty():
+		passive_manager.resolve_passive(current_player, "Meditate")
+	elif selected_ability.damage.type == Data.DamageType.NONE:
+		selected_ability = {}
+		passive_manager.resolve_passive(current_player, "Meditate")
+		
 	increment_turn_queue()
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
@@ -403,7 +409,7 @@ func end_turn() -> void:
 	cursor.disable()
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
-
+	
 func get_targets(target_cells: Array, check_movement: bool = false) -> Array[Character]:
 	var selected_targets: Array[Character]
 	for cell in target_cells: # move to base grids
@@ -440,8 +446,7 @@ func select_enemies():
 	var enemy_pool = []
 	var data = battle_scene.get_battle_data().data #fix this
 	if data is Node:
-		enemy_pool.append("Runt")
-		#enemy_pool.append_array(["Thumper", "Runt", "Mandrake"])
+		enemy_pool.append_array(["Thumper", "Runt", "Mandrake"])
 	else:
 		enemy_pool = data
 	
