@@ -26,12 +26,12 @@ func switch_to_scene(next_scene: Data.Scenes, data: Dictionary = {}):
 	if !data.is_empty():
 		scene.init(data)
 		
-	await play_transition()
+	play_transition()
+	await get_tree().create_timer(0.8).timeout
 		
 	current_scene.queue_free()
 	add_child(scene)
-	fade_to_black.stop()
-	fade_to_black.visible = false
+	
 	current_scene = scene
 	is_loading = false
 	
@@ -39,6 +39,8 @@ func play_transition():
 	fade_to_black.visible = true
 	fade_to_black.play()
 	await get_tree().create_timer(1).timeout
+	fade_to_black.stop()
+	fade_to_black.visible = false
 
 
 func get_scene_resource(scene: Data.Scenes) -> String:
