@@ -10,6 +10,7 @@ class_name BaseObject
 
 var grid_coords: Vector2i
 var dialog_tree: Dictionary
+var dialog_box: DialogBox 
 
 func _ready() -> void:
 	grid_coords = map_controller.point_to_grid(position)
@@ -39,6 +40,25 @@ func update_tree() -> Dictionary:
 	resolve_options()
 	return dialog_tree
  
+func start_dialog() -> void:
+	var updated_tree = update_tree()
+	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
+	dialog_box = dialog_scene.instantiate()
+	get_parent().add_child(dialog_box)
+	dialog_box.set_tree(updated_tree)
+	dialog_box.position = self.position ####NEEDS FIX
+#dialog_box.update_selected_option(input_direction)
+
+func update_selected_option(input_direction: Vector2i):
+	if dialog_box != null:
+		dialog_box.update_selected_option(input_direction)
+
+func select_option():
+	if dialog_box != null:
+		var close_dialog = dialog_box.select_option()
+		return close_dialog
+	return true
+
 func kill() -> void:
 	map_controller.set_object_at_coords(null, grid_coords)
 	queue_free()

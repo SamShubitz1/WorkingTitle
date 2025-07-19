@@ -27,8 +27,8 @@ func switch_to_scene(next_scene: Data.Scenes, data: Dictionary = {}):
 		scene.init(data)
 		
 	play_transition()
-	await get_tree().create_timer(0.8).timeout
-		
+	await get_tree().create_timer(0.7).timeout
+	
 	current_scene.queue_free()
 	add_child(scene)
 	

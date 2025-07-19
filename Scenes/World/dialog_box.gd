@@ -56,6 +56,7 @@ func select_option() -> bool:
 	else:
 		update_dialog(next_dialog)
 		return false
+	
 		
 # this will eventually be generalized to iterate through region-specific dictionaries of dialog flags
 func set_flags(branch: String) -> void:

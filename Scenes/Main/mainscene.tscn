@@ -120,13 +120,14 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 4.0
+"speed": 16.0
 }]
 
 [node name="MainScene" type="Node2D" groups=["MyControllers"]]
 script = ExtResource("1_2nx2o")
 
 [node name="FadeToBlack" type="AnimatedSprite2D" parent="."]
+visible = false
 z_index = 10
 position = Vector2(700, 450)
 sprite_frames = SubResource("SpriteFrames_gseum")

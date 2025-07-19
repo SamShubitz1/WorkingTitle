@@ -9,7 +9,7 @@ extends Node2D
 signal player_position_updated(grid_position: Vector2i)
 
 var dialog_mode: bool = false
-var dialog_box: DialogBox
+var dialog_object: BaseObject
 
 var weather = null
 
@@ -77,8 +77,8 @@ func _input(_e) -> void:
 	if !dialog_mode:
 		return
 	var input_direction = get_direction()
-	if input_direction != Vector2i.ZERO && dialog_box != null:
-		dialog_box.update_selected_option(input_direction)
+	if input_direction != Vector2i.ZERO:
+		dialog_object.update_selected_option(input_direction)
 	
 # used for dialog and movement
 func get_direction() -> Vector2i:
@@ -134,8 +134,8 @@ func finish_move(dest_pos: Vector2i) -> void:
 	emit_signal("player_position_updated", player.grid_position)
 	
 func player_action_pressed() -> void:
-	if dialog_mode && dialog_box != null:
-		var close_dialog = dialog_box.select_option()
+	if dialog_mode:
+		var close_dialog = dialog_object.select_option()
 		if close_dialog:
 			dialog_mode = false
 		return
@@ -166,8 +166,9 @@ func interact(object: Node):
 		if object.battle_ready:
 			enter_battle_scene(object)
 		elif !object.dialog_tree.is_empty():
-			var updated_tree = object.update_tree()
-			start_dialog(updated_tree)
+			dialog_mode = true
+			dialog_object = object
+			var updated_tree = object.start_dialog()
 	elif object is BaseDoor:
 		player.position = object.spawn_position
 		player.grid_position = map_controller.point_to_grid(player.position)
@@ -247,14 +248,6 @@ func overlaps(limits: Dictionary, player: Node) -> bool:
 	if player.position.x > limits["left"] && player.position.x < limits["right"] && player.position.y > limits["top"] && player.position.y < limits["bottom"]:
 		return true
 	return false
-	
-func start_dialog(dialog_tree: Dictionary) -> void:
-	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
-	dialog_box = dialog_scene.instantiate()
-	get_parent().add_child(dialog_box)
-	dialog_box.set_tree(dialog_tree)
-	dialog_box.position = player.position
-	dialog_mode = true 
 	
 func enter_battle_scene(object) -> void:
 	save_state()
