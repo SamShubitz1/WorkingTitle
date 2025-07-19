@@ -135,9 +135,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 	
 func player_action_pressed() -> void:
 	if dialog_mode:
-		var close_dialog = dialog_object.select_option()
-		if close_dialog:
-			dialog_mode = false
+		dialog_mode = dialog_object.select_option()
 		return
 	elif dialog_mode:
 		return

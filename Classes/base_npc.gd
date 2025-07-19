@@ -16,8 +16,6 @@ enum BehaviorMode
 @export var patrol_move_list := [Vector2i.LEFT, Vector2i.DOWN, Vector2i.RIGHT, Vector2i.UP]
 @export var number_of_tiles: int = 1
 
-@onready var sprite := $NPCSprite
-
 var range_limits: Dictionary
 
 var behavior_mode: BehaviorMode = BehaviorMode.PATROL 

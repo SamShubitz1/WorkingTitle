@@ -48,15 +48,9 @@ func update_selected_option(direction: Vector2i) -> void:
 	options[option_index].modulate = Color(1, 1, 0)
 
 # updates dialog or quits scene based on option, called on player action press
-func select_option() -> bool:
+func select_option(): #this a string
 	var next_dialog = current_options[option_index].get("next")
-	if !next_dialog:
-		self.queue_free()
-		return true
-	else:
-		update_dialog(next_dialog)
-		return false
-	
+	return next_dialog
 		
 # this will eventually be generalized to iterate through region-specific dictionaries of dialog flags
 func set_flags(branch: String) -> void:

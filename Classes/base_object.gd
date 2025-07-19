@@ -4,6 +4,7 @@ class_name BaseObject
 
 @onready var map_controller = $"/root/MainScene/Overworld/MapController"
 @onready var game_controller = get_tree().current_scene
+@onready var sprite = get_child(0)
 
 @export var battle_ready: bool = false
 @export var neighbor_coords: Array
@@ -54,10 +55,17 @@ func update_selected_option(input_direction: Vector2i):
 		dialog_box.update_selected_option(input_direction)
 
 func select_option():
-	if dialog_box != null:
-		var close_dialog = dialog_box.select_option()
-		return close_dialog
-	return true
+	if dialog_box == null:
+		return false
+		
+	var selected_dialog = dialog_box.select_option()
+	
+	if selected_dialog == null:
+		dialog_box.queue_free()
+		return false
+	else:
+		dialog_box.update_dialog(selected_dialog)
+		return true
 
 func kill() -> void:
 	map_controller.set_object_at_coords(null, grid_coords)
