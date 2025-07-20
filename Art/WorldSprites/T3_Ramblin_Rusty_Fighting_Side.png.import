@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl50c3y6n2qc2"
-path="res://.godot/imported/fade_to_black.png-300f3a3b3b3beb6d1625b4c3350383a9.ctex"
+uid="uid://bgavshi82ojw4"
+path="res://.godot/imported/T3_Ramblin_Rusty_Fighting_Side.png-bf371837ebe38652c73a8f938a9349cf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/UI/fade_to_black.png"
-dest_files=["res://.godot/imported/fade_to_black.png-300f3a3b3b3beb6d1625b4c3350383a9.ctex"]
+source_file="res://Art/WorldSprites/T3_Ramblin_Rusty_Fighting_Side.png"
+dest_files=["res://.godot/imported/T3_Ramblin_Rusty_Fighting_Side.png-bf371837ebe38652c73a8f938a9349cf.ctex"]
 
 [params]
 
