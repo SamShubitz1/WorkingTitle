@@ -4,7 +4,7 @@ var reticle_offset = Vector2i(0, 10)
 
 func _ready() -> void:
 	self.hide()
-	self.z_index = 2
+	self.z_index = 7
 	
 func move(next_position: Vector2i) -> void:
 	self.show()

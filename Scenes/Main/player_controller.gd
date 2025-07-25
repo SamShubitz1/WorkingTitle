@@ -47,7 +47,7 @@ func process_player_movement(delta) -> void:
 
 # used for overworld movement and dialog/menu accept
 func process_player_inputs() -> void:
-	if player.is_moving:
+	if player.is_moving || game_controller.is_loading:
 		return
 		
 	if Input.is_action_just_pressed("ui_accept"):
