@@ -1074,7 +1074,7 @@ sprite_frames = SubResource("SpriteFrames_mhdvp")
 animation = &"EggCharger"
 
 [node name="Newsboy" type="Node2D" parent="Doodads"]
-position = Vector2(352, 448)
+position = Vector2(224, 448)
 script = ExtResource("18_krwbj")
 
 [node name="Newsboy" type="AnimatedSprite2D" parent="Doodads/Newsboy"]
