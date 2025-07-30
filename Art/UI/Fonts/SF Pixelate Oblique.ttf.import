@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://cpi4ovpinl2nq"
-path="res://.godot/imported/PressStart2P-Regular.ttf-864cfa802db52b2ee54a77f2cf6db5ac.fontdata"
+uid="uid://doxoih5iv8dp"
+path="res://.godot/imported/SF Pixelate Oblique.ttf-e666a070a3dd78aadb64315dd862baf8.fontdata"
 
 [deps]
 
-source_file="res://Art/UI/Fonts/PressStart2P-Regular.ttf"
-dest_files=["res://.godot/imported/PressStart2P-Regular.ttf-864cfa802db52b2ee54a77f2cf6db5ac.fontdata"]
+source_file="res://Art/UI/Fonts/SF Pixelate Oblique.ttf"
+dest_files=["res://.godot/imported/SF Pixelate Oblique.ttf-e666a070a3dd78aadb64315dd862baf8.fontdata"]
 
 [params]
 

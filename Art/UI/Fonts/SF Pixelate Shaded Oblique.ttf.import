@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://dxwtsuvuhxvji"
-path="res://.godot/imported/Big Pixel Shadow demo.otf-e3ab521ab5186d6a9fcbee0be09744f2.fontdata"
+uid="uid://bfwugih06pgg"
+path="res://.godot/imported/SF Pixelate Shaded Oblique.ttf-6884ab3933e8947654959804a951303e.fontdata"
 
 [deps]
 
-source_file="res://Art/UI/Fonts/Big Pixel Shadow demo.otf"
-dest_files=["res://.godot/imported/Big Pixel Shadow demo.otf-e3ab521ab5186d6a9fcbee0be09744f2.fontdata"]
+source_file="res://Art/UI/Fonts/SF Pixelate Shaded Oblique.ttf"
+dest_files=["res://.godot/imported/SF Pixelate Shaded Oblique.ttf-6884ab3933e8947654959804a951303e.fontdata"]
 
 [params]
 

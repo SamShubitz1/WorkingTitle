@@ -133,3 +133,5 @@ z_index = 10
 position = Vector2(640, 384)
 scale = Vector2(1.82857, 1.70667)
 sprite_frames = SubResource("SpriteFrames_gseum")
+
+[node name="UI" type="CanvasLayer" parent="."]

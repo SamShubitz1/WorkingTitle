@@ -1,98 +1,122 @@
 [gd_scene load_steps=4 format=3 uid="uid://bmotudh6qa1ic"]
 
 [ext_resource type="Script" path="res://Scenes/World/dialog_box.gd" id="1_xa5un"]
-[ext_resource type="FontFile" uid="uid://dpkboxemfbcvo" path="res://Art/UI/Fonts/advanced_pixel-7.ttf" id="2_dbynj"]
+[ext_resource type="FontFile" uid="uid://ctvniqkse3d8c" path="res://Art/UI/Fonts/PixelMaster.ttf" id="2_bkxnl"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbn7a"]
-bg_color = Color(0, 0, 0, 0.9)
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.386456, 0.381665, 0.36866, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
 
-[node name="DialogBoxCanvas" type="CanvasLayer"]
-
-[node name="DialogBox" type="Control" parent="."]
+[node name="DialogBox" type="Control"]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = -384.0
+offset_right = 640.0
+offset_bottom = 384.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_xa5un")
 
-[node name="DialogContainer" type="Panel" parent="DialogBox"]
+[node name="DialogContainer" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -600.0
+offset_top = -308.0
+offset_right = 600.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cbn7a")
+
+[node name="Dialog" type="RichTextLabel" parent="DialogContainer"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -350.0
-offset_top = -250.0
-offset_right = 350.0
-offset_bottom = 250.0
+offset_left = -550.0
+offset_top = -130.0
+offset_right = 550.0
+offset_bottom = 70.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_cbn7a")
-
-[node name="Dialog" type="RichTextLabel" parent="DialogBox/DialogContainer"]
-layout_mode = 0
-offset_left = 2.0
-offset_top = 15.0
-offset_right = 348.0
-offset_bottom = 155.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_fonts/normal_font = ExtResource("2_dbynj")
-theme_override_font_sizes/normal_font_size = 20
+theme_override_fonts/normal_font = ExtResource("2_bkxnl")
+theme_override_font_sizes/normal_font_size = 52
 bbcode_enabled = true
 text = "[center]
 "
 
-[node name="Options" type="HBoxContainer" parent="DialogBox/DialogContainer"]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 19.0
-offset_right = 313.0
-offset_bottom = 197.0
-scale = Vector2(1.12, 1)
+[node name="Options" type="HBoxContainer" parent="DialogContainer"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -570.0
+offset_top = -184.0
+offset_right = 570.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
 alignment = 2
 
-[node name="Option" type="Label" parent="DialogBox/DialogContainer/Options"]
+[node name="Option" type="Label" parent="DialogContainer/Options"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
-theme_override_fonts/font = ExtResource("2_dbynj")
-theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("2_bkxnl")
+theme_override_font_sizes/font_size = 52
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Option2" type="Label" parent="DialogBox/DialogContainer/Options"]
+[node name="Option2" type="Label" parent="DialogContainer/Options"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
-theme_override_fonts/font = ExtResource("2_dbynj")
-theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("2_bkxnl")
+theme_override_font_sizes/font_size = 52
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Option3" type="Label" parent="DialogBox/DialogContainer/Options"]
+[node name="Option3" type="Label" parent="DialogContainer/Options"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
-theme_override_fonts/font = ExtResource("2_dbynj")
-theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("2_bkxnl")
+theme_override_font_sizes/font_size = 52
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Option4" type="Label" parent="DialogBox/DialogContainer/Options"]
+[node name="Option4" type="Label" parent="DialogContainer/Options"]
 custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
-theme_override_fonts/font = ExtResource("2_dbynj")
-theme_override_font_sizes/font_size = 20
+theme_override_fonts/font = ExtResource("2_bkxnl")
+theme_override_font_sizes/font_size = 52
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bth10royuayle"
-path="res://.godot/imported/Big Pixel Light demo.otf-dc7fb29995f2c7cef3c09a57c8316f05.fontdata"
+uid="uid://cfwmd124epjb8"
+path="res://.godot/imported/SF Pixelate Shaded.ttf-253801b5485bab3fbd0a9a46af95f749.fontdata"
 
 [deps]
 
-source_file="res://Art/UI/Fonts/Big Pixel Light demo.otf"
-dest_files=["res://.godot/imported/Big Pixel Light demo.otf-dc7fb29995f2c7cef3c09a57c8316f05.fontdata"]
+source_file="res://Art/UI/Fonts/SF Pixelate Shaded.ttf"
+dest_files=["res://.godot/imported/SF Pixelate Shaded.ttf-253801b5485bab3fbd0a9a46af95f749.fontdata"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqr7lmhjj646q"
-path="res://.godot/imported/big_pixel_800.png-1ecfca2b783116ccf7fb8eece831b6cc.ctex"
+uid="uid://dxfbrwet7lwh7"
+path="res://.godot/imported/SF Pixelate Sample.jpg-cdb5f6d7cfd8f355c2fd93fc8f5a1cd2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Art/UI/Fonts/big_pixel_800.png"
-dest_files=["res://.godot/imported/big_pixel_800.png-1ecfca2b783116ccf7fb8eece831b6cc.ctex"]
+source_file="res://Art/UI/Fonts/SF Pixelate Sample.jpg"
+dest_files=["res://.godot/imported/SF Pixelate Sample.jpg-cdb5f6d7cfd8f355c2fd93fc8f5a1cd2.ctex"]
 
 [params]
 

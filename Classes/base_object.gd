@@ -44,9 +44,8 @@ func update_tree() -> Dictionary:
 func start_dialog() -> void:
 	var updated_tree = update_tree()
 	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
-	var dialog_box_canvas = dialog_scene.instantiate()
-	dialog_box = dialog_box_canvas.get_child(0)
-	game_controller.add_child(dialog_box_canvas)
+	dialog_box = dialog_scene.instantiate()
+	game_controller.get_node("UI").add_child(dialog_box)
 	dialog_box.set_tree(updated_tree)
 	#dialog_box.position = self.position ####NEEDS FIX
 #dialog_box.update_selected_option(input_direction)
