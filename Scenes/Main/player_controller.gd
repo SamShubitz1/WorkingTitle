@@ -82,6 +82,13 @@ func get_direction() -> Vector2i:
 		
 	return input_direction
 
+func _input(_e) -> void:
+	if !dialog_mode:
+		return
+	var input_direction = get_direction()
+	if input_direction != Vector2i.ZERO:
+		dialog_object.update_selected_option(input_direction)
+
 func check_collision() -> void:
 	var dest_coords = player.get_grid_position() + player.current_direction
 
@@ -339,7 +346,7 @@ func load_state() -> bool:
 func add_pause_menu() -> void:
 	var pause_menu_scene = load("res://Scenes/StartMenu/start_menu.tscn")
 	pause_menu = pause_menu_scene.instantiate()
-	add_child(pause_menu)
+	game_controller.get_node("UI").add_child(pause_menu)
 	pause_menu.close()
 
 # load player data from disk

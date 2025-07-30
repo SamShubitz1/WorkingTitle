@@ -5,15 +5,15 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cbn7a"]
 bg_color = Color(0, 0, 0, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-border_color = Color(0.386456, 0.381665, 0.36866, 1)
-corner_radius_top_left = 20
-corner_radius_top_right = 20
-corner_radius_bottom_right = 20
-corner_radius_bottom_left = 20
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.851769, 0.851769, 0.851769, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [node name="DialogBox" type="Control"]
 layout_mode = 3
@@ -74,9 +74,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -570.0
-offset_top = -184.0
+offset_top = -186.0
 offset_right = 570.0
-offset_bottom = -6.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 alignment = 2
