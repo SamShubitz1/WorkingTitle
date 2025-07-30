@@ -59,7 +59,6 @@ func select_option():
 		return false
 		
 	var selected_dialog = dialog_box.select_option()
-	
 	if selected_dialog == null:
 		dialog_box.queue_free()
 		return false

@@ -71,14 +71,6 @@ func process_player_inputs() -> void:
 		check_collision()
 	else:
 		set_player_animation(player.current_direction, true)
-
-# used for dialog/menu navigation
-func _input(_e) -> void:
-	if !dialog_mode:
-		return
-	var input_direction = get_direction()
-	if input_direction != Vector2i.ZERO:
-		dialog_object.update_selected_option(input_direction)
 	
 # used for dialog and movement
 func get_direction() -> Vector2i:

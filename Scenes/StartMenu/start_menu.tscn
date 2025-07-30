@@ -1,310 +1,62 @@
-[gd_scene load_steps=39 format=3 uid="uid://cl1ne5owbqs66"]
+[gd_scene load_steps=3 format=3 uid="uid://cl1ne5owbqs66"]
 
 [ext_resource type="Script" path="res://Scenes/StartMenu/start_menu.gd" id="1_ugx30"]
-[ext_resource type="Texture2D" uid="uid://bq0kq1e8rcwje" path="res://Scenes/StartMenu/Main_Menu_Button4.png" id="2_pqfd8"]
 [ext_resource type="Script" path="res://Scenes/StartMenu/start_menu_cursor.gd" id="2_qhcmj"]
-[ext_resource type="Script" path="res://Scenes/StartMenu/main_menu.gd" id="2_xe1ol"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ojhtm"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(0, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_det71"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(192, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_17sf5"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(384, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_87220"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(576, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y3n36"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(768, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ub7qw"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(960, 0, 192, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_mvg7k"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ojhtm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_det71")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_17sf5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_87220")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_y3n36")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ub7qw")
-}],
-"loop": false,
-"name": &"default",
-"speed": 20.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tkfid"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(0, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bmb1h"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(192, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_f08bl"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(384, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4u007"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(768, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_x6bo6"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(960, 0, 192, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_psifr"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tkfid")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bmb1h")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_f08bl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4u007")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_x6bo6")
-}],
-"loop": false,
-"name": &"default",
-"speed": 20.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bqb46"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(0, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i2u71"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(192, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_lq504"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(384, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1w4rr"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(576, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m1sxl"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(768, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_57fsh"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(960, 0, 192, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_0t1ks"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_bqb46")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_i2u71")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_lq504")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1w4rr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m1sxl")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_57fsh")
-}],
-"loop": false,
-"name": &"default",
-"speed": 20.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vxa06"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(0, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_1d32p"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(192, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_786ow"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(384, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_hq2xv"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(576, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_p8tv6"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(768, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_s08d6"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(960, 0, 192, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_cuaxw"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vxa06")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_1d32p")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_786ow")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hq2xv")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_p8tv6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_s08d6")
-}],
-"loop": false,
-"name": &"default",
-"speed": 20.0
-}]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2wnen"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(0, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_a8ajc"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(192, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mmjd7"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(384, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_womt4"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(576, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_mtoum"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(768, 0, 192, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tyq0r"]
-atlas = ExtResource("2_pqfd8")
-region = Rect2(960, 0, 192, 64)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_es1o1"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_2wnen")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_a8ajc")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mmjd7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_womt4")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_mtoum")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_tyq0r")
-}],
-"loop": false,
-"name": &"default",
-"speed": 20.0
-}]
 
 [node name="StartMenu" type="Control"]
 layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1280.0
+offset_bottom = -768.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ugx30")
 
 [node name="Background" type="ColorRect" parent="."]
-z_index = 6
 layout_mode = 0
 offset_right = 1280.0
 offset_bottom = 768.0
-scale = Vector2(0.35, 0.35)
-color = Color(0, 0.00392157, 0, 0.501961)
+color = Color(0.00175109, 0.00211988, 0.000130405, 1)
 
 [node name="MainMenu" type="Control" parent="."]
 anchors_preset = 0
-offset_left = 448.0
-offset_right = 1088.0
+offset_left = 640.0
+offset_right = 1280.0
 offset_bottom = 768.0
-scale = Vector2(0.35, 0.35)
-script = ExtResource("2_xe1ol")
 
 [node name="Menu" type="VBoxContainer" parent="MainMenu"]
-z_index = 6
 layout_mode = 0
-offset_left = -640.0
+offset_right = 640.0
 offset_bottom = 768.0
 
-[node name="MainMenu0" type="AnimatedSprite2D" parent="MainMenu/Menu"]
-position = Vector2(448, 96)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_mvg7k")
+[node name="Pokedex" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Pokédex"
 
-[node name="MainMenu1" type="AnimatedSprite2D" parent="MainMenu/Menu"]
-position = Vector2(448, 240)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_psifr")
+[node name="Pokemon" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Pokémon
+"
 
-[node name="MainMenu2" type="AnimatedSprite2D" parent="MainMenu/Menu"]
-position = Vector2(448, 384)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_0t1ks")
+[node name="Items" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Items
+"
 
-[node name="MainMenu3" type="AnimatedSprite2D" parent="MainMenu/Menu"]
-position = Vector2(448, 528)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_cuaxw")
+[node name="Save" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Save"
 
-[node name="MainMenu4" type="AnimatedSprite2D" parent="MainMenu/Menu"]
-position = Vector2(448, 672)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_es1o1")
+[node name="Exit" type="Button" parent="MainMenu/Menu"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Exit"
 
 [node name="PokedexLog" type="Control" parent="."]
 layout_mode = 3
