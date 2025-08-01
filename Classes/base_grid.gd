@@ -4,6 +4,9 @@ class_name BaseGrid
 
 var current_grid = {}
 
+func set_grid() -> void:
+	pass
+	
 func set_object_at_grid_position(object: Node) -> void: # could eventually define non-char grid objects
 	current_grid[object.grid_position] = object
 
@@ -44,6 +47,20 @@ func check_valid_targets(target_cells: Array, target_type: Data.TargetType, chec
 			is_valid_target = true
 			
 	return is_valid_target
+
+func set_position_by_grid_coords(character: Character) -> void:
+	var y_offsets = {0: 405, 1: 340, 2: 283, 3: 230}
+	var x_offsets = {0: 50, 1: 80, 2: 100, 3: 120 }
+	var enemy_x_offset = 60
+	var coords = character.grid_position
+	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 126, const grid_offset_y = -110
+	var y_pos = 400 + (coords.y * -110)
+	if character.alliance == Data.Alliance.ENEMY:
+		x_pos += enemy_x_offset
+		x_offsets[0] += 130
+		x_offsets[1] += 70
+		x_offsets[2] += 30
+	character.position = Vector2i(x_pos + x_offsets[coords.y], y_offsets[coords.y])
 
 func get_melee_targets(alliance: Data.Alliance, ability: Dictionary, player: Character) -> Array:
 	var x_range: Vector2i

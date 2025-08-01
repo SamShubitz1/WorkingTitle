@@ -163,9 +163,11 @@ func interact(object: Node):
 		if object.battle_ready:
 			enter_battle_scene(object)
 		elif !object.dialog_tree.is_empty():
+			set_player_animation(player.current_direction, true)
 			dialog_mode = true
 			dialog_object = object
-			var updated_tree = object.start_dialog()
+			object.start_dialog()
+			
 	elif object is BaseDoor:
 		player.position = object.spawn_position
 		player.grid_position = map_controller.point_to_grid(player.position)
@@ -249,7 +251,11 @@ func overlaps(limits: Dictionary, player: Node) -> bool:
 func enter_battle_scene(object) -> void:
 	save_state()
 	save_data()
-	await game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
+	
+	if object is BaseObject:
+		await game_controller.switch_to_scene(Data.Scenes.BATTLE, {"NPC": object})
+	elif object is Array:
+		await game_controller.switch_to_scene(Data.Scenes.BATTLE, {"enemy_pool": object})
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	match player.current_direction:

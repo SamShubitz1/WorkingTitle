@@ -137,7 +137,7 @@ func handle_ability(event: Dictionary) -> void:
 func handle_movement(event: Dictionary) -> void:
 	var target = event.target
 	battle_grid.update_grid_object(target, event.next_position)
-	set_position_by_grid_coords(target)
+	battle_grid.set_position_by_grid_coords(target)
 	reticle.move(target.position)
 	
 func handle_guard(event: Dictionary) -> void:
@@ -148,7 +148,7 @@ func handle_guard(event: Dictionary) -> void:
 
 func handle_death(event) -> void:
 	if event.target.is_player:
-		game_controller.switch_to_scene(Data.Scenes.OVERWORLD, {})
+		game_controller.switch_to_scene(Data.Scenes.OVERWORLD)
 	else:
 		event.target.visible = false
 		event.target.sound.play_sound(event.target.char_name, Data.SoundAction.DEATH)
@@ -444,11 +444,11 @@ func get_enemies_by_position():
 
 func select_enemies():
 	var enemy_pool = []
-	var data = battle_scene.get_battle_data().data #fix this
-	if data is Node: #CHECK LATER
-		enemy_pool.append_array(["Thumper", "Runt", "Mandrake"])
-	else:
-		enemy_pool = data
+	var data = battle_scene.get_battle_data()
+	if data.has("NPC"):
+		enemy_pool = ["Thumper", "Mandrake", "Runt", "Mage"]
+	elif data.has("enemy_pool"):
+		enemy_pool = data.enemy_pool
 	
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
@@ -472,20 +472,6 @@ func get_current_player() -> Node:
 	
 #func get_grid_info() -> Dictionary:
 	#return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
-	
-func set_position_by_grid_coords(character: Character) -> void:
-	var y_offsets = {0: 405, 1: 340, 2: 283, 3: 230}
-	var x_offsets = {0: 50, 1: 80, 2: 100, 3: 120 }
-	var enemy_x_offset = 60
-	var coords = character.grid_position
-	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 126, const grid_offset_y = -110
-	var y_pos = 400 + (coords.y * -110)
-	if character.alliance == Data.Alliance.ENEMY:
-		x_pos += enemy_x_offset
-		x_offsets[0] += 130
-		x_offsets[1] += 70
-		x_offsets[2] += 30
-	character.position = Vector2i(x_pos + x_offsets[coords.y], y_offsets[coords.y])
 
 func set_turn_order() -> void:
 	var positions: Array
@@ -583,7 +569,7 @@ func build_character(char_name: String, char_alliance: Data.Alliance, char_posit
 	var char = char_scene.instantiate()
 	char.init(battle_id, char_name, char_info.attributes, char_alliance, char.get_node("CharSprite"), char.get_node("CharSound"), char.get_node("CharHealth"), char_info["base energy"], char_info["base health"], char_info.abilities, char_position, char_info.role)
 	add_child(char)
-	set_position_by_grid_coords(char)
+	battle_grid.set_position_by_grid_coords(char)
 	battle_id += 1
 	passive_manager.resolve_passive(char, "Hop")
 	passive_manager.resolve_passive(char, "Hex")

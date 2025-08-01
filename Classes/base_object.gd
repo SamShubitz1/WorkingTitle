@@ -47,8 +47,6 @@ func start_dialog() -> void:
 	dialog_box = dialog_scene.instantiate()
 	game_controller.get_node("UI").add_child(dialog_box)
 	dialog_box.set_tree(updated_tree)
-	#dialog_box.position = self.position ####NEEDS FIX
-#dialog_box.update_selected_option(input_direction)
 
 func update_selected_option(input_direction: Vector2i):
 	if dialog_box != null:
