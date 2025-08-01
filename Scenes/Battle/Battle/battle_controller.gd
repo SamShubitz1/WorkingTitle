@@ -19,6 +19,8 @@ extends Node2D
 
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
 
+var battle_data: Dictionary
+
 var players: Array[Character]
 var current_player: Character
 var battle_id = 0
@@ -89,7 +91,7 @@ func increment_event_queue() -> void:
 
 		if event.has("duration"):
 			await wait(event.duration)
-			increment_event_queue() # can recursively call itself :)
+			increment_event_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
 	else:
@@ -270,6 +272,7 @@ func prompt_select_target(ability_name: String) -> Dictionary:
 	var hero_ability = GameData.abilities[ability_name]
 	selected_ability = hero_ability
 	play_dialog("Select a target!", false)
+	
 	if hero_ability.shape == Data.AbilityShape.MELEE: #for melee attacks, battle controller passes valid targets to battle menu
 		target_cells = battle_grid.get_melee_targets(Data.Alliance.HERO, hero_ability, current_player)
 	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range, "origin": current_player.grid_position, "target_cells": target_cells}
@@ -443,13 +446,11 @@ func get_enemies_by_position():
 	return positions
 
 func select_enemies():
-	var enemy_pool = []
-	var data = battle_scene.get_battle_data()
-	if data.has("NPC"):
-		enemy_pool = ["Thumper", "Mandrake", "Runt", "Mage"]
-	elif data.has("enemy_pool"):
-		enemy_pool = data.enemy_pool
+	var enemy_pool = battle_data.enemy_pool
 	
+	if enemy_pool.is_empty(): # placeholder default
+		enemy_pool = ["Mandrake", "Runt", "Mage", "Thumper", "Pilypile"]
+		
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
@@ -460,18 +461,14 @@ func select_enemies():
 	
 	return selected_enemies
 	
-#func set_grid_cells() -> Vector2i:
-	# will create grid shape for the batlle
-	#return Vector2i(8, 4)
-	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
 	
 func get_current_player() -> Node:
 	return current_player
 	
-#func get_grid_info() -> Dictionary:
-	#return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
+func get_current_grid() -> Dictionary:
+	return battle_grid.current_grid
 
 func set_turn_order() -> void:
 	var positions: Array
@@ -548,6 +545,8 @@ func update_energy_display() -> void:
 	reserve_energy_display.value = current_player.current_reserve_energy
 	
 func initialize_battle() -> void:
+	battle_data = battle_scene.get_battle_data()
+	battle_grid.set_terrain(battle_data.terrain)
 	dialog = dialog_box[0]
 	
 	add_players()

@@ -3,6 +3,7 @@ extends Node
 class_name Data
 
 const permanent = -1
+const grid_size = Vector2i(8,4)
 
 var GlobalMapControllerRef = 1
 
@@ -14,6 +15,11 @@ enum Scenes {
 enum MainMenuType {
 	MAIN,
 	POKEDEX
+}
+
+enum BattleTerrain {
+	BLOCKED,
+	NONE
 }
 
 enum BattleMenuType {

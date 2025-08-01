@@ -128,7 +128,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 	GameState.current_time += 1
 	if weather != null:
 		weather.position = player.position
-	#check_for_battle()
+	check_for_battle()
 	check_for_camera_bounds()
 	emit_signal("player_position_updated", player.grid_position)
 	
@@ -161,7 +161,7 @@ func close_pause_menu():
 func interact(object: Node):
 	if object is BaseObject:
 		if object.battle_ready:
-			enter_battle_scene(object)
+			enter_battle_scene(object.battle_data)
 		elif !object.dialog_tree.is_empty():
 			set_player_animation(player.current_direction, true)
 			dialog_mode = true
@@ -195,7 +195,7 @@ func check_for_battle() -> void:
 			player.increment_step_count()
 			var random = randi_range(12, 28)
 			if player.get_step_count() >= random:
-				enter_battle_scene(area.enemy_pool)
+				enter_battle_scene({"NPC": null, "terrain": {},"enemy_pool": area.enemy_pool}) #placeholder logic
 		else:
 			player.reset_step_count()
 		
@@ -248,14 +248,10 @@ func overlaps(limits: Dictionary, player: Node) -> bool:
 		return true
 	return false
 	
-func enter_battle_scene(object) -> void:
+func enter_battle_scene(battle_data: Dictionary) -> void:
 	save_state()
 	save_data()
-	
-	if object is BaseObject:
-		await game_controller.switch_to_scene(Data.Scenes.BATTLE, {"NPC": object})
-	elif object is Array:
-		await game_controller.switch_to_scene(Data.Scenes.BATTLE, {"enemy_pool": object})
+	await game_controller.switch_to_scene(Data.Scenes.BATTLE, battle_data)
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	match player.current_direction:

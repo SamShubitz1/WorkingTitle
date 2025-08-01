@@ -46,7 +46,7 @@ func _input(e) -> void:
 			if selected_menu != log_menu:
 				navigate_log()
 		elif Input.is_action_just_pressed("go_back"):
-				go_back()	
+				go_back()
 	update_description()
 
 	if Input.is_action_just_pressed("ui_accept"):

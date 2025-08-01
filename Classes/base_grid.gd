@@ -4,8 +4,15 @@ class_name BaseGrid
 
 var current_grid = {}
 
-func set_grid() -> void:
-	pass
+func set_terrain(terrain: Dictionary) -> void:
+	for y in range(Data.grid_size.y):
+		for x in range(Data.grid_size.x):
+			var current_cell = Vector2i(x,y)
+			for type in terrain.keys():
+				if current_cell in terrain[type]:
+					current_grid[Vector2i(x,y)] = BaseGridCell.new(type)
+				else:
+					current_grid[Vector2i(x,y)] = BaseGridCell.new(Data.BattleTerrain.NONE)
 	
 func set_object_at_grid_position(object: Node) -> void: # could eventually define non-char grid objects
 	current_grid[object.grid_position] = object
