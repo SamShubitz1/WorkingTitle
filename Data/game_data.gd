@@ -18,8 +18,8 @@ enum MainMenuType {
 }
 
 enum BattleTerrain {
-	BLOCKED,
-	NONE
+	NONE,
+	BLOCKED
 }
 
 enum BattleMenuType {

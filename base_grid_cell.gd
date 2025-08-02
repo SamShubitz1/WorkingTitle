@@ -5,5 +5,5 @@ class_name BaseGridCell
 var character: Character = null
 var terrain: Data.BattleTerrain = Data.BattleTerrain.NONE
 
-func _init(initial_terrain) -> void:
-	terrain = initial_terrain
+func set_terrain(next_terrain) -> void:
+	terrain = next_terrain

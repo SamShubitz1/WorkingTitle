@@ -1,5 +1,10 @@
 extends BaseNPC
 
+func _ready() -> void:
+	super._ready()
+	set_terrain()
+	set_enemy_pool()
+
 func set_terrain() -> void:
 	battle_data.terrain[Data.BattleTerrain.BLOCKED] = []
 	for y in range(Data.grid_size.y):

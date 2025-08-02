@@ -1,3 +1,3 @@
 extends Area2D
 
-var enemy_pool = ["Runt", "Thumper", "Mandrake"]
+var battle_data = {"terrain": {}, "enemy_pool": ["Runt", "Thumper", "Mandrake"]}

@@ -9,7 +9,7 @@ class_name BaseObject
 @export var battle_ready: bool = false
 @export var neighbor_coords: Array
 
-var battle_data: Dictionary = {"terrain": {}, "NPC": self, "enemy_pool": []}
+var battle_data: Dictionary = {"terrain": {}, "enemy_pool": []}
 
 var grid_coords: Vector2i
 var dialog_tree: Dictionary

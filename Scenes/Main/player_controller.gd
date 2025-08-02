@@ -128,7 +128,7 @@ func finish_move(dest_pos: Vector2i) -> void:
 	GameState.current_time += 1
 	if weather != null:
 		weather.position = player.position
-	check_for_battle()
+	#check_for_battle()
 	check_for_camera_bounds()
 	emit_signal("player_position_updated", player.grid_position)
 	
@@ -151,7 +151,6 @@ func player_action_pressed() -> void:
 
 func open_pause_menu():
 	dialog_mode = true
-	#pause_menu.position = player.position + Vector2(-235, -134)
 	pause_menu.open()
 
 func close_pause_menu():
@@ -180,8 +179,7 @@ func update_weather() -> void:
 	if GameState.current_weather == GameState.Weather.RAINING:
 		var weather_scene = load("res://Scenes/World/weather_visuals.tscn")
 		weather = weather_scene.instantiate()
-		get_parent().add_child(weather)
-		weather.position = player.position
+		game_controller.get_node("UI").add_child(weather)
 		
 	elif GameState.current_weather == GameState.Weather.CLEAR:
 		if weather != null:
@@ -195,7 +193,7 @@ func check_for_battle() -> void:
 			player.increment_step_count()
 			var random = randi_range(12, 28)
 			if player.get_step_count() >= random:
-				enter_battle_scene({"NPC": null, "terrain": {},"enemy_pool": area.enemy_pool}) #placeholder logic
+				enter_battle_scene(area.battle_data) #placeholder logic?
 		else:
 			player.reset_step_count()
 		

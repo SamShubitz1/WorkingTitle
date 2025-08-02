@@ -170,7 +170,7 @@ func handle_end_turn() -> void:
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
 	for player in players:
-		if player.alliance == Data.Alliance.HERO && player.guardian == current_player:
+		if player.guardian == current_player:
 			player.set_guardian(null)
 			add_event({"type": EventType.DIALOG, "text": player.char_name + " is no longer protected!", "duration": dialog_duration})
 			
@@ -227,6 +227,11 @@ func on_use_ability(selected_targets: Array) -> void:
 	else:
 		var is_first_target = true
 		for target in selected_targets:
+			if target.guardian:
+				add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+				var next_target = target.guardian
+				target = next_target
+				
 			if !selected_ability.damage.type == Data.DamageType.NONE:
 				build_attack_event(target, is_first_target)
 				
@@ -364,9 +369,9 @@ func on_guard() -> void:
 	var guard_targets: Array
 	var guard_pos = current_player.grid_position
 	
-	for pos in battle_grid.current_grid:
+	for pos in battle_grid.get_occupied_cells():
 		if pos.x < guard_pos.x && pos.y == guard_pos.y:
-			guard_targets.append(battle_grid.current_grid[pos])
+			guard_targets.append(battle_grid.current_grid[pos].character)
 	
 	if !guard_targets.is_empty():
 		for target in guard_targets:
@@ -413,11 +418,11 @@ func end_turn() -> void:
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 	
-func get_targets(target_cells: Array, check_movement: bool = false) -> Array[Character]:
+func get_targets(target_cells: Array) -> Array[Character]:
 	var selected_targets: Array[Character]
-	for cell in target_cells: # move to base grids
-		if battle_grid.current_grid.has(cell):
-			selected_targets.append(battle_grid.current_grid[cell])
+	for cell in target_cells: # move to base grid?
+		if battle_grid.current_grid[cell].character != null:
+			selected_targets.append(battle_grid.current_grid[cell].character)
 	return selected_targets
 	
 func add_players() -> void:

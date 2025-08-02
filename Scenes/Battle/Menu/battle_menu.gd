@@ -213,8 +213,8 @@ func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 	
 func on_select_movement() -> void:
-	var cell_coords: Array = movement_menu.get_target_cells()
-	var targets = battle_controller.get_targets(cell_coords, true)
+	var cell_coords = movement_menu.get_target_cells()
+	var targets = battle_controller.get_targets(cell_coords)
 	if targets.is_empty():
 		battle_controller.on_movement(cell_coords[0])
 		go_back()

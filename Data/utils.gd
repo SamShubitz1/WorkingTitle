@@ -1,10 +1,10 @@
 extends Node
 
-func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, alliance: Data.Alliance, grid_size: Vector2i = Vector2i(8, 4)) -> Array:
-	var neighbor_coords = [origin_coords]
+func get_neighbor_coords(origin_coords: Vector2i, shape: Data.AbilityShape, alliance: Data.Alliance, grid_size: Vector2i = Vector2i(8, 4)) -> Array[Vector2i]:
+	var neighbor_coords: Array[Vector2i] = [origin_coords]
 	match shape:
 		GameData.AbilityShape.SINGLE:
-			return neighbor_coords
+			return neighbor_coords 
 		GameData.AbilityShape.DOUBLEH:
 			if alliance == Data.Alliance.HERO:
 				if origin_coords.x + 1 < 4:
