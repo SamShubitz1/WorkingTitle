@@ -108,7 +108,6 @@ func load_room(room_resource_path: String, use_default_pos: bool):
 	map_container.add_child(current_map)
 	
 	get_updated_enemy_areas()
-	get_updated_camera_bounds()
 	
 	current_tile_map_layers = current_map.get_children().filter(func(n): return n is TileMapLayer)
 	if use_default_pos:

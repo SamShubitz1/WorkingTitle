@@ -2,6 +2,8 @@ extends Node
 
 class_name BaseGrid
 
+signal terrain_change(grid: Dictionary)
+
 var current_grid = {}
 
 func _init() -> void:
@@ -17,11 +19,13 @@ func set_terrain(terrain: Dictionary) -> void:
 		for cell in terrain[type]:
 			current_grid[cell].terrain = type
 	
+	emit_signal("terrain_change", current_grid)
+	
 func set_object_at_grid_position(object: Node) -> void: # could eventually define non-char grid objects
 	current_grid[object.grid_position].character = object
 	
-	print("Current grid after set object at grid position:")
-	print_grid()
+	#print("Current grid after set object at grid position:")
+	#print_grid()
 
 func get_object_at_grid_position(position: Vector2i) -> Node:
 	var object = current_grid[position].character
@@ -30,7 +34,7 @@ func get_object_at_grid_position(position: Vector2i) -> Node:
 	return null
 
 func update_grid_object(object: Node, next_position: Vector2i) -> void:
-	current_grid.erase(object.grid_position)
+	current_grid[object.grid_position].character = null
 	object.set_grid_position(next_position)
 	current_grid[next_position].character = object
 	

@@ -5,17 +5,17 @@ extends Node2D
 @onready var game_controller = get_tree().current_scene
 @onready var battle_scene = get_parent()
 
-@onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
-@onready var cursor = $"../BattleMenu/Cursor"
-@onready var health_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/Health"
-@onready var main_energy_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/MainEnergy"
-@onready var reserve_energy_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/ReserveEnergy"
-@onready var ap_display = $"../BattleMenu/Descriptions/Labels/ActionPointDisplay"
+@onready var dialog_box = $"BattleMenu/DialogBox/BattleLog".get_children().slice(1)
+@onready var cursor = $"BattleMenu/Cursor"
+@onready var health_display = $"BattleMenu/MainMenu/Menu/CharPanel/StatusBars/Health"
+@onready var main_energy_display = $"BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/MainEnergy"
+@onready var reserve_energy_display = $"BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/ReserveEnergy"
+@onready var ap_display = $"BattleMenu/Descriptions/Labels/ActionPointDisplay"
 @onready var reticle = $Reticle
-@onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
-@onready var items_node = $"../BattleMenu/ItemsMenu"
-@onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
-@onready var ability_sound = $AbilitySound
+@onready var char_name_label = $"BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
+@onready var items_node = $"BattleMenu/ItemsMenu"
+@onready var abilities_node = $"BattleMenu/AbilitiesMenu"
+@onready var ability_sound = $BattleSound
 
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
 
@@ -506,6 +506,7 @@ func check_mobility_change() -> bool:
 		return false
 
 func prompt_action_points_insufficient() -> void:
+	battle_grid.set_terrain({Data.BattleTerrain.BLOCKED: [Vector2i(0,3)]})
 	play_dialog("AP is too low!", false)
 	cursor.enable()
 
@@ -598,3 +599,6 @@ func select_random(number_of_targets: int) -> void:
 		enemies = enemies.filter(func(e): return e.battle_id != selected_enemy.battle_id)
 		# get size of list, randi_range between 0 and list size -1 = index_selected1
 	on_use_ability(get_targets(target_cells))
+
+func get_grid() -> BaseGrid:
+	return battle_grid
