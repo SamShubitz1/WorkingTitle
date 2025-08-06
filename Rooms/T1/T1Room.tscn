@@ -948,159 +948,134 @@ tile_set = SubResource("TileSet_xwy1t")
 tile_map_data = PackedByteArray("AAAKAA4AAAASAAYAAAA=")
 tile_set = ExtResource("5_kuyv6")
 
-[node name="Doodads" type="Node2D" parent="."]
+[node name="Objects" type="Node2D" parent="."]
 
-[node name="Doors" type="Node2D" parent="Doodads"]
-
-[node name="DoorToUnderground" type="Node2D" parent="Doodads/Doors"]
-z_index = 2
-position = Vector2(512, 192)
-script = ExtResource("3_ify6l")
-
-[node name="Sprite2D" type="Sprite2D" parent="Doodads/Doors/DoorToUnderground"]
-scale = Vector2(1, 0.8)
-texture = ExtResource("4_xtyhp")
-offset = Vector2(16, 18)
-
-[node name="DoorToT2" type="Node2D" parent="Doodads/Doors"]
-modulate = Color(1, 1, 1, 0.435294)
-position = Vector2(128, 288)
-script = ExtResource("3_ify6l")
-door_destination = "res://Rooms/T2/T2Room.tscn"
-spawn_position = Vector2(960, 544)
-
-[node name="Sprite2D" type="Sprite2D" parent="Doodads/Doors/DoorToT2"]
-position = Vector2(0, -4)
-scale = Vector2(1, 1.65625)
-texture = ExtResource("5_prnhr")
-offset = Vector2(16, 16)
-
-[node name="PlayerSpawn" type="Node2D" parent="Doodads"]
+[node name="PlayerSpawn" type="Node2D" parent="Objects"]
 position = Vector2(160, 288)
 
-[node name="RailTramSlider" type="Node2D" parent="Doodads"]
+[node name="RailTramSlider" type="Node2D" parent="Objects"]
 position = Vector2(512, 416)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Doodads/RailTramSlider"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Objects/RailTramSlider"]
 sprite_frames = SubResource("SpriteFrames_mcth7")
 animation = &"RailTramSlider"
 
-[node name="Accumulator" type="Node2D" parent="Doodads"]
+[node name="Accumulator" type="Node2D" parent="Objects"]
 position = Vector2(352, 384)
 script = ExtResource("7_w5ah3")
 neighbor_coords = [Vector2i(-1, 0), Vector2i(-1, 1), Vector2i(0, 1)]
 
-[node name="Accumulator_Top" type="AnimatedSprite2D" parent="Doodads/Accumulator"]
+[node name="Accumulator_Top" type="AnimatedSprite2D" parent="Objects/Accumulator"]
 z_index = 2
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_ht572")
 animation = &"Accumulator_Top"
 
-[node name="Accumulator_Bottom" type="AnimatedSprite2D" parent="Doodads/Accumulator"]
+[node name="Accumulator_Bottom" type="AnimatedSprite2D" parent="Objects/Accumulator"]
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_pouxm")
 animation = &"Accumulator_Bottom"
 
-[node name="AcidPool" type="Node2D" parent="Doodads"]
+[node name="AcidPool" type="Node2D" parent="Objects"]
 position = Vector2(512, 576)
 
-[node name="AcidPool" type="AnimatedSprite2D" parent="Doodads/AcidPool"]
+[node name="AcidPool" type="AnimatedSprite2D" parent="Objects/AcidPool"]
 sprite_frames = SubResource("SpriteFrames_ejsae")
 autoplay = "default"
 frame_progress = 0.0133983
 
-[node name="RailTram" type="Node2D" parent="Doodads"]
+[node name="RailTram" type="Node2D" parent="Objects"]
 z_index = 2
 position = Vector2(576, 384)
 script = ExtResource("11_fe8by")
 neighbor_coords = [Vector2i(0, -1), Vector2i(0, 1), Vector2i(-1, -1), Vector2i(-1, 0), Vector2i(-1, 1)]
 
-[node name="RailTram" type="AnimatedSprite2D" parent="Doodads/RailTram"]
+[node name="RailTram" type="AnimatedSprite2D" parent="Objects/RailTram"]
 position = Vector2(0, 32)
 sprite_frames = SubResource("SpriteFrames_eff4g")
 animation = &"RailTram"
 
-[node name="RailTramTracks" type="Node2D" parent="Doodads"]
+[node name="RailTramTracks" type="Node2D" parent="Objects"]
 z_index = 2
 position = Vector2(448, 416)
 
-[node name="RailTramTracks1" type="AnimatedSprite2D" parent="Doodads/RailTramTracks"]
+[node name="RailTramTracks1" type="AnimatedSprite2D" parent="Objects/RailTramTracks"]
 position = Vector2(0, -384)
 sprite_frames = SubResource("SpriteFrames_ospi7")
 animation = &"RailTramTracks"
 
-[node name="RailTramTracks2" type="AnimatedSprite2D" parent="Doodads/RailTramTracks"]
+[node name="RailTramTracks2" type="AnimatedSprite2D" parent="Objects/RailTramTracks"]
 position = Vector2(0, -256)
 sprite_frames = SubResource("SpriteFrames_ospi7")
 animation = &"RailTramTracks"
 
-[node name="RailTramTracks3" type="AnimatedSprite2D" parent="Doodads/RailTramTracks"]
+[node name="RailTramTracks3" type="AnimatedSprite2D" parent="Objects/RailTramTracks"]
 position = Vector2(0, -128)
 sprite_frames = SubResource("SpriteFrames_ospi7")
 animation = &"RailTramTracks"
 
-[node name="RailTramTracks4" type="AnimatedSprite2D" parent="Doodads/RailTramTracks"]
+[node name="RailTramTracks4" type="AnimatedSprite2D" parent="Objects/RailTramTracks"]
 sprite_frames = SubResource("SpriteFrames_ospi7")
 animation = &"RailTramTracks"
 
-[node name="RailTramTracks5" type="AnimatedSprite2D" parent="Doodads/RailTramTracks"]
+[node name="RailTramTracks5" type="AnimatedSprite2D" parent="Objects/RailTramTracks"]
 position = Vector2(0, 128)
 sprite_frames = SubResource("SpriteFrames_ospi7")
 animation = &"RailTramTracks"
 
-[node name="RailTramTracks6" type="AnimatedSprite2D" parent="Doodads/RailTramTracks"]
+[node name="RailTramTracks6" type="AnimatedSprite2D" parent="Objects/RailTramTracks"]
 position = Vector2(0, 256)
 sprite_frames = SubResource("SpriteFrames_ospi7")
 animation = &"RailTramTracks"
 
-[node name="RailTramConsole" type="Node2D" parent="Doodads"]
+[node name="RailTramConsole" type="Node2D" parent="Objects"]
 position = Vector2(640, 320)
 script = ExtResource("14_wjx62")
 
-[node name="RailTramConsole" type="AnimatedSprite2D" parent="Doodads/RailTramConsole"]
+[node name="RailTramConsole" type="AnimatedSprite2D" parent="Objects/RailTramConsole"]
 position = Vector2(16, 16)
 sprite_frames = SubResource("SpriteFrames_6cn46")
 animation = &"RailTramConsole"
 
-[node name="EggCharger" type="Node2D" parent="Doodads"]
+[node name="EggCharger" type="Node2D" parent="Objects"]
 position = Vector2(672, 544)
 script = ExtResource("16_05hfr")
 neighbor_coords = [Vector2i(-1, 0)]
 
-[node name="EggCharger" type="AnimatedSprite2D" parent="Doodads/EggCharger"]
+[node name="EggCharger" type="AnimatedSprite2D" parent="Objects/EggCharger"]
 position = Vector2(0, 14)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_mhdvp")
 animation = &"EggCharger"
 
-[node name="Newsboy" type="Node2D" parent="Doodads"]
+[node name="Newsboy" type="Node2D" parent="Objects"]
 position = Vector2(224, 448)
 script = ExtResource("18_krwbj")
 
-[node name="Newsboy" type="AnimatedSprite2D" parent="Doodads/Newsboy"]
+[node name="Newsboy" type="AnimatedSprite2D" parent="Objects/Newsboy"]
 position = Vector2(0, 32)
 sprite_frames = SubResource("SpriteFrames_4e7jl")
 animation = &"Newsboy"
 offset = Vector2(16, -24)
 
-[node name="Repository" type="Node2D" parent="Doodads"]
+[node name="Repository" type="Node2D" parent="Objects"]
 position = Vector2(896, 480)
 script = ExtResource("20_6jj18")
 neighbor_coords = [Vector2i(-2, 0)]
 
-[node name="Repository" type="AnimatedSprite2D" parent="Doodads/Repository"]
+[node name="Repository" type="AnimatedSprite2D" parent="Objects/Repository"]
 position = Vector2(0, 14)
 sprite_frames = SubResource("SpriteFrames_ybpn8")
 animation = &"ReactorWall"
 
-[node name="ReactorWall" type="Node2D" parent="Doodads"]
+[node name="ReactorWall" type="Node2D" parent="Objects"]
 position = Vector2(1056, 416)
 
-[node name="ReactorWall1" type="AnimatedSprite2D" parent="Doodads/ReactorWall"]
+[node name="ReactorWall1" type="AnimatedSprite2D" parent="Objects/ReactorWall"]
 position = Vector2(-64, -256)
 sprite_frames = SubResource("SpriteFrames_h2q6p")
 
-[node name="ReactorWall2" type="AnimatedSprite2D" parent="Doodads/ReactorWall"]
+[node name="ReactorWall2" type="AnimatedSprite2D" parent="Objects/ReactorWall"]
 position = Vector2(-64, 96)
 sprite_frames = SubResource("SpriteFrames_xs5ka")
 
@@ -1175,3 +1150,28 @@ script = ExtResource("28_7e48e")
 position = Vector2(448, 256)
 shape = SubResource("RectangleShape2D_ps43k")
 debug_color = Color(0, 0.6, 0.701961, 0)
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="DoorToUnderground" type="Node2D" parent="Doors"]
+z_index = 2
+position = Vector2(512, 192)
+script = ExtResource("3_ify6l")
+
+[node name="Sprite2D" type="Sprite2D" parent="Doors/DoorToUnderground"]
+scale = Vector2(1, 0.8)
+texture = ExtResource("4_xtyhp")
+offset = Vector2(16, 18)
+
+[node name="DoorToT2" type="Node2D" parent="Doors"]
+modulate = Color(1, 1, 1, 0.435294)
+position = Vector2(128, 288)
+script = ExtResource("3_ify6l")
+door_destination = "res://Rooms/T2/T2Room.tscn"
+spawn_position = Vector2(960, 544)
+
+[node name="Sprite2D" type="Sprite2D" parent="Doors/DoorToT2"]
+position = Vector2(0, -4)
+scale = Vector2(1, 1.65625)
+texture = ExtResource("5_prnhr")
+offset = Vector2(16, 16)

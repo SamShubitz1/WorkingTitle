@@ -15,10 +15,50 @@ func _ready() -> void:
 			{"name": "Insert 100 cells", "next": "powered01"},
 			{"name": "Leave", "next": null}]
 			},
-	"powered01": {
-		"text": "asdf",
+	"default02": {
+		"text": "Howdy, stranger!",
 		"options": [
-			{"name": "I smell nothing.", "next": "powered02"},
+			{"name": "Advice?", "next": "powered05"},
+			{"name": "Light bulbs.", "next": "lightbulb01"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered01": {
+		"text": "Caught me sleepin' on the job, didn't ya?",
+		"options": [
+			{"name": "I repowered you.", "next": "powered02"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered02": {
+		"text": "Well, ain't I the damsel distressed? What the score, partner? Why the helping hand?",
+		"options": [
+			{"name": "The mechanical bull...", "next": "powered03"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered03": {
+		"text": "Imma stop ya right there. You ain't pulled me up from the dirt just to get me kicked back down in it. Look at this chassis! That bull's kicked my plates in more times than I can count.",
+		"options": [
+			{"name": ">", "next": "powered04"}]
+			},
+	"powered04": {
+		"text": "And I can count pretty high.",
+		"options": [
+			{"name": "Advice?", "next": "powered05"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered05": {
+		"text": "You gotta take the bull down quick 'fore he starts gettin' *real* mad. If he does, I got a trick for that. But I need some old world light bulbs if there's any left lyin' around.",
+		"options": [
+			{"name": "Light bulbs.", "next": "lightbulb01"},
+			{"name": "Leave", "next": null}]
+			},
+	"lightbulb01": {
+		"text": "Let me see those for a minute. Think I got all the fixin's right here.",
+		"options": [
+			{"name": ">", "next": "lightbulb02"}]
+			},
+	"lightbulb02": {
+		"text": "There ya go. When he starts gettin' mad, hit him with one of these.",
+		"options": [
 			{"name": "Leave", "next": null}]
 			},
 }

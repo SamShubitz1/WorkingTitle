@@ -17,7 +17,7 @@ func _ready() -> void:
 		"option_name": "Leave",
 		"next": null}],
 	"default": {
-		"text": "(The Newsboy rests against a waste receptacle as he waves a scroll of printed paper. His walkers have been broken into a pile of twigs. There was an attempt to mend the hobbled legs back together but it looks as though he gave up halfway through.)",
+		"text": "(The Newsboy waves a scroll of printed paper in the air. His walkers have been crushed into broken twigs. An attempt was made to mend the hobbled legs back together but it looks like he gave up halfway through.)",
 		"options": [
 			{"name": ">", "next": "greeting"}]
 			},
@@ -63,13 +63,13 @@ func _ready() -> void:
 			{"name": "Leave", "next": "leave01"}]
 			},
 	"leave01": {
-		"text": "You'd take care not to head east, pal. The airfield's been run amok by a mad-wired bull!",
+		"text": "You'd take care not to head west, pal. The airfield's been run amok by a mad-wired bull!",
 		"options": [
 			{"name": "Broken Legs", "next": "leave02"},
 			{"name": "Leave", "next": null}]
 			},
 	"leave02": {
-		"text": "It was them miserable pilgrims that did me in like this. Said somethin’ about how buying my own batteries is blasphemy.?",
+		"text": "It was them miserable pilgrims that did me in like this. Said somethin’ about how buying my own batteries is blasphemy. Everything's blasphemy with them. All they ever do is damn the rest of us.",
 		"options": [
 			{"name": "Leave", "next": null}]
 			},

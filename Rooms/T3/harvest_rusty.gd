@@ -15,8 +15,15 @@ func _ready() -> void:
 			{"name": "Insert 100 cells", "next": "powered01"},
 			{"name": "Leave", "next": null}]
 			},
+	"default02": {
+		"text": "Greetings, stranger.",
+		"options": [
+			{"name": "Chained valve", "next": "chain01"},
+			{"name": "Farm restored", "next": "farm01"},
+			{"name": "Leave", "next": null}]
+			},
 	"powered01": {
-		"text": "A nose to the air, neophyte. What do you smell?",
+		"text": "A nose to the air, neophyte. What can you smell?",
 		"options": [
 			{"name": "I smell nothing.", "next": "powered02"},
 			{"name": "Leave", "next": null}]
@@ -34,13 +41,23 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]
 			},
 	"powered04": {
-		"text": "Hard part's doing it right. There's a delicate balance of pressure that needs to be maintained while filling the tanks or the growth accelerators can't do their thing. Once the furnace light goes green, the rest is automated.",
+		"text": "Hard part's doing it right. It's a delicate balance of pressure that needs to be maintained while filling the tanks or else the growth accelerators can't do their thing.",
+		"options": [
+			{"name": ">", "next": "powered05"}]
+			},
+	"powered05": {
+		"text": "If the furnace light blinks red, something's wrong. Once it goes green, you know you've done it right. After that, the rest is automated.",
 		"options": [
 			{"name": "Chained Valve", "next": "chain01"},
 			{"name": "Leave", "next": null}]
 			},
 	"chain01": {
-		"text": "That's just old world steel. You can break it with a pinch. I chained up the valve to discourage the runts and thumps.",
+		"text": "I chained up the valve to discourage the runts and thumps. That's just old world steel. You can break it with a pinch. ",
+		"options": [
+			{"name": "Leave", "next": null}]
+			},
+	"farm01": {
+		"text": "Smells like the algea farm is up and running. Good work. With the furnace burning, Tabernacle's pneumatics are back online. Hopefully for good this time.",
 		"options": [
 			{"name": "Leave", "next": null}]
 			},

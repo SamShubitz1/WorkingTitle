@@ -6,7 +6,7 @@ class_name PlayerChar
 @onready var player_camera = $OverworldCamera
 
 @export var DEBUG_PLAYER: bool = true
-@export var speed = 120
+@export var speed = 400
 @export var sprite_offset = Vector2(16,16)
 @export var initial_position_override = Vector2i(12,3)
 

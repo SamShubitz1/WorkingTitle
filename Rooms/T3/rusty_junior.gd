@@ -15,10 +15,50 @@ func _ready() -> void:
 			{"name": "Insert 50 cells", "next": "powered01"},
 			{"name": "Leave", "next": null}]
 			},
-	"powered01": {
-		"text": "asdf",
+	"default02": {
+		"text": "You grace me? I am unworthy.",
 		"options": [
-			{"name": "I smell nothing.", "next": "powered02"},
+			{"name": "Find any items?", "next": "items01"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered01": {
+		"text": "Oh! Dearest me, I appear to be restored! If I had pockets, I'd empty 'em for you. If I had hands, I'd shake yours twice. But alas...I've only a heart full of static warmth.",
+		"options": [
+			{"name": "Your role?", "next": "powered02"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered02": {
+		"text": "No one’s ever quite figured what I’m for. Least of all me. Unlikely to be of much use, I fear. I've no tools, nor torque. Just me little limbs and a loyal ticker.",
+		"options": [
+			{"name": "Your role?", "next": "powered02"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered03": {
+		"text": "No one’s ever quite figured what I’m for. Least of all me. Unlikely to be of much use, I fear. I've no tools, nor torque. Just me little limbs and a loyal ticker.",
+		"options": [
+			{"name": "Items?", "next": "powered03"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered04": {
+		"text": "Oh, goodness. How dreadfully sorry I am to deny you your due. Allow me to...unfasten my little latches, that you might retrieve your battery cells nestled in my chest.",
+		"options": [
+			{"name": "Nevermind.", "next": "powered05"},
+			{"name": "Retrieve batteries.", "next": "powered06"},
+			{"name": "Leave", "next": null}]
+			},
+	"powered05": {
+		"text": "I could perhaps still be of use. My optics aren't licensed for anything but they are functional. I'll search the area for usefuls. Right this instance!",
+		"options": [
+			{"name": "Leave", "next": null}]
+			},
+	"powered06": {
+		"text": "(The machine closes its optical vents and turns its head up, exposing its chest. You unbuckle the battery pack and retrieve your 50 cells.)",
+		"options": [
+			{"name": "Leave", "next": null}]
+			},
+	"items01": {
+		"text": "No such luck. I won't last long outside the bounds of the church, so my search perimeter is limited.",
+		"options": [
 			{"name": "Leave", "next": null}]
 			},
 }
