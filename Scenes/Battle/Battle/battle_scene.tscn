@@ -99,186 +99,180 @@ script = ExtResource("3_lw5ac")
 [node name="AiController" type="Node" parent="BattleController"]
 script = ExtResource("2_8a0eq")
 
-[node name="Reticle" type="Sprite2D" parent="BattleController"]
-texture = ExtResource("3_pviwv")
-script = ExtResource("4_yqpad")
-
-[node name="AbilitySound" type="AudioStreamPlayer" parent="BattleController"]
-
-[node name="BattleMenu" type="Control" parent="."]
+[node name="BattleMenu" type="Control" parent="BattleController"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("2_tvtlk")
 
-[node name="TargetsGrid" type="Control" parent="BattleMenu"]
+[node name="TargetsGrid" type="Control" parent="BattleController/BattleMenu"]
 anchors_preset = 0
 offset_left = 5.0
 offset_right = 45.0
 offset_bottom = 40.0
 
-[node name="GridCell" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(191, 253)
 texture = ExtResource("10_ebd46")
 
-[node name="GridCell2" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell2" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(303, 252)
 texture = ExtResource("14_fxda1")
 
-[node name="GridCell3" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell3" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(418, 252)
 texture = ExtResource("18_dag15")
 
-[node name="GridCell4" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell4" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(535, 252)
 texture = ExtResource("22_2mrbx")
 
-[node name="GridCell5" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell5" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(727, 253)
 texture = ExtResource("11_b3vxe")
 
-[node name="GridCell6" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell6" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(841, 253)
 texture = ExtResource("12_twy4n")
 
-[node name="GridCell7" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell7" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(955, 253)
 texture = ExtResource("13_dm321")
 
-[node name="GridCell8" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell8" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(1072, 254)
 texture = ExtResource("14_m6gox")
 
-[node name="GridCell9" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell9" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(161, 305)
 texture = ExtResource("9_pk467")
 
-[node name="GridCell10" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell10" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(283, 305)
 texture = ExtResource("13_iun26")
 
-[node name="GridCell11" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell11" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(404, 305)
 texture = ExtResource("17_ouvf5")
 
-[node name="GridCell12" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell12" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(526, 305)
 texture = ExtResource("21_mxltt")
 
-[node name="GridCell13" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell13" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(738, 305)
 texture = ExtResource("19_chqft")
 
-[node name="GridCell14" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell14" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(862, 305)
 texture = ExtResource("20_jngcv")
 
-[node name="GridCell15" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell15" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(981, 305)
 texture = ExtResource("21_lliwc")
 
-[node name="GridCell16" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell16" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(1108, 305)
 texture = ExtResource("22_020fe")
 
-[node name="GridCell17" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell17" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(126, 363)
 texture = ExtResource("8_t0bnn")
 
-[node name="GridCell18" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell18" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(254, 363)
 texture = ExtResource("12_mohn7")
 
-[node name="GridCell19" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell19" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(382, 363)
 texture = ExtResource("16_3rycn")
 
-[node name="GridCell20" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell20" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(512, 363)
 texture = ExtResource("20_7ibxn")
 
-[node name="GridCell21" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell21" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(749, 363)
 texture = ExtResource("27_dxse2")
 
-[node name="GridCell22" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell22" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(880, 363)
 texture = ExtResource("28_5k48p")
 
-[node name="GridCell23" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell23" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(1009, 363)
 texture = ExtResource("29_dgqng")
 
-[node name="GridCell24" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell24" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(1139, 363)
 texture = ExtResource("30_63fwi")
 
-[node name="GridCell25" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell25" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(87, 432)
 texture = ExtResource("7_uw7sp")
 
-[node name="GridCell26" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell26" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(223, 431)
 texture = ExtResource("11_7l2i3")
 
-[node name="GridCell27" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell27" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(361, 431)
 texture = ExtResource("15_vdtop")
 
-[node name="GridCell28" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell28" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(499, 431)
 texture = ExtResource("19_ecv50")
 
-[node name="GridCell29" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell29" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(765, 431)
 texture = ExtResource("35_ah6mv")
 
-[node name="GridCell30" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell30" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(906, 431)
 texture = ExtResource("36_i7v2g")
 
-[node name="GridCell31" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell31" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(1044, 431)
 texture = ExtResource("37_wus1v")
 
-[node name="GridCell32" type="Sprite2D" parent="BattleMenu/TargetsGrid"]
+[node name="GridCell32" type="Sprite2D" parent="BattleController/BattleMenu/TargetsGrid"]
 z_index = -1
 position = Vector2(1184, 431)
 texture = ExtResource("38_hyktr")
 
-[node name="BattleMenu" type="Panel" parent="BattleMenu"]
+[node name="BattleMenu" type="Panel" parent="BattleController/BattleMenu"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -291,7 +285,7 @@ grow_vertical = 2
 theme = SubResource("Theme_y4e55")
 theme_override_styles/panel = SubResource("StyleBoxFlat_uks1o")
 
-[node name="TargetsMenu" type="Panel" parent="BattleMenu"]
+[node name="TargetsMenu" type="Panel" parent="BattleController/BattleMenu"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 32.0
@@ -304,16 +298,16 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_eurhc")
 
-[node name="Menu" type="VBoxContainer" parent="BattleMenu/TargetsMenu"]
+[node name="Menu" type="VBoxContainer" parent="BattleController/BattleMenu/TargetsMenu"]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Label" type="Label" parent="BattleMenu/TargetsMenu/Menu"]
+[node name="Label" type="Label" parent="BattleController/BattleMenu/TargetsMenu/Menu"]
 layout_mode = 2
 text = "Target Info"
 
-[node name="Background" type="TextureRect" parent="BattleMenu"]
+[node name="Background" type="TextureRect" parent="BattleController/BattleMenu"]
 z_index = -2
 layout_mode = 0
 offset_left = -35.0
@@ -323,7 +317,7 @@ offset_bottom = 604.0
 texture = ExtResource("23_njfmf")
 expand_mode = 1
 
-[node name="DialogBox" type="Panel" parent="BattleMenu"]
+[node name="DialogBox" type="Panel" parent="BattleController/BattleMenu"]
 z_index = 1
 layout_mode = 1
 offset_left = 320.0
@@ -332,7 +326,7 @@ offset_right = 960.0
 offset_bottom = 767.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_m8nmk")
 
-[node name="BattleLog" type="VBoxContainer" parent="BattleMenu/DialogBox"]
+[node name="BattleLog" type="VBoxContainer" parent="BattleController/BattleMenu/DialogBox"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -341,7 +335,7 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="BattleLogLabel" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
+[node name="BattleLogLabel" type="Label" parent="BattleController/BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
@@ -349,42 +343,42 @@ theme_override_font_sizes/font_size = 20
 text = "Log"
 vertical_alignment = 1
 
-[node name="Slot1" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
+[node name="Slot1" type="Label" parent="BattleController/BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot2" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
+[node name="Slot2" type="Label" parent="BattleController/BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot3" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
+[node name="Slot3" type="Label" parent="BattleController/BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot4" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
+[node name="Slot4" type="Label" parent="BattleController/BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="Slot5" type="Label" parent="BattleMenu/DialogBox/BattleLog"]
+[node name="Slot5" type="Label" parent="BattleController/BattleMenu/DialogBox/BattleLog"]
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.940636, 0.940636, 0.940636, 1)
 theme_override_font_sizes/font_size = 20
 vertical_alignment = 1
 
-[node name="MainMenu" type="Panel" parent="BattleMenu"]
+[node name="MainMenu" type="Panel" parent="BattleController/BattleMenu"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.25
@@ -393,18 +387,18 @@ offset_top = 511.0
 offset_right = 310.0
 offset_bottom = 727.0
 
-[node name="Menu" type="VBoxContainer" parent="BattleMenu/MainMenu"]
+[node name="Menu" type="VBoxContainer" parent="BattleController/BattleMenu/MainMenu"]
 layout_mode = 0
 offset_right = 320.0
 offset_bottom = 256.0
 theme = SubResource("Theme_om1ud")
 alignment = 1
 
-[node name="CharPanel" type="HBoxContainer" parent="BattleMenu/MainMenu/Menu"]
+[node name="CharPanel" type="HBoxContainer" parent="BattleController/BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="NameLabel" type="Label" parent="BattleMenu/MainMenu/Menu/CharPanel"]
+[node name="NameLabel" type="Label" parent="BattleController/BattleMenu/MainMenu/Menu/CharPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -412,7 +406,7 @@ text = "
 "
 label_settings = SubResource("LabelSettings_g53kf")
 
-[node name="Control" type="Label" parent="BattleMenu/MainMenu/Menu/CharPanel"]
+[node name="Control" type="Label" parent="BattleController/BattleMenu/MainMenu/Menu/CharPanel"]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -420,11 +414,11 @@ text = "HP:
 EP:"
 horizontal_alignment = 2
 
-[node name="StatusBars" type="VBoxContainer" parent="BattleMenu/MainMenu/Menu/CharPanel"]
+[node name="StatusBars" type="VBoxContainer" parent="BattleController/BattleMenu/MainMenu/Menu/CharPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Health" type="ProgressBar" parent="BattleMenu/MainMenu/Menu/CharPanel/StatusBars"]
+[node name="Health" type="ProgressBar" parent="BattleController/BattleMenu/MainMenu/Menu/CharPanel/StatusBars"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -436,11 +430,11 @@ value = 300.0
 rounded = true
 show_percentage = false
 
-[node name="EnergyContainer" type="VBoxContainer" parent="BattleMenu/MainMenu/Menu/CharPanel/StatusBars"]
+[node name="EnergyContainer" type="VBoxContainer" parent="BattleController/BattleMenu/MainMenu/Menu/CharPanel/StatusBars"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="MainEnergy" type="ProgressBar" parent="BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer"]
+[node name="MainEnergy" type="ProgressBar" parent="BattleController/BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_vertical = 3
@@ -452,7 +446,7 @@ value = 50.0
 rounded = true
 show_percentage = false
 
-[node name="ReserveEnergy" type="ProgressBar" parent="BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer"]
+[node name="ReserveEnergy" type="ProgressBar" parent="BattleController/BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_vertical = 3
@@ -462,217 +456,217 @@ max_value = 50.0
 value = 50.0
 show_percentage = false
 
-[node name="Attack" type="Button" parent="BattleMenu/MainMenu/Menu"]
+[node name="Attack" type="Button" parent="BattleController/BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Abilities"
 alignment = 0
 
-[node name="Move" type="Button" parent="BattleMenu/MainMenu/Menu"]
+[node name="Move" type="Button" parent="BattleController/BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Move"
 alignment = 0
 
-[node name="Guard" type="Button" parent="BattleMenu/MainMenu/Menu"]
+[node name="Guard" type="Button" parent="BattleController/BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Guard"
 alignment = 0
 
-[node name="Aim" type="Button" parent="BattleMenu/MainMenu/Menu"]
+[node name="Aim" type="Button" parent="BattleController/BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Aim"
 alignment = 0
 
-[node name="Items" type="Button" parent="BattleMenu/MainMenu/Menu"]
+[node name="Items" type="Button" parent="BattleController/BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Items"
 alignment = 0
 
-[node name="Retreat" type="Button" parent="BattleMenu/MainMenu/Menu"]
+[node name="Retreat" type="Button" parent="BattleController/BattleMenu/MainMenu/Menu"]
 layout_mode = 2
 size_flags_vertical = 3
 text = " Retreat"
 alignment = 0
 
-[node name="AbilitiesMenu" type="Panel" parent="BattleMenu"]
+[node name="AbilitiesMenu" type="Panel" parent="BattleController/BattleMenu"]
 layout_mode = 0
 offset_left = 320.0
 offset_top = 511.0
 offset_right = 960.0
 offset_bottom = 767.0
 
-[node name="Menu" type="GridContainer" parent="BattleMenu/AbilitiesMenu"]
+[node name="Menu" type="GridContainer" parent="BattleController/BattleMenu/AbilitiesMenu"]
 custom_minimum_size = Vector2(320, 256)
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 256.0
 columns = 3
 
-[node name="AbilitiesLabel" type="Label" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="AbilitiesLabel" type="Label" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 text = " Abilities
 
 "
 
-[node name="Panel2" type="Panel" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Panel2" type="Panel" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel3" type="Panel" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Panel3" type="Panel" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_1" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_1" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_2" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_2" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_3" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_3" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_4" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_4" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_5" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_5" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_6" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_6" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_7" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_7" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_8" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_8" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Ability_9" type="Button" parent="BattleMenu/AbilitiesMenu/Menu"]
+[node name="Ability_9" type="Button" parent="BattleController/BattleMenu/AbilitiesMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ItemsMenu" type="Panel" parent="BattleMenu"]
+[node name="ItemsMenu" type="Panel" parent="BattleController/BattleMenu"]
 layout_mode = 0
 offset_left = 320.0
 offset_top = 511.0
 offset_right = 960.0
 offset_bottom = 767.0
 
-[node name="Menu" type="GridContainer" parent="BattleMenu/ItemsMenu"]
+[node name="Menu" type="GridContainer" parent="BattleController/BattleMenu/ItemsMenu"]
 custom_minimum_size = Vector2(320, 256)
 layout_mode = 0
 offset_right = 640.0
 offset_bottom = 256.0
 columns = 3
 
-[node name="Items" type="Label" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Items" type="Label" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 text = " Items
 "
 
-[node name="Panel2" type="Panel" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Panel2" type="Panel" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Panel3" type="Panel" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Panel3" type="Panel" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot2" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot2" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot3" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot3" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot4" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot4" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot5" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot5" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot6" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot6" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot7" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot7" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot8" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot8" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Slot9" type="Button" parent="BattleMenu/ItemsMenu/Menu"]
+[node name="Slot9" type="Button" parent="BattleController/BattleMenu/ItemsMenu/Menu"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Descriptions" type="Panel" parent="BattleMenu"]
+[node name="Descriptions" type="Panel" parent="BattleController/BattleMenu"]
 layout_mode = 0
 offset_left = 960.0
 offset_top = 511.0
 offset_right = 1280.0
 offset_bottom = 767.0
 
-[node name="Labels" type="VBoxContainer" parent="BattleMenu/Descriptions"]
+[node name="Labels" type="VBoxContainer" parent="BattleController/BattleMenu/Descriptions"]
 layout_mode = 0
 offset_right = 320.0
 offset_bottom = 256.0
 theme = SubResource("Theme_om1ud")
 alignment = 1
 
-[node name="ActionPointDisplay" type="HBoxContainer" parent="BattleMenu/Descriptions/Labels"]
+[node name="ActionPointDisplay" type="HBoxContainer" parent="BattleController/BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("3_ywqhi")
 
-[node name="ActionPoints" type="Label" parent="BattleMenu/Descriptions/Labels/ActionPointDisplay"]
+[node name="ActionPoints" type="Label" parent="BattleController/BattleMenu/Descriptions/Labels/ActionPointDisplay"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "AP:	"
 vertical_alignment = 2
 
-[node name="AbilityDescription" type="Label" parent="BattleMenu/Descriptions/Labels"]
+[node name="AbilityDescription" type="Label" parent="BattleController/BattleMenu/Descriptions/Labels"]
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_vertical = 3
@@ -680,66 +674,72 @@ size_flags_stretch_ratio = 2.0
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="AbilityStats" type="VBoxContainer" parent="BattleMenu/Descriptions/Labels"]
+[node name="AbilityStats" type="VBoxContainer" parent="BattleController/BattleMenu/Descriptions/Labels"]
 layout_mode = 2
 
-[node name="EnergyCost" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ApCost" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
+[node name="EnergyCost" type="Label" parent="BattleController/BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Range" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
+[node name="ApCost" type="Label" parent="BattleController/BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 size_flags_vertical = 3
-text = "Text"
 
-[node name="Label6" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
+[node name="Range" type="Label" parent="BattleController/BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Text"
 
-[node name="Padding" type="Label" parent="BattleMenu/Descriptions/Labels/AbilityStats"]
+[node name="Label6" type="Label" parent="BattleController/BattleMenu/Descriptions/Labels/AbilityStats"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Text"
+
+[node name="Padding" type="Label" parent="BattleController/BattleMenu/Descriptions/Labels/AbilityStats"]
 layout_mode = 2
 
-[node name="PassTurnMenu" type="Panel" parent="BattleMenu"]
+[node name="PassTurnMenu" type="Panel" parent="BattleController/BattleMenu"]
 layout_mode = 0
 offset_top = 511.0
 offset_right = 320.0
 offset_bottom = 768.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="BattleMenu/PassTurnMenu"]
+[node name="VBoxContainer" type="VBoxContainer" parent="BattleController/BattleMenu/PassTurnMenu"]
 layout_mode = 0
 offset_right = 320.0
 offset_bottom = 257.0
 
-[node name="PassTurnLabel" type="Label" parent="BattleMenu/PassTurnMenu/VBoxContainer"]
+[node name="PassTurnLabel" type="Label" parent="BattleController/BattleMenu/PassTurnMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Pass Turn"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PassButton" type="Button" parent="BattleMenu/PassTurnMenu/VBoxContainer"]
+[node name="PassButton" type="Button" parent="BattleController/BattleMenu/PassTurnMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Confirm"
 
-[node name="Padding" type="Button" parent="BattleMenu/PassTurnMenu/VBoxContainer"]
+[node name="Padding" type="Button" parent="BattleController/BattleMenu/PassTurnMenu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "Go Back
 "
 
-[node name="Cursor" type="Polygon2D" parent="BattleMenu"]
+[node name="Cursor" type="Polygon2D" parent="BattleController/BattleMenu"]
 z_index = 1
 position = Vector2(84, 558)
 rotation = 1.5708
 scale = Vector2(0.594435, 1.19025)
 polygon = PackedVector2Array(0, 0, 20, 0, 10, 12)
 script = ExtResource("3_nifbg")
+
+[node name="Reticle" type="Sprite2D" parent="BattleController"]
+texture = ExtResource("3_pviwv")
+script = ExtResource("4_yqpad")
+
+[node name="BattleSound" type="AudioStreamPlayer" parent="BattleController"]
 
 [node name="BattleCamera" type="Camera2D" parent="."]
 position = Vector2(640, 384)

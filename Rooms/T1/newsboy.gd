@@ -19,7 +19,7 @@ func _ready() -> void:
 	"default": {
 		"text": "(The Newsboy waves a scroll of printed paper in the air. His walkers have been crushed into broken twigs. An attempt was made to mend the hobbled legs back together but it looks like he gave up halfway through.)",
 		"options": [
-			{"name": ">", "next": "greeting"}]
+			{"name": "▸", "next": "greeting"}]
 			},
 	"greeting": {
 		"text": "Extra! Extra! Read all about it! Top Church hikes tithes! Dean of Denominations descends from Stovetop for tax collections!",

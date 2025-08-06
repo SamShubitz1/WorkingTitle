@@ -16,27 +16,26 @@ enum Direction {
 	RIGHT
 }
 
+var battle_grid: Dictionary
 var targets_grid: Dictionary = {}
 var current_grid_type: GridType = GridType.GLOBAL
-var global_cells: Array[Node]
 var range_of_movement: Vector2i
 var origin: Vector2i
 var wrap: bool
 
-const initial_grid_size: Vector2i = Vector2i(8, 4)
+const initial_grid_size := Data.grid_size
 
 var current_shape: GameData.AbilityShape
 #var custom_cells: Array
 var custom_index = 0
 	
-func init(menu: Node, buttons: Array, menu_cursor: BaseCursor, initial_button_position = null, wrap = true) -> void:
+func init(menu: Node, cells: Array, menu_cursor: BaseCursor, initial_button_position = null, wrap = true) -> void:
 	super.init(menu, buttons, menu_cursor)
 	self.wrap = wrap
-	global_cells = buttons
+	self.buttons = cells
 	update_grid(initial_grid_size)
 	for button in buttons:
-		button.modulate = Color(0, 0, 0)
-		button.modulate.a = .1
+		button.modulate = Color(0, 0, 0, 0.1)
 	
 func update_grid(grid_size: Vector2i):
 	targets_grid = {}
@@ -50,7 +49,6 @@ func update_grid(grid_size: Vector2i):
 
 func custom_update_grid(cells):
 	var custom_buttons: Array
-	var offset = Vector2i(4,0)
 	for cell in targets_grid.keys():
 		if cell in cells:
 			var next_button = targets_grid[cell]
@@ -85,19 +83,19 @@ func activate_hero_grid() -> void:
 func get_enemy_cells() -> Array:
 	var enemy_cells: Array
 	var columns = initial_grid_size.x
-	for i in range(global_cells.size()):
+	for i in range(buttons.size()):
 		if i % columns == columns / 2:
 			for j in range(columns / 2):
-				enemy_cells.append(global_cells[i + j])
+				enemy_cells.append(buttons[i + j])
 	return enemy_cells
 				
 func get_player_cells() -> Array:
 	var player_cells: Array
 	var columns = initial_grid_size.x
-	for i in range(global_cells.size()):
+	for i in range(buttons.size()):
 		if i % columns == 0:
 			for j in range(columns / 2):
-				player_cells.append(global_cells[i + j])
+				player_cells.append(buttons[i + j])
 	return player_cells
 		
 func get_target_cells() -> Array:
@@ -251,7 +249,7 @@ func set_custom_cells(cells: Array) -> void:
 func reset_cells() -> void:
 	for button in buttons:
 		button.modulate = Color(0, 0, 0)
-		button.modulate.a = .1
+		button.modulate.a = 0.1
 		
 func set_range(origin: Vector2i, range: Vector2i) -> void:
 	self.origin = origin
@@ -276,3 +274,6 @@ func check_range(coords: Vector2i):
 		return false
 	else:
 		return true
+
+func _on_terrain_change(grid: Dictionary) -> void:
+	battle_grid = grid

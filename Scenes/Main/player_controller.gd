@@ -151,7 +151,6 @@ func player_action_pressed() -> void:
 
 func open_pause_menu():
 	dialog_mode = true
-	#pause_menu.position = player.position + Vector2(-235, -134)
 	pause_menu.open()
 
 func close_pause_menu():
@@ -161,11 +160,13 @@ func close_pause_menu():
 func interact(object: Node):
 	if object is BaseObject:
 		if object.battle_ready:
-			enter_battle_scene(object)
+			enter_battle_scene(object.battle_data)
 		elif !object.dialog_tree.is_empty():
+			set_player_animation(player.current_direction, true)
 			dialog_mode = true
 			dialog_object = object
-			var updated_tree = object.start_dialog()
+			object.start_dialog()
+			
 	elif object is BaseDoor:
 		player.position = object.spawn_position
 		player.grid_position = map_controller.point_to_grid(player.position)
@@ -178,8 +179,7 @@ func update_weather() -> void:
 	if GameState.current_weather == GameState.Weather.RAINING:
 		var weather_scene = load("res://Scenes/World/weather_visuals.tscn")
 		weather = weather_scene.instantiate()
-		get_parent().add_child(weather)
-		weather.position = player.position
+		game_controller.get_node("UI").add_child(weather)
 		
 	elif GameState.current_weather == GameState.Weather.CLEAR:
 		if weather != null:
@@ -193,7 +193,7 @@ func check_for_battle() -> void:
 			player.increment_step_count()
 			var random = randi_range(12, 28)
 			if player.get_step_count() >= random:
-				enter_battle_scene(area.enemy_pool)
+				enter_battle_scene(area.battle_data) #placeholder logic?
 		else:
 			player.reset_step_count()
 		
@@ -246,10 +246,10 @@ func overlaps(limits: Dictionary, player: Node) -> bool:
 		return true
 	return false
 	
-func enter_battle_scene(object) -> void:
+func enter_battle_scene(battle_data: Dictionary) -> void:
 	save_state()
 	save_data()
-	await game_controller.switch_to_scene(Data.Scenes.BATTLE, {"data": object})
+	await game_controller.switch_to_scene(Data.Scenes.BATTLE, battle_data)
 
 func set_player_animation(dir: Vector2i, idle: bool) -> void:
 	match player.current_direction:

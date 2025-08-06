@@ -1,6 +1,6 @@
 extends Control
 
-@onready var battle_controller = $"../BattleController"
+@onready var battle_controller = get_parent()
 @onready var battle_cursor = $Cursor
 @onready var options_node = $MainMenu
 @onready var abilities_node = $AbilitiesMenu
@@ -16,7 +16,6 @@ extends Control
 @onready var range_label = $Descriptions/Labels/AbilityStats/Range
 
 var current_player: Node
-#var grid_info: Dictionary
 var options_menu = BaseMenu.new()
 
 var abilities_menu = BaseMenu.new()
@@ -31,7 +30,6 @@ var menus: Array
 var cursor: BaseCursor
 
 func _ready() -> void:
-	#grid_info = battle_controller.get_grid_info()
 	initialize_menus()
 	var initial_cursor_position = Vector2(0, 55)
 	cursor.move_cursor(initial_cursor_position)
@@ -46,7 +44,7 @@ func _input(e) -> void:
 			if selected_menu != log_menu:
 				navigate_log()
 		elif Input.is_action_just_pressed("go_back"):
-				go_back()	
+				go_back()
 	update_description()
 
 	if Input.is_action_just_pressed("ui_accept"):
@@ -213,8 +211,8 @@ func on_select_retreat() -> void:
 	battle_controller.on_try_retreat()
 	
 func on_select_movement() -> void:
-	var cell_coords: Array = movement_menu.get_target_cells()
-	var targets = battle_controller.get_targets(cell_coords, true)
+	var cell_coords = movement_menu.get_target_cells()
+	var targets = battle_controller.get_targets(cell_coords)
 	if targets.is_empty():
 		battle_controller.on_movement(cell_coords[0])
 		go_back()
@@ -262,6 +260,9 @@ func initialize_menus() -> void:
 	targets_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
 	movement_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
 	
+	var battle_grid = battle_controller.get_grid()
+	battle_grid.terrain_change.connect(targets_menu._on_terrain_change)
+	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
 	
 	var initial_pass_turn_cursor_pos = Vector2i(0, 90)
@@ -272,19 +273,6 @@ func initialize_menus() -> void:
 	selected_menu = options_menu
 	update_description()
 	selected_menu.activate()
-	
-#func build_targets_cells() -> Array[Panel]:
-	#var cells: Array[Panel]
-	#for i in range(32): # battle_controller.get_grid_size() x * y
-		#var cell = Panel.new()
-		#cell.size_flags_horizontal = SIZE_EXPAND_FILL
-		#cell.size_flags_vertical = SIZE_EXPAND_FILL
-		#var style = StyleBoxFlat.new()
-		#style.bg_color = Color(1, 1, 1)
-		#cell.add_theme_stylebox_override("panel", style)
-		#cell.z_index = -1
-		#cells.append(cell)
-	#return cells
 	
 func update_scroll_size() -> void:
 	current_player = battle_controller.get_current_player()

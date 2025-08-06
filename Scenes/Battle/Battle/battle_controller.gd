@@ -5,19 +5,21 @@ extends Node2D
 @onready var game_controller = get_tree().current_scene
 @onready var battle_scene = get_parent()
 
-@onready var dialog_box = $"../BattleMenu/DialogBox/BattleLog".get_children().slice(1)
-@onready var cursor = $"../BattleMenu/Cursor"
-@onready var health_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/Health"
-@onready var main_energy_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/MainEnergy"
-@onready var reserve_energy_display = $"../BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/ReserveEnergy"
-@onready var ap_display = $"../BattleMenu/Descriptions/Labels/ActionPointDisplay"
+@onready var dialog_box = $"BattleMenu/DialogBox/BattleLog".get_children().slice(1)
+@onready var cursor = $"BattleMenu/Cursor"
+@onready var health_display = $"BattleMenu/MainMenu/Menu/CharPanel/StatusBars/Health"
+@onready var main_energy_display = $"BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/MainEnergy"
+@onready var reserve_energy_display = $"BattleMenu/MainMenu/Menu/CharPanel/StatusBars/EnergyContainer/ReserveEnergy"
+@onready var ap_display = $"BattleMenu/Descriptions/Labels/ActionPointDisplay"
 @onready var reticle = $Reticle
-@onready var char_name_label = $"../BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
-@onready var items_node = $"../BattleMenu/ItemsMenu"
-@onready var abilities_node = $"../BattleMenu/AbilitiesMenu"
-@onready var ability_sound = $AbilitySound
+@onready var char_name_label = $"BattleMenu/MainMenu/Menu/CharPanel/NameLabel"
+@onready var items_node = $"BattleMenu/ItemsMenu"
+@onready var abilities_node = $"BattleMenu/AbilitiesMenu"
+@onready var ability_sound = $BattleSound
 
 var kapow_scene = preload("res://Scenes/Battle/Battle/kapow_scene.tscn")
+
+var battle_data: Dictionary
 
 var players: Array[Character]
 var current_player: Character
@@ -89,7 +91,7 @@ func increment_event_queue() -> void:
 
 		if event.has("duration"):
 			await wait(event.duration)
-			increment_event_queue() # can recursively call itself :)
+			increment_event_queue() # can recursively call itself :O
 		else:
 			manual_increment = true
 	else:
@@ -137,7 +139,7 @@ func handle_ability(event: Dictionary) -> void:
 func handle_movement(event: Dictionary) -> void:
 	var target = event.target
 	battle_grid.update_grid_object(target, event.next_position)
-	set_position_by_grid_coords(target)
+	battle_grid.set_position_by_grid_coords(target)
 	reticle.move(target.position)
 	
 func handle_guard(event: Dictionary) -> void:
@@ -148,7 +150,7 @@ func handle_guard(event: Dictionary) -> void:
 
 func handle_death(event) -> void:
 	if event.target.is_player:
-		game_controller.switch_to_scene(Data.Scenes.OVERWORLD, {})
+		game_controller.switch_to_scene(Data.Scenes.OVERWORLD)
 	else:
 		event.target.visible = false
 		event.target.sound.play_sound(event.target.char_name, Data.SoundAction.DEATH)
@@ -168,7 +170,7 @@ func handle_end_turn() -> void:
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration, "emitter": current_player})
 	
 	for player in players:
-		if player.alliance == Data.Alliance.HERO && player.guardian == current_player:
+		if player.guardian == current_player:
 			player.set_guardian(null)
 			add_event({"type": EventType.DIALOG, "text": player.char_name + " is no longer protected!", "duration": dialog_duration})
 			
@@ -225,6 +227,11 @@ func on_use_ability(selected_targets: Array) -> void:
 	else:
 		var is_first_target = true
 		for target in selected_targets:
+			if target.guardian:
+				add_event({"type": EventType.DIALOG, "text": target.char_name + " was protected!", "duration": dialog_duration, "emitter": current_player})
+				var next_target = target.guardian
+				target = next_target
+				
 			if !selected_ability.damage.type == Data.DamageType.NONE:
 				build_attack_event(target, is_first_target)
 				
@@ -270,6 +277,7 @@ func prompt_select_target(ability_name: String) -> Dictionary:
 	var hero_ability = GameData.abilities[ability_name]
 	selected_ability = hero_ability
 	play_dialog("Select a target!", false)
+	
 	if hero_ability.shape == Data.AbilityShape.MELEE: #for melee attacks, battle controller passes valid targets to battle menu
 		target_cells = battle_grid.get_melee_targets(Data.Alliance.HERO, hero_ability, current_player)
 	return {"shape": hero_ability.shape, "target_type": selected_ability.target_type, "range": selected_ability.range, "origin": current_player.grid_position, "target_cells": target_cells}
@@ -361,9 +369,9 @@ func on_guard() -> void:
 	var guard_targets: Array
 	var guard_pos = current_player.grid_position
 	
-	for pos in battle_grid.current_grid:
+	for pos in battle_grid.get_occupied_cells():
 		if pos.x < guard_pos.x && pos.y == guard_pos.y:
-			guard_targets.append(battle_grid.current_grid[pos])
+			guard_targets.append(battle_grid.current_grid[pos].character)
 	
 	if !guard_targets.is_empty():
 		for target in guard_targets:
@@ -410,11 +418,11 @@ func end_turn() -> void:
 	add_event({"type": EventType.END_TURN, "duration": 0})
 	increment_event_queue()
 	
-func get_targets(target_cells: Array, check_movement: bool = false) -> Array[Character]:
+func get_targets(target_cells: Array) -> Array[Character]:
 	var selected_targets: Array[Character]
-	for cell in target_cells: # move to base grids
-		if battle_grid.current_grid.has(cell):
-			selected_targets.append(battle_grid.current_grid[cell])
+	for cell in target_cells: # move to base grid?
+		if battle_grid.current_grid[cell].character != null:
+			selected_targets.append(battle_grid.current_grid[cell].character)
 	return selected_targets
 	
 func add_players() -> void:
@@ -443,13 +451,11 @@ func get_enemies_by_position():
 	return positions
 
 func select_enemies():
-	var enemy_pool = []
-	var data = battle_scene.get_battle_data().data #fix this
-	if data is Node: #CHECK LATER
-		enemy_pool.append_array(["Thumper", "Runt", "Mandrake"])
-	else:
-		enemy_pool = data
+	var enemy_pool = battle_data.enemy_pool
 	
+	if enemy_pool.is_empty(): # placeholder default
+		enemy_pool = ["Mandrake", "Runt", "Mage", "Thumper", "Pilypile"]
+		
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
 	for i in range(number_of_enemies):
@@ -460,32 +466,14 @@ func select_enemies():
 	
 	return selected_enemies
 	
-#func set_grid_cells() -> Vector2i:
-	# will create grid shape for the batlle
-	#return Vector2i(8, 4)
-	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
 	
 func get_current_player() -> Node:
 	return current_player
 	
-#func get_grid_info() -> Dictionary:
-	#return {"current_grid": battle_grid.current_grid, "grid_size": set_grid_cells()}
-	
-func set_position_by_grid_coords(character: Character) -> void:
-	var y_offsets = {0: 405, 1: 340, 2: 283, 3: 230}
-	var x_offsets = {0: 50, 1: 80, 2: 100, 3: 120 }
-	var enemy_x_offset = 60
-	var coords = character.grid_position
-	var x_pos = 50 + (coords.x * 126) # const grid_span_x = 126, const grid_offset_y = -110
-	var y_pos = 400 + (coords.y * -110)
-	if character.alliance == Data.Alliance.ENEMY:
-		x_pos += enemy_x_offset
-		x_offsets[0] += 130
-		x_offsets[1] += 70
-		x_offsets[2] += 30
-	character.position = Vector2i(x_pos + x_offsets[coords.y], y_offsets[coords.y])
+func get_current_grid() -> Dictionary:
+	return battle_grid.current_grid
 
 func set_turn_order() -> void:
 	var positions: Array
@@ -518,6 +506,7 @@ func check_mobility_change() -> bool:
 		return false
 
 func prompt_action_points_insufficient() -> void:
+	battle_grid.set_terrain({Data.BattleTerrain.BLOCKED: [Vector2i(0,3)]})
 	play_dialog("AP is too low!", false)
 	cursor.enable()
 
@@ -562,6 +551,8 @@ func update_energy_display() -> void:
 	reserve_energy_display.value = current_player.current_reserve_energy
 	
 func initialize_battle() -> void:
+	battle_data = battle_scene.get_battle_data()
+	battle_grid.set_terrain(battle_data.terrain)
 	dialog = dialog_box[0]
 	
 	add_players()
@@ -583,7 +574,7 @@ func build_character(char_name: String, char_alliance: Data.Alliance, char_posit
 	var char = char_scene.instantiate()
 	char.init(battle_id, char_name, char_info.attributes, char_alliance, char.get_node("CharSprite"), char.get_node("CharSound"), char.get_node("CharHealth"), char_info["base energy"], char_info["base health"], char_info.abilities, char_position, char_info.role)
 	add_child(char)
-	set_position_by_grid_coords(char)
+	battle_grid.set_position_by_grid_coords(char)
 	battle_id += 1
 	passive_manager.resolve_passive(char, "Hop")
 	passive_manager.resolve_passive(char, "Hex")
@@ -608,3 +599,6 @@ func select_random(number_of_targets: int) -> void:
 		enemies = enemies.filter(func(e): return e.battle_id != selected_enemy.battle_id)
 		# get size of list, randi_range between 0 and list size -1 = index_selected1
 	on_use_ability(get_targets(target_cells))
+
+func get_grid() -> BaseGrid:
+	return battle_grid
