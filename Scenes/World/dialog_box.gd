@@ -20,8 +20,8 @@ func set_tree(dialog_tree: Dictionary) -> void:
 
 # takes a dialog_tree key, sets new screen of dialog (text + options)
 func update_dialog(next_branch: String) -> void:
-	build_text_covers()
-	play_text_covers()
+	#build_text_covers()
+	#play_text_covers()
 	set_flags(next_branch)
 	var current_dialog = current_tree[next_branch]
 	dialog.text = current_dialog.text
