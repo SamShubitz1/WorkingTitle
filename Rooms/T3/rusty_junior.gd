@@ -30,28 +30,22 @@ func _ready() -> void:
 	"powered02": {
 		"text": "No one’s ever quite figured what I’m for. Least of all me. Unlikely to be of much use, I fear. I've no tools, nor torque. Just me little limbs and a loyal ticker.",
 		"options": [
-			{"name": "Your role?", "next": "powered02"},
-			{"name": "Leave", "next": null}]
-			},
-	"powered03": {
-		"text": "No one’s ever quite figured what I’m for. Least of all me. Unlikely to be of much use, I fear. I've no tools, nor torque. Just me little limbs and a loyal ticker.",
-		"options": [
 			{"name": "Items?", "next": "powered03"},
 			{"name": "Leave", "next": null}]
 			},
-	"powered04": {
+	"powered03": {
 		"text": "Oh, goodness. How dreadfully sorry I am to deny you your due. Allow me to...unfasten my little latches, that you might retrieve your battery cells nestled in my chest.",
 		"options": [
-			{"name": "Nevermind.", "next": "powered05"},
-			{"name": "Retrieve batteries.", "next": "powered06"},
+			{"name": "Nevermind.", "next": "powered04"},
+			{"name": "Retrieve batteries.", "next": "powered05"},
 			{"name": "Leave", "next": null}]
 			},
-	"powered05": {
+	"powered04": {
 		"text": "I could perhaps still be of use. My optics aren't licensed for anything but they are functional. I'll search the area for usefuls. Right this instance!",
 		"options": [
 			{"name": "Leave", "next": null}]
 			},
-	"powered06": {
+	"powered05": {
 		"text": "(The machine closes its optical vents and turns its head up, exposing its chest. You unbuckle the battery pack and retrieve your 50 cells.)",
 		"options": [
 			{"name": "Leave", "next": null}]
@@ -73,6 +67,7 @@ func select_option():
 		dialog_box.queue_free()
 		return false
 	elif selected_dialog == "powered01":
+		PlayerFlags.flags["rusty_junior_powered"] = true
 		dialog_box.queue_free()
 		game_controller.play_transition()
 		sprite.play("powered")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=4 uid="uid://c1v4bwv2f1b7i"]
+[gd_scene load_steps=76 format=4 uid="uid://c1v4bwv2f1b7i"]
 
 [ext_resource type="Script" path="res://Rooms/T3/T3Room.gd" id="1_5ib1x"]
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_hjmfd"]
@@ -15,7 +15,6 @@
 [ext_resource type="Script" path="res://Rooms/T1/camera_bound.gd" id="8_my6u5"]
 [ext_resource type="Script" path="res://Rooms/T3/peddlin_rusty.gd" id="8_svfat"]
 [ext_resource type="Texture2D" uid="uid://b4vp5lpubs5mg" path="res://Art/WorldSprites/T3_Harvest_Rusty_unpowered.png" id="9_l8mhe"]
-[ext_resource type="Script" path="res://Rooms/T2/camera_bound_2.gd" id="9_oub8l"]
 [ext_resource type="Script" path="res://Rooms/T3/harvest_rusty.gd" id="10_ffke0"]
 [ext_resource type="Texture2D" uid="uid://c4ud5jcyfbjl2" path="res://Art/WorldSprites/T3_RoundUp_Rusty_unpowered.png" id="10_sh5f2"]
 [ext_resource type="Texture2D" uid="uid://dj8t6o3evfkir" path="res://Art/WorldSprites/T3_Rusty_Junior_Walk_Unpowered.png" id="11_hf7hy"]
@@ -2047,10 +2046,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j0jfl"]
-size = Vector2(1791.5, 256)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_r1w5s"]
-size = Vector2(896, 768)
+size = Vector2(1791.75, 768)
 
 [node name="T3Room" type="Node2D"]
 script = ExtResource("1_5ib1x")
@@ -2073,12 +2069,12 @@ tile_set = ExtResource("6_ah60h")
 [node name="PeddlinRusty" type="Node2D" parent="Objects"]
 position = Vector2(992, 640)
 script = ExtResource("8_svfat")
+neighbor_coords = [Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)]
 
 [node name="PeddlinRusty" type="AnimatedSprite2D" parent="Objects/PeddlinRusty"]
-position = Vector2(32, 32)
 sprite_frames = SubResource("SpriteFrames_6j5u3")
-frame_progress = 0.717301
-offset = Vector2(16, 0)
+frame_progress = 0.677633
+offset = Vector2(48, 40)
 
 [node name="HarvestRusty" type="Node2D" parent="Objects"]
 position = Vector2(864, 416)
@@ -2129,7 +2125,7 @@ offset = Vector2(16, 16)
 [node name="Doodads" type="Node2D" parent="."]
 
 [node name="RailTramTracks" type="Node2D" parent="Doodads"]
-z_index = 2
+z_index = 6
 position = Vector2(1792, 800)
 
 [node name="RailTramTracks1" type="AnimatedSprite2D" parent="Doodads/RailTramTracks"]
@@ -2287,21 +2283,15 @@ texture = ExtResource("12_ehnkr")
 offset = Vector2(16, 16)
 
 [node name="CameraBoundContainer" type="Node2D" parent="."]
+visible = false
 
 [node name="CameraBound" type="Area2D" parent="CameraBoundContainer"]
-position = Vector2(128, 640)
+visible = false
+position = Vector2(128, 128)
 script = ExtResource("8_my6u5")
 
 [node name="CameraCollisionArea" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound"]
-position = Vector2(896, 128)
+visible = false
+position = Vector2(896, 384)
 shape = SubResource("RectangleShape2D_j0jfl")
-debug_color = Color(0, 0.6, 0.701961, 0)
-
-[node name="CameraBound2" type="Area2D" parent="CameraBoundContainer"]
-position = Vector2(128, 128)
-script = ExtResource("9_oub8l")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound2"]
-position = Vector2(448, 384)
-shape = SubResource("RectangleShape2D_r1w5s")
 debug_color = Color(0, 0.6, 0.701961, 0)

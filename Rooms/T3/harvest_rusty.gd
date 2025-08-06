@@ -74,6 +74,7 @@ func select_option():
 		dialog_box.queue_free()
 		return false
 	elif selected_dialog == "powered01":
+		PlayerFlags.flags["harvest_rusty_powered"] = true
 		dialog_box.queue_free()
 		game_controller.play_transition()
 		sprite.play("powered")
