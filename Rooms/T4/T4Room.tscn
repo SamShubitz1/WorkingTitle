@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=4 uid="uid://bk81t86o1j0qv"]
+[gd_scene load_steps=19 format=4 uid="uid://bk81t86o1j0qv"]
 
 [ext_resource type="Script" path="res://Rooms/T4/T4room.gd" id="1_bgx4r"]
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_dr1ii"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://bu5t8rnxtgdul" path="res://Dodads/Doors/Door_02.png" id="6_mn5q7"]
 [ext_resource type="Script" path="res://Rooms/T1/camera_bound.gd" id="7_70e55"]
 [ext_resource type="Script" path="res://Rooms/T2/enemy_area.gd" id="7_aw8qa"]
+[ext_resource type="Texture2D" uid="uid://dkvdb5wvet014" path="res://Art/WorldSprites/T4_Rustys_Shack.png" id="10_qwru4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_j3j0a"]
 texture = ExtResource("1_dr1ii")
@@ -697,3 +698,8 @@ shape = SubResource("RectangleShape2D_o2x0i")
 debug_color = Color(0, 0.6, 0.701961, 0)
 
 [node name="Area2D" type="Area2D" parent="."]
+
+[node name="T4RustysShack" type="Sprite2D" parent="."]
+position = Vector2(384, 320)
+scale = Vector2(2, 2)
+texture = ExtResource("10_qwru4")
