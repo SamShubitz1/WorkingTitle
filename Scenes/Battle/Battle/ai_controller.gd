@@ -247,7 +247,6 @@ func get_priority_ability(abilities: Array, enemy: Character) -> Dictionary: #se
 			ability_with_priority.priority += damage_bonus
 			
 		ability_with_priority.priority += randi_range(-2, 2)
-			
 		abilities_with_priorities.append(ability_with_priority)
 		
 	var selected_ability = select_by_priority(abilities_with_priorities)

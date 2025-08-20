@@ -303,7 +303,7 @@ var characters = {
 	
 	"Mandrake": {"name": "Mandrake", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 3, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 3, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Sonic Pulse", "Zap", "Burst Rifle", "Wave Beam", "Acid Cloud", "Septic Injection"], "base energy": 80, "base health": 300, "role": Data.MachineRole.ESNIPER, "path": "res://Scenes/Battle/Characters/Mandrake/mandrake.tscn"},
 	
-	"Thumper": {"name": "Thumper", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}, "abilities": ["Trample", "Power Strike", "Accelerate", "Burst Rifle", "Cluster Rockets", "Ignite"], "base energy": 80, "base health": 300, "role": Data.MachineRole.PASSAULTER, "path": "res://Scenes/Battle/Characters/Thumper/thumper.tscn"},
+	"Thumper": {"name": "Thumper", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}, "abilities": ["Trample", "Acid Cloud", "Accelerate", "Burst Rifle", "Cluster Rockets", "Ignite"], "base energy": 80, "base health": 300, "role": Data.MachineRole.PASSAULTER, "path": "res://Scenes/Battle/Characters/Thumper/thumper.tscn"},
 	}
 	
 var items: Dictionary = {

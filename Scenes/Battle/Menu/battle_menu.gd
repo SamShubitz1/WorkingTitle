@@ -257,11 +257,12 @@ func initialize_menus() -> void:
 	items_menu.init(items_node, items_buttons, cursor, initial_cursor_pos)
 	
 	var targets_buttons = targets_grid.get_children()
-	targets_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
-	movement_menu.init(targets_node, targets_buttons, cursor, null, false) # wrapping is false
+	targets_menu.init(targets_node, targets_buttons, cursor, null)
+	movement_menu.init(targets_node, targets_buttons, cursor, null)
 	
 	var battle_grid = battle_controller.get_grid()
 	battle_grid.terrain_change.connect(targets_menu._on_terrain_change)
+	battle_grid.terrain_change.connect(movement_menu._on_terrain_change)
 	
 	log_menu.init(log_node, log_node.get_child(0).get_children().slice(1), cursor, null, battle_controller.battle_log)
 	

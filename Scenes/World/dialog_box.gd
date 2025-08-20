@@ -14,16 +14,15 @@ var current_tree: Dictionary
 
 # pass the NPC or object's dialog tree, display default dialog
 func set_tree(dialog_tree: Dictionary) -> void:
-	#dialog_container.position -= Vector2(180, 100)
 	current_tree = dialog_tree
 	update_dialog("default")
 
 # takes a dialog_tree key, sets new screen of dialog (text + options)
 func update_dialog(next_branch: String) -> void:
-	build_text_covers()
-	play_text_covers()
+	#build_text_covers()
+	#play_text_covers()
 	set_flags(next_branch)
-	var current_dialog = current_tree[next_branch]
+	var current_dialog = current_tree.get(next_branch, current_tree["default"]) # default used as safe fallback
 	dialog.text = current_dialog.text
 	current_options = current_dialog.options
 	for i in range(options.size()):
@@ -82,7 +81,6 @@ func play_text_covers():
 	text_cover_container.get_child(0).stop()
 	kill_text_covers()
 	
-
 func kill_text_covers():
 	for i in range(1,4):
 		var next_text_cover = text_cover_container.get_child(i)

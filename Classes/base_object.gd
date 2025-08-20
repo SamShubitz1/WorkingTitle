@@ -14,12 +14,13 @@ var battle_data: Dictionary = {"terrain": {}, "enemy_pool": []}
 
 var grid_coords: Vector2i
 var dialog_tree: Dictionary
-var dialog_box: DialogBox 
+var dialog_box: DialogBox
 
 func _ready() -> void:
 	grid_coords = map_controller.point_to_grid(position)
 	map_controller.set_object_at_coords(self, grid_coords)
-	sprite.play("default")
+	if sprite.sprite_frames.has_animation("default"):
+		sprite.play()
 	
 	for coords in neighbor_coords:
 		var neighbor = grid_coords + coords
@@ -48,7 +49,6 @@ func update_tree() -> Dictionary:
 func start_dialog() -> void:
 	if has_alt_greeting:
 		PlayerFlags.flags[self.name + "_greeted"] = true
-		print(self.name)
 		
 	var updated_tree = update_tree()
 	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
@@ -56,7 +56,6 @@ func start_dialog() -> void:
 	game_controller.get_node("UI").add_child(dialog_box)
 	dialog_box.set_tree(updated_tree)
 	
-
 func update_selected_option(input_direction: Vector2i):
 	if dialog_box != null:
 		dialog_box.update_selected_option(input_direction)
