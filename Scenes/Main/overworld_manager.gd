@@ -18,7 +18,7 @@ func load_pause_menu() -> void:
 	pause_menu.anchor_top = 0.5
 	pause_menu.anchor_right = 0.5
 	pause_menu.anchor_bottom = 0.5
-
+ 
 	# Define desired width and height
 	var width = 300
 	var height = 200
