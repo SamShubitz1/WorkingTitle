@@ -125,6 +125,7 @@ animations = [{
 script = ExtResource("1_2nx2o")
 
 [node name="FadeToBlackCanvas" type="CanvasLayer" parent="."]
+layer = 2
 script = ExtResource("2_q7va1")
 
 [node name="FadeToBlack" type="AnimatedSprite2D" parent="FadeToBlackCanvas"]

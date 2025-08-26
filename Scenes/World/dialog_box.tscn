@@ -30,12 +30,15 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -600.0
-offset_top = -308.0
+offset_top = -300.0
 offset_right = 600.0
-offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxTexture_fwixy")
+
+[node name="CoverAnimContainer" type="Node2D" parent="DialogContainer"]
+z_index = 8
+position = Vector2(600, -4)
 
 [node name="Dialog" type="RichTextLabel" parent="DialogContainer"]
 layout_mode = 1

@@ -5,7 +5,7 @@ func _ready() -> void:
 	"name": "tram",
 	"variants": [],
 	"default": {
-		"text": "This tram is trammin.",
+		"text": "This tram is trammin",
 		"options": [
 			{"name": "Leave", "next": null}
 					]

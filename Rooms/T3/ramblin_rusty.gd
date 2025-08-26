@@ -1,8 +1,8 @@
-extends BaseObject
+extends BaseRusty
 
 func _ready() -> void:
 	dialog_tree = {
-	"name": "ramblinrusty",
+	"name": "ramblin_rusty",
 	"variants": [{
 		"type": "default_variant",
 		"flag": "ramblin_rusty_powered",
@@ -58,21 +58,3 @@ func _ready() -> void:
 			},
 }
 	super._ready()
-
-func select_option():
-	if dialog_box == null:
-		return false
-		
-	var selected_dialog = dialog_box.select_option()
-	if selected_dialog == null:
-		dialog_box.queue_free()
-		return false
-	elif selected_dialog == "powered01":
-		PlayerFlags.flags["ramblin_rusty_powered"] = true
-		dialog_box.queue_free()
-		game_controller.play_transition()
-		sprite.play("powered")
-		return false
-	else:
-		dialog_box.update_dialog(selected_dialog)
-		return true

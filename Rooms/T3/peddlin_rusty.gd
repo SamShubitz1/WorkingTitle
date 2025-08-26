@@ -1,8 +1,8 @@
-extends BaseObject
+extends BaseRusty
 
 func _ready() -> void:
 	dialog_tree = {
-	"name": "peddlinrusty",
+	"name": "peddlin_rusty",
 	"variants": [{
 		"type": "default_variant",
 		"flag": "peddlin_rusty_powered",

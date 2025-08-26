@@ -19,11 +19,11 @@ func load_pause_menu() -> void:
 	pause_menu.anchor_right = 0.5
 	pause_menu.anchor_bottom = 0.5
 
-		# Define desired width and height
+	# Define desired width and height
 	var width = 300
 	var height = 200
 
-		# Use offsets to center the menu
+	# Use offsets to center the menu
 	pause_menu.offset_left = -width / 2
 	pause_menu.offset_top = -height / 2
 	pause_menu.offset_right = width / 2

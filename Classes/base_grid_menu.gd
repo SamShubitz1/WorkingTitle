@@ -3,7 +3,6 @@ extends BaseMenu
 class_name BaseGridMenu
 
 enum GridType {
-	GLOBAL,
 	ENEMY,
 	HERO,
 	CUSTOM

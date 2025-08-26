@@ -6,6 +6,7 @@ var battle_res = "res://Scenes/Battle/Battle/battle_scene.tscn"
 var overworld_res = "res://Scenes/Main/overworld.tscn"
 var current_scene
 var is_loading = false
+var dialog_mode = false
 
 func _ready() -> void:
 	var overworld_scene = load(overworld_res)
@@ -48,6 +49,13 @@ func get_scene_resource(scene: Data.Scenes) -> String:
 		_:
 			resource = ""
 	return resource
+
+func _enter_dialog_mode() -> void:
+	dialog_mode = true
+
+func _exit_dialog_mode() -> void:
+	await get_tree().create_timer(0.1).timeout
+	dialog_mode = false
 
 # pause target node / sub-scene
 #func set_pause_subtree(root: Node, pause: bool) -> void:

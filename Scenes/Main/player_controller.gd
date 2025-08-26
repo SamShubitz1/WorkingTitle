@@ -8,9 +8,6 @@ extends Node2D
 
 signal player_position_updated(grid_position: Vector2i)
 
-var dialog_mode: bool = false
-var dialog_object: BaseObject
-
 var weather = null
 
 var default_player_pos = null
@@ -45,23 +42,18 @@ func process_player_movement(delta) -> void:
 	player.position += player.speed * delta * player.current_direction
 	check_move_complete()
 
-# used for overworld movement and dialog/menu accept
+# used for overworld movement
 func process_player_inputs() -> void:
-	if player.is_moving || game_controller.is_loading:
+	if player.is_moving || game_controller.is_loading || game_controller.dialog_mode:
 		return
 		
 	if Input.is_action_just_pressed("ui_accept"):
 		player_action_pressed()
 		
-	if Input.is_action_just_pressed("pause_menu"):
-		if !dialog_mode:
+	if Input.is_action_just_pressed("pause_menu"): 
 			open_pause_menu()
-		else:
-			close_pause_menu()
-		return
-		
-	if dialog_mode:
-		return
+			#close_pause_menu() # this gonna change
+			return
 		
 	var input_direction = get_direction()
 	
@@ -72,7 +64,7 @@ func process_player_inputs() -> void:
 	else:
 		set_player_animation(player.current_direction, true)
 	
-# used for dialog and movement
+# used for movement
 func get_direction() -> Vector2i:
 	var input_direction: Vector2i
 	if input_direction.y == 0:
@@ -81,13 +73,6 @@ func get_direction() -> Vector2i:
 		input_direction.y = int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up"))
 		
 	return input_direction
-
-func _input(_e) -> void:
-	if !dialog_mode:
-		return
-	var input_direction = get_direction()
-	if input_direction != Vector2i.ZERO:
-		dialog_object.update_selected_option(input_direction)
 
 func check_collision() -> void:
 	var dest_coords = player.get_grid_position() + player.current_direction
@@ -133,12 +118,6 @@ func finish_move(dest_pos: Vector2i) -> void:
 	emit_signal("player_position_updated", player.grid_position)
 	
 func player_action_pressed() -> void:
-	if dialog_mode:
-		dialog_mode = dialog_object.select_option()
-		return
-	elif dialog_mode:
-		return
-
 	var action_coords = player.grid_position + player.current_direction
 	var object = map_controller.get_object_at_coords(action_coords)
 	var actioned_tile = map_controller.get_tile_at_coords(action_coords)
@@ -146,15 +125,13 @@ func player_action_pressed() -> void:
 	
 	if object == null && actioned_tile.is_empty(): #may want to check actioned_tile list members individually
 		return
-		
+
 	interact(object)
 
 func open_pause_menu():
-	dialog_mode = true
 	pause_menu.open()
 
 func close_pause_menu():
-	dialog_mode = false
 	pause_menu.close()
 
 func interact(object: Node):
@@ -163,8 +140,6 @@ func interact(object: Node):
 			enter_battle_scene(object.battle_data)
 		elif !object.dialog_tree.is_empty():
 			set_player_animation(player.current_direction, true)
-			dialog_mode = true
-			dialog_object = object
 			object.start_dialog()
 			
 	elif object is BaseDoor:

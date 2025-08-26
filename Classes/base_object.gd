@@ -53,24 +53,10 @@ func start_dialog() -> void:
 	var updated_tree = update_tree()
 	var dialog_scene = load("res://Scenes/World/dialog_box.tscn")
 	dialog_box = dialog_scene.instantiate()
+	dialog_box.open_box.connect(game_controller._enter_dialog_mode)
+	dialog_box.close_box.connect(game_controller._exit_dialog_mode)
 	game_controller.get_node("UI").add_child(dialog_box)
 	dialog_box.set_tree(updated_tree)
-	
-func update_selected_option(input_direction: Vector2i):
-	if dialog_box != null:
-		dialog_box.update_selected_option(input_direction)
-
-func select_option():
-	if dialog_box == null:
-		return false
-		
-	var selected_dialog = dialog_box.select_option()
-	if selected_dialog == null:
-		dialog_box.queue_free()
-		return false
-	else:
-		dialog_box.update_dialog(selected_dialog)
-		return true
 
 func kill() -> void:
 	map_controller.set_object_at_coords(null, grid_coords)
