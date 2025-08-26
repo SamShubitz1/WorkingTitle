@@ -76,11 +76,10 @@ func update_selected_option(direction: NavDirection) -> void:
 	options[option_index].modulate = Color(1, 1, 0)
 
 # updates dialog or quits scene based on option, called on player action press
-func select_option(): #this a string
+func select_option():
 	var next_dialog = current_options[option_index].get("next")
 	if next_dialog == null:
-		emit_signal("close_box")
-		self.queue_free()
+		close()
 	else:
 		update_dialog(next_dialog)
 		
@@ -111,13 +110,18 @@ func build_text_covers(number_of_lines: int):
 		cover_anim.position += offset
 		offset.y += 50
 
+func close() -> void:
+	emit_signal("close_box")
+	self.queue_free()
+
 func play_text_covers():
 	anim_is_playing = true
 	for anim in cover_anim_container.get_children():
 		anim.play()
 		await get_tree().create_timer(1.1).timeout
 		if anim == null:
-			#anim_is_playing = false
+			anim_is_playing = false
+			options[option_index].modulate = Color(1, 1, 0)
 			break
 		else:
 			anim.queue_free()
@@ -127,4 +131,3 @@ func play_text_covers():
 func kill_animations():
 	for anim in cover_anim_container.get_children():
 		anim.queue_free()
-	options[option_index].modulate = Color(1, 1, 0)

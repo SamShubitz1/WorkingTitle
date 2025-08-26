@@ -1,14 +1,9 @@
-extends BaseRusty
+extends BaseObject
 
 func _ready() -> void:
 	dialog_tree = {
 	"name": "peddlin_rusty",
-	"variants": [{
-		"type": "default_variant",
-		"flag": "peddlin_rusty_powered",
-		"branch": "powered01",
-	}
-	],
+	"variants": [],
 	"default": {
 		"text": "Come closer, neophyte. Let the Church of Rusty ease the surge that fires between your synapse. The spoils of Tabernacle are more brilliant than their shimmer.",
 		"options": [
