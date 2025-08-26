@@ -1,4 +1,4 @@
-[gd_scene load_steps=82 format=4 uid="uid://dwgjvlselmdr4"]
+[gd_scene load_steps=92 format=4 uid="uid://dwgjvlselmdr4"]
 
 [ext_resource type="Texture2D" uid="uid://cwvf5o0n53a8c" path="res://Art/Tiles/T_E_Farmland_Onetile.png" id="1_q2ld6"]
 [ext_resource type="Script" path="res://Rooms/T2/T2Room.gd" id="1_rb3v6"]
@@ -1680,6 +1680,65 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_ymd6a"]
+blend_mode = 1
+
+[sub_resource type="Curve" id="Curve_xgeev"]
+max_value = 0.75
+_data = [Vector2(0.468085, 0.75), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="CurveTexture" id="CurveTexture_2xago"]
+curve = SubResource("Curve_xgeev")
+
+[sub_resource type="Gradient" id="Gradient_kfbsr"]
+offsets = PackedFloat32Array(1)
+colors = PackedColorArray(1, 1, 1, 0.27451)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_1l78n"]
+gradient = SubResource("Gradient_kfbsr")
+
+[sub_resource type="Curve" id="Curve_0dcb4"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_ew2tb"]
+max_value = 30.0
+_data = [Vector2(0, 30), 0.0, 0.0, 0, 0, Vector2(1, 30), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_7ygih"]
+max_value = 3.0
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_lwlf5"]
+curve_x = SubResource("Curve_0dcb4")
+curve_y = SubResource("Curve_ew2tb")
+curve_z = SubResource("Curve_7ygih")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j5rxt"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(0, -1800, 0)
+emission_shape = 3
+emission_box_extents = Vector3(1280, 1, 1)
+inherit_velocity_ratio = 1.0
+direction = Vector3(0, 1, 0)
+spread = 0.0
+initial_velocity_max = 114.4
+angular_velocity_min = -1.60933e-05
+angular_velocity_max = -1.60933e-05
+gravity = Vector3(0, 1000, 0)
+linear_accel_min = 13.65
+linear_accel_max = 27.67
+scale_min = 0.2
+scale_max = 2.0
+scale_over_velocity_curve = SubResource("CurveXYZTexture_lwlf5")
+color = Color(7.46027e-07, 0.37882, 0.419598, 0.615686)
+color_initial_ramp = SubResource("GradientTexture1D_1l78n")
+alpha_curve = SubResource("CurveTexture_2xago")
+
 [node name="T2Room" type="Node2D"]
 script = ExtResource("1_rb3v6")
 
@@ -1938,3 +1997,11 @@ scale = Vector2(2, 2)
 position = Vector2(112, 64)
 sprite_frames = SubResource("SpriteFrames_skgyo")
 animation = &"Screenbox"
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_ymd6a")
+amount = 1500
+process_material = SubResource("ParticleProcessMaterial_j5rxt")
+lifetime = 5.0
+preprocess = 0.5
+visibility_rect = Rect2(0, 0, 5120, 5120)

@@ -2207,15 +2207,12 @@ texture = ExtResource("12_ehnkr")
 offset = Vector2(16, 16)
 
 [node name="CameraBoundContainer" type="Node2D" parent="."]
-visible = false
 
 [node name="CameraBound" type="Area2D" parent="CameraBoundContainer"]
-visible = false
 position = Vector2(128, 128)
 script = ExtResource("8_my6u5")
 
 [node name="CameraCollisionArea" type="CollisionShape2D" parent="CameraBoundContainer/CameraBound"]
-visible = false
 position = Vector2(896, 384)
 shape = SubResource("RectangleShape2D_j0jfl")
 debug_color = Color(0, 0.6, 0.701961, 0)

@@ -111,8 +111,6 @@ func finish_move(dest_pos: Vector2i) -> void:
 	map_controller.set_object_at_coords(player, player.grid_position)
 	
 	GameState.current_time += 1
-	if weather != null:
-		weather.position = player.position
 	#check_for_battle()
 	check_for_camera_bounds()
 	emit_signal("player_position_updated", player.grid_position)
@@ -154,7 +152,8 @@ func update_weather() -> void:
 	if GameState.current_weather == GameState.Weather.RAINING:
 		var weather_scene = load("res://Scenes/World/weather_visuals.tscn")
 		weather = weather_scene.instantiate()
-		game_controller.get_node("UI").add_child(weather)
+		self.player_position_updated.connect(weather._set_splash_range)
+		map_controller.add_child(weather)
 		
 	elif GameState.current_weather == GameState.Weather.CLEAR:
 		if weather != null:

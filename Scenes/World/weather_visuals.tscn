@@ -11,14 +11,14 @@ max_value = 0.75
 _data = [Vector2(0.468085, 0.75), 0.0, 0.0, 0, 0]
 point_count = 1
 
-[sub_resource type="CurveTexture" id="CurveTexture_wogah"]
+[sub_resource type="CurveTexture" id="CurveTexture_oqkrb"]
 curve = SubResource("Curve_8hflj")
 
 [sub_resource type="Gradient" id="Gradient_e7a8l"]
 offsets = PackedFloat32Array(1)
 colors = PackedColorArray(1, 1, 1, 0.27451)
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_sy8by"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_53ins"]
 gradient = SubResource("Gradient_e7a8l")
 
 [sub_resource type="Curve" id="Curve_hqmjq"]
@@ -36,7 +36,7 @@ max_value = 3.0
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
-[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_xno77"]
+[sub_resource type="CurveXYZTexture" id="CurveXYZTexture_gf8io"]
 curve_x = SubResource("Curve_hqmjq")
 curve_y = SubResource("Curve_c746u")
 curve_z = SubResource("Curve_dkos2")
@@ -49,16 +49,17 @@ emission_box_extents = Vector3(1280, 1, 1)
 inherit_velocity_ratio = 1.0
 direction = Vector3(0, 1, 0)
 spread = 0.0
-initial_velocity_min = 885.6
-initial_velocity_max = 1000.0
+initial_velocity_max = 114.4
+angular_velocity_min = -1.60933e-05
+angular_velocity_max = -1.60933e-05
 gravity = Vector3(0, 1000, 0)
 linear_accel_min = 13.65
 linear_accel_max = 27.67
 scale_min = 0.2
-scale_over_velocity_curve = SubResource("CurveXYZTexture_xno77")
-color = Color(0, 0.803922, 0.882353, 0.717647)
-color_initial_ramp = SubResource("GradientTexture1D_sy8by")
-alpha_curve = SubResource("CurveTexture_wogah")
+scale_over_velocity_curve = SubResource("CurveXYZTexture_gf8io")
+color = Color(7.46027e-07, 0.37882, 0.419598, 0.615686)
+color_initial_ramp = SubResource("GradientTexture1D_53ins")
+alpha_curve = SubResource("CurveTexture_oqkrb")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ksh1c"]
 atlas = ExtResource("2_ls6ms")
@@ -101,13 +102,15 @@ script = ExtResource("1_r1msg")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_fuyn2")
-amount = 1500
+amount = 3000
 process_material = SubResource("ParticleProcessMaterial_ctsxt")
 lifetime = 5.0
 preprocess = 0.5
-visibility_rect = Rect2(-1280, -1280, 2560, 2560)
+visibility_rect = Rect2(0, 0, 5120, 5120)
 
-[node name="RainSplash" type="AnimatedSprite2D" parent="GPUParticles2D"]
+[node name="RainSplash" type="AnimatedSprite2D" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.701961)
 sprite_frames = SubResource("SpriteFrames_q25ys")
 animation = &"RainSplash"
 frame = 3
