@@ -8,6 +8,13 @@ enum GridType {
 	CUSTOM
 }
 
+enum Direction {
+	LEFT,
+	RIGHT,
+	UP,
+	DOWN
+}
+
 const grid_size := Data.grid_size
 
 var battle_grid: Dictionary
@@ -42,6 +49,7 @@ func reset_cells() -> void:
 				targets_grid[cell].node.modulate = Color(0, 0, 0, 0)
 	
 func set_custom_cells(custom_cells: Array):
+	grid_type = GridType.CUSTOM
 	for cell in targets_grid:
 		if cell in custom_cells:
 			targets_grid[cell].active = true
@@ -85,7 +93,7 @@ func navigate_forward(e: InputEvent) -> void:
 	if !is_active:
 		return
 		
-	#if current_grid_type == GridType.CUSTOM:
+	#if grid_type == GridType.CUSTOM:
 		#var next_index = (custom_index + 1) % targets_grid.size()
 		#custom_index = next_index
 		#update_selected_cell(targets_grid.keys()[custom_index])
@@ -116,9 +124,9 @@ func move_up() -> void:
 	if selected_coords.y == grid_size.y - 1:
 		return
 		
-	var next_coords := Vector2i(selected_coords.x, selected_coords.y + 1)
-	if !targets_grid[next_coords].active:
-		return #add logic to get next valid cell
+	var next_coords = get_next_valid_coords(Direction.UP)
+	if next_coords == null:
+		return 
 		
 	var is_in_range = check_range(next_coords)
 	if !is_in_range:
@@ -130,9 +138,9 @@ func move_down() -> void:
 	if selected_coords.y == 0:
 		return
 		
-	var next_coords := Vector2i(selected_coords.x, selected_coords.y - 1)
-	if !targets_grid[next_coords].active:
-		return #add logic to get next valid cell
+	var next_coords = get_next_valid_coords(Direction.DOWN)
+	if next_coords == null:
+		return
 		
 	var is_in_range = check_range(next_coords)
 	if !is_in_range:
@@ -144,9 +152,9 @@ func move_left() -> void:
 	if selected_coords.x == 0:
 		return
 
-	var next_coords := Vector2i(selected_coords.x - 1, selected_coords.y)
-	if !targets_grid[next_coords].active:
-		return #add logic to get next valid cell
+	var next_coords = get_next_valid_coords(Direction.LEFT)
+	if next_coords == null:
+		return 
 		
 	var is_in_range = check_range(next_coords)
 	if !is_in_range:
@@ -158,9 +166,9 @@ func move_right() -> void:
 	if selected_coords.x == 7:
 		return
 
-	var next_coords := Vector2i(selected_coords.x + 1, selected_coords.y)
-	if !targets_grid[next_coords].active:
-		return #add logic to get next valid cell
+	var next_coords = get_next_valid_coords(Direction.RIGHT)
+	if next_coords == null:
+		return 
 		
 	var is_in_range = check_range(next_coords)
 	if !is_in_range:
@@ -179,7 +187,9 @@ func disactivate() -> void:
 
 func update_selected_cell(next_coords) -> void:
 	reset_cells()
-	var neighbor_coords = Utils.get_neighbor_coords(next_coords, current_shape, Data.Alliance.HERO)
+	selected_coords = next_coords
+	
+	var neighbor_coords = Utils.get_neighbor_coords(selected_coords, current_shape, Data.Alliance.HERO)
 	for coords in neighbor_coords:
 		if !targets_grid.has(coords):
 			continue
@@ -187,7 +197,6 @@ func update_selected_cell(next_coords) -> void:
 		if neighbor.active:
 			neighbor.node.modulate = get_cell_color(coords, true)
 			
-	selected_coords = next_coords
 	targets_grid[selected_coords].node.modulate = get_cell_color(selected_coords, false)
 	
 func set_current_shape(attack_shape: Data.AbilityShape) -> void:
@@ -203,8 +212,18 @@ func set_range(next_origin: Vector2i, range: Vector2i) -> void:
 	if grid_type == GridType.HERO:
 		update_selected_cell(origin)
 	elif grid_type == GridType.ENEMY:
-		update_selected_cell(Vector2i(4, origin.y))
+		var coords = get_valid_origin_coords()
+		update_selected_cell(coords)
 
+func get_valid_origin_coords():
+	for y in range(grid_size.y):
+		for x in range(4, grid_size.x):
+			var coords = Vector2i(x,y)
+			print(coords)
+			if targets_grid[coords].active:
+				return coords
+	return null
+				
 func get_cell_color(coords: Vector2i, is_neighbor: bool) -> Color:
 	var opacity := 0.5 if is_neighbor else 0.6
 	if coords.x > 3:
@@ -212,13 +231,43 @@ func get_cell_color(coords: Vector2i, is_neighbor: bool) -> Color:
 	else:
 		return Color(0.5, 0.2, 1, opacity)
 		
-func check_range(coords: Vector2i):
+func check_range(coords: Vector2i) -> bool:
 	if abs(coords.x - origin.x) > range_of_movement.x:
 		return false
 	elif abs(coords.y - origin.y) > range_of_movement.y:
 		return false
 	else:
 		return true
+		
+func get_next_valid_coords(direction: Direction):
+	var next_coords := selected_coords
+	var x_limit = Vector2i(0, 3) if grid_type == GridType.HERO else Vector2i(4, 7)
+	match direction:
+		Direction.UP:
+			while next_coords.y < 3:
+				next_coords.y += 1
+				var cell = targets_grid[next_coords]
+				if cell.active:
+					return next_coords
+		Direction.DOWN:
+			while next_coords.y > 0:
+				next_coords.y -= 1
+				var cell = targets_grid[next_coords]
+				if cell.active:
+					return next_coords
+		Direction.LEFT:
+			while next_coords.x > x_limit.x:
+				next_coords.x -= 1
+				var cell = targets_grid[next_coords]
+				if cell.active:
+					return next_coords
+		Direction.RIGHT:
+			while next_coords.x < x_limit.y:
+				next_coords.x += 1
+				var cell = targets_grid[next_coords]
+				if cell.active:
+					return next_coords
+	return null
 
 func _on_terrain_change(grid: Dictionary) -> void:
 	battle_grid = grid
