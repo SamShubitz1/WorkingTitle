@@ -153,7 +153,7 @@ func update_weather() -> void:
 		var weather_scene = load("res://Scenes/World/weather_visuals.tscn")
 		weather = weather_scene.instantiate()
 		self.player_position_updated.connect(weather._set_splash_range)
-		map_controller.add_child(weather)
+		self.add_child(weather)
 		
 	elif GameState.current_weather == GameState.Weather.CLEAR:
 		if weather != null:
