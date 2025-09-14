@@ -1,4 +1,4 @@
-[gd_scene load_steps=254 format=3 uid="uid://bs4nq0f1kxhja"]
+[gd_scene load_steps=263 format=3 uid="uid://bs4nq0f1kxhja"]
 
 [ext_resource type="Texture2D" uid="uid://dyq4gui5vpr6b" path="res://Scenes/Battle/Animations/Abi_Acid_Cloud.png" id="1_h2h23"]
 [ext_resource type="Texture2D" uid="uid://cenbw75qemri8" path="res://Scenes/Battle/Animations/Abi_Accerlate.png" id="1_jug3c"]
@@ -15,6 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://b070wtolklk4o" path="res://Scenes/Battle/Animations/Abi_Contemplate.png" id="8_02kpp"]
 [ext_resource type="Script" path="res://Scenes/Battle/Battle/animation_player.gd" id="8_eb3ju"]
 [ext_resource type="Texture2D" uid="uid://fnxtlq44sext" path="res://Scenes/Battle/Animations/Abi_Power_Strike.png" id="8_gll17"]
+[ext_resource type="Texture2D" uid="uid://bgn3kllrqfxlh" path="res://Scenes/Battle/Animations/Abi_Charge_Beam.png" id="8_j4bfo"]
 [ext_resource type="Texture2D" uid="uid://bhgrj5intl5ua" path="res://Scenes/Battle/Animations/Abi_Cluster_Rocket.png" id="9_6xthw"]
 [ext_resource type="Texture2D" uid="uid://22e4tgwj5aom" path="res://Scenes/Battle/Animations/Abi_Crush.png" id="9_kh3my"]
 [ext_resource type="Texture2D" uid="uid://cenjc3svlenw4" path="res://Scenes/Battle/Animations/Abi_Ignite.png" id="10_traay"]
@@ -264,6 +265,38 @@ region = Rect2(448, 0, 64, 32)
 [sub_resource type="AtlasTexture" id="AtlasTexture_opjpb"]
 atlas = ExtResource("5_n2a3h")
 region = Rect2(512, 0, 64, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6a4b"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(0, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gtt8o"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(192, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hajg"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(384, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mk51i"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(576, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6swb"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(768, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f0p2g"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(960, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7fhpv"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(1152, 0, 192, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uxdl6"]
+atlas = ExtResource("8_j4bfo")
+region = Rect2(1344, 0, 192, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_aqk76"]
 atlas = ExtResource("4_82los")
@@ -1141,6 +1174,35 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_e6a4b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gtt8o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2hajg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mk51i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6swb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f0p2g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7fhpv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uxdl6")
+}],
+"loop": true,
+"name": &"ChargeBeam",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_aqk76")
 }, {
 "duration": 1.0,
@@ -1741,7 +1803,5 @@ animations = [{
 [node name="KapowSprite" type="AnimatedSprite2D"]
 z_index = 4
 sprite_frames = SubResource("SpriteFrames_g16yy")
-animation = &"RalliedSurge"
-frame = 7
-frame_progress = 1.0
+animation = &"ChargeBeam"
 script = ExtResource("8_eb3ju")

@@ -69,7 +69,7 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]
 			},
 	"leave02": {
-		"text": "It was them miserable pilgrims that did me in like this. Said somethin’ about how buying my own batteries is blasphemy. Everything's blasphemy with them. All they ever do is damn the rest of us.",
+		"text": "It was them miserable pilgrims that did me in like this. Said somethin' about how buying my own batteries is blasphemy. Everything's blasphemy with them. All they ever do is damn the rest of us.",
 		"options": [
 			{"name": "Leave", "next": null}]
 			},
