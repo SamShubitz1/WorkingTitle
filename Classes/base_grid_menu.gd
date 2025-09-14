@@ -227,24 +227,48 @@ func update_terrain() -> void:
 	for cell in battle_grid:
 		targets_grid[cell].terrain = battle_grid[cell].terrain
 
-func set_range(next_origin: Vector2i, range: Vector2i) -> void:
+func set_range(next_origin: Vector2i, range: Vector2i) -> bool:
 	self.origin = next_origin
 	range_of_movement = range
 	if grid_type == GridType.HERO:
 		update_selected_cell(origin)
 	elif grid_type == GridType.ENEMY:
 		var coords = get_valid_origin_coords()
+		if coords == null:
+			return false
 		update_selected_cell(coords)
+	return true
 
 func get_valid_origin_coords():
-	for y in range(clamp(origin.y - range_of_movement.y, 0, 3), grid_size.y):
-		for x in range(4, clamp(origin.x + range_of_movement.x, 4, 7)):
-			var coords = Vector2i(x,y)
+	var x_max = clamp(origin.x + range_of_movement.x + 1, 0, 7)
+	for x in range(4, x_max):
+		var coords = Vector2i(x, origin.y)
+		print(coords)
+		if targets_grid[coords].active:
+			return coords
+			
+	if current_shape == Data.AbilityShape.LINE:
+		return null
+	
+	var y_below_min = clamp(origin.y - range_of_movement.y, 0, 3)
+	var y_below_max = origin.y
+	for y in range(y_below_min, y_below_max):
+		for x in range(4, x_max):
+			var coords = Vector2i(x, y)
 			print(coords)
 			if targets_grid[coords].active:
 				return coords
-	return null # shouldn't happen but would crash
-	
+				
+	var y_above_min = clamp(origin.y + 1, 0, 3)
+	var y_above_max = clamp(origin.y + range_of_movement.y + 1, 0, 3)
+	for y in range(y_above_min, y_above_max):
+		for x in range(4, x_max):
+			var coords = Vector2i(x, y)
+			print(coords)
+			if targets_grid[coords].active:
+				return coords
+	return null
+		
 func get_cell_color(coords: Vector2i, is_neighbor: bool) -> Color:
 	var opacity := 0.5 if is_neighbor else 0.6
 	if coords.x > 3:
