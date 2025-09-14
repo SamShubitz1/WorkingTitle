@@ -16,4 +16,5 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]
 			}
 	}
+	battle_data["terrain"] = {Data.BattleTerrain.BLOCKED: [Vector2i(4,1),Vector2i(5,1),Vector2i(6,1),Vector2i(7,1)]}
 	super._ready()

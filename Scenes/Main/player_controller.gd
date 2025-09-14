@@ -9,11 +9,8 @@ extends Node2D
 signal player_position_updated(grid_position: Vector2i)
 
 var weather = null
-
 var default_player_pos = null
-
 var pause_menu: Control
-
 var initialized: bool = false
 
 func _ready() -> void:

@@ -20,12 +20,12 @@ const grid_size := Data.grid_size
 var battle_grid: Dictionary
 var targets_grid: Dictionary
 var grid_type: GridType
+
 var range_of_movement: Vector2i
-var selected_coords: Vector2i
 var origin: Vector2i
 
+var selected_coords: Vector2i
 var current_shape: GameData.AbilityShape
-var custom_index = 0
 	
 func init(menu: Node, cells: Array, menu_cursor: BaseCursor, initial_button_position = null) -> void:
 	super.init(menu, cells, menu_cursor)
@@ -48,11 +48,17 @@ func reset_cells() -> void:
 			Data.BattleTerrain.BLOCKED:
 				targets_grid[cell].node.modulate = Color(0, 0, 0, 0)
 	
-func set_custom_cells(custom_cells: Array):
+func set_custom_cells(custom_cells: Array): # really just for melee now
 	grid_type = GridType.CUSTOM
+	current_shape = Data.AbilityShape.SINGLE
+	var first_target = false
+	
 	for cell in targets_grid:
 		if cell in custom_cells:
 			targets_grid[cell].active = true
+			if !first_target:
+				update_selected_cell(cell)
+				first_target = true
 		else:
 			targets_grid[cell].active = false
 	
@@ -88,17 +94,15 @@ func get_target_cells() -> Array:
 		#guarded_cells.append(Vector2i(coords.x - i, coords.y))
 	#for cell in guarded_cells:
 		#targets_grid[cell].modulate = Color(1.0, 0.84, 0.0)
-	
+		
 func navigate_forward(e: InputEvent) -> void:
 	if !is_active:
 		return
 		
-	#if grid_type == GridType.CUSTOM:
-		#var next_index = (custom_index + 1) % targets_grid.size()
-		#custom_index = next_index
-		#update_selected_cell(targets_grid.keys()[custom_index])
-		#return
-		
+	if grid_type == GridType.CUSTOM:
+		var coords = find_next_custom_cell(Direction.DOWN)
+		update_selected_cell(coords)
+	
 	elif e.keycode == KEY_DOWN || e.keycode == KEY_S: 
 		move_down()
 	elif e.keycode == KEY_RIGHT || e.keycode == KEY_D:
@@ -108,18 +112,33 @@ func navigate_backward(e: InputEvent) -> void:
 	if !is_active:
 		return
 		
-	#if current_grid_type == GridType.CUSTOM:
-		#if custom_index > 0:
-			#custom_index -= 1
-		#else:
-			#custom_index = targets_grid.size() - 1
-		#update_selected_cell(targets_grid.keys()[custom_index])
+	if grid_type == GridType.CUSTOM:
+		var coords = find_next_custom_cell(Direction.UP)
+		update_selected_cell(coords)
 		
 	elif e.keycode == KEY_UP || e.keycode == KEY_W:
 		move_up()
 	elif e.keycode == KEY_LEFT || e.keycode == KEY_A:
 		move_left()
 
+func find_next_custom_cell(direction: Direction):
+	var active_cells: Array
+	for cell in targets_grid:
+		if targets_grid[cell].active:
+			active_cells.append(cell)
+	match direction:
+		Direction.UP:
+			active_cells.reverse()
+			for cell in active_cells:
+				if cell.y > selected_coords.y:
+					return cell
+			return selected_coords
+		Direction.DOWN:
+			for cell in active_cells:
+				if cell.y < selected_coords.y:
+					return cell
+			return selected_coords
+	
 func move_up() -> void:
 	if selected_coords.y == grid_size.y - 1:
 		return
@@ -186,6 +205,8 @@ func disactivate() -> void:
 	reset_cells()
 
 func update_selected_cell(next_coords) -> void:
+	if next_coords == selected_coords:
+		return
 	reset_cells()
 	selected_coords = next_coords
 	
@@ -216,14 +237,14 @@ func set_range(next_origin: Vector2i, range: Vector2i) -> void:
 		update_selected_cell(coords)
 
 func get_valid_origin_coords():
-	for y in range(grid_size.y):
-		for x in range(4, grid_size.x):
+	for y in range(clamp(origin.y - range_of_movement.y, 0, 3), grid_size.y):
+		for x in range(4, clamp(origin.x + range_of_movement.x, 4, 7)):
 			var coords = Vector2i(x,y)
 			print(coords)
 			if targets_grid[coords].active:
 				return coords
-	return null
-				
+	return null # shouldn't happen but would crash
+	
 func get_cell_color(coords: Vector2i, is_neighbor: bool) -> Color:
 	var opacity := 0.5 if is_neighbor else 0.6
 	if coords.x > 3:

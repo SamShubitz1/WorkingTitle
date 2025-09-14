@@ -57,6 +57,8 @@ func set_position_by_grid_coords(character: Character) -> void:
 	character.position = Vector2i(x_pos + x_offsets[coords.y], y_offsets[coords.y])
 
 func get_melee_targets(alliance: Data.Alliance, ability: Dictionary, player: Character) -> Array:
+	if player.grid_position.x < 2:
+		return []
 	var x_range: Vector2i
 	if alliance == Data.Alliance.HERO:
 		x_range = Vector2i(4,8) # hard coded
