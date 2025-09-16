@@ -50,7 +50,7 @@ func reset_cells() -> void:
 	
 func set_custom_cells(custom_cells: Array): # really just for melee now
 	grid_type = GridType.CUSTOM
-	current_shape = Data.AbilityShape.SINGLE
+	current_shape = Data.AbilityShape.MELEE
 	var first_target = false
 	
 	for cell in targets_grid:
@@ -240,6 +240,8 @@ func set_range(next_origin: Vector2i, range: Vector2i) -> bool:
 	return true
 
 func get_valid_origin_coords():
+	if range_of_movement == Vector2i.ZERO:
+		range_of_movement = Vector2i(4,3)
 	var x_max = clamp(origin.x + range_of_movement.x + 1, 0, 7)
 	for x in range(4, x_max):
 		var coords = Vector2i(x, origin.y)
