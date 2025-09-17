@@ -205,8 +205,6 @@ func disactivate() -> void:
 	reset_cells()
 
 func update_selected_cell(next_coords) -> void:
-	if next_coords == selected_coords:
-		return
 	reset_cells()
 	selected_coords = next_coords
 	
@@ -240,12 +238,14 @@ func set_range(next_origin: Vector2i, range: Vector2i) -> bool:
 	return true
 
 func get_valid_origin_coords():
-	if range_of_movement == Vector2i.ZERO:
-		range_of_movement = Vector2i(4,3)
-	var x_max = clamp(origin.x + range_of_movement.x + 1, 0, 7)
+	var x_max: int
+	if current_shape == Data.AbilityShape.LINE:
+		x_max = 7
+	else:
+		x_max = clamp(origin.x + range_of_movement.x + 1, 0, 7)
+		
 	for x in range(4, x_max):
 		var coords = Vector2i(x, origin.y)
-		print(coords)
 		if targets_grid[coords].active:
 			return coords
 			
@@ -266,7 +266,7 @@ func get_valid_origin_coords():
 	for y in range(y_above_min, y_above_max):
 		for x in range(4, x_max):
 			var coords = Vector2i(x, y)
-			print(coords)
+
 			if targets_grid[coords].active:
 				return coords
 	return null

@@ -168,10 +168,10 @@ func set_next_move() -> void:
 	
 func check_collision(dest_coords: Vector2i) -> bool:
 	var tile_collision_check = map_controller.check_for_collider(dest_coords)
-	var object_collision_check = map_controller.get_object_at_coords(dest_coords)
-	
-	if tile_collision_check || object_collision_check:
+	if tile_collision_check:
 		return true
+	elif behavior_mode != BehaviorMode.CHASE:
+		return map_controller.get_object_at_coords(dest_coords)
 	else:
 		return false
 
