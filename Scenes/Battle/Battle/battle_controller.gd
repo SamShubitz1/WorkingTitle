@@ -119,7 +119,7 @@ func handle_ability(event: Dictionary) -> void:
 	if event.has("damage_event"):
 		var damage_result = event.target.take_damage(event.damage_event)
 		play_dialog(event.target.char_name + " took " + str(damage_result) + " damage!", true)
-		update_health_display()
+		update_health_display(event.target)
 		
 		var offset = event.target.position
 		play_damage_animation(offset, damage_result)
@@ -521,7 +521,7 @@ func prompt_out_of_range() -> void:
 func update_ui() -> void:
 	if current_player.alliance == GameData.Alliance.HERO:
 		char_name_label.text = current_player.char_name
-		update_health_display()
+		update_health_display(current_player)
 		update_energy_display()
 		ap_display.set_action_points(current_player.action_points)
 		
@@ -542,9 +542,9 @@ func update_ui() -> void:
 			else:
 				items_buttons[i].text = "-"
 
-func update_health_display() -> void:
-	health_display.max_value = current_player.health_bar.max_value
-	health_display.value = current_player.health_bar.value
+func update_health_display(player: Character) -> void:
+	health_display.max_value = player.health_bar.max_value
+	health_display.value = player.health_bar.value
 
 func update_energy_display() -> void:
 	main_energy_display.value = current_player.current_main_energy
