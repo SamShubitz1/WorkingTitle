@@ -53,15 +53,18 @@ enum EventType {
 func _ready() -> void:
 	cursor.disable()
 	initialize_battle()
-	add_event({"type": EventType.DIALOG, "text": initial_dialog})
+	add_event({"type": EventType.DIALOG, "text": initial_dialog, "duration": dialog_duration})
 	add_event({"type": EventType.DIALOG, "text": current_player.char_name + "'s turn!", "duration": dialog_duration})
 	if current_player.alliance == GameData.Alliance.ENEMY:
 		perform_enemy_turn()
 	else:
 		increment_event_queue()
 
-func add_event(event) -> void:
-	event_queue.append(event)
+func add_event(event: Dictionary, priority := false) -> void:
+	if priority:
+		event_queue.push_front(event)
+	else:
+		event_queue.append(event)
 
 func clear_queue() -> void:
 	event_queue.clear()
@@ -124,10 +127,11 @@ func handle_ability(event: Dictionary) -> void:
 		var offset = event.target.position
 		play_damage_animation(offset, damage_result)
 			
+		passive_manager.resolve_passive(event.target, "Harden")
+		
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
-			
-		passive_manager.resolve_passive(event.target, "Harden")
+			return
 #
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
@@ -410,8 +414,8 @@ func on_target_death(target: Character) -> void:
 	turn_queue = turn_queue.filter(func(c): return c.character.battle_id != target.battle_id)
 	passive_manager.remove_player(target)
 	
-	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration})
-	add_event({"type": EventType.DEATH, "target": target, "duration": 0})
+	add_event({"type": EventType.DEATH, "target": target, "duration": 0}, true)
+	add_event({"type": EventType.DIALOG, "text": target.char_name + " died!", "duration": dialog_duration}, true)
 		
 func end_turn() -> void:
 	cursor.disable()
@@ -433,13 +437,15 @@ func add_players() -> void:
 	
 	var mage = build_character("Mage", Data.Alliance.HERO, Vector2i(2,1))
 	players.append(mage)
-	var pilypile = build_character("Pilypile", Data.Alliance.HERO, Vector2i(2,2))
+	var pilypile = build_character("Pilypile", Data.Alliance.HERO, Vector2i(3,1))
 	players.append(pilypile)
-	var thumper = build_character("Thumper", Data.Alliance.HERO, Vector2i(2,0))
+	var thumper = build_character("Thumper", Data.Alliance.HERO, Vector2i(1,1))
 	players.append(thumper)
 
 func randomize_enemies():
 	var selected_enemies = select_enemies()
+	initial_dialog = str(selected_enemies.size()) + " enemies appeared!"
+	
 	var enemies_with_positions = randomize_positions(selected_enemies)
 	for pos in enemies_with_positions:
 			var next_enemy = build_character(enemies_with_positions[pos], Data.Alliance.ENEMY, pos)
@@ -459,14 +465,8 @@ func select_enemies() -> Array:
 	for i in range(number_of_enemies):
 		var enemy_index = randi() % (enemies.size())
 		selected_enemies.append(enemies[enemy_index])
-		
-	initial_dialog = str(number_of_enemies) + " enemies appeared!"
 	
 	return selected_enemies
-	
-func set_enemies() -> void:
-	for entry in battle_data.enemy_pool:
-		build_character(entry.enemy, Data.Alliance.ENEMY, entry.position)
 
 func randomize_positions(enemies: Array) -> Dictionary:
 	var occupied_cells: Array
@@ -478,6 +478,11 @@ func randomize_positions(enemies: Array) -> Dictionary:
 				positions[next_position] = enemies[i]
 				occupied_cells.append(next_position)
 	return positions
+
+func set_enemies() -> void:
+	for entry in battle_data.enemy_pool:
+		build_character(entry.enemy, Data.Alliance.ENEMY, entry.position)
+	initial_dialog = str(battle_data.enemy_pool.size()) + " enemies appeared!"
 	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
@@ -556,6 +561,8 @@ func update_ui() -> void:
 				items_buttons[i].text = "-"
 
 func update_health_display(player: Character) -> void:
+	if player.alliance != Data.Alliance.HERO:
+		return
 	health_display.max_value = player.health_bar.max_value
 	health_display.value = player.health_bar.value
 
