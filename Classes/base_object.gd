@@ -9,8 +9,7 @@ class_name BaseObject
 @export var battle_ready: bool = false
 @export var neighbor_coords: Array
 @export var has_alt_greeting: bool = false
-
-var battle_data: Dictionary = {"terrain": {}, "enemy_pool": []}
+@export var battle_data: Dictionary = {"terrain": {}, "enemy_pool": [{"enemy": null, "position": Vector2i.ZERO}], "randomize": true}
 
 var grid_coords: Vector2i
 var dialog_tree: Dictionary

@@ -426,10 +426,10 @@ func get_targets(target_cells: Array) -> Array[Character]:
 	return selected_targets
 	
 func add_players() -> void:
-	var positions = get_enemies_by_position()
-	for pos in positions:
-		var next_enemy = build_character(positions[pos], Data.Alliance.ENEMY, pos)
-		players.append(next_enemy)
+	if battle_data.randomize:
+		randomize_enemies()
+	else:
+		set_enemies()
 	
 	var mage = build_character("Mage", Data.Alliance.HERO, Vector2i(2,1))
 	players.append(mage)
@@ -438,8 +438,37 @@ func add_players() -> void:
 	var thumper = build_character("Thumper", Data.Alliance.HERO, Vector2i(2,0))
 	players.append(thumper)
 
-func get_enemies_by_position():
-	var enemies = select_enemies()
+func randomize_enemies():
+	var selected_enemies = select_enemies()
+	var enemies_with_positions = randomize_positions(selected_enemies)
+	for pos in enemies_with_positions:
+			var next_enemy = build_character(enemies_with_positions[pos], Data.Alliance.ENEMY, pos)
+			players.append(next_enemy)
+			
+func select_enemies() -> Array:
+	var enemies: Array
+	for entry in battle_data.enemy_pool:
+		if entry.enemy:
+			enemies.append(entry.enemy)
+	
+	if enemies.is_empty(): # placeholder default
+		enemies = ["Mandrake", "Runt", "Mage", "Thumper", "Pilypile"]
+		
+	var selected_enemies: Array
+	var number_of_enemies = randi_range(2, 5)
+	for i in range(number_of_enemies):
+		var enemy_index = randi() % (enemies.size())
+		selected_enemies.append(enemies[enemy_index])
+		
+	initial_dialog = str(number_of_enemies) + " enemies appeared!"
+	
+	return selected_enemies
+	
+func set_enemies() -> void:
+	for entry in battle_data.enemy_pool:
+		build_character(entry.enemy, Data.Alliance.ENEMY, entry.position)
+
+func randomize_positions(enemies: Array) -> Dictionary:
 	var occupied_cells: Array
 	var positions: Dictionary
 	for i in range(enemies.size()):
@@ -449,22 +478,6 @@ func get_enemies_by_position():
 				positions[next_position] = enemies[i]
 				occupied_cells.append(next_position)
 	return positions
-
-func select_enemies():
-	var enemy_pool = battle_data.enemy_pool
-	
-	if enemy_pool.is_empty(): # placeholder default
-		enemy_pool = ["Mandrake", "Runt", "Mage", "Thumper", "Pilypile"]
-		
-	var selected_enemies: Array
-	var number_of_enemies = randi_range(2, 5)
-	for i in range(number_of_enemies):
-		var enemy_index = randi() % (enemy_pool.size())
-		selected_enemies.append(enemy_pool[enemy_index])
-		
-	initial_dialog = str(number_of_enemies) + " enemies appeared!"
-	
-	return selected_enemies
 	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
@@ -482,7 +495,7 @@ func set_turn_order() -> void:
 		for i in range(1, 15):
 			positions.append({"character": player, "position_value": position_value * i})
 	positions.sort_custom(func(playerA, playerB): return playerA.position_value < playerB.position_value)
-
+	
 	turn_queue.append_array(positions)
 	
 func increment_turn_queue() -> void:

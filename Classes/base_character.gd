@@ -265,7 +265,7 @@ func decrement_status_effects():
 	resolve_status_effects()
 	
 	for status in status_effects:
-		if status.value == -1:
+		if status.value == Data.permanent:
 			continue
 		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)

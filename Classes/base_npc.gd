@@ -171,7 +171,8 @@ func check_collision(dest_coords: Vector2i) -> bool:
 	if tile_collision_check:
 		return true
 	elif behavior_mode != BehaviorMode.CHASE:
-		return map_controller.get_object_at_coords(dest_coords)
+		var object = map_controller.get_object_at_coords(dest_coords)
+		return object != null
 	else:
 		return false
 
