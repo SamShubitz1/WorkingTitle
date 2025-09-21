@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://ejip7yl7v30p" path="res://Rooms/PalletTown/PalletTown_TileSet_01.png" id="1_fnrna"]
 [ext_resource type="Script" path="res://Classes/base_door.gd" id="2_3vbfs"]
-[ext_resource type="Texture2D" uid="uid://c6akgc62gr5bu" path="res://Dodads/Doors/Zelda_Door_Sprite_01.png" id="3_k28pq"]
+[ext_resource type="Texture2D" uid="uid://c6akgc62gr5bu" path="res://Doors/Zelda_Door_Sprite_01.png" id="3_k28pq"]
 [ext_resource type="PackedScene" uid="uid://bn23gjblirfpr" path="res://Scenes/Npc/npc.tscn" id="4_vmciw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wc1li"]

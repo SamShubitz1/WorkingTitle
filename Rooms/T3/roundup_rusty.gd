@@ -29,7 +29,7 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]
 			},
 	"powered02": {
-		"text": "Well, ain't I the damsel distressed? What the score, partner? Why the helping hand?",
+		"text": "That makes me the damsel distressed. What's the score, partner? Why the helping hand?",
 		"options": [
 			{"name": "The mechanical bull...", "next": "powered03"},
 			{"name": "Leave", "next": null}]
@@ -52,12 +52,12 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]
 			},
 	"lightbulb01": {
-		"text": "Let me see those for a minute. Think I got all the fixin's right here.",
+		"text": "Let me see those bulbs for a minute. Pretty sure I got all the fixings right here.",
 		"options": [
 			{"name": ">", "next": "lightbulb02"}]
 			},
 	"lightbulb02": {
-		"text": "There ya go. When he starts gettin' mad, hit him with one of these.",
+		"text": "And there ya go. When he starts throwin' a tantrum, hit him with one of these.",
 		"options": [
 			{"name": "Leave", "next": null}]
 			},

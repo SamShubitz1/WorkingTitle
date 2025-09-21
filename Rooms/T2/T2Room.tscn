@@ -8,11 +8,11 @@
 [ext_resource type="Texture2D" uid="uid://dsuty0117lg3h" path="res://Art/EditorTools/Screen_Box_14x8.png" id="4_kko3w"]
 [ext_resource type="Script" path="res://Classes/base_door.gd" id="6_a7531"]
 [ext_resource type="TileSet" uid="uid://cdnjytn271ohb" path="res://Art/Tiles/Tilesets/doodad_tile_set.tres" id="6_olinx"]
-[ext_resource type="Texture2D" uid="uid://bu5t8rnxtgdul" path="res://Dodads/Doors/Door_02.png" id="7_6hgfd"]
+[ext_resource type="Texture2D" uid="uid://bu5t8rnxtgdul" path="res://Doors/Door_02.png" id="7_6hgfd"]
 [ext_resource type="Script" path="res://Rooms/T2/enemy_area.gd" id="8_1es84"]
 [ext_resource type="Script" path="res://Rooms/T2/camera_bound.gd" id="9_dlbsn"]
 [ext_resource type="Script" path="res://Rooms/T2/camera_bound_2.gd" id="10_6p6cm"]
-[ext_resource type="Texture2D" uid="uid://davhqoh1fh38c" path="res://Dodads/Doors/Door_01.png" id="10_bx2dh"]
+[ext_resource type="Texture2D" uid="uid://davhqoh1fh38c" path="res://Doors/Door_01.png" id="10_bx2dh"]
 [ext_resource type="Script" path="res://Rooms/T2/mad_wired_bull.gd" id="13_egomq"]
 [ext_resource type="Texture2D" uid="uid://t7g3c6vdb1jy" path="res://Art/WorldSprites/T2_Mad_Wired_Bull_Idle_Back.png" id="15_3j71u"]
 [ext_resource type="Texture2D" uid="uid://don2pksp83vkl" path="res://Art/WorldSprites/T2_Mad_Wired_Bull_Idle_Front.png" id="16_wilmp"]
@@ -1699,7 +1699,7 @@ tile_set = ExtResource("6_olinx")
 [node name="Objects" type="Node2D" parent="."]
 
 [node name="PlayerSpawn" type="Node2D" parent="Objects"]
-position = Vector2(352, 288)
+position = Vector2(448, 160)
 
 [node name="Runt" type="Node2D" parent="Objects"]
 z_index = 20
@@ -1788,20 +1788,41 @@ texture = ExtResource("7_6hgfd")
 offset = Vector2(16, 16)
 flip_h = true
 
-[node name="DoorToT3" type="Node2D" parent="Doors"]
+[node name="DoorToT3p1" type="Node2D" parent="Doors"]
 modulate = Color(1, 1, 1, 0.435294)
 position = Vector2(352, 128)
 script = ExtResource("6_a7531")
 door_destination = "res://Rooms/T3/T3room.tscn"
 spawn_position = Vector2(352, 832)
 
-[node name="T3Door" type="Sprite2D" parent="Doors/DoorToT3"]
+[node name="T3Door" type="Sprite2D" parent="Doors/DoorToT3p1"]
 position = Vector2(-16.0595, 32)
 rotation = 4.71239
 scale = Vector2(1, 5.00108)
 texture = ExtResource("7_6hgfd")
 offset = Vector2(16, 16)
 flip_h = true
+
+[node name="DoorToT3p2" type="Node2D" parent="Doors"]
+modulate = Color(1, 1, 1, 0.435294)
+position = Vector2(384, 128)
+script = ExtResource("6_a7531")
+door_destination = "res://Rooms/T3/T3room.tscn"
+spawn_position = Vector2(384, 832)
+
+[node name="DoorToT3p3" type="Node2D" parent="Doors"]
+modulate = Color(1, 1, 1, 0.435294)
+position = Vector2(416, 128)
+script = ExtResource("6_a7531")
+door_destination = "res://Rooms/T3/T3room.tscn"
+spawn_position = Vector2(416, 832)
+
+[node name="DoorToT4p4" type="Node2D" parent="Doors"]
+modulate = Color(1, 1, 1, 0.435294)
+position = Vector2(448, 128)
+script = ExtResource("6_a7531")
+door_destination = "res://Rooms/T3/T3room.tscn"
+spawn_position = Vector2(448, 832)
 
 [node name="DoorToUnderground" type="Node2D" parent="Doors"]
 z_index = 2

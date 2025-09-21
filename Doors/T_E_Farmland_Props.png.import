@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bu5t8rnxtgdul"
-path="res://.godot/imported/Door_02.png-effa33bf795d22416b8c59c2aeac926e.ctex"
+uid="uid://b7j1ks8qja1jm"
+path="res://.godot/imported/T_E_Farmland_Props.png-af15e378aad8b6b54fd07fdf707597a8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Dodads/Doors/Door_02.png"
-dest_files=["res://.godot/imported/Door_02.png-effa33bf795d22416b8c59c2aeac926e.ctex"]
+source_file="res://Doors/T_E_Farmland_Props.png"
+dest_files=["res://.godot/imported/T_E_Farmland_Props.png-af15e378aad8b6b54fd07fdf707597a8.ctex"]
 
 [params]
 

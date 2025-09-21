@@ -28,13 +28,13 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]
 			},
 	"powered02": {
-		"text": "No one’s ever quite figured what I’m for. Least of all me. Unlikely to be of much use, I fear. I've no tools, nor torque. Just me little limbs and a loyal ticker.",
+		"text": "No one's ever quite figured what I'm for. Least of all me. Unlikely to be of much use, I fear. I've no tools, nor torque. Just me little limbs and a loyal ticker.",
 		"options": [
 			{"name": "Items?", "next": "powered03"},
 			{"name": "Leave", "next": null}]
 			},
 	"powered03": {
-		"text": "Oh, goodness. How dreadfully sorry I am to deny you your due. Allow me to...unfasten my little latches, that you might retrieve your battery cells nestled in my chest.",
+		"text": "Oh, goodness. How dreadfully sorry I am to deny you your due. Allow me to... unfasten my little latches, that you might retrieve your battery cells nestled in my chest.",
 		"options": [
 			{"name": "Nevermind.", "next": "powered04"},
 			{"name": "Retrieve batteries.", "next": "powered05"},

@@ -13,7 +13,7 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]}
 		],
 	"default": {
-		"text": "(The screen on the tram console is off. Below the screen is a call button. Along the base of the console, its panel is ajar.)",
+		"text": "(The screen on the tram console is off. Below the screen is a call button. The panel along the base of the console is ajar.)",
 		"options": [
 			{"name": "Call Button", "next": "trambutton01"},
 			{"name": "Open Panel", "next": "panel01"},
@@ -32,7 +32,7 @@ func _ready() -> void:
 			{"name": "Leave", "next": null}]
 			},
 	"panel01": {
-		"text": "(Inside is the housing for a battery stack but it's empty.)",
+		"text": "(Inside is the housing for a battery stack.)",
 		"options": [
 			{"name": "Insert Battery [500]", "next": "panel02"},
 			{"name": "Leave", "next": null}]

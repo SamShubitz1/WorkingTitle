@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2u654ry2cjiu"
-path="res://.godot/imported/Pokemon_Door_Sprite_02.png-352d0bf622c878a9accd0970d99277ff.ctex"
+uid="uid://dpfwy43v25dai"
+path="res://.godot/imported/T1_Repository_Tube.png-6a7ea3133227514661ef132bbe2a31a4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Dodads/Doors/Pokemon_Door_Sprite_02.png"
-dest_files=["res://.godot/imported/Pokemon_Door_Sprite_02.png-352d0bf622c878a9accd0970d99277ff.ctex"]
+source_file="res://Art/WorldSprites/T1_Repository_Tube.png"
+dest_files=["res://.godot/imported/T1_Repository_Tube.png-6a7ea3133227514661ef132bbe2a31a4.ctex"]
 
 [params]
 
