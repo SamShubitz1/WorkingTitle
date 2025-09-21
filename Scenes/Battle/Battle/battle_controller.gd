@@ -227,7 +227,7 @@ func on_use_ability(selected_targets: Array) -> void:
 	var hit_success = current_player.check_success(selected_ability)
 
 	if !hit_success:
-		add_event({"type": EventType.DIALOG, "text": "But it missed!", "duration": dialog_duration, "emitter": current_player})
+		add_event({"type": EventType.DIALOG, "text": "But it failed!", "duration": dialog_duration, "emitter": current_player})
 	else:
 		var is_first_target = true
 		for target in selected_targets:
@@ -408,7 +408,7 @@ func on_target_death(target: Character) -> void:
 			if player.alliance == Data.Alliance.HERO:
 				player.set_guardian(null)
 				
-	battle_grid.current_grid.erase(target.grid_position)
+	battle_grid.current_grid[target.grid_position].character = null
 	players = players.filter(func(p): return p.battle_id != target.battle_id)
 	event_queue = event_queue.filter(func(e): return !e.has("emitter") || e.emitter.battle_id != target.battle_id || e.has("target") && e.target.battle_id != target.battle_id) # make sure this works
 	turn_queue = turn_queue.filter(func(c): return c.character.battle_id != target.battle_id)
@@ -434,6 +434,7 @@ func add_players() -> void:
 		randomize_enemies()
 	else:
 		set_enemies()
+		initial_dialog = str(battle_data.enemy_pool.size()) + " enemies appeared!"
 	
 	var mage = build_character("Mage", Data.Alliance.HERO, Vector2i(2,1))
 	players.append(mage)
@@ -482,7 +483,6 @@ func randomize_positions(enemies: Array) -> Dictionary:
 func set_enemies() -> void:
 	for entry in battle_data.enemy_pool:
 		build_character(entry.enemy, Data.Alliance.ENEMY, entry.position)
-	initial_dialog = str(battle_data.enemy_pool.size()) + " enemies appeared!"
 	
 func wait(seconds: float) -> void:
 	await get_tree().create_timer(seconds).timeout
