@@ -131,3 +131,7 @@ func play_text_covers():
 func kill_animations():
 	for anim in cover_anim_container.get_children():
 		anim.queue_free()
+	
+func get_number_of_lines(dialog: String) -> int:
+	var adjusted_length = dialog.length()
+	return clamp(ceil((adjusted_length * 12)/1024.0), 1, 4)

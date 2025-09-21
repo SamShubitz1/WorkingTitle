@@ -161,7 +161,11 @@ func on_select_ability() -> void:
 		targets_menu.set_custom_cells(ability_info.target_cells)
 	else:
 		targets_menu.set_current_shape(ability_info.shape)
-		targets_menu.set_range(current_player.grid_position, ability_info.range)
+		var success = targets_menu.set_range(current_player.grid_position, ability_info.range)
+		if !success:
+			battle_controller.prompt_out_of_range()
+			update_selected_menu(Data.BattleMenuType.OPTIONS)
+			return
 	
 	update_selected_menu(Data.BattleMenuType.TARGETS)
 

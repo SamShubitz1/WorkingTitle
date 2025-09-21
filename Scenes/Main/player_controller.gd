@@ -42,6 +42,7 @@ func process_player_movement(delta) -> void:
 # used for overworld movement
 func process_player_inputs() -> void:
 	if player.is_moving || game_controller.is_loading || game_controller.dialog_mode:
+		set_player_animation(player.current_direction, true)
 		return
 		
 	if Input.is_action_just_pressed("ui_accept"):
@@ -134,7 +135,6 @@ func interact(object: Node):
 		if object.battle_ready:
 			enter_battle_scene(object.battle_data)
 		elif !object.dialog_tree.is_empty():
-			set_player_animation(player.current_direction, true)
 			object.start_dialog()
 			
 	elif object is BaseDoor:
