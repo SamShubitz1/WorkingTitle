@@ -15,7 +15,7 @@ enum NavDirection
 
 signal close_box
 signal open_box
-signal rusty_powered # could be moved into a flag manager along with rest of flag logic
+signal rusty_powered # should be moved into a flag manager along with rest of flag logic
 
 var option_index = 0
 var current_options: Array
@@ -131,7 +131,3 @@ func play_text_covers():
 func kill_animations():
 	for anim in cover_anim_container.get_children():
 		anim.queue_free()
-	
-func get_number_of_lines(dialog: String) -> int:
-	var adjusted_length = dialog.length()
-	return clamp(ceil((adjusted_length * 12)/1024.0), 1, 4)
