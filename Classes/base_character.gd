@@ -5,6 +5,12 @@ extends Node
 
 class_name Character
 
+var sprite: AnimatedSprite2D
+var health_bar: ProgressBar
+var sound: AudioStreamPlayer
+var attribute_icons: Dictionary
+var ailment_icons: Dictionary
+
 var char_name: String
 var alliance: GameData.Alliance
 var max_health: int
@@ -13,10 +19,6 @@ var current_main_energy: int
 var current_reserve_energy: int
 
 var is_player: bool = false
-var health_bar: ProgressBar
-
-var sprite: AnimatedSprite2D
-var sound: AudioStreamPlayer
 
 var action_points: int = 5
 var role: Data.MachineRole
@@ -44,18 +46,21 @@ var has_moved: bool = false
 var turn_count: int
 var battle_id: int
 
-func init(player_id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, char_sprite: AnimatedSprite2D, char_sound: AudioStreamPlayer, char_health: ProgressBar, energy: int, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
+func init(player_id: int, char_name: String, char_attributes: Dictionary, char_alliance: GameData.Alliance, energy: int, max_health: int, abilities: Array, grid_position: Vector2i, role = Data.MachineRole.NONE, items: Array = []):
+	self.health_bar = self.get_node("CharHealth")
+	self.sprite = self.get_node("CharSprite")
+	self.sound = self.get_node("CharSound")
+	build_attribute_icons()
+	build_ailment_icons()
+	
 	self.battle_id = player_id
 	self.char_name = char_name
 	self.alliance = char_alliance
-	self.sprite = char_sprite
-	self.sound = char_sound
 	
 	passive = GameData.passives[char_name]
 	
 	if alliance == Data.Alliance.ENEMY:
 		flip_sprite()
-	self.health_bar = char_health
 	self.max_health = max_health
 	self.max_energy = energy
 	self.current_main_energy = max_energy / 2
@@ -243,6 +248,8 @@ func resolve_status_effects() -> void:
 	for attribute in current_attributes.keys():
 		if current_attributes[attribute] < 0:
 			current_attributes[attribute] = 0;
+	
+	resolve_status_icons()
 			
 func resolve_special_stats():
 	for effect in status_effects:
@@ -269,18 +276,9 @@ func decrement_status_effects():
 			continue
 		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)
-			var effect_name: String
+			ailment_icons[status.type].visible = false
 			if status.type == Data.EffectType.AILMENT:
-				match status.property:
-					Data.Ailments.OVERHEATED:
-						effect_name = "Overheated"
-					Data.Ailments.ACIDIZED:
-						effect_name = "Acidized"
-					Data.Ailments.BLANCHED:
-						effect_name = "Blanched"
-					Data.Ailments.CONCUSSED:
-						effect_name = "Concussed"
-				return effect_name
+				return map_ailment_to_string(status.property)
 		elif status.has("duration"):
 			if status.duration == 0: # duration check for status effects
 				status_effects.erase(status)
@@ -305,7 +303,7 @@ func set_abilities_by_memory() -> void:
 	for i in range(2 + memory):
 		if i <= base_abilities.size() - 1:
 			current_abilities.append(base_abilities[i])
-
+	
 func update_status(next_effect: Dictionary) -> void:
 	var status_exists: bool = false
 	for status in status_effects:
@@ -314,3 +312,76 @@ func update_status(next_effect: Dictionary) -> void:
 			status_exists = true
 	if !status_exists:
 		status_effects.append(next_effect)
+	
+func resolve_status_icons() -> void:
+	for attribute in current_attributes:
+		var difference = current_attributes[attribute] - base_attributes[attribute]
+		var icon = attribute_icons[attribute]
+		if difference == 0:
+			icon.visible = false
+			continue
+		var number_sprite = icon.get_child(0)
+		icon.visible = true
+		var animation = "green" if difference > 0 else "red"
+		number_sprite.animation = animation
+		var frame = abs(difference) if difference < 10 else 11
+		number_sprite.frame = frame
+		
+	for status in status_effects:
+		if status.property == Data.EffectType.AILMENT:
+			var icon = ailment_icons[map_ailment_to_string(status.type)]
+			icon.visible = true
+			var number_sprite = icon.get_child(0)
+			number_sprite.animation = "red"
+			number_sprite.frame = status.duration
+	
+func build_attribute_icons() -> void:
+	var attributes = [Data.Attributes.ARMOR, Data.Attributes.BATTERY, Data.Attributes.FLUX, Data.Attributes.MEMORY, Data.Attributes.OPTICS, Data.Attributes.SHIELDING, Data.Attributes.MOBILITY, Data.Attributes.STRENGTH]
+	var status_container = health_bar.get_child(0)
+	if status_container == null:
+		return
+	var attributes_container = status_container.get_child(0)
+	for attribute in attributes:
+		attribute_icons[attribute] = attributes_container.get_node(map_attribute_to_string(attribute))
+		
+func build_ailment_icons() -> void:
+	var ailments = ["Corroded", "Blanked", "Overheated"]
+	var status_container = health_bar.get_child(0)
+	var ailments_container = status_container.get_child(1)
+	for ailment in ailments:
+		ailment_icons[ailment] = ailments_container.get_node(ailment)
+
+func map_attribute_to_string(attribute: Data.Attributes) -> String:
+	match attribute:
+		Data.Attributes.ARMOR:
+			return "Armor"
+		Data.Attributes.BATTERY:
+			return "Battery"
+		Data.Attributes.FLUX:
+			return "Flux"
+		Data.Attributes.MEMORY:
+			return "Memory"
+		Data.Attributes.OPTICS:
+			return "Optics"
+		Data.Attributes.SHIELDING:
+			return "Shielding"
+		Data.Attributes.MOBILITY:
+			return "Mobility"
+		Data.Attributes.STRENGTH:
+			return "Strength"
+		_:
+			return ""
+
+func map_ailment_to_string(ailment: Data.Ailments) -> String:
+	match ailment:
+		Data.Ailments.OVERHEATED:
+			return "Overheated"
+		Data.Ailments.ACIDIZED:
+			return "Corroded"
+		Data.Ailments.BLANCHED:
+			return "Blanked"
+		Data.Ailments.CONCUSSED:
+			return "Concussed"
+		_:
+			return ""
+	

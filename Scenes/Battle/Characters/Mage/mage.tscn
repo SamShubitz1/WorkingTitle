@@ -1,11 +1,23 @@
-[gd_scene load_steps=16 format=3 uid="uid://cr3t2sex466g6"]
+[gd_scene load_steps=53 format=3 uid="uid://cr3t2sex466g6"]
 
 [ext_resource type="Script" path="res://Classes/base_character.gd" id="1_ge1t4"]
 [ext_resource type="Texture2D" uid="uid://dluixngiwseb5" path="res://Scenes/Battle/Characters/Mage/Mage_Combat_Attack1.png" id="2_4dyix"]
 [ext_resource type="Script" path="res://player_animation.gd" id="3_ne4sa"]
 [ext_resource type="Texture2D" uid="uid://d07n848nosdmn" path="res://Scenes/Battle/Characters/Mage/Mage_Combat_Idle.png" id="3_oiqil"]
+[ext_resource type="Texture2D" uid="uid://cxyd253b2xgbw" path="res://Art/UI/Icons/Armor_Icon.png" id="5_6tii3"]
 [ext_resource type="AudioStream" uid="uid://dqoh787ogrkxm" path="res://Scenes/Battle/Characters/Mage/Sounds/Mage_StartA1.wav" id="5_fi0nc"]
 [ext_resource type="Script" path="res://Scenes/Battle/Characters/Mage/char_sound.gd" id="6_2ec51"]
+[ext_resource type="Texture2D" uid="uid://bk0b70ru4jqdd" path="res://Art/UI/Icons/floating_numbers.png" id="6_ihcfr"]
+[ext_resource type="Texture2D" uid="uid://d0lxg08rbbusq" path="res://Art/UI/Icons/Battery_Icon.png" id="7_lna82"]
+[ext_resource type="Texture2D" uid="uid://brpfgljv7t64n" path="res://Art/UI/Icons/Flux_Icon.png" id="8_n137i"]
+[ext_resource type="Texture2D" uid="uid://cevcgo0rxo41s" path="res://Art/UI/Icons/Memory_Icon.png" id="9_g6shp"]
+[ext_resource type="Texture2D" uid="uid://dfis36ogw8774" path="res://Art/UI/Icons/Sensory_Icon.png" id="10_c3uaj"]
+[ext_resource type="Texture2D" uid="uid://3kcismraktmb" path="res://Art/UI/Icons/Shielding_Icon.png" id="11_t76x1"]
+[ext_resource type="Texture2D" uid="uid://bjden4okdye6w" path="res://Art/UI/Icons/Speed_Icon.png" id="12_ajc4i"]
+[ext_resource type="Texture2D" uid="uid://d23n78kj54gsj" path="res://Art/UI/Icons/Strength_Icon.png" id="13_k5bv7"]
+[ext_resource type="Texture2D" uid="uid://w23via34vtbn" path="res://Art/UI/Icons/Ailment_Acid_Icon.png" id="14_wd171"]
+[ext_resource type="Texture2D" uid="uid://o6mjmcvm67og" path="res://Art/UI/Icons/Ailment_Blanched_Icon.png" id="15_amlm7"]
+[ext_resource type="Texture2D" uid="uid://cgdjn2cwqvaaq" path="res://Art/UI/Icons/Ailment_Overheated_Icon.png" id="16_8ruqk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_orfo0"]
 atlas = ExtResource("2_4dyix")
@@ -77,6 +89,187 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hy8r4"]
 bg_color = Color(0.870588, 0.121569, 0.180392, 1)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_at6qj"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(120, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ayi8g"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(130, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tlnr4"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(140, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j0j5p"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(150, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfr7q"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(160, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ce5lc"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(170, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c3jg2"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(180, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_galsi"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(190, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ks8ua"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(200, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i7yq0"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(210, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_224ct"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(220, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3wd0r"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(230, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_prrrt"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(0, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7wv6f"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(10, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mwoej"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(20, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2ttbi"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(30, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w1ty5"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(40, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hpxl"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(50, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_awpe8"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(60, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ebqcl"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(70, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4cyga"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(80, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3x0m5"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(90, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iy0q7"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(100, 0, 10, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m8y1g"]
+atlas = ExtResource("6_ihcfr")
+region = Rect2(110, 0, 10, 10)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cxkhq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_at6qj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ayi8g")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tlnr4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j0j5p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hfr7q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ce5lc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c3jg2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_galsi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ks8ua")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i7yq0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_224ct")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3wd0r")
+}],
+"loop": true,
+"name": &"green",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_prrrt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7wv6f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mwoej")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2ttbi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w1ty5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0hpxl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_awpe8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ebqcl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4cyga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3x0m5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iy0q7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m8y1g")
+}],
+"loop": true,
+"name": &"red",
+"speed": 5.0
+}]
+
 [node name="Mage" type="Node2D"]
 scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ge1t4")
@@ -104,6 +297,154 @@ step = 1.0
 value = 80.0
 rounded = true
 show_percentage = false
+
+[node name="StatusContainer" type="VBoxContainer" parent="CharHealth"]
+offset_top = 26.0
+offset_right = 200.0
+offset_bottom = 94.0
+
+[node name="Attributes" type="HBoxContainer" parent="CharHealth/StatusContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Armor" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("5_6tii3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Armor"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"red"
+
+[node name="Battery" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("7_lna82")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Battery"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Flux" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("8_n137i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Flux"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Memory" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("9_g6shp")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Memory"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Optics" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("10_c3uaj")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Optics"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Shielding" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("11_t76x1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Shielding"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Mobility" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("12_ajc4i")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Mobility"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Strength" type="TextureRect" parent="CharHealth/StatusContainer/Attributes"]
+visible = false
+layout_mode = 2
+texture = ExtResource("13_k5bv7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Attributes/Strength"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Ailments" type="HBoxContainer" parent="CharHealth/StatusContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+alignment = 1
+
+[node name="Corroded" type="TextureRect" parent="CharHealth/StatusContainer/Ailments"]
+visible = false
+layout_mode = 2
+texture = ExtResource("14_wd171")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Ailments/Corroded"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Blanked" type="TextureRect" parent="CharHealth/StatusContainer/Ailments"]
+visible = false
+layout_mode = 2
+texture = ExtResource("15_amlm7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Ailments/Blanked"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Overheated" type="TextureRect" parent="CharHealth/StatusContainer/Ailments"]
+visible = false
+layout_mode = 2
+texture = ExtResource("16_8ruqk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Ailments/Overheated"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
+
+[node name="Placeholder" type="TextureRect" parent="CharHealth/StatusContainer/Ailments"]
+visible = false
+layout_mode = 2
+texture = ExtResource("14_wd171")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharHealth/StatusContainer/Ailments/Placeholder"]
+position = Vector2(16, 14)
+scale = Vector2(3.8, 2.85)
+sprite_frames = SubResource("SpriteFrames_cxkhq")
+animation = &"green"
 
 [node name="CharSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_fi0nc")

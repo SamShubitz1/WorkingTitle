@@ -592,7 +592,7 @@ func build_character(char_name: String, char_alliance: Data.Alliance, char_posit
 	var char_scene = load(GameData.characters[char_name].path)
 	var char_info = GameData.characters[char_name]
 	var char = char_scene.instantiate()
-	char.init(battle_id, char_name, char_info.attributes, char_alliance, char.get_node("CharSprite"), char.get_node("CharSound"), char.get_node("CharHealth"), char_info["base energy"], char_info["base health"], char_info.abilities, char_position, char_info.role)
+	char.init(battle_id, char_name, char_info.attributes, char_alliance, char_info["base energy"], char_info["base health"], char_info.abilities, char_position, char_info.role)
 	add_child(char)
 	battle_grid.set_position_by_grid_coords(char)
 	battle_id += 1
