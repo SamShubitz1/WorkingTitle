@@ -50,6 +50,7 @@ func init(player_id: int, char_name: String, char_attributes: Dictionary, char_a
 	self.health_bar = self.get_node("CharHealth")
 	self.sprite = self.get_node("CharSprite")
 	self.sound = self.get_node("CharSound")
+	
 	build_attribute_icons()
 	build_ailment_icons()
 	
@@ -58,9 +59,7 @@ func init(player_id: int, char_name: String, char_attributes: Dictionary, char_a
 	self.alliance = char_alliance
 	
 	passive = GameData.passives[char_name]
-	
-	if alliance == Data.Alliance.ENEMY:
-		flip_sprite()
+
 	self.max_health = max_health
 	self.max_energy = energy
 	self.current_main_energy = max_energy / 2
@@ -71,6 +70,10 @@ func init(player_id: int, char_name: String, char_attributes: Dictionary, char_a
 	set_abilities(abilities)
 	set_items(items)
 	set_grid_position(grid_position)
+	
+	if alliance == Data.Alliance.ENEMY:
+		flip_sprite()
+		
 	sprite.play()
 
 func set_grid_position(next_position: Vector2i):
@@ -276,9 +279,10 @@ func decrement_status_effects():
 			continue
 		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)
-			ailment_icons[status.type].visible = false
 			if status.type == Data.EffectType.AILMENT:
-				return map_ailment_to_string(status.property)
+				var ailment_string = map_ailment_to_string(status.property)
+				ailment_icons[ailment_string].visible = false
+				return ailment_string
 		elif status.has("duration"):
 			if status.duration == 0: # duration check for status effects
 				status_effects.erase(status)
@@ -328,18 +332,16 @@ func resolve_status_icons() -> void:
 		number_sprite.frame = frame
 		
 	for status in status_effects:
-		if status.property == Data.EffectType.AILMENT:
-			var icon = ailment_icons[map_ailment_to_string(status.type)]
+		if status.type == Data.EffectType.AILMENT:
+			var icon = ailment_icons[map_ailment_to_string(status.property)]
 			icon.visible = true
 			var number_sprite = icon.get_child(0)
 			number_sprite.animation = "red"
-			number_sprite.frame = status.duration
+			number_sprite.frame = status.value
 	
 func build_attribute_icons() -> void:
 	var attributes = [Data.Attributes.ARMOR, Data.Attributes.BATTERY, Data.Attributes.FLUX, Data.Attributes.MEMORY, Data.Attributes.OPTICS, Data.Attributes.SHIELDING, Data.Attributes.MOBILITY, Data.Attributes.STRENGTH]
 	var status_container = health_bar.get_child(0)
-	if status_container == null:
-		return
 	var attributes_container = status_container.get_child(0)
 	for attribute in attributes:
 		attribute_icons[attribute] = attributes_container.get_node(map_attribute_to_string(attribute))
