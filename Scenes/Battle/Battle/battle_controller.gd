@@ -459,7 +459,7 @@ func select_enemies() -> Array:
 			enemies.append(entry.enemy)
 	
 	if enemies.is_empty(): # placeholder default
-		enemies = ["Thumper"]
+		enemies = ["Mandrake", "Runt", "Mage", "Thumper", "Pilypile"]
 		
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)
