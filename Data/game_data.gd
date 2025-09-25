@@ -94,8 +94,8 @@ enum SpecialStat {
 
 enum Ailments {
 	OVERHEATED,
-	ACIDIZED,
-	BLANCHED,
+	CORRODED,
+	BLANKED,
 	CONCUSSED
 }
 
@@ -188,7 +188,7 @@ var abilities: Dictionary = {
 	
 	"Acid Cloud": {"name": "Acid Cloud", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 16, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Applies 3 acidize to enemies in a circle", "range": Vector2i(4,1), "shape": AbilityShape.DIAMOND, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Acid_Cloud.wav", "effects": [
 		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 3, "property":
-			Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "AcidCloud", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
+			Ailments.CORRODED, "dialog": "gained 3 acidized", "animation": {"name": "AcidCloud", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 			
 	"Screen Flash": {"name": "Screen Flash", "ability_type": AbilityType.EFFECT, "damage": {"type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 14, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Enemies lose 1 AP and 1 memory", "range": Vector2i.ZERO, "shape": AbilityShape.ALL, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [
 		{"effect_type": EffectType.STATS, "target": EffectTarget.OTHER, "value": -1, "property": SpecialStat.AP, "dialog": "lost 1 AP", "animation": {"name": "ScreenFlash", "origin": AnimOrigin.SELF, "duration": 0.9, "offset": 185}},
@@ -237,7 +237,7 @@ var abilities: Dictionary = {
 	
 	"Septic Injection": {"name": "Septic Injection", "ability_type": AbilityType.EFFECT, "damage": { "type": DamageType.NONE, "value": 0}, "action_cost": 3, "energy_cost": 0, "target_type": TargetType.ENEMY, "attribute_bonus": Attributes.NONE, "description": "Target loses 40 health and gains 3 acidized.", "range": Vector2i(4,1), "shape": AbilityShape.SINGLE, "sound": "res://Scenes/Battle/Animations/Animation_Sounds/Beam_Slice.wav", "effects": [
 		#{"effect_type": EffectType.ATTRIBUTE, "duration": permanent, "target": EffectTarget.OTHER, "value": -2, "property": Attributes.ARMOR, "dialog": "lost 2 armor", "animation": {"name": "ArmorInversionOther", "origin": AnimOrigin.OTHER, "duration": 0.8}}, ##Target loses 40 health
-		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 3, "property": Ailments.ACIDIZED, "dialog": "gained 3 acidized", "animation": {"name": "SepticInjection", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
+		{"effect_type": EffectType.AILMENT, "target": EffectTarget.OTHER, "value": 3, "property": Ailments.CORRODED, "dialog": "gained 3 acidized", "animation": {"name": "SepticInjection", "origin": AnimOrigin.OTHER, "duration": 0.8}}]},
 	}
 	
 var passives = {
@@ -303,7 +303,7 @@ var characters = {
 	
 	"Mandrake": {"name": "Mandrake", "attributes": {Data.Attributes.STRENGTH: 1, Data.Attributes.FLUX: 3, Data.Attributes.ARMOR: 2, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 3, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 2}, "abilities": ["Sonic Pulse", "Zap", "Burst Rifle", "Wave Beam", "Acid Cloud", "Septic Injection"], "base energy": 80, "base health": 300, "role": Data.MachineRole.ESNIPER, "path": "res://Scenes/Battle/Characters/Mandrake/mandrake.tscn"},
 	
-	"Thumper": {"name": "Thumper", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}, "abilities": ["Trample", "Acid Cloud", "Accelerate", "Burst Rifle", "Cluster Rockets", "Ignite"], "base energy": 80, "base health": 300, "role": Data.MachineRole.PASSAULTER, "path": "res://Scenes/Battle/Characters/Thumper/thumper.tscn"},
+	"Thumper": {"name": "Thumper", "attributes": {Data.Attributes.STRENGTH: 2, Data.Attributes.FLUX: 1, Data.Attributes.ARMOR: 1, Data.Attributes.SHIELDING: 1, Data.Attributes.MEMORY: 2, Data.Attributes.BATTERY: 2, Data.Attributes.OPTICS: 2, Data.Attributes.MOBILITY: 4}, "abilities": ["Acid Cloud"], "base energy": 80, "base health": 300, "role": Data.MachineRole.PASSAULTER, "path": "res://Scenes/Battle/Characters/Thumper/thumper.tscn"},
 	}
 	
 var items: Dictionary = {

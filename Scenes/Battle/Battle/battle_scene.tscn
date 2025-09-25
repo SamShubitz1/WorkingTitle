@@ -440,9 +440,9 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/background = SubResource("StyleBoxFlat_36wqr")
 theme_override_styles/fill = SubResource("StyleBoxFlat_lxaq2")
-max_value = 50.0
+max_value = 40.0
 step = 1.0
-value = 50.0
+value = 40.0
 rounded = true
 show_percentage = false
 
@@ -452,8 +452,10 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/background = SubResource("StyleBoxFlat_1q481")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ce04u")
-max_value = 50.0
-value = 50.0
+max_value = 40.0
+step = 1.0
+value = 40.0
+rounded = true
 show_percentage = false
 
 [node name="Attack" type="Button" parent="BattleController/BattleMenu/MainMenu/Menu"]

@@ -132,7 +132,7 @@ func handle_ability(event: Dictionary) -> void:
 		if event.target.health_bar.value <= 0:
 			on_target_death(event.target)
 			return
-#
+			
 	elif event.has("effect"):
 		event.target.resolve_effect(event.effect)
 		play_dialog(event.target.char_name + " " + event.effect.dialog + "!", true)
@@ -459,7 +459,7 @@ func select_enemies() -> Array:
 			enemies.append(entry.enemy)
 	
 	if enemies.is_empty(): # placeholder default
-		enemies = ["Mandrake", "Runt", "Mage", "Thumper", "Pilypile"]
+		enemies = ["Thumper"]
 		
 	var selected_enemies: Array
 	var number_of_enemies = randi_range(2, 5)

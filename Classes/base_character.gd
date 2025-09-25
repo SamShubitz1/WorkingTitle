@@ -228,18 +228,19 @@ func end_turn():
 	
 func resolve_status_effects() -> void:
 	current_attributes = base_attributes.duplicate(true)
-
 	for status in status_effects:
+		var type = Utils.map_effect_type_to_string(status.type)
+		var property = Utils.map_ailment_to_string(status.property) if type == "Ailment" else Utils.map_attribute_to_string(status.property)
 		if status.type == Data.EffectType.ATTRIBUTE:
 				current_attributes[status.property] += status.value
 		elif status.type == Data.EffectType.AILMENT:
 			match status.property:
 				Data.Ailments.OVERHEATED:
 					current_attributes[Data.Attributes.SHIELDING] -= status.value
-				Data.Ailments.ACIDIZED:
+				Data.Ailments.CORRODED:
 					current_attributes[Data.Attributes.ARMOR] -= status.value
 					mobility_changed = true
-				Data.Ailments.BLANCHED:
+				Data.Ailments.BLANKED:
 					current_attributes[Data.Attributes.MEMORY] -= status.value
 				Data.Ailments.CONCUSSED:
 					current_attributes[Data.Attributes.STRENGTH] -= status.value
@@ -280,9 +281,8 @@ func decrement_status_effects():
 		if status.value == 0: # duration check for ailments
 			status_effects.erase(status)
 			if status.type == Data.EffectType.AILMENT:
-				var ailment_string = map_ailment_to_string(status.property)
-				ailment_icons[ailment_string].visible = false
-				return ailment_string
+				ailment_icons[status.property].visible = false
+				return map_ailment_to_string(status.property)
 		elif status.has("duration"):
 			if status.duration == 0: # duration check for status effects
 				status_effects.erase(status)
@@ -311,7 +311,7 @@ func set_abilities_by_memory() -> void:
 func update_status(next_effect: Dictionary) -> void:
 	var status_exists: bool = false
 	for status in status_effects:
-		if status.property == next_effect.property:
+		if status.type == next_effect.type && status.property == next_effect.property:
 			status.value += next_effect.value
 			status_exists = true
 	if !status_exists:
@@ -333,7 +333,7 @@ func resolve_status_icons() -> void:
 		
 	for status in status_effects:
 		if status.type == Data.EffectType.AILMENT:
-			var icon = ailment_icons[map_ailment_to_string(status.property)]
+			var icon = ailment_icons[status.property]
 			icon.visible = true
 			var number_sprite = icon.get_child(0)
 			number_sprite.animation = "red"
@@ -347,11 +347,11 @@ func build_attribute_icons() -> void:
 		attribute_icons[attribute] = attributes_container.get_node(map_attribute_to_string(attribute))
 		
 func build_ailment_icons() -> void:
-	var ailments = ["Corroded", "Blanked", "Overheated"]
+	var ailments = [Data.Ailments.CORRODED, Data.Ailments.BLANKED, Data.Ailments.OVERHEATED]
 	var status_container = health_bar.get_child(0)
 	var ailments_container = status_container.get_child(1)
 	for ailment in ailments:
-		ailment_icons[ailment] = ailments_container.get_node(ailment)
+		ailment_icons[ailment] = ailments_container.get_node(map_ailment_to_string(ailment))
 
 func map_attribute_to_string(attribute: Data.Attributes) -> String:
 	match attribute:
@@ -371,6 +371,8 @@ func map_attribute_to_string(attribute: Data.Attributes) -> String:
 			return "Mobility"
 		Data.Attributes.STRENGTH:
 			return "Strength"
+		Data.Attributes.NONE:
+			return "None"
 		_:
 			return ""
 
@@ -378,12 +380,11 @@ func map_ailment_to_string(ailment: Data.Ailments) -> String:
 	match ailment:
 		Data.Ailments.OVERHEATED:
 			return "Overheated"
-		Data.Ailments.ACIDIZED:
+		Data.Ailments.CORRODED:
 			return "Corroded"
-		Data.Ailments.BLANCHED:
+		Data.Ailments.BLANKED:
 			return "Blanked"
 		Data.Ailments.CONCUSSED:
 			return "Concussed"
 		_:
 			return ""
-	
