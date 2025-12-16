@@ -45,8 +45,8 @@ func set_tree(dialog_tree: Dictionary) -> void:
 func update_dialog(next_branch: String) -> void:
 	set_flags(next_branch)
 	var current_dialog = current_tree.get(next_branch, current_tree["default"]) # default used as safe fallback
-	handle_animation_covers(current_dialog.text)
 	dialog.text = current_dialog.text
+	handle_animation_covers()
 	current_options = current_dialog.options
 	for i in range(options.size()):
 		if i < current_options.size():
@@ -96,10 +96,12 @@ func set_flags(branch: String) -> void:
 		PlayerFlags.flags[object_name + "_powered"] = true
 		emit_signal("rusty_powered")
 
-func handle_animation_covers(dialog: String) -> void:
-	var number_of_lines = clamp(ceil(int(dialog.length() / 40)), 1, 4)
+func handle_animation_covers() -> void:
+	var number_of_lines = dialog.get_line_count()
 	build_text_covers(number_of_lines)
 	play_text_covers()
+	print(number_of_lines)
+
 
 func build_text_covers(number_of_lines: int):
 	var offset = Vector2(0,50)
